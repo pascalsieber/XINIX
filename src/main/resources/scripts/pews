@@ -1,0 +1,23 @@
+#!/bin/bash
+
+CLEANTECH_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+
+LIB=${CLEANTECH_HOME}/lib
+PLUGIN=${CLEANTECH_HOME}/plugin
+CLEANTECH_HOME_PROP=-Dch.zhaw.iwi.cis.cleantech.cleantechHome=${CLEANTECH_HOME}
+LOGGING_PROP=-Djava.util.logging.config.file=${CLEANTECH_HOME}/conf/logging.properties
+
+for arg in "$@" ; do
+  if [ "$arg" = "-debug" ] ; then
+    DEBUG="-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y"
+  fi
+done
+
+cd ${CLEANTECH_HOME}
+
+for jar in $LIB/* $PLUGIN/*
+do
+	CLASSPATH=${CLASSPATH}:$jar
+done
+
+java -classpath ${CLASSPATH} ${DEBUG} ${CLEANTECH_HOME_PROP} ${LOGGING_PROP} ch.zhaw.iwi.cis.cleantech.framework.ZhawEngine $*

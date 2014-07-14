@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE ivy-module [
+	<!ENTITY hibernate.revision "4.3.5.Final">
+	<!ENTITY flexjson.revision "2.0">
+	<!ENTITY jackson.revision "1.9.13">
+	<!ENTITY jackson.jaxrs.revision "2.3.3">
+	<!ENTITY jackson.datatype.guava.revision "2.4.0">
+	<!ENTITY jee.web.revision "7.0">
+	<!ENTITY derby.revision "10.10.1.1">
+	<!ENTITY jstl.revision "1.2">
+	<!ENTITY junit.revision "4.11">
+	<!ENTITY hamcrest.revision "1.3">
+	<!ENTITY reflections.revision "0.9.9-RC1">
+	<!ENTITY jetty.revision "9.1.3.v20140225">
+	<!ENTITY jersey.revision "2.7">
+	<!ENTITY commons.lang.revision "2.6">
+	<!ENTITY commons.io.revision "2.4">
+]>
+
+<ivy-module version="2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	
+	<info organisation="zhaw" module="cleantech" status="integration"/>
+	
+	<dependencies>
+		<dependency org="org.hibernate" name="hibernate-core" rev="&hibernate.revision;" conf="default"/>
+		<dependency org="org.hibernate" name="hibernate-entitymanager" rev="&hibernate.revision;" conf="default"/>
+		<dependency org="net.sf.flexjson" name="flexjson" rev="&flexjson.revision;" conf="default"/>
+		<dependency org="org.codehaus.jackson" name="jackson-core-asl" rev="&jackson.revision;" conf="default"/>
+		<dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="&jackson.revision;" conf="default"/>
+		<dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-json-provider" rev="&jackson.jaxrs.revision;" conf="default"/>
+		<dependency org="com.fasterxml.jackson.datatype" name="jackson-datatype-guava" rev="&jackson.datatype.guava.revision;" conf="default"/>
+		<dependency org="javax" name="javaee-web-api" rev="&jee.web.revision;" conf="default"/>
+		<dependency org="jstl" name="jstl" rev="&jstl.revision;" conf="default"/>
+		<dependency org="org.apache.derby" name="derby" rev="&derby.revision;" conf="default"/>
+		<dependency org="org.apache.derby" name="derbynet" rev="&derby.revision;" conf="default"/>
+		<dependency org="org.apache.derby" name="derbyclient" rev="&derby.revision;" conf="default"/>
+		<dependency org="junit" name="junit" rev="&junit.revision;" conf="default"/>
+		<dependency org="org.hamcrest" name="hamcrest-all" rev="&hamcrest.revision;" conf="default"/>
+		<dependency org="org.reflections" name="reflections" rev="&reflections.revision;" conf="default"/>
+		<dependency org="org.eclipse.jetty" name="jetty-server" rev="&jetty.revision;" conf="default"/>
+		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="&jetty.revision;" conf="default"/>
+		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="&jetty.revision;" conf="default"/>
+		<dependency org="org.glassfish.jersey.core" name="jersey-server" rev="&jersey.revision;" conf="default"/>
+		<dependency org="org.glassfish.jersey.core" name="jersey-common" rev="&jersey.revision;" conf="default"/>
+		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet" rev="&jersey.revision;" conf="default"/>
+		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet-core" rev="&jersey.revision;" conf="default"/>
+		<dependency org="commons-lang" name="commons-lang" rev="&commons.lang.revision;" conf="default"/>
+		<dependency org="commons-io" name="commons-io" rev="&commons.io.revision;" conf="default"/>
+		<exclude module="persistence-api"/>
+	</dependencies>
+	
+</ivy-module>

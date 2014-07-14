@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+	<persistence-unit name="pews">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		
+		<class>ch.zhaw.iwi.cis.cleantech.model.IdentifiableObject</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.NamedObject</class>
+		
+		<class>ch.zhaw.iwi.cis.cleantech.model.domain.Address</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.domain.Company</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.domain.Person</class>
+		
+		<class>ch.zhaw.iwi.cis.cleantech.model.job.Job</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.job.JobExecution</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.job.JobObject</class>
+		
+		<class>ch.zhaw.iwi.cis.cleantech.model.meta.DomainObject</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.meta.Evolution</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.meta.MetaData</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.meta.Quality</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.meta.Source</class>
+		
+		<class>ch.zhaw.iwi.cis.cleantech.model.view.AttributeView</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.view.ClassView</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.view.Profile</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.view.ProfileGroup</class>
+		<class>ch.zhaw.iwi.cis.cleantech.model.view.ViewObject</class>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/pewsDB;create=true" />
+			<property name="javax.persistence.jdbc.user" value="pews" />
+			<property name="javax.persistence.jdbc.password" value="pews" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>
