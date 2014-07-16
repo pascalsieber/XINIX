@@ -26,7 +26,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 	private String description;
 
 	@OneToMany
-	private Set< WorkflowElementStatusHistroyElementImpl > statusHistory;
+	private Set< WorkflowElementStatusHistoryElementImpl > statusHistory;
 
 	private String currentState;
 
@@ -47,7 +47,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 		super();
 		this.name = name;
 		this.description = description;
-		this.statusHistory = new HashSet< WorkflowElementStatusHistroyElementImpl >();
+		this.statusHistory = new HashSet< WorkflowElementStatusHistoryElementImpl >();
 		this.definition = definition;
 		this.data = new HashSet< WorkflowElementDataImpl >();
 	}
@@ -72,12 +72,12 @@ public class WorkflowElementImpl extends IdentifiableObject
 		this.description = description;
 	}
 
-	public Set< WorkflowElementStatusHistroyElementImpl > getStatusHistory()
+	public Set< WorkflowElementStatusHistoryElementImpl > getStatusHistory()
 	{
 		return statusHistory;
 	}
 
-	public void setStatusHistory( Set< WorkflowElementStatusHistroyElementImpl > statusHistory )
+	public void setStatusHistory( Set< WorkflowElementStatusHistoryElementImpl > statusHistory )
 	{
 		this.statusHistory = statusHistory;
 	}

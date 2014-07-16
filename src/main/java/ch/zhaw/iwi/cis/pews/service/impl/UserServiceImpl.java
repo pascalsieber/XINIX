@@ -13,4 +13,11 @@ public class UserServiceImpl extends IdentifiableObjectServiceImpl implements Us
 		return null;
 	}
 
+	@Override
+	public void acceptInvitation( int userID, int sessionID )
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

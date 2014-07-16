@@ -79,9 +79,9 @@ public class ZhawEngine implements LifecycleObject
 	private static void setupEntityManager()
 	{
 		ManagedObjectRegistry registry = ZhawEngine.getManagedObjectRegistry();
-		registry.registerManagedObjectType( new EntityManagerFactoryLifecycleManager( "cleantech" ), "cleantechFactory", Scope.CLASSLOADER );
-		EntityManagerLifecycleManager lifecycleManager = new EntityManagerLifecycleManager( (EntityManagerFactory)registry.getManagedObject( "cleantechFactory" ) );
-		registry.registerManagedObjectType( lifecycleManager, "cleantech", Scope.THREAD );
+		registry.registerManagedObjectType( new EntityManagerFactoryLifecycleManager( "pews" ), "pewsFactory", Scope.CLASSLOADER );
+		EntityManagerLifecycleManager lifecycleManager = new EntityManagerLifecycleManager( (EntityManagerFactory)registry.getManagedObject( "pewsFactory" ) );
+		registry.registerManagedObjectType( lifecycleManager, "pews", Scope.THREAD );
 	}
 	
 	public void stop()
@@ -145,7 +145,7 @@ public class ZhawEngine implements LifecycleObject
 	{
 		// Setup servlet context handler
 		ResourceConfig resourceConfig = new ResourceConfig();
-		resourceConfig.packages( "ch.zhaw.iwi.cis.pews.restservice" );
+		resourceConfig.packages( "ch.zhaw.iwi.cis.pews.service.rest" );
 		resourceConfig.register( CustomObjectMapperProviderServer.class );
 		ServletHolder holder = new ServletHolder( new ServletContainer( resourceConfig ) );
 		holder.setInitParameter( "jersey.config.server.provider.classnames", LoggingFilter.class.getName() );
@@ -181,7 +181,7 @@ public class ZhawEngine implements LifecycleObject
 	{
 		URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
 		
-		HashLoginService loginService = new HashLoginService( "CleanTechRealm", url.toString() );
+		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
 		webServer.addBean( loginService );
 
 		Constraint constraint = new Constraint( Constraint.__BASIC_AUTH, "user" );

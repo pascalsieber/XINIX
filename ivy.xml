@@ -22,7 +22,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
 	
-	<info organisation="zhaw" module="cleantech" status="integration"/>
+	<info organisation="zhaw" module="pews_reloaded" status="integration"/>
 	
 	<dependencies>
 		<dependency org="org.hibernate" name="hibernate-core" rev="&hibernate.revision;" conf="default"/>

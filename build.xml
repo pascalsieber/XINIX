@@ -6,8 +6,7 @@
 	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpath="/opt/local/share/java/apache-ant/lib/ant-junit.jar"/>
 
-	<exec executable="svnversion" outputproperty="svnversion-temp" />
-	<propertyregex property="svnversion" input="${svnversion-temp}" regexp=":" replace="-"/>
+	
 	
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
 	<property name="lib" location="${basedir}/lib"/>
@@ -24,10 +23,10 @@
 	<property name="target.reports" location="${target}/reports"/>
 	<property name="target.javadoc" location="${target}/javadoc"/>
 
-	<property name="pews.jar" location="${target}/pews-${svnversion}.jar"/>
-	<property name="pews-test.jar" location="${target}/pews-test-${svnversion}.jar"/>
-	<property name="pews-release.tar" location="${target}/pews-release-${svnversion}.tar"/>
-	<property name="pews-release.tar.gz" location="${target}/pews-release-${svnversion}.tar.gz"/>
+	<property name="pews.jar" location="${target}/pews-snapshot.jar"/>
+	<property name="pews-test.jar" location="${target}/pews-test-snapshot.jar"/>
+	<property name="pews-release.tar" location="${target}/pews-release-snapshot.tar"/>
+	<property name="pews-release.tar.gz" location="${target}/pews-release-snapshot.tar.gz"/>
 
 	<path id="libs.main">
 		<fileset dir="${lib}">
@@ -126,11 +125,6 @@
 			</zipfileset>
 			<zipfileset dir="${src.test.resources}" prefix="META-INF">
 				<include name="**"/>
-			</zipfileset>
-		</jar>
-		<jar destfile="${heisenberg-evolver.jar}">
-			<zipfileset dir="${target.test}">
-				<include name="**/test/evolver/**"/>
 			</zipfileset>
 		</jar>
 	</target>

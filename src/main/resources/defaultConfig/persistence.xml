@@ -7,28 +7,29 @@
 	<persistence-unit name="pews">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		
-		<class>ch.zhaw.iwi.cis.cleantech.model.IdentifiableObject</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.NamedObject</class>
+		<class>ch.zhaw.iwi.cis.pews.model.IdentifiableObject</class>
+		<class>ch.zhaw.iwi.cis.pews.model.OwnableObject</class>
 		
-		<class>ch.zhaw.iwi.cis.cleantech.model.domain.Address</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.domain.Company</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.domain.Person</class>
+		<class>ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.data.WorkshopDataImpl</class>
 		
-		<class>ch.zhaw.iwi.cis.cleantech.model.job.Job</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.job.JobExecution</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.job.JobObject</class>
+		<class>ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl</class>
 		
-		<class>ch.zhaw.iwi.cis.cleantech.model.meta.DomainObject</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.meta.Evolution</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.meta.MetaData</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.meta.Quality</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.meta.Source</class>
+		<class>ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.instance.SessionImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusHistoryElementImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl</class>
 		
-		<class>ch.zhaw.iwi.cis.cleantech.model.view.AttributeView</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.view.ClassView</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.view.Profile</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.view.ProfileGroup</class>
-		<class>ch.zhaw.iwi.cis.cleantech.model.view.ViewObject</class>
+		<class>ch.zhaw.iwi.cis.pews.model.user.CredentialImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.user.GroupImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.user.RoleImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.user.UserImpl</class>
 		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
