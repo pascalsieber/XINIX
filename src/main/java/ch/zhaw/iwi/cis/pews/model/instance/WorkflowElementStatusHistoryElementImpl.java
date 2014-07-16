@@ -8,20 +8,20 @@ import javax.persistence.Transient;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 
 @Entity
-public class WorkflowElementStatusHistroyElementImpl extends IdentifiableObject
+public class WorkflowElementStatusHistoryElementImpl extends IdentifiableObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private Date date;
 	private WorkflowElementStatusImpl status;
 
-	public WorkflowElementStatusHistroyElementImpl()
+	public WorkflowElementStatusHistoryElementImpl()
 	{
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public WorkflowElementStatusHistroyElementImpl( Date date, WorkflowElementStatusImpl status )
+	public WorkflowElementStatusHistoryElementImpl( Date date, WorkflowElementStatusImpl status )
 	{
 		super();
 		this.date = date;
