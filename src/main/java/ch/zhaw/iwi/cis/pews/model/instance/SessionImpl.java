@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
@@ -23,7 +24,7 @@ public class SessionImpl extends WorkflowElementImpl
 	@ManyToOne
 	private ExerciseImpl currentExercise;
 
-	@ManyToMany
+	@OneToMany
 	private Set< PrincipalImpl > participants;
 
 	@ManyToMany

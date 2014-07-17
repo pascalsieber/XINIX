@@ -32,9 +32,6 @@ public class PrincipalImpl extends IdentifiableObject
 	private SessionImpl session;
 
 	@ManyToMany
-	private Set< SessionImpl > sessionParticipations;
-
-	@ManyToMany
 	private Set< SessionImpl > sessionInvitations;
 
 	@ManyToMany
@@ -48,7 +45,6 @@ public class PrincipalImpl extends IdentifiableObject
 		super();
 		this.sessionAcceptances = new HashSet<SessionImpl>();
 		this.sessionInvitations = new HashSet<SessionImpl>();
-		this.sessionParticipations = new HashSet<SessionImpl>();
 		this.sessionExecutions = new HashSet<SessionImpl>();
 	}
 
@@ -60,7 +56,6 @@ public class PrincipalImpl extends IdentifiableObject
 		this.session = session;
 		this.sessionAcceptances = new HashSet<SessionImpl>();
 		this.sessionInvitations = new HashSet<SessionImpl>();
-		this.sessionParticipations = new HashSet<SessionImpl>();
 		this.sessionExecutions = new HashSet<SessionImpl>();
 	}
 
@@ -92,16 +87,6 @@ public class PrincipalImpl extends IdentifiableObject
 	public void setSession( SessionImpl session )
 	{
 		this.session = session;
-	}
-
-	public Set< SessionImpl > getSessionParticipations()
-	{
-		return sessionParticipations;
-	}
-
-	public void setSessionParticipations( Set< SessionImpl > sessionParticipations )
-	{
-		this.sessionParticipations = sessionParticipations;
 	}
 
 	public Set< SessionImpl > getSessionInvitations()

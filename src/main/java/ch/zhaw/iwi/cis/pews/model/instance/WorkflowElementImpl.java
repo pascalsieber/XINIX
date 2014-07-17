@@ -1,6 +1,8 @@
 package ch.zhaw.iwi.cis.pews.model.instance;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -26,7 +28,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 	private String description;
 
 	@OneToMany
-	private Set< WorkflowElementStatusHistoryElementImpl > statusHistory;
+	private List< WorkflowElementStatusHistoryElementImpl > statusHistory;
 
 	private String currentState;
 
@@ -47,7 +49,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 		super();
 		this.name = name;
 		this.description = description;
-		this.statusHistory = new HashSet< WorkflowElementStatusHistoryElementImpl >();
+		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
 		this.definition = definition;
 		this.data = new HashSet< WorkflowElementDataImpl >();
 	}
@@ -72,12 +74,12 @@ public class WorkflowElementImpl extends IdentifiableObject
 		this.description = description;
 	}
 
-	public Set< WorkflowElementStatusHistoryElementImpl > getStatusHistory()
+	public List< WorkflowElementStatusHistoryElementImpl > getStatusHistory()
 	{
 		return statusHistory;
 	}
 
-	public void setStatusHistory( Set< WorkflowElementStatusHistoryElementImpl > statusHistory )
+	public void setStatusHistory( List< WorkflowElementStatusHistoryElementImpl > statusHistory )
 	{
 		this.statusHistory = statusHistory;
 	}

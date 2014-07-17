@@ -5,9 +5,9 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 public interface WorkshopService extends WorkflowElementService
 {
 
-	public void joinSession( int id, int sessionID );
+	public void joinSession( int userID, int sessionID );
 
-	public void leaveSession( int id, int sessionID );
+	public void leaveSession( int userID, int sessionID );
 
 	public ExerciseImpl getCurrentExercise( int sessionID );
 	

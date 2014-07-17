@@ -17,27 +17,45 @@ public class WorkshopImpl extends WorkflowElementImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	
-	@OneToMany(cascade = CascadeType.ALL)
+
+	@OneToMany( cascade = CascadeType.ALL )
 	private Set< SessionImpl > sessions;
-	
-	@OneToMany(cascade = CascadeType.ALL)
+
+	@OneToMany( cascade = CascadeType.ALL )
 	private List< ExerciseImpl > exercises;
 
 	public WorkshopImpl()
 	{
 		super();
-		this.sessions = new HashSet<SessionImpl>();
-		this.exercises = new ArrayList<ExerciseImpl>();
+		this.sessions = new HashSet< SessionImpl >();
+		this.exercises = new ArrayList< ExerciseImpl >();
 	}
 
 	public WorkshopImpl( String name, String description, WorkflowElementDefinitionImpl definition )
 	{
 		super( name, description, definition );
-		this.sessions = new HashSet<SessionImpl>();
-		this.exercises = new ArrayList<ExerciseImpl>();
+		this.sessions = new HashSet< SessionImpl >();
+		this.exercises = new ArrayList< ExerciseImpl >();
 	}
-	
-	
+
+	public Set< SessionImpl > getSessions()
+	{
+		return sessions;
+	}
+
+	public void setSessions( Set< SessionImpl > sessions )
+	{
+		this.sessions = sessions;
+	}
+
+	public List< ExerciseImpl > getExercises()
+	{
+		return exercises;
+	}
+
+	public void setExercises( List< ExerciseImpl > exercises )
+	{
+		this.exercises = exercises;
+	}
 
 }
