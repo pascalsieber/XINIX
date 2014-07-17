@@ -48,9 +48,10 @@ public class WorkshopRestService extends IdentifiableObjectRestService
 
 	public static final String SESSION_JOIN = "/session/join";
 	public static final String SESSION_LEAVE = "/session/leave";
-	public static final String SESSION_GET_CURRENT_EX = "/session/currentExercise";
-	public static final String SESSION_GET_NEXT_EX = "/session/nextExercise";
-	public static final String SESSION_GET_PREVIOUS_EX = "/session/previousExercise";
+	public static final String SESSION_GET_CURRENT_EX = "/session/getCurrentExercise";
+	public static final String SESSION_GET_NEXT_EX = "/session/getNextExercise";
+	public static final String SESSION_GET_PREVIOUS_EX = "/session/getPreviousExercise";
+	public static final String SESSION_SET_NEXT_EX = "/session/setNextExercise";
 
 	private WorkshopService workshopService;
 	private UserService userService;
@@ -196,6 +197,13 @@ public class WorkshopRestService extends IdentifiableObjectRestService
 		return workshopService.getPreviousExercise( sessionID );
 	}
 
+	@POST
+	@Path( SESSION_SET_NEXT_EX )
+	public void setNextExercise( int sessionID )
+	{
+		workshopService.setNextExercise( sessionID );
+	}
+	
 	@Override
 	protected IdentifiableObjectService getPersistentObjectService()
 	{
