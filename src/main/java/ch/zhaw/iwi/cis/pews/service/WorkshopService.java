@@ -15,4 +15,6 @@ public interface WorkshopService extends WorkflowElementService
 	
 	public ExerciseImpl getPreviousExercise( int sessionID );
 
+	public void setNextExercise( int sessionID );
+
 }

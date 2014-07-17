@@ -90,4 +90,19 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		}
 	}
 
+	@Override
+	public void setNextExercise( int sessionID )
+	{
+		SessionImpl session = workshopDao.findById( sessionID );
+		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
+		int current = exercises.indexOf( session.getCurrentExercise() );
+		
+		if ( current < exercises.size() )
+		{
+			session.setCurrentExercise( exercises.get( current + 1 ) );
+			workshopDao.persist( session );
+		}
+		
+	}
+
 }
