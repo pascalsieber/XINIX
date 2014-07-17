@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.model.data;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -17,9 +18,9 @@ public class WorkshopDataImpl extends WorkflowElementDataImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	public WorkshopDataImpl( PrincipalImpl owner )
+	public WorkshopDataImpl( PrincipalImpl owner, WorkflowElementImpl workflowElement )
 	{
-		super( owner );
+		super( owner, workflowElement );
 		// TODO Auto-generated constructor stub
 	}
 
