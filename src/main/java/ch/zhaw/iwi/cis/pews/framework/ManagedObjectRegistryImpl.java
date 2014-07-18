@@ -138,7 +138,7 @@ public class ManagedObjectRegistryImpl implements ManagedObjectRegistry
 	private static MetaManagedObjectMap createClassMap()
 	{
 		MetaManagedObjectMap classmap = new MetaManagedObjectMap();
-		Reflections reflections = new Reflections( ".*" );
+		Reflections reflections = new Reflections( "" );
 		Set< Class< ? > > managedObjectTypes = reflections.getTypesAnnotatedWith( ManagedObject.class );
  
 		// TODO introduce dual registration of simple and fully qualified class names.

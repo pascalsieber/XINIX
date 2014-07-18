@@ -14,7 +14,6 @@ import javax.servlet.DispatcherType;
 import org.apache.derby.drda.NetworkServerControl;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
-import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Handler;
@@ -187,8 +186,8 @@ public class ZhawEngine implements LifecycleObject
 	{
 		URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
 
-		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
-//		ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
+//		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
+		ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
 
 		webServer.addBean( loginService );
 

@@ -18,7 +18,7 @@ public class ZhawJDBCLoginService extends MappedLoginService
 	public ZhawJDBCLoginService()
 	{
 		super();
-		setName( "zhaw login realm" );
+		setName( "ZHAWRealm" );
 		userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 	}
 

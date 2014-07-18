@@ -11,6 +11,13 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class UserDaoImpl extends IdentifiableObjectDaoImpl implements UserDao
 {
+	
+	
+	public UserDaoImpl()
+	{
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
