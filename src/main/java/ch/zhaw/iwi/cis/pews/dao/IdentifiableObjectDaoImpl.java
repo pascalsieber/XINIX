@@ -11,7 +11,7 @@ public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 {
 	protected EntityManager getEntityManager()
 	{
-		return ZhawEngine.getManagedObjectRegistry().getManagedObject( "cleantech" );
+		return ZhawEngine.getManagedObjectRegistry().getManagedObject( "pews" );
 	}
 
 	@Override

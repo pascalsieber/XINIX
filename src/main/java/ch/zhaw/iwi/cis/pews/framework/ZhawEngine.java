@@ -35,6 +35,12 @@ import org.glassfish.jersey.servlet.ServletContainer;
 
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
+import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
+import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.service.UserService;
+import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.URIWrapper;
@@ -53,27 +59,28 @@ public class ZhawEngine implements LifecycleObject
 		// This only needs to be done once, so am doing it here.
 		Runtime.getRuntime().addShutdownHook( new ShutdownThread() );
 	}
-	
+
 	public static void main( String[] args )
 	{
 		Logger.getLogger( ZhawEngine.class.getName() ).info( "Testing" );
-		
+
 		getEngine().start();
 	}
-	
+
 	public static ZhawEngine getEngine()
 	{
 		if ( zhawEngine == null )
 			zhawEngine = new ZhawEngine();
-		
+
 		return zhawEngine;
 	}
-	
+
 	public void start()
 	{
 		startDatabase();
 		startWebServer();
 		setupEntityManager();
+		ensureRootUser();
 	}
 
 	private static void setupEntityManager()
@@ -83,11 +90,11 @@ public class ZhawEngine implements LifecycleObject
 		EntityManagerLifecycleManager lifecycleManager = new EntityManagerLifecycleManager( (EntityManagerFactory)registry.getManagedObject( "pewsFactory" ) );
 		registry.registerManagedObjectType( lifecycleManager, "pews", Scope.THREAD );
 	}
-	
+
 	public void stop()
 	{
 		stopWebServer();
-		
+
 		try
 		{
 			serverControl.ping();
@@ -95,49 +102,48 @@ public class ZhawEngine implements LifecycleObject
 			getManagedObjectRegistry().stop();
 		}
 		catch ( Exception e )
-		{
-		}
+		{}
 	}
-	
+
 	public static ManagedObjectRegistry getManagedObjectRegistry()
 	{
 		if ( managedObjectRegistry == null )
 			managedObjectRegistry = new ManagedObjectRegistryImpl();
-		
+
 		return managedObjectRegistry;
 	}
-	
+
 	private static void startDatabase()
 	{
 		serverControl = NetworkServerControlWrapper.__new( InetAddressWrapper.getByName( "0.0.0.0" ), 1527 );
 		NetworkServerControlWrapper.start( serverControl, new PrintWriter( System.out ) );
 	}
-	
+
 	private static void startWebServer()
 	{
 		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8080 ) );
 
 		// Setup session ID manager.
 		webServer.setSessionIdManager( new HashSessionIdManager() );
-        
-        HandlerCollection handlers = new HandlerCollection();
-        handlers.addHandler( getSecurityHandler( getServletContextHandler() ) );
-        
-        handlers.addHandler( getRequestLogHandler() );
-        handlers.addHandler( getResourceHandler() );
+
+		HandlerCollection handlers = new HandlerCollection();
+		handlers.addHandler( getSecurityHandler( getServletContextHandler() ) );
+
+		handlers.addHandler( getRequestLogHandler() );
+		handlers.addHandler( getResourceHandler() );
 		webServer.setHandler( handlers );
-        
-        // Start the server.
+
+		// Start the server.
 		ServerWrapper.start( webServer );
 	}
-	
+
 	private static ResourceHandler getResourceHandler()
 	{
 		ResourceHandler handler = new ResourceHandler();
 		handler.setDirectoriesListed( true );
 		handler.setWelcomeFiles( new String[] { "index.html" } );
 		handler.setResourceBase( PewsConfig.getWebDir() );
-		
+
 		return handler;
 	}
 
@@ -156,13 +162,13 @@ public class ZhawEngine implements LifecycleObject
 		handler.addFilter( ThreadLocalFilter.class, "/*", EnumSet.of( DispatcherType.INCLUDE, DispatcherType.REQUEST ) );
 
 		// Setup session handler.
-        HashSessionManager manager = new HashSessionManager();
-        SessionHandler sessionHandler = new SessionHandler(manager);
-        handler.setHandler(sessionHandler);
-        
+		HashSessionManager manager = new HashSessionManager();
+		SessionHandler sessionHandler = new SessionHandler( manager );
+		handler.setHandler( sessionHandler );
+
 		return handler;
 	}
-	
+
 	private static RequestLogHandler getRequestLogHandler()
 	{
 		NCSARequestLog requestLog = new NCSARequestLog( PewsConfig.getLogDir() + "/jetty-yyyy_mm_dd.request.log" );
@@ -173,20 +179,22 @@ public class ZhawEngine implements LifecycleObject
 
 		RequestLogHandler requestLogHandler = new RequestLogHandler();
 		requestLogHandler.setRequestLog( requestLog );
-		
+
 		return requestLogHandler;
 	}
-	
+
 	private static SecurityHandler getSecurityHandler( Handler delegateHandler )
 	{
 		URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
-		
+
 		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
+//		ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
+
 		webServer.addBean( loginService );
 
 		Constraint constraint = new Constraint( Constraint.__BASIC_AUTH, "user" );
 		constraint.setAuthenticate( true );
-		
+
 		ConstraintMapping mapping = new ConstraintMapping();
 		mapping.setPathSpec( "/*" );
 		mapping.setConstraint( constraint );
@@ -195,17 +203,40 @@ public class ZhawEngine implements LifecycleObject
 		handler.setConstraintMappings( Collections.singletonList( mapping ) );
 		handler.setAuthenticator( new BasicAuthenticator() );
 		handler.setLoginService( loginService );
-		
+
 		handler.setHandler( delegateHandler );
-		
+
 		return handler;
 	}
-	
+
+	private static void ensureRootUser()
+	{
+		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
+
+		boolean rootRegistered = false;
+		for ( IdentifiableObject user : userService.findAll( UserImpl.class.getSimpleName() ) )
+		{
+			if ( ( (UserImpl)user ).getLoginName().equalsIgnoreCase( "root" ) )
+			{
+				rootRegistered = true;
+				break;
+			}
+		}
+
+		if ( !rootRegistered )
+		{
+			int roleID = userService.persist( new RoleImpl( "user", "user" ) );
+			userService.persist( new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)userService.findByID( roleID ), null, "root first name", "root last name", "root" ) );
+			System.out.println("root user registered initially");
+		}
+
+	}
+
 	private static void stopDatabase()
 	{
 		NetworkServerControlWrapper.shutdown( serverControl );
 	}
-	
+
 	private static void stopWebServer()
 	{
 		ServerWrapper.stop( webServer );

@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.framework.ThreadLocalFilter;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
@@ -73,9 +74,10 @@ public class UserRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( USER_ACCEPT_INVITATION )
-	public void acceptInvitation( int userID, int sessionID )
+	public void acceptInvitation( int sessionID )
 	{
-		userService.acceptInvitation(userID, sessionID);
+		PrincipalImpl user = userService.findByLoginName( ThreadLocalFilter.getServletRequest().getUserPrincipal().getName() );
+		userService.acceptInvitation(user.getID(), sessionID);
 	}
 
 	@POST
