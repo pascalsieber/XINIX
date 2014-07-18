@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
@@ -19,11 +18,7 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 
 	public < T extends IdentifiableObject > int persist( T persistentObject )
 	{
-		// return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) ).readEntity( int.class );
-
-		Response response = getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) );
-		System.out.println( response );
-		return response.readEntity( int.class );
+		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) ).readEntity( int.class );
 	}
 
 	public < T extends IdentifiableObject > void remove( T persistentObject )
