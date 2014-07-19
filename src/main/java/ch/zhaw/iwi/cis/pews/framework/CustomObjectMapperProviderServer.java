@@ -14,14 +14,12 @@ public class CustomObjectMapperProviderServer implements ContextResolver< Object
 
 	public CustomObjectMapperProviderServer()
 	{
-		System.out.println("new CustomObjectMapper");
 		mapper = createCustomMapper();
 	}
 
 	@Override
 	public ObjectMapper getContext( Class< ? > type )
 	{
-		System.out.println("CustomObjectMapper.getContext(...)");
 		return mapper;
 	}
 

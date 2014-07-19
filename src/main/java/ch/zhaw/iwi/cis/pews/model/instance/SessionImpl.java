@@ -45,13 +45,14 @@ public class SessionImpl extends WorkflowElementImpl
 		this.executers = new HashSet< PrincipalImpl >();
 	}
 
-	public SessionImpl( String name, String description, WorkflowElementDefinitionImpl definition )
+	public SessionImpl( String name, String description, WorkflowElementDefinitionImpl definition, WorkshopImpl workshop )
 	{
 		super( name, description, definition );
 		this.participants = new HashSet< PrincipalImpl >();
 		this.acceptees = new HashSet< PrincipalImpl >();
 		this.invitees = new HashSet< PrincipalImpl >();
 		this.executers = new HashSet< PrincipalImpl >();
+		this.workshop = workshop;
 	}
 
 	public WorkshopImpl getWorkshop()
@@ -66,6 +67,10 @@ public class SessionImpl extends WorkflowElementImpl
 
 	public ExerciseImpl getCurrentExercise()
 	{
+		if ( currentExercise == null )
+		{
+			setCurrentExercise( getWorkshop().getExercises().get( 0 ) );
+		}
 		return currentExercise;
 	}
 
