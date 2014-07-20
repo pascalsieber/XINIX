@@ -45,12 +45,12 @@ public class WorkflowElementServiceImpl extends IdentifiableObjectServiceImpl im
 	private void changeStatus( int id, WorkflowElementStatusImpl newStatus )
 	{
 		WorkflowElementStatusHistoryElementImpl status = new WorkflowElementStatusHistoryElementImpl( new Date(), newStatus );
-		int statusID = workflowElementDao.persist( status );
+		int statusID = persist( status );
 
-		WorkflowElementImpl workflowElement = workflowElementDao.findById( id );
-		workflowElement.getStatusHistory().add( (WorkflowElementStatusHistoryElementImpl)workflowElementDao.findById( statusID ) );
+		WorkflowElementImpl workflowElement = findByID( id );
+		workflowElement.getStatusHistory().add( (WorkflowElementStatusHistoryElementImpl)findByID( statusID ) );
 		workflowElement.setCurrentState( status.getStatus().toString() );
-		workflowElementDao.persist( workflowElement );
+		persist( workflowElement );
 	}
 
 }

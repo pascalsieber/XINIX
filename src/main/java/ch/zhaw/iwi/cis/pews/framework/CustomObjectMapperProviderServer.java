@@ -4,7 +4,6 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 
 @Provider
@@ -26,7 +25,7 @@ public class CustomObjectMapperProviderServer implements ContextResolver< Object
 	private static ObjectMapper createCustomMapper()
 	{
 		final ObjectMapper result = new ObjectMapper();
-		result.enableDefaultTyping(DefaultTyping.JAVA_LANG_OBJECT);
+		result.enableDefaultTyping();
 		result.registerModule( new GuavaModule() );
 		return result;
 	}

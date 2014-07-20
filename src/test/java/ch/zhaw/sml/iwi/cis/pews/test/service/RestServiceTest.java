@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
@@ -17,39 +17,54 @@ import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
+import ch.zhaw.iwi.cis.pews.service.RoleService;
+import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDataServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
 
 public class RestServiceTest
 {
-	private UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
-	private WorkshopService workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
-	private ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
+	private static SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
+	private static RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+	private static UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
+	private static WorkshopDefinitionService workshopDefinitionService = ServiceProxyManager.createServiceProxy( WorkshopDefinitionServiceProxy.class );
+	private static WorkshopService workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
+	private static ExerciseDefinitionService exerciseDefinitionService = ServiceProxyManager.createServiceProxy( ExerciseDefinitionServiceProxy.class );
+	private static ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
+	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 
-	private int defaultWorkshopDefinitionID;
-	private int defaultWorkshopID;
-	private int defaultSessionID;
-	private int defaultExerciseDefinitionID;
-	private int defaultExerciseID;
-	private int defaultRoleID;
-	private int defaultUserID;
+	private static int defaultWorkshopDefinitionID;
+	private static int defaultWorkshopID;
+	private static int defaultSessionID;
+	private static int defaultExerciseDefinitionID;
+	private static int defaultExerciseID;
+	private static int defaultRoleID;
+	private static int defaultUserID;
 
-	@Before
-	public void setupTest()
+	@BeforeClass
+	public static void setupTest()
 	{
 		// new role
-		defaultRoleID = userService.persist( new RoleImpl( "user", "user role" ) );
+		defaultRoleID = roleService.persist( new RoleImpl( "user", "user role" ) );
 
 		// new User
-		defaultUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "password" ), (RoleImpl)userService.findByID( defaultRoleID ), null, "John", "Smith", "john.smith@mail.com" ) );
+		defaultUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "password" ), (RoleImpl)roleService.findByID( defaultRoleID ), null, "John", "Smith", "john.smith@mail.com" ) );
 
 		// new workshop definition
-		defaultWorkshopDefinitionID = workshopService.persist( new WorkshopDefinitionImpl(
+		defaultWorkshopDefinitionID = workshopDefinitionService.persist( new WorkshopDefinitionImpl(
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			"workshop definition",
 			"workshop definition test entry" ) );
@@ -58,10 +73,10 @@ public class RestServiceTest
 		defaultWorkshopID = workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", (WorkflowElementDefinitionImpl)workshopService.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// new session
-		defaultSessionID = workshopService.persist( new SessionImpl( "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultSessionID ) ) );
+		defaultSessionID = sessionService.persist( new SessionImpl( "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultSessionID ) ) );
 
 		// new exercise definition
-		defaultExerciseDefinitionID = exerciseService.persist( new ExerciseDefinitionImpl( (PrincipalImpl)userService.findByID( defaultUserID ), TimeUnit.SECONDS, 120 ) );
+		defaultExerciseDefinitionID = exerciseDefinitionService.persist( new ExerciseDefinitionImpl( (PrincipalImpl)userService.findByID( defaultUserID ), TimeUnit.SECONDS, 120 ) );
 
 		// new exercise
 		defaultExerciseID = exerciseService.persist( new ExerciseImpl(
@@ -75,26 +90,26 @@ public class RestServiceTest
 	public void crudOperationsUser()
 	{
 		// create role
-		int roleID = userService.persist( new RoleImpl( "new role", "new role description" ) );
+		int roleID = roleService.persist( new RoleImpl( "new role", "new role description" ) );
 		assertTrue( roleID > 0 );
 
 		// read role
-		RoleImpl role = userService.findByID( roleID );
+		RoleImpl role = roleService.findByID( roleID );
 		assertTrue( role.getID() == roleID );
 		assertTrue( role.getName().equalsIgnoreCase( "new role" ) );
 		assertTrue( role.getDescription().equalsIgnoreCase( "new role description" ) );
 
 		// update role
 		role.setName( "updated role" );
-		userService.persist( role );
-		RoleImpl updatedRole = userService.findByID( roleID );
+		roleService.persist( role );
+		RoleImpl updatedRole = roleService.findByID( roleID );
 		assertTrue( updatedRole.getName().equalsIgnoreCase( "updated role" ) );
 
 		// delete role
-		userService.remove( userService.findByID( roleID ) );
+		roleService.remove( userService.findByID( roleID ) );
 
 		// find all checks delete
-		assertTrue( !userService.findAll( RoleImpl.class.getSimpleName() ).contains( updatedRole ) );
+		assertTrue( !roleService.findAll( RoleImpl.class.getSimpleName() ).contains( updatedRole ) );
 
 		// create user
 		int userID = userService.persist( new UserImpl( new PasswordCredentialImpl( "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService

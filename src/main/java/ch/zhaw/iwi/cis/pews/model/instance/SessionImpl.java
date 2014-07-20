@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.model.instance;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -10,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -21,19 +23,19 @@ public class SessionImpl extends WorkflowElementImpl
 	@ManyToOne
 	private WorkshopImpl workshop;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private ExerciseImpl currentExercise;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private Set< PrincipalImpl > participants;
 
 	@ManyToMany
 	private Set< PrincipalImpl > acceptees;
 
-	@ManyToMany
-	private Set< PrincipalImpl > invitees;
+	@OneToMany(cascade = CascadeType.ALL)
+	private Set< Invitation > invitations;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	private Set< PrincipalImpl > executers;
 
 	public SessionImpl()
@@ -41,7 +43,7 @@ public class SessionImpl extends WorkflowElementImpl
 		super();
 		this.participants = new HashSet< PrincipalImpl >();
 		this.acceptees = new HashSet< PrincipalImpl >();
-		this.invitees = new HashSet< PrincipalImpl >();
+		this.invitations = new HashSet< Invitation >();
 		this.executers = new HashSet< PrincipalImpl >();
 	}
 
@@ -50,7 +52,7 @@ public class SessionImpl extends WorkflowElementImpl
 		super( name, description, definition );
 		this.participants = new HashSet< PrincipalImpl >();
 		this.acceptees = new HashSet< PrincipalImpl >();
-		this.invitees = new HashSet< PrincipalImpl >();
+		this.invitations = new HashSet< Invitation >();
 		this.executers = new HashSet< PrincipalImpl >();
 		this.workshop = workshop;
 	}
@@ -99,14 +101,14 @@ public class SessionImpl extends WorkflowElementImpl
 		this.acceptees = acceptees;
 	}
 
-	public Set< PrincipalImpl > getInvitees()
+	public Set< Invitation > getInvitations()
 	{
-		return invitees;
+		return invitations;
 	}
 
-	public void setInvitees( Set< PrincipalImpl > invitees )
+	public void setInvitations( Set< Invitation > invitations )
 	{
-		this.invitees = invitees;
+		this.invitations = invitations;
 	}
 
 	public Set< PrincipalImpl > getExecuters()

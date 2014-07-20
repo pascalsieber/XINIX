@@ -4,10 +4,9 @@ import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
 import ch.zhaw.iwi.cis.pews.dao.UserDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 
@@ -25,22 +24,6 @@ public class UserServiceImpl extends IdentifiableObjectServiceImpl implements Us
 	protected IdentifiableObjectDao getIdentifiableObjectDao()
 	{
 		return userdao;
-	}
-
-	@Override
-	public void acceptInvitation( int userID, int sessionID )
-	{
-		PrincipalImpl user = userdao.findById( userID );
-		SessionImpl session = userdao.findById( sessionID );
-
-		session.getAcceptees().add( user );
-		session.getInvitees().remove( user );
-		userdao.persist( session );
-
-		user.getSessionAcceptances().add( session );
-		user.getSessionInvitations().remove( session );
-		userdao.persist( user );
-
 	}
 
 	@Override

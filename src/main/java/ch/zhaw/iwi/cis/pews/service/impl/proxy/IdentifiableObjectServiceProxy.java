@@ -26,7 +26,7 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 
 	public < T extends IdentifiableObject > void remove( T persistentObject )
 	{
-		getServiceTarget().path( IdentifiableObjectRestService.REMOVE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( jsonStringify( persistentObject ) ) );
+		getServiceTarget().path( IdentifiableObjectRestService.REMOVE ).request( MediaType.APPLICATION_JSON ).post( Entity.json(persistentObject  ) );
 	}
 
 	@SuppressWarnings( "unchecked" )

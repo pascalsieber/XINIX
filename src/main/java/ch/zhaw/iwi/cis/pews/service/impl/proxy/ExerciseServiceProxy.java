@@ -11,19 +11,19 @@ public class ExerciseServiceProxy extends IdentifiableObjectServiceProxy impleme
 
 	protected ExerciseServiceProxy( String hostName, int port, String userName, String password )
 	{
-		super( hostName, port, userName, password, ExerciseRestService.EX_BASE );
+		super( hostName, port, userName, password, ExerciseRestService.BASE );
 	}
 
 	@Override
 	public void start( int id )
 	{
-		getServiceTarget().path( ExerciseRestService.EX_START ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+		getServiceTarget().path( ExerciseRestService.START ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
 	@Override
 	public void stop( int id )
 	{
-		getServiceTarget().path( ExerciseRestService.EX_STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+		getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
 }

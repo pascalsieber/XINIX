@@ -9,6 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -31,8 +32,8 @@ public class PrincipalImpl extends IdentifiableObject
 	@ManyToOne
 	private SessionImpl session;
 
-	@ManyToMany
-	private Set< SessionImpl > sessionInvitations;
+	@OneToMany(mappedBy="invitee")
+	private Set< Invitation > sessionInvitations;
 
 	@ManyToMany
 	private Set< SessionImpl > sessionAcceptances;
@@ -44,7 +45,7 @@ public class PrincipalImpl extends IdentifiableObject
 	{
 		super();
 		this.sessionAcceptances = new HashSet<SessionImpl>();
-		this.sessionInvitations = new HashSet<SessionImpl>();
+		this.sessionInvitations = new HashSet<Invitation>();
 		this.sessionExecutions = new HashSet<SessionImpl>();
 	}
 
@@ -55,7 +56,7 @@ public class PrincipalImpl extends IdentifiableObject
 		this.role = role;
 		this.session = session;
 		this.sessionAcceptances = new HashSet<SessionImpl>();
-		this.sessionInvitations = new HashSet<SessionImpl>();
+		this.sessionInvitations = new HashSet<Invitation>();
 		this.sessionExecutions = new HashSet<SessionImpl>();
 	}
 
@@ -89,12 +90,12 @@ public class PrincipalImpl extends IdentifiableObject
 		this.session = session;
 	}
 
-	public Set< SessionImpl > getSessionInvitations()
+	public Set< Invitation > getSessionInvitations()
 	{
 		return sessionInvitations;
 	}
 
-	public void setSessionInvitations( Set< SessionImpl > sessionInvitations )
+	public void setSessionInvitations( Set< Invitation > sessionInvitations )
 	{
 		this.sessionInvitations = sessionInvitations;
 	}
