@@ -2,11 +2,14 @@ package ch.zhaw.sml.iwi.cis.pews.test.service;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
@@ -47,6 +50,8 @@ public class RestServiceTest
 	private static ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 
+	private static ArrayList< Integer > ids = new ArrayList<>();
+	
 	private static int defaultWorkshopDefinitionID;
 	private static int defaultWorkshopID;
 	private static int defaultSessionID;
@@ -68,7 +73,8 @@ public class RestServiceTest
 		defaultWorkshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			"workshop definition",
-			"workshop definition test entry", "problem description" ) );
+			"workshop definition test entry",
+			"problem description" ) );
 
 		// new workshop instance
 		defaultWorkshopID = workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", (WorkflowElementDefinitionImpl)workshopService.findByID( defaultWorkshopDefinitionID ) ) );
@@ -77,7 +83,11 @@ public class RestServiceTest
 		defaultSessionID = sessionService.persist( new SessionImpl( "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
 
 		// new exercise definition
-		defaultExerciseDefinitionID = exerciseDefinitionService.persist( new ExerciseDefinitionImpl( (PrincipalImpl)userService.findByID( defaultUserID ), TimeUnit.SECONDS, 120, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( defaultWorkshopDefinitionID ) ) );
+		defaultExerciseDefinitionID = exerciseDefinitionService.persist( new ExerciseDefinitionImpl(
+			(PrincipalImpl)userService.findByID( defaultUserID ),
+			TimeUnit.SECONDS,
+			120,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// new exercise
 		defaultExerciseID = exerciseService.persist( new ExerciseImpl(
@@ -88,7 +98,7 @@ public class RestServiceTest
 	}
 
 	@Test
-	public void crudOperationsUser()
+	public void crudOperationsUserService()
 	{
 		// create role
 		int roleID = roleService.persist( new RoleImpl( "new role", "new role description" ) );
@@ -107,10 +117,18 @@ public class RestServiceTest
 		assertTrue( updatedRole.getName().equalsIgnoreCase( "updated role" ) );
 
 		// delete role
-		roleService.remove( userService.findByID( roleID ) );
+		roleService.remove( roleService.findByID( roleID ) );
 
 		// find all checks delete
-		assertTrue( !roleService.findAll( RoleImpl.class.getSimpleName() ).contains( updatedRole ) );
+		List< RoleImpl > roles = roleService.findAll( RoleImpl.class.getSimpleName() );
+		assertTrue( roles.size() > 0 );
+		
+		ids.clear();
+		for ( RoleImpl elem : roles )
+		{
+			ids.add( elem.getID() );
+		}
+		assertTrue( !ids.contains( roleID ) );
 
 		// create user
 		int userID = userService.persist( new UserImpl( new PasswordCredentialImpl( "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService
@@ -133,20 +151,160 @@ public class RestServiceTest
 		// delete user
 		userService.remove( userService.findByID( userID ) );
 
-		// find all check delete
-		assertTrue( !userService.findAll( UserImpl.class.getSimpleName() ).contains( updatedUser ) );
+		// find all checks delete
+		List< UserImpl > users = roleService.findAll( UserImpl.class.getSimpleName() );
+		assertTrue( users.size() > 0 );
+		
+		ids.clear();
+		for ( UserImpl elem : users )
+		{
+			ids.add( elem.getID() );
+		}
+		assertTrue( !ids.contains( userID ) );
 
 	}
 
 	@Test
-	public void crudOperationsWorkshop()
+	public void crudOperationsWorkshopService()
 	{
+		// create workshop definition
+		int workshopDefinitionID = workshopDefinitionService.persist( new WorkshopDefinitionImpl(
+			(PrincipalImpl)userService.findByID( defaultUserID ),
+			"workshop definition",
+			"workshop definition description" ) );
 
+		// read workshop definition
+		WorkshopDefinitionImpl workshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
+		assertTrue( workshopDefinition.getID() == workshopDefinitionID );
+		assertTrue( workshopDefinition.getName().equalsIgnoreCase( "workshop definition" ) );
+		assertTrue( workshopDefinition.getDescription().equalsIgnoreCase( "workshop definition description" ) );
+		assertTrue( workshopDefinition.getOwner().getID() == defaultUserID );
+
+		// update workshop definition
+		workshopDefinition.setName( "updated workshop definition" );
+		workshopDefinitionService.persist( workshopDefinition );
+		WorkshopDefinitionImpl updatedWorkshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
+		assertTrue( updatedWorkshopDefinition.getName().equalsIgnoreCase( "updated workshop definition" ) );
+
+		// delete workshop definition
+		workshopDefinitionService.remove( workshopDefinitionService.findByID( workshopDefinitionID ) );
+
+		// find all checks delete
+		List< WorkshopDefinitionImpl > wsDefs = roleService.findAll( WorkshopDefinitionImpl.class.getSimpleName() );
+		assertTrue( wsDefs.size() > 0 );
+		
+		ids.clear();
+		for ( WorkshopDefinitionImpl elem : wsDefs )
+		{
+			ids.add( elem.getID() );
+		}
+		assertTrue( !ids.contains( workshopDefinitionID ) );
+		
+		// create workshop instance
+		int wsID = workshopService.persist( new WorkshopImpl( "workshop instance", "workshop instance description", (WorkflowElementDefinitionImpl)workshopDefinitionService
+			.findByID( defaultWorkshopDefinitionID ) ) );
+
+		// read workshop instance
+		WorkshopImpl ws = workshopService.findByID( wsID );
+		assertTrue( ws.getID() == wsID );
+		assertTrue( ws.getName().equalsIgnoreCase( "workshop instance" ) );
+		assertTrue( ws.getDescription().equalsIgnoreCase( "workshop instance description" ) );
+		assertTrue( ws.getCurrentState().equalsIgnoreCase( "new" ) );
+		assertTrue( ws.getDefinition().getID() == defaultWorkshopDefinitionID );
+
+		// update workshop instance
+		ws.setName( "update workshop instance" );
+		workshopService.persist( ws );
+		WorkshopImpl updatedWs = workshopService.findByID( wsID );
+		assertTrue( updatedWs.getName().equalsIgnoreCase( "updated workshop instance" ) );
+
+		// delete workshop instance
+		workshopService.remove( updatedWs );
+
+		// find all checks delete
+		List< WorkshopImpl > workshops = roleService.findAll( WorkshopImpl.class.getSimpleName() );
+		assertTrue( workshops.size() > 0 );
+		
+		ids.clear();
+		for ( WorkshopImpl elem : workshops )
+		{
+			ids.add( elem.getID() );
+		}
+		assertTrue( !ids.contains( wsID ) );
+
+		// create session
+		int sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+
+		// read session
+		SessionImpl session = sessionService.findByID( sessionID );
+		assertTrue( session.getID() == sessionID );
+		assertTrue( session.getName().equalsIgnoreCase( "session instance" ) );
+		assertTrue( session.getName().equalsIgnoreCase( "session description" ) );
+		assertTrue( session.getDefinition() == null );
+		assertTrue( session.getWorkshop().getID() == defaultWorkshopID );
+
+		// update session
+		session.setName( "updated session" );
+		sessionService.persist( session );
+		SessionImpl updatedSession = sessionService.findByID( sessionID );
+		assertTrue( updatedSession.getName().equalsIgnoreCase( "updated session" ) );
+
+		// delete session
+		sessionService.remove( updatedSession );
+
+		// find all checks delete
+		List< SessionImpl > sessions = roleService.findAll( SessionImpl.class.getSimpleName() );
+		assertTrue( sessions.size() > 0 );
+		
+		ids.clear();
+		for ( SessionImpl elem : sessions )
+		{
+			ids.add( elem.getID() );
+		}
+		assertTrue( !ids.contains( sessionID ) );
 	}
 
 	@Test
-	public void crudOperationsExercise()
+	public void crudOperationsExerciseService()
 	{
+		// create exercise definition
 
+		// read exercise definition
+
+		// update exercise definition
+
+		// delete exercise definition
+
+		// find all checks delete
+
+		// create exercise instance
+
+		// read exercise instance
+
+		// update exercise instance
+
+		// delete exercise instance
+
+		// find all checks delete
+
+		// create exercise instance
+
+		// read exercise instance
+
+		// update exercise instance
+
+		// delete exercise instance
+
+		// find all checks delete
+
+		// create exercise data
+
+		// read exercise data
+
+		// update exercise data
+
+		// delete exercise data
+
+		// find all checks delete
 	}
 }
