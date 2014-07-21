@@ -69,7 +69,7 @@ public class SessionImpl extends WorkflowElementImpl
 
 	public ExerciseImpl getCurrentExercise()
 	{
-		if ( currentExercise == null )
+		if ( currentExercise == null && workshop.getExercises().size() > 0 )
 		{
 			setCurrentExercise( getWorkshop().getExercises().get( 0 ) );
 		}

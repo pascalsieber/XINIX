@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.instance;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 	private String name;
 	private String description;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List< WorkflowElementStatusHistoryElementImpl > statusHistory;
 
 	private String currentState;
@@ -41,7 +42,9 @@ public class WorkflowElementImpl extends IdentifiableObject
 	public WorkflowElementImpl()
 	{
 		super();
-		// TODO Auto-generated constructor stub
+		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
+		this.data = new HashSet<WorkflowElementDataImpl>();
+		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 	}
 
 	public WorkflowElementImpl( String name, String description, WorkflowElementDefinitionImpl definition )
@@ -52,6 +55,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
 		this.definition = definition;
 		this.data = new HashSet< WorkflowElementDataImpl >();
+		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 	}
 
 	public String getName()
@@ -89,9 +93,10 @@ public class WorkflowElementImpl extends IdentifiableObject
 		return currentState;
 	}
 
-	public void setCurrentState( String currentState )
+	public void setCurrentState( WorkflowElementStatusImpl currentState )
 	{
-		this.currentState = currentState;
+		statusHistory.add( new WorkflowElementStatusHistoryElementImpl( new Date(), currentState ) );
+		this.currentState = currentState.toString();
 	}
 
 	public WorkflowElementDefinitionImpl getDefinition()

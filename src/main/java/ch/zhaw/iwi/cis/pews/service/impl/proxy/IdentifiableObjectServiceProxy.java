@@ -21,7 +21,7 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 
 	public < T extends IdentifiableObject > int persist( T persistentObject )
 	{
-		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( jsonStringify( persistentObject ) ) ).readEntity( int.class );
+		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json(persistentObject ) ).readEntity( int.class );
 	}
 
 	public < T extends IdentifiableObject > void remove( T persistentObject )

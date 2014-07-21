@@ -9,6 +9,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 
 public abstract class ServiceProxy
@@ -25,7 +26,9 @@ public abstract class ServiceProxy
 		Client client = ClientBuilder.newBuilder().newClient().register( basicAuth );
 		WebTarget baseTarget = client.target( "http://" + hostName + ":" + port + IdentifiableObjectRestService.SERVICES_BASE );
 		serviceTarget = baseTarget.path( servicePath );
-		mapper = new ObjectMapper().enableDefaultTyping().registerModule( new GuavaModule() );
+		mapper = new ObjectMapper();
+		mapper.enableDefaultTyping();
+		mapper.registerModule( new GuavaModule() );
 	}
 
 	protected WebTarget getServiceTarget()

@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.model.instance;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
@@ -13,6 +15,8 @@ public class WorkflowElementStatusHistoryElementImpl extends IdentifiableObject
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private Date date;
+	
+	@Enumerated( EnumType.STRING )
 	private WorkflowElementStatusImpl status;
 
 	public WorkflowElementStatusHistoryElementImpl()

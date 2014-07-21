@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.model.definition;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -15,17 +16,21 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 	private TimeUnit timeUnit;
 	private int duration;
 
+	@ManyToOne
+	private WorkshopDefinitionImpl workshopDefinition;
+
 	public ExerciseDefinitionImpl()
 	{
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ExerciseDefinitionImpl( PrincipalImpl owner, TimeUnit timeUnit, int duration )
+	public ExerciseDefinitionImpl( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
 	{
 		super( owner );
 		this.timeUnit = timeUnit;
 		this.duration = duration;
+		this.workshopDefinition = workshopDefinition;
 	}
 
 	public TimeUnit getTimeUnit()
@@ -46,6 +51,16 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 	public void setDuration( int duration )
 	{
 		this.duration = duration;
+	}
+
+	public WorkshopDefinitionImpl getWorkshopDefinition()
+	{
+		return workshopDefinition;
+	}
+
+	public void setWorkshopDefinition( WorkshopDefinitionImpl workshopDefinition )
+	{
+		this.workshopDefinition = workshopDefinition;
 	}
 
 }

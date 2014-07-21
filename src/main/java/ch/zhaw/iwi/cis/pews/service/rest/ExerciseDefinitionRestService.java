@@ -29,33 +29,33 @@ public class ExerciseDefinitionRestService extends IdentifiableObjectRestService
 		exerciseDefinitionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
 	}
 
-//	@POST
-//	@Path( PERSIST )
-//	public int persist( ExerciseDefinitionImpl obj )
-//	{
-//		return super.persist( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_BY_ID )
-//	public ExerciseDefinitionImpl findById( int id )
-//	{
-//		return super.findByID( id );
-//	}
-//
-//	@POST
-//	@Path( REMOVE )
-//	public void remove( ExerciseDefinitionImpl obj )
-//	{
-//		super.remove( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_ALL )
-//	public List< ExerciseDefinitionImpl > findAll()
-//	{
-//		return super.findAll( ExerciseDefinitionImpl.class.getSimpleName() );
-//	}
+	@POST
+	@Path( PERSIST )
+	public int persistExerciseDefinition( ExerciseDefinitionImpl obj )
+	{
+		return super.persist( obj );
+	}
+
+	@POST
+	@Path( FIND_BY_ID )
+	public ExerciseDefinitionImpl findExerciseDefinitionById( int id )
+	{
+		return super.findByID( id );
+	}
+
+	@POST
+	@Path( REMOVE )
+	public void removeExerciseDefinition( ExerciseDefinitionImpl obj )
+	{
+		super.remove( obj );
+	}
+
+	@POST
+	@Path( FIND_ALL )
+	public List< ExerciseDefinitionImpl > findAll()
+	{
+		return super.findAll( ExerciseDefinitionImpl.class.getSimpleName() );
+	}
 
 	@Override
 	protected IdentifiableObjectService getPersistentObjectService()

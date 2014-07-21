@@ -28,34 +28,34 @@ public class ExerciseDataRestService extends IdentifiableObjectRestService
 		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 	}
 
-//	@POST
-//	@Path( PERSIST )
-//	public int persist( ExerciseDataImpl obj )
-//	{
-//		return super.persist( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_BY_ID )
-//	public ExerciseDataImpl findById( int id )
-//	{
-//		return super.findByID( id );
-//	}
-//
-//	@POST
-//	@Path( REMOVE )
-//	public void remove( ExerciseDataImpl obj )
-//	{
-//		super.remove( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_ALL )
-//	public List< ExerciseDataImpl > findAll()
-//	{
-//		return super.findAll( ExerciseDataImpl.class.getSimpleName() );
-//	}
-//	
+	@POST
+	@Path( PERSIST )
+	public int persistExerciseData( ExerciseDataImpl obj )
+	{
+		return super.persist( obj );
+	}
+
+	@POST
+	@Path( FIND_BY_ID )
+	public ExerciseDataImpl findExerciseDataById( int id )
+	{
+		return super.findByID( id );
+	}
+
+	@POST
+	@Path( REMOVE )
+	public void removeExerciseData( ExerciseDataImpl obj )
+	{
+		super.remove( obj );
+	}
+
+	@POST
+	@Path( FIND_ALL )
+	public List< ExerciseDataImpl > findAll()
+	{
+		return super.findAll( ExerciseDataImpl.class.getSimpleName() );
+	}
+	
 	@Override
 	protected IdentifiableObjectService getPersistentObjectService()
 	{

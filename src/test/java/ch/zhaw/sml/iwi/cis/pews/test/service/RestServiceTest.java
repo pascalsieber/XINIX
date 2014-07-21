@@ -34,6 +34,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
 public class RestServiceTest
 {
@@ -64,19 +65,19 @@ public class RestServiceTest
 		defaultUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "password" ), (RoleImpl)roleService.findByID( defaultRoleID ), null, "John", "Smith", "john.smith@mail.com" ) );
 
 		// new workshop definition
-		defaultWorkshopDefinitionID = workshopDefinitionService.persist( new WorkshopDefinitionImpl(
+		defaultWorkshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			"workshop definition",
-			"workshop definition test entry" ) );
+			"workshop definition test entry", "problem description" ) );
 
 		// new workshop instance
 		defaultWorkshopID = workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", (WorkflowElementDefinitionImpl)workshopService.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// new session
-		defaultSessionID = sessionService.persist( new SessionImpl( "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultSessionID ) ) );
+		defaultSessionID = sessionService.persist( new SessionImpl( "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
 
 		// new exercise definition
-		defaultExerciseDefinitionID = exerciseDefinitionService.persist( new ExerciseDefinitionImpl( (PrincipalImpl)userService.findByID( defaultUserID ), TimeUnit.SECONDS, 120 ) );
+		defaultExerciseDefinitionID = exerciseDefinitionService.persist( new ExerciseDefinitionImpl( (PrincipalImpl)userService.findByID( defaultUserID ), TimeUnit.SECONDS, 120, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// new exercise
 		defaultExerciseID = exerciseService.persist( new ExerciseImpl(

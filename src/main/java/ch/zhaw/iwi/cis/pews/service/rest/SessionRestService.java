@@ -56,33 +56,33 @@ public class SessionRestService extends IdentifiableObjectRestService
 		userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 	}
 
-//	@POST
-//	@Path( PERSIST )
-//	public int persist( SessionImpl obj )
-//	{
-//		return super.persist( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_BY_ID )
-//	public SessionImpl findById( int id )
-//	{
-//		return super.findByID( id );
-//	}
-//
-//	@POST
-//	@Path( REMOVE )
-//	public void remove( SessionImpl obj )
-//	{
-//		super.remove( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_ALL )
-//	public List< SessionImpl > findAll()
-//	{
-//		return super.findAll( SessionImpl.class.getSimpleName() );
-//	}
+	@POST
+	@Path( PERSIST )
+	public int persistSession( SessionImpl obj )
+	{
+		return super.persist( obj );
+	}
+
+	@POST
+	@Path( FIND_BY_ID )
+	public SessionImpl findSessionById( int id )
+	{
+		return super.findByID( id );
+	}
+
+	@POST
+	@Path( REMOVE )
+	public void removeSession( SessionImpl obj )
+	{
+		super.remove( obj );
+	}
+
+	@POST
+	@Path( FIND_ALL )
+	public List< SessionImpl > findAllSessions()
+	{
+		return super.findAll( SessionImpl.class.getSimpleName() );
+	}
 
 	@POST
 	@Path( GET_CURRENT_EXERCISE )

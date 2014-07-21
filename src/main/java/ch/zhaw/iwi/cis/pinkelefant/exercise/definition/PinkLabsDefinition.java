@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -21,11 +22,15 @@ public class PinkLabsDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	public PinkLabsDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, String question )
+	
+
+	public PinkLabsDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question )
 	{
-		super( owner, timeUnit, duration );
+		super( owner, timeUnit, duration, workshopDefinition );
 		this.question = question;
 	}
+
+
 
 	public String getQuestion()
 	{

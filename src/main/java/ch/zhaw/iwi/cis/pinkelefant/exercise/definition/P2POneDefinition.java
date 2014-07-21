@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -22,12 +23,16 @@ public class P2POneDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	public P2POneDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, String picture, String theme )
+	
+
+	public P2POneDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String picture, String theme )
 	{
-		super( owner, timeUnit, duration );
+		super( owner, timeUnit, duration, workshopDefinition );
 		this.picture = picture;
 		this.theme = theme;
 	}
+
+
 
 	public String getPicture()
 	{

@@ -29,33 +29,33 @@ public class WorkshopDefinitionRestService extends IdentifiableObjectRestService
 		workshopDefinitionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
 	}
 
-//	@POST
-//	@Path( PERSIST )
-//	public int persist( WorkshopDefinitionImpl obj )
-//	{
-//		return super.persist( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_BY_ID )
-//	public WorkshopDefinitionImpl findById( int id )
-//	{
-//		return super.findByID( id );
-//	}
-//
-//	@POST
-//	@Path( REMOVE )
-//	public void remove( WorkshopDefinitionImpl obj )
-//	{
-//		super.remove( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_ALL )
-//	public List< WorkshopDefinitionImpl > findAll()
-//	{
-//		return super.findAll( WorkshopDefinitionImpl.class.getSimpleName() );
-//	}
+	@POST
+	@Path( PERSIST )
+	public int persistWorkshopDefinition( WorkshopDefinitionImpl obj )
+	{
+		return super.persist( obj );
+	}
+
+	@POST
+	@Path( FIND_BY_ID )
+	public WorkshopDefinitionImpl findWorkshopDefinitionById( int id )
+	{
+		return super.findByID( id );
+	}
+
+	@POST
+	@Path( REMOVE )
+	public void removeWorkshopDefinition( WorkshopDefinitionImpl obj )
+	{
+		super.remove( obj );
+	}
+
+	@POST
+	@Path( FIND_ALL )
+	public List< WorkshopDefinitionImpl > findAllWorkshopDefinitions()
+	{
+		return super.findAll( WorkshopDefinitionImpl.class.getSimpleName() );
+	}
 
 	@Override
 	protected IdentifiableObjectService getPersistentObjectService()

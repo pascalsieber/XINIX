@@ -32,33 +32,33 @@ public class WorkshopRestService extends IdentifiableObjectRestService
 		workshopService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
 	}
 
-//	@POST
-//	@Path( PERSIST )
-//	public int persist( WorkshopImpl obj )
-//	{
-//		return super.persist( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_BY_ID )
-//	public WorkshopImpl findById( int id )
-//	{
-//		return super.findByID( id );
-//	}
-//
-//	@POST
-//	@Path( REMOVE )
-//	public void remove( WorkshopImpl obj )
-//	{
-//		super.remove( obj );
-//	}
-//
-//	@POST
-//	@Path( FIND_ALL )
-//	public List< WorkshopImpl > findAll()
-//	{
-//		return super.findAll( WorkshopImpl.class.getSimpleName() );
-//	}
+	@POST
+	@Path( PERSIST )
+	public int persistWorkshop( WorkshopImpl obj )
+	{
+		return super.persist( obj );
+	}
+
+	@POST
+	@Path( FIND_BY_ID )
+	public WorkshopImpl findWorkshopById( int id )
+	{
+		return super.findByID( id );
+	}
+
+	@POST
+	@Path( REMOVE )
+	public void removeWorkshop( WorkshopImpl obj )
+	{
+		super.remove( obj );
+	}
+
+	@POST
+	@Path( FIND_ALL )
+	public List< WorkshopImpl > findAllWorkshops()
+	{
+		return super.findAll( WorkshopImpl.class.getSimpleName() );
+	}
 
 	@POST
 	@Path( START )

@@ -152,7 +152,7 @@ public class ZhawEngine implements LifecycleObject
 		// Setup servlet context handler
 		ResourceConfig resourceConfig = new ResourceConfig();
 		resourceConfig.packages( "ch.zhaw.iwi.cis.pews.service.rest" );
-		resourceConfig.register( CustomObjectMapperProviderServer.class );
+//		resourceConfig.register( CustomObjectMapperProviderServer.class );
 		ServletHolder holder = new ServletHolder( new ServletContainer( resourceConfig ) );
 		holder.setInitParameter( "jersey.config.server.provider.classnames", LoggingFilter.class.getName() );
 		holder.setInitOrder( 1 );
