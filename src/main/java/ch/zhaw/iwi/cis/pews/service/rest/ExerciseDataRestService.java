@@ -20,6 +20,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 public class ExerciseDataRestService extends IdentifiableObjectRestService
 {
 	public final static String BASE = "/exerciseService/data";
+	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
 
 	private ExerciseDataService exerciseDataService;
 
@@ -54,6 +55,13 @@ public class ExerciseDataRestService extends IdentifiableObjectRestService
 	public List< ExerciseDataImpl > findAll()
 	{
 		return super.findAll( ExerciseDataImpl.class );
+	}
+
+	@POST
+	@Path( FIND_BY_EXERCISE_ID )
+	public List< ExerciseDataImpl > findByExerciseID( int exerciseID )
+	{
+		return exerciseDataService.findByExerciseID( exerciseID );
 	}
 
 	@Override
