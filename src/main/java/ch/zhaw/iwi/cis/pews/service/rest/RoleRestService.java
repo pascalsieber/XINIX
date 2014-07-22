@@ -54,7 +54,7 @@ public class RoleRestService extends IdentifiableObjectRestService
 	@Path( FIND_ALL )
 	public List< RoleImpl > findAll()
 	{
-		return super.findAll( RoleImpl.class.getSimpleName() );
+		return super.findAll( RoleImpl.class );
 	}
 
 	@Override

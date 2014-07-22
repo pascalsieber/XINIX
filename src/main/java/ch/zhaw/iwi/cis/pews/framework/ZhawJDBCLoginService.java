@@ -41,7 +41,7 @@ public class ZhawJDBCLoginService extends MappedLoginService
 	@Override
 	protected void loadUsers() throws IOException
 	{
-		for ( IdentifiableObject user : userService.findAll( UserImpl.class.getSimpleName() ) )
+		for ( IdentifiableObject user : userService.findAll( UserImpl.class ) )
 		{
 			loadUserHelper( (UserImpl)user );
 		}

@@ -44,9 +44,9 @@ public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 
 	@Override
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > List< T > findByAll(String className)
+	public < T extends IdentifiableObject > List< T > findByAll(Class< ? > clazz)
 	{
-		return getEntityManager().createQuery( "from " + className ).getResultList();
+		return getEntityManager().createQuery( "from " + clazz.getSimpleName() ).getResultList();
 	}
 
 	protected abstract Class< ? extends IdentifiableObject > getPersistentObjectClass();

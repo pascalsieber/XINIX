@@ -56,7 +56,7 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 	@Path( FIND_ALL )
 	public List< ExerciseImpl > findAllExercises()
 	{
-		return super.findAll( ExerciseImpl.class.getSimpleName() );
+		return super.findAll( ExerciseImpl.class );
 	}
 
 	@POST

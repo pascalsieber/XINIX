@@ -81,7 +81,7 @@ public class SessionRestService extends IdentifiableObjectRestService
 	@Path( FIND_ALL )
 	public List< SessionImpl > findAllSessions()
 	{
-		return super.findAll( SessionImpl.class.getSimpleName() );
+		return super.findAll( SessionImpl.class );
 	}
 
 	@POST

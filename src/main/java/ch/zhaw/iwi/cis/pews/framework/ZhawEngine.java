@@ -214,7 +214,7 @@ public class ZhawEngine implements LifecycleObject
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 
 		boolean rootRegistered = false;
-		for ( IdentifiableObject user : userService.findAll( UserImpl.class.getSimpleName() ) )
+		for ( IdentifiableObject user : userService.findAll( UserImpl.class ) )
 		{
 			if ( ( (UserImpl)user ).getLoginName().equalsIgnoreCase( "root" ) )
 			{

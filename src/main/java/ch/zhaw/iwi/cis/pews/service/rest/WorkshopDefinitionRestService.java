@@ -54,7 +54,7 @@ public class WorkshopDefinitionRestService extends IdentifiableObjectRestService
 	@Path( FIND_ALL )
 	public List< WorkshopDefinitionImpl > findAllWorkshopDefinitions()
 	{
-		return super.findAll( WorkshopDefinitionImpl.class.getSimpleName() );
+		return super.findAll( WorkshopDefinitionImpl.class );
 	}
 
 	@Override

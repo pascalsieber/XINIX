@@ -57,7 +57,7 @@ public class WorkshopRestService extends IdentifiableObjectRestService
 	@Path( FIND_ALL )
 	public List< WorkshopImpl > findAllWorkshops()
 	{
-		return super.findAll( WorkshopImpl.class.getSimpleName() );
+		return super.findAll( WorkshopImpl.class );
 	}
 
 	@POST

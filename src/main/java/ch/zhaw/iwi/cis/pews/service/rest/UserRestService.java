@@ -55,7 +55,7 @@ public class UserRestService extends IdentifiableObjectRestService
 	@Path( FIND_ALL )
 	public List< UserImpl > findAllUsers()
 	{
-		return super.findAll( UserImpl.class.getSimpleName() );
+		return super.findAll( UserImpl.class );
 	}
 
 	@Override

@@ -9,5 +9,5 @@ public interface IdentifiableObjectService extends Service
 	public < T extends IdentifiableObject > int persist( T object );
 	public < T extends IdentifiableObject > void remove( T object );
 	public < T extends IdentifiableObject > T findByID( int id );
-	public < T extends IdentifiableObject> List< T > findAll( String className );
+	public < T extends IdentifiableObject> List< T > findAll( Class< ? > clazz );
 }

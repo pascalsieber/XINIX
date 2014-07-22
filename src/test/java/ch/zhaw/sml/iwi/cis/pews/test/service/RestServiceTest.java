@@ -3,7 +3,9 @@ package ch.zhaw.sml.iwi.cis.pews.test.service;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.BeforeClass;
@@ -50,8 +52,6 @@ public class RestServiceTest
 	private static ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 
-	private static ArrayList< Integer > ids = new ArrayList<>();
-	
 	private static int defaultWorkshopDefinitionID;
 	private static int defaultWorkshopID;
 	private static int defaultSessionID;
@@ -120,15 +120,9 @@ public class RestServiceTest
 		roleService.remove( roleService.findByID( roleID ) );
 
 		// find all checks delete
-		List< RoleImpl > roles = roleService.findAll( RoleImpl.class.getSimpleName() );
+		List< RoleImpl > roles = roleService.findAll( RoleImpl.class );
 		assertTrue( roles.size() > 0 );
-		
-		ids.clear();
-		for ( RoleImpl elem : roles )
-		{
-			ids.add( elem.getID() );
-		}
-		assertTrue( !ids.contains( roleID ) );
+		assertTrue( checkDelete( roles, roleID ) );
 
 		// create user
 		int userID = userService.persist( new UserImpl( new PasswordCredentialImpl( "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService
@@ -152,15 +146,9 @@ public class RestServiceTest
 		userService.remove( userService.findByID( userID ) );
 
 		// find all checks delete
-		List< UserImpl > users = roleService.findAll( UserImpl.class.getSimpleName() );
+		List< UserImpl > users = userService.findAll( UserImpl.class );
 		assertTrue( users.size() > 0 );
-		
-		ids.clear();
-		for ( UserImpl elem : users )
-		{
-			ids.add( elem.getID() );
-		}
-		assertTrue( !ids.contains( userID ) );
+		assertTrue( checkDelete( users, userID ) );
 
 	}
 
@@ -190,16 +178,10 @@ public class RestServiceTest
 		workshopDefinitionService.remove( workshopDefinitionService.findByID( workshopDefinitionID ) );
 
 		// find all checks delete
-		List< WorkshopDefinitionImpl > wsDefs = roleService.findAll( WorkshopDefinitionImpl.class.getSimpleName() );
+		List< WorkshopDefinitionImpl > wsDefs = roleService.findAll( WorkshopDefinitionImpl.class );
 		assertTrue( wsDefs.size() > 0 );
-		
-		ids.clear();
-		for ( WorkshopDefinitionImpl elem : wsDefs )
-		{
-			ids.add( elem.getID() );
-		}
-		assertTrue( !ids.contains( workshopDefinitionID ) );
-		
+		assertTrue(checkDelete( wsDefs, workshopDefinitionID ));
+
 		// create workshop instance
 		int wsID = workshopService.persist( new WorkshopImpl( "workshop instance", "workshop instance description", (WorkflowElementDefinitionImpl)workshopDefinitionService
 			.findByID( defaultWorkshopDefinitionID ) ) );
@@ -222,15 +204,9 @@ public class RestServiceTest
 		workshopService.remove( updatedWs );
 
 		// find all checks delete
-		List< WorkshopImpl > workshops = roleService.findAll( WorkshopImpl.class.getSimpleName() );
+		List< WorkshopImpl > workshops = roleService.findAll( WorkshopImpl.class );
 		assertTrue( workshops.size() > 0 );
-		
-		ids.clear();
-		for ( WorkshopImpl elem : workshops )
-		{
-			ids.add( elem.getID() );
-		}
-		assertTrue( !ids.contains( wsID ) );
+		assertTrue(checkDelete( workshops, wsID ));
 
 		// create session
 		int sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
@@ -253,15 +229,9 @@ public class RestServiceTest
 		sessionService.remove( updatedSession );
 
 		// find all checks delete
-		List< SessionImpl > sessions = roleService.findAll( SessionImpl.class.getSimpleName() );
+		List< SessionImpl > sessions = roleService.findAll( SessionImpl.class );
 		assertTrue( sessions.size() > 0 );
-		
-		ids.clear();
-		for ( SessionImpl elem : sessions )
-		{
-			ids.add( elem.getID() );
-		}
-		assertTrue( !ids.contains( sessionID ) );
+		assertTrue(checkDelete( sessions, sessionID ));
 	}
 
 	@Test
@@ -306,5 +276,23 @@ public class RestServiceTest
 		// delete exercise data
 
 		// find all checks delete
+	}
+
+	private < T extends IdentifiableObject > boolean checkDelete( List< T > objects, int deletedID )
+	{
+		boolean result = false;
+		ArrayList< Integer > ids = new ArrayList<>();
+
+		for ( IdentifiableObject object : objects )
+		{
+			ids.add( object.getID() );
+		}
+
+		if ( !ids.contains( deletedID ) )
+		{
+			result = true;
+		}
+
+		return result;
 	}
 }
