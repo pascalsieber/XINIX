@@ -178,7 +178,7 @@ public class RestServiceTest
 		workshopDefinitionService.remove( workshopDefinitionService.findByID( workshopDefinitionID ) );
 
 		// find all checks delete
-		List< WorkshopDefinitionImpl > wsDefs = roleService.findAll( WorkshopDefinitionImpl.class );
+		List< WorkshopDefinitionImpl > wsDefs = workshopDefinitionService.findAll( WorkshopDefinitionImpl.class );
 		assertTrue( wsDefs.size() > 0 );
 		assertTrue(checkDelete( wsDefs, workshopDefinitionID ));
 
@@ -204,7 +204,7 @@ public class RestServiceTest
 		workshopService.remove( updatedWs );
 
 		// find all checks delete
-		List< WorkshopImpl > workshops = roleService.findAll( WorkshopImpl.class );
+		List< WorkshopImpl > workshops = workshopService.findAll( WorkshopImpl.class );
 		assertTrue( workshops.size() > 0 );
 		assertTrue(checkDelete( workshops, wsID ));
 
@@ -229,7 +229,7 @@ public class RestServiceTest
 		sessionService.remove( updatedSession );
 
 		// find all checks delete
-		List< SessionImpl > sessions = roleService.findAll( SessionImpl.class );
+		List< SessionImpl > sessions = sessionService.findAll( SessionImpl.class );
 		assertTrue( sessions.size() > 0 );
 		assertTrue(checkDelete( sessions, sessionID ));
 	}
