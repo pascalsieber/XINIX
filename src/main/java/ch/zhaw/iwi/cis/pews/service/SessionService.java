@@ -25,7 +25,7 @@ public interface SessionService extends WorkflowElementService
 	public void invite( Invitation invitation );
 
 	public void outvite( int invitationID );
-	
+
 	public void addExecuter( Invitation invitation );
 
 	public void removeExecuter( Invitation invitation );

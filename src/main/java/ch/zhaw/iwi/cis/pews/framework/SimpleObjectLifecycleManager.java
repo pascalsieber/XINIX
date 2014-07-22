@@ -20,5 +20,6 @@ public class SimpleObjectLifecycleManager implements LifecycleManager< Object >
 
 	@Override
 	public void destroy( Object object )
-	{}
+	{
+	}
 }

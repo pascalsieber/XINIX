@@ -28,7 +28,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 	private String name;
 	private String description;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany( cascade = CascadeType.ALL )
 	private List< WorkflowElementStatusHistoryElementImpl > statusHistory;
 
 	private String currentState;
@@ -43,7 +43,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 	{
 		super();
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
-		this.data = new HashSet<WorkflowElementDataImpl>();
+		this.data = new HashSet< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 	}
 

@@ -80,7 +80,7 @@ public class ZhawEngine implements LifecycleObject
 		startDatabase();
 		startWebServer();
 		setupEntityManager();
-//		ensureRootUser();
+		// ensureRootUser();
 	}
 
 	private static void setupEntityManager()
@@ -152,7 +152,7 @@ public class ZhawEngine implements LifecycleObject
 		// Setup servlet context handler
 		ResourceConfig resourceConfig = new ResourceConfig();
 		resourceConfig.packages( "ch.zhaw.iwi.cis.pews.service.rest" );
-//		resourceConfig.register( CustomObjectMapperProviderServer.class );
+		// resourceConfig.register( CustomObjectMapperProviderServer.class );
 		ServletHolder holder = new ServletHolder( new ServletContainer( resourceConfig ) );
 		holder.setInitParameter( "jersey.config.server.provider.classnames", LoggingFilter.class.getName() );
 		holder.setInitOrder( 1 );
@@ -188,7 +188,7 @@ public class ZhawEngine implements LifecycleObject
 		URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
 
 		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
-//		ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
+		// ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
 
 		webServer.addBean( loginService );
 
@@ -227,7 +227,7 @@ public class ZhawEngine implements LifecycleObject
 		{
 			int roleID = userService.persist( new RoleImpl( "user", "user" ) );
 			userService.persist( new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)userService.findByID( roleID ), null, "root first name", "root last name", "root" ) );
-			System.out.println("root user registered initially");
+			System.out.println( "root user registered initially" );
 		}
 
 	}

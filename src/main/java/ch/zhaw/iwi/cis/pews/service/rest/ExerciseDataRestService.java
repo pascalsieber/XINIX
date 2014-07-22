@@ -55,7 +55,7 @@ public class ExerciseDataRestService extends IdentifiableObjectRestService
 	{
 		return super.findAll( ExerciseDataImpl.class );
 	}
-	
+
 	@Override
 	protected IdentifiableObjectService getPersistentObjectService()
 	{

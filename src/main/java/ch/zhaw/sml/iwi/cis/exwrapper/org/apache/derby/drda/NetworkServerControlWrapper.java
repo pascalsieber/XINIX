@@ -20,7 +20,7 @@ public class NetworkServerControlWrapper
 			throw new ExceptionWrapper( e );
 		}
 	}
-	
+
 	public static void start( NetworkServerControl nsc, PrintWriter pw )
 	{
 		try
@@ -32,7 +32,7 @@ public class NetworkServerControlWrapper
 			throw new ExceptionWrapper( e );
 		}
 	}
-	
+
 	public static void shutdown( NetworkServerControl nsc )
 	{
 		try

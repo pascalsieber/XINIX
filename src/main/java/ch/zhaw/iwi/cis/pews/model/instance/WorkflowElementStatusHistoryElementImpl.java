@@ -15,7 +15,7 @@ public class WorkflowElementStatusHistoryElementImpl extends IdentifiableObject
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private Date date;
-	
+
 	@Enumerated( EnumType.STRING )
 	private WorkflowElementStatusImpl status;
 

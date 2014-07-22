@@ -4,7 +4,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 public class JsonMappingExceptionWrapper extends RuntimeException
 {
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
 	public JsonMappingExceptionWrapper( JsonMappingException e )
 	{

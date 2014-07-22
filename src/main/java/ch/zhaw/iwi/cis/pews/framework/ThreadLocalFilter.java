@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ThreadLocalFilter implements Filter
 {
 	private static ThreadLocal< HttpServletRequest > servletRequest = new ThreadLocal< HttpServletRequest >();
-	
+
 	@Override
 	public void init( FilterConfig filterConfig ) throws ServletException
 	{
@@ -23,7 +23,7 @@ public class ThreadLocalFilter implements Filter
 	public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain ) throws IOException, ServletException
 	{
 		servletRequest.set( (HttpServletRequest)request );
-		
+
 		chain.doFilter( request, response );
 	}
 
@@ -31,7 +31,7 @@ public class ThreadLocalFilter implements Filter
 	public void destroy()
 	{
 	}
-	
+
 	public static HttpServletRequest getServletRequest()
 	{
 		return servletRequest.get();

@@ -22,15 +22,11 @@ public class PinkLabsDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 	public PinkLabsDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
 		this.question = question;
 	}
-
-
 
 	public String getQuestion()
 	{

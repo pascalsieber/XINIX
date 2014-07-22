@@ -23,14 +23,12 @@ public class You2MeDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	
 	public You2MeDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, String counterQuestion )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
 		this.question = question;
 		this.counterQuestion = counterQuestion;
 	}
-
 
 	public String getQuestion()
 	{

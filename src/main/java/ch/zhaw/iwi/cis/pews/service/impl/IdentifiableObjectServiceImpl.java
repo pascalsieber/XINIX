@@ -27,7 +27,7 @@ public abstract class IdentifiableObjectServiceImpl implements IdentifiableObjec
 	}
 
 	@Override
-	public < T extends IdentifiableObject > List< T > findAll( Class<?> clazz )
+	public < T extends IdentifiableObject > List< T > findAll( Class< ? > clazz )
 	{
 		return getIdentifiableObjectDao().findByAll( clazz );
 	}

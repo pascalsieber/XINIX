@@ -7,14 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 @JsonTypeInfo( use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "class" )
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance( strategy = InheritanceType.JOINED )
 public abstract class IdentifiableObject implements Serializable
 {
 	// TODO replace 1L with singleton constant.

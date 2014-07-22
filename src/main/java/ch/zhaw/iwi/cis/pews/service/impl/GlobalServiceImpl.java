@@ -6,13 +6,13 @@ import ch.zhaw.iwi.cis.pews.framework.ThreadLocalFilter;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.service.GlobalService;
 
-@ManagedObject( scope=Scope.THREAD )
+@ManagedObject( scope = Scope.THREAD )
 public class GlobalServiceImpl implements GlobalService
 {
 	public String shutdown()
 	{
 		ZhawEngine.getEngine().stop();
-		
+
 		return "shutdown successful";
 	}
 

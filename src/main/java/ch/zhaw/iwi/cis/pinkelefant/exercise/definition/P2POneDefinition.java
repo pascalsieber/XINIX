@@ -23,16 +23,12 @@ public class P2POneDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 	public P2POneDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String picture, String theme )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
 		this.picture = picture;
 		this.theme = theme;
 	}
-
-
 
 	public String getPicture()
 	{

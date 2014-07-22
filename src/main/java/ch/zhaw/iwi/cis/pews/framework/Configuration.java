@@ -9,12 +9,12 @@ public class Configuration
 {
 	private static final String APPLICATION_PROPERTIES = "application.properties";
 	private static Properties properties;
-	
+
 	public static String getProperty( String key )
 	{
 		return getProperties().getProperty( key );
 	}
-	
+
 	private static Properties getProperties()
 	{
 		if ( properties == null )
@@ -23,7 +23,7 @@ public class Configuration
 			InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream( APPLICATION_PROPERTIES );
 			PropertiesWrapper.load( properties, is );
 		}
-		
+
 		return properties;
 	}
 }

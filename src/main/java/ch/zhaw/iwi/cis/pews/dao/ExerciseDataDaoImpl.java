@@ -4,16 +4,16 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
-import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class ExerciseDaoImpl extends IdentifiableObjectDaoImpl implements ExerciseDao
+public class ExerciseDataDaoImpl extends ExerciseDaoImpl implements ExerciseDataDao
 {
 
 	@Override
 	protected Class< ? extends IdentifiableObject > getPersistentObjectClass()
 	{
-		return ExerciseImpl.class;
+		return ExerciseDataImpl.class;
 	}
 
 }

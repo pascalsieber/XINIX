@@ -16,14 +16,14 @@ public class GlobalRestService extends RestService
 	public static final String SHOW_PRINCIPAL = "/showPrincipal";
 
 	private GlobalService globalService;
-	
+
 	public GlobalRestService()
 	{
 		globalService = ZhawEngine.getManagedObjectRegistry().getManagedObject( GlobalServiceImpl.class.getSimpleName() );
 	}
-	
+
 	@GET
-    @Path( SHUTDOWN )
+	@Path( SHUTDOWN )
 	public String shutdown()
 	{
 		return globalService.shutdown();

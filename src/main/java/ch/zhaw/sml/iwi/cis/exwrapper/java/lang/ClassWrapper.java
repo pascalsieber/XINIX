@@ -45,7 +45,7 @@ public class ClassWrapper
 		}
 	}
 
-	public static Constructor< ? > getConstructor( Class<?> theClass, Class<?> ... parameterTypes )
+	public static Constructor< ? > getConstructor( Class< ? > theClass, Class< ? >... parameterTypes )
 	{
 		try
 		{
@@ -61,7 +61,7 @@ public class ClassWrapper
 		}
 	}
 
-	public static Constructor< ? > getDeclaredConstructor( Class<?> theClass, Class<?> ... parameterTypes )
+	public static Constructor< ? > getDeclaredConstructor( Class< ? > theClass, Class< ? >... parameterTypes )
 	{
 		try
 		{
@@ -76,8 +76,8 @@ public class ClassWrapper
 			throw new SecurityExceptionWrapper( e );
 		}
 	}
-	
-	public static Method getMethod( Class<?> theClass, String name, Class< ? >[] parameterTypes )
+
+	public static Method getMethod( Class< ? > theClass, String name, Class< ? >[] parameterTypes )
 	{
 		try
 		{

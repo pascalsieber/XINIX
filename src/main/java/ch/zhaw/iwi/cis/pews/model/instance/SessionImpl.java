@@ -23,19 +23,19 @@ public class SessionImpl extends WorkflowElementImpl
 	@ManyToOne
 	private WorkshopImpl workshop;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne( cascade = CascadeType.ALL )
 	private ExerciseImpl currentExercise;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany( cascade = CascadeType.ALL )
 	private Set< PrincipalImpl > participants;
 
 	@ManyToMany
 	private Set< PrincipalImpl > acceptees;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany( cascade = CascadeType.ALL )
 	private Set< Invitation > invitations;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany( cascade = CascadeType.ALL )
 	private Set< PrincipalImpl > executers;
 
 	public SessionImpl()

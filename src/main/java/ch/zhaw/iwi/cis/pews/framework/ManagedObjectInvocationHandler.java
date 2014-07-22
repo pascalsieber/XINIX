@@ -24,9 +24,9 @@ public class ManagedObjectInvocationHandler implements InvocationHandler
 	public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
 	{
 		Object retVal = null;
-		
+
 		EntityTransaction entityTransaction = getEntityManagerTransaction();
-		
+
 		if ( entityTransaction == null )
 			retVal = invokeWithoutTransaction( proxy, method, args );
 		else if ( entityTransaction.isActive() )
@@ -36,39 +36,39 @@ public class ManagedObjectInvocationHandler implements InvocationHandler
 
 		return retVal;
 	}
-	
+
 	private EntityTransaction getEntityManagerTransaction()
 	{
 		EntityTransaction entityTransaction = null;
 
 		EntityManager entityManager = getEntityManager();
-		
+
 		if ( entityManager != null )
 		{
 			if ( getTransactionType( entityManager ).equals( PersistenceUnitTransactionType.RESOURCE_LOCAL ) )
 				entityTransaction = entityManager.getTransaction();
 		}
-		
+
 		return entityTransaction;
 	}
-	
+
 	private EntityManager getEntityManager()
 	{
 		EntityManager entityManager = null;
 		String entityManagerName = managedObjectAnnotation.entityManager();
-		
+
 		if ( entityManagerName != null && !entityManagerName.isEmpty() )
 			entityManager = (EntityManager)ZhawEngine.getManagedObjectRegistry().getManagedObject( entityManagerName );
-		
+
 		return entityManager;
 	}
-	
+
 	private PersistenceUnitTransactionType getTransactionType( EntityManager entityManager )
 	{
 		// TOOD find out how to derive this from the entityManager.
 		return PersistenceUnitTransactionType.RESOURCE_LOCAL;
 	}
-	
+
 	private Object invokeWithoutTransaction( Object proxy, Method method, Object[] args ) throws Throwable
 	{
 		Object retVal = null;
@@ -81,10 +81,10 @@ public class ManagedObjectInvocationHandler implements InvocationHandler
 		{
 			throw e.getCause();
 		}
-		
+
 		return retVal;
 	}
-	
+
 	private Object invokeWithExistingTransaction( Object proxy, Method method, Object[] args, EntityTransaction tx ) throws Throwable
 	{
 		Object retVal = null;
@@ -97,17 +97,17 @@ public class ManagedObjectInvocationHandler implements InvocationHandler
 		{
 			if ( tx.isActive() )
 				tx.rollback();
-			
+
 			throw t;
 		}
-		
+
 		return retVal;
 	}
-	
+
 	private Object invokeWithNewTransaction( Object proxy, Method method, Object[] args, EntityTransaction tx ) throws Throwable
 	{
 		Object retVal = null;
-		
+
 		tx.begin();
 		getEntityManager().clear();
 

@@ -17,7 +17,7 @@ public class ServerWrapper
 			throw new ExceptionWrapper( e );
 		}
 	}
-	
+
 	public static void stop( Server server )
 	{
 		try

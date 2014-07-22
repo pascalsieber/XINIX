@@ -27,6 +27,4 @@ public class XinixImageDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 }

@@ -15,5 +15,5 @@ public class ExerciseDefinitionDaoImpl extends WorkflowElementDaoImpl implements
 	{
 		return ExerciseDefinitionImpl.class;
 	}
-	
+
 }

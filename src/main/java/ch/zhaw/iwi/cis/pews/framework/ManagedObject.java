@@ -9,12 +9,22 @@ import java.lang.annotation.Target;
 @Target( ElementType.TYPE )
 public @interface ManagedObject
 {
-	public enum Scope { CLASSLOADER, THREAD, CLIENT, POOLED };
-	public enum Transactionality { TRANSACTIONAL, NON_TRANSACTIONAL };
-	
+	public enum Scope
+	{
+		CLASSLOADER, THREAD, CLIENT, POOLED
+	};
+
+	public enum Transactionality
+	{
+		TRANSACTIONAL, NON_TRANSACTIONAL
+	};
+
 	// TODO refactor transactionality to transactional : boolean
 	public Scope scope() default Scope.CLIENT;
+
 	public Transactionality transactionality() default Transactionality.NON_TRANSACTIONAL;
+
 	public int poolSize() default ManagedObjectDefaults.DEFAULT_POOL_SIZE;
+
 	public String entityManager() default ManagedObjectDefaults.DEFAULT_ENTITY_MANAGER;
 }

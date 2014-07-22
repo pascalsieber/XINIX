@@ -27,6 +27,4 @@ public class CompressionDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
 }

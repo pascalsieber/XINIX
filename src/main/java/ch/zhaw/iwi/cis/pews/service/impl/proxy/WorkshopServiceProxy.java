@@ -26,5 +26,4 @@ public class WorkshopServiceProxy extends IdentifiableObjectServiceProxy impleme
 		getServiceTarget().path( WorkshopRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
-
 }

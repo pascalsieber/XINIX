@@ -30,8 +30,6 @@ public class XinixDefinition extends ExerciseDefinitionImpl
 		this.images = new HashSet< XinixImage >();
 	}
 
-	
-
 	public XinixDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, String keyword )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
@@ -39,8 +37,6 @@ public class XinixDefinition extends ExerciseDefinitionImpl
 		this.keyword = keyword;
 		this.images = new HashSet< XinixImage >();
 	}
-
-
 
 	public String getQuestion()
 	{

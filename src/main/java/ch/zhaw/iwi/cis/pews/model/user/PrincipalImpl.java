@@ -32,7 +32,7 @@ public class PrincipalImpl extends IdentifiableObject
 	@ManyToOne
 	private SessionImpl session;
 
-	@OneToMany(mappedBy="invitee")
+	@OneToMany( mappedBy = "invitee" )
 	private Set< Invitation > sessionInvitations;
 
 	@ManyToMany
@@ -44,9 +44,9 @@ public class PrincipalImpl extends IdentifiableObject
 	public PrincipalImpl()
 	{
 		super();
-		this.sessionAcceptances = new HashSet<SessionImpl>();
-		this.sessionInvitations = new HashSet<Invitation>();
-		this.sessionExecutions = new HashSet<SessionImpl>();
+		this.sessionAcceptances = new HashSet< SessionImpl >();
+		this.sessionInvitations = new HashSet< Invitation >();
+		this.sessionExecutions = new HashSet< SessionImpl >();
 	}
 
 	public PrincipalImpl( PasswordCredentialImpl credential, RoleImpl role, SessionImpl session )
@@ -55,9 +55,9 @@ public class PrincipalImpl extends IdentifiableObject
 		this.credential = credential;
 		this.role = role;
 		this.session = session;
-		this.sessionAcceptances = new HashSet<SessionImpl>();
-		this.sessionInvitations = new HashSet<Invitation>();
-		this.sessionExecutions = new HashSet<SessionImpl>();
+		this.sessionAcceptances = new HashSet< SessionImpl >();
+		this.sessionInvitations = new HashSet< Invitation >();
+		this.sessionExecutions = new HashSet< SessionImpl >();
 	}
 
 	public PasswordCredentialImpl getCredential()

@@ -9,13 +9,13 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implements IdentifiableObjectService
 {
@@ -26,12 +26,12 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 
 	public < T extends IdentifiableObject > int persist( T persistentObject )
 	{
-		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json(persistentObject ) ).readEntity( int.class );
+		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) ).readEntity( int.class );
 	}
 
 	public < T extends IdentifiableObject > void remove( T persistentObject )
 	{
-		getServiceTarget().path( IdentifiableObjectRestService.REMOVE ).request( MediaType.APPLICATION_JSON ).post( Entity.json(persistentObject  ) );
+		getServiceTarget().path( IdentifiableObjectRestService.REMOVE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -44,11 +44,11 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 			.readEntity( IdentifiableObject.class );
 	}
 
-	public < T extends IdentifiableObject > List< T > findAll( Class<?> clazz )
+	public < T extends IdentifiableObject > List< T > findAll( Class< ? > clazz )
 	{
 		Response response = getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( clazz ) );
 		String jsonString = response.readEntity( String.class );
-		
+
 		try
 		{
 			List< T > list = new ArrayList<>();
@@ -60,18 +60,19 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 		{
 			throw new RuntimeErrorException( null, "IdentifiableObjectServiceProxy could not deserialize json response" );
 		}
-		
-//		return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( className ) ).readEntity( List.class );
+
+		// return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( className ) ).readEntity( List.class );
 	}
-	
-	public <T extends Object > String jsonStringify (T object) {
+
+	public < T extends Object > String jsonStringify( T object )
+	{
 		try
 		{
 			return getMapper().writeValueAsString( object );
 		}
 		catch ( JsonProcessingException e )
 		{
-			throw new RuntimeErrorException(null);
+			throw new RuntimeErrorException( null );
 		}
 	}
 }

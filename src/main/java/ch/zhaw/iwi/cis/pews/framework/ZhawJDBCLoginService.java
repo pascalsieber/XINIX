@@ -22,13 +22,13 @@ public class ZhawJDBCLoginService extends MappedLoginService
 		userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 	}
 
-	private UserIdentity loadUserHelper(UserImpl principal)
+	private UserIdentity loadUserHelper( UserImpl principal )
 	{
 		Credential credential = Credential.getCredential( principal.getCredential().getPassword() );
-		
+
 		String[] roles = new String[ 1 ];
 		roles[ 0 ] = principal.getRole().getName();
-		
+
 		return putUser( principal.getLoginName(), credential, roles );
 	}
 

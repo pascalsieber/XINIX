@@ -10,6 +10,5 @@ public class ExerciseDataServiceProxy extends IdentifiableObjectServiceProxy imp
 	{
 		super( hostName, port, userName, password, ExerciseDataRestService.BASE );
 	}
-	
 
 }

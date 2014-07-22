@@ -22,15 +22,11 @@ public class P2PTwoDefinition extends ExerciseDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
-	public P2PTwoDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question)
+	public P2PTwoDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
 		this.question = question;
 	}
-
-
 
 	public String getQuestion()
 	{
