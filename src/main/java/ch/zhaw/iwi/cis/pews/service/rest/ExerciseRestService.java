@@ -23,7 +23,6 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 	public final static String BASE = "/exerciseService/exercise";
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
-	public final static String FIND_BY_ID_WITH_DATA = FIND_BY_ID + "withData";
 
 	private ExerciseService exerciseService;
 

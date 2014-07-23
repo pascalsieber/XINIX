@@ -22,6 +22,8 @@ public class UserRestService extends IdentifiableObjectRestService
 {
 
 	public static final String USER_BASE = "/userService/user";
+	public static final String FIND_BY_LOGIN_NAME = "/findByLogin";
+	public static final String REQUEST_PASSWORD = "/requestPassword";
 
 	private UserService userService;
 
@@ -56,6 +58,20 @@ public class UserRestService extends IdentifiableObjectRestService
 	public List< UserImpl > findAllUsers()
 	{
 		return super.findAll( UserImpl.class );
+	}
+
+	@POST
+	@Path( FIND_BY_LOGIN_NAME )
+	public PrincipalImpl findByLoginName( String loginName )
+	{
+		return userService.findByLoginName( loginName );
+	}
+
+	@POST
+	@Path( REQUEST_PASSWORD )
+	public String requestNewPassword( int userID )
+	{
+		return userService.requestNewPassword(userID);
 	}
 
 	@Override

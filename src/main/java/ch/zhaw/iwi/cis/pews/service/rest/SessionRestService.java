@@ -39,10 +39,8 @@ public class SessionRestService extends IdentifiableObjectRestService
 	public static final String JOIN = "/join";
 	public static final String LEAVE = "/leave";
 
-	public static final String ACCEPT_INVITATION = "/acceptInvitation";
-	public static final String DECLINE_INVITATION = "/declineInvitation";
-	public static final String INVITE = "/invite";
-	public static final String OUTVITE = "/outvite";
+
+
 
 	public static final String ADD_EXECUTER = "/addExecuter";
 	public static final String REMOVE_EXECUTER = "/removeExecuter";
@@ -142,33 +140,6 @@ public class SessionRestService extends IdentifiableObjectRestService
 		sessionService.leave( sessionID, user.getID() );
 	}
 
-	@POST
-	@Path( ACCEPT_INVITATION )
-	public void acceptInvitation( int invitationID )
-	{
-		sessionService.acceptInvitation( invitationID );
-	}
-
-	@POST
-	@Path( DECLINE_INVITATION )
-	public void declineInvitation( int invitationID )
-	{
-		sessionService.declineInvitation( invitationID );
-	}
-
-	@POST
-	@Path( INVITE )
-	public void invite( Invitation invitation )
-	{
-		sessionService.invite( invitation );
-	}
-
-	@POST
-	@Path( OUTVITE )
-	public void outvite( int invitationID )
-	{
-		sessionService.outvite( invitationID );
-	}
 
 	@POST
 	@Path( ADD_EXECUTER )

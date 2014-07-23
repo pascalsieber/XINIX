@@ -1,5 +1,8 @@
 package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.rest.UserRestService;
@@ -15,8 +18,13 @@ public class UserServiceProxy extends IdentifiableObjectServiceProxy implements 
 	@Override
 	public PrincipalImpl findByLoginName( String loginName )
 	{
-		// method exists as helper for joining and leaving sessions. not to be used as proxy method.
-		throw new UnsupportedOperationException();
+		return getServiceTarget().path( UserRestService.FIND_BY_LOGIN_NAME ).request(MediaType.APPLICATION_JSON).post( Entity.json( loginName ) ).readEntity( PrincipalImpl.class );
+	}
+
+	@Override
+	public String requestNewPassword( int userID )
+	{
+		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request(MediaType.APPLICATION_JSON).post( Entity.json( "" ) ).readEntity( String.class );
 	}
 
 }

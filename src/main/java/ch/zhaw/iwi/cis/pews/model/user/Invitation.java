@@ -32,12 +32,12 @@ public class Invitation extends IdentifiableObject
 		// TODO Auto-generated constructor stub
 	}
 
-	public Invitation( PrincipalImpl inviter, PrincipalImpl invitee, Date date, SessionImpl session )
+	public Invitation( PrincipalImpl inviter, PrincipalImpl invitee, SessionImpl session )
 	{
 		super();
 		this.inviter = inviter;
 		this.invitee = invitee;
-		this.date = date;
+		this.date = new Date();
 		this.session = session;
 	}
 

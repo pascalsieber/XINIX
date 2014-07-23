@@ -103,23 +103,6 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 			session.setCurrentExercise( exercises.get( current + 1 ) );
 			persist( session );
 		}
-
-	}
-
-	@Override
-	public void acceptInvitation( int invitationID )
-	{
-		Invitation invitation = findByID( invitationID );
-		PrincipalImpl user = findByID( invitation.getInvitee().getID() );
-		SessionImpl session = findByID( invitation.getSession().getID() );
-
-		user.setSession( session );
-		persist( user );
-
-		session.getAcceptees().add( user );
-		persist( session );
-
-		remove( invitation );
 	}
 
 	@Override
@@ -136,24 +119,6 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		SessionImpl session = findByID( invitation.getSession().getID() );
 		session.getExecuters().remove( (PrincipalImpl)findByID( invitation.getInvitee().getID() ) );
 		persist( session );
-	}
-
-	@Override
-	public void declineInvitation( int invitationID )
-	{
-		remove( findByID( invitationID ) );
-	}
-
-	@Override
-	public void invite( Invitation invitation )
-	{
-		persist( invitation );
-	}
-
-	@Override
-	public void outvite( int invitationID )
-	{
-		remove( findByID( invitationID ) );
 	}
 
 	@Override

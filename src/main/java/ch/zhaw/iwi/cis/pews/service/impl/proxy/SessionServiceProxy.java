@@ -65,12 +65,6 @@ public class SessionServiceProxy extends IdentifiableObjectServiceProxy implemen
 	}
 
 	@Override
-	public void acceptInvitation( int invitationID )
-	{
-		getServiceTarget().path( SessionRestService.ACCEPT_INVITATION ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitationID ) );
-	}
-
-	@Override
 	public void addExecuter( Invitation invitation )
 	{
 		getServiceTarget().path( SessionRestService.ADD_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( jsonStringify( invitation ) ) );
@@ -80,24 +74,6 @@ public class SessionServiceProxy extends IdentifiableObjectServiceProxy implemen
 	public void removeExecuter( Invitation invitation )
 	{
 		getServiceTarget().path( SessionRestService.REMOVE_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( jsonStringify( invitation ) ) );
-	}
-
-	@Override
-	public void declineInvitation( int invitationID )
-	{
-		getServiceTarget().path( SessionRestService.DECLINE_INVITATION ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitationID ) );
-	}
-
-	@Override
-	public void invite( Invitation invitation )
-	{
-		getServiceTarget().path( SessionRestService.INVITE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( jsonStringify( invitation ) ) );
-	}
-
-	@Override
-	public void outvite( int invitationID )
-	{
-		getServiceTarget().path( SessionRestService.OUTVITE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitationID ) );
 	}
 
 }

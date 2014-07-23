@@ -6,7 +6,5 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 
 public interface ExerciseDataService extends IdentifiableObjectService
 {
-
 	public List< ExerciseDataImpl > findByExerciseID( int exerciseID );
-
 }

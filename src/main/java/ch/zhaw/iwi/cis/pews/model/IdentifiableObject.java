@@ -8,10 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonTypeInfo( use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "class" )
+@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class, property="@id", scope=IdentifiableObject.class)
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
 public abstract class IdentifiableObject implements Serializable

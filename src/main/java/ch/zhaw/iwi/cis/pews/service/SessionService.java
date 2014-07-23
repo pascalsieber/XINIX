@@ -18,14 +18,6 @@ public interface SessionService extends WorkflowElementService
 
 	public void leave( int sessionID, int id );
 
-	public void acceptInvitation( int invitationID );
-
-	public void declineInvitation( int invitationID );
-
-	public void invite( Invitation invitation );
-
-	public void outvite( int invitationID );
-
 	public void addExecuter( Invitation invitation );
 
 	public void removeExecuter( Invitation invitation );
