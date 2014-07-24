@@ -17,7 +17,7 @@ public class InvitationServiceProxy extends IdentifiableObjectServiceProxy imple
 	@Override
 	public void accept( int invitationID )
 	{
-		getServiceTarget().path( InvitationRestService.ACCEPT ).request(MediaType.APPLICATION_JSON).post( Entity.json(invitationID) );
+		getServiceTarget().path( InvitationRestService.ACCEPT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitationID ) );
 	}
 
 }

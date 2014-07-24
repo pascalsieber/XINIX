@@ -61,16 +61,16 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( START )
-	public void statExercise( ExerciseImpl exercise )
+	public void statExercise( int exerciseID )
 	{
-		exerciseService.start( exercise.getID() );
+		exerciseService.start( exerciseID );
 	}
 
 	@POST
 	@Path( STOP )
-	public void stopExercise( ExerciseImpl exercise )
+	public void stopExercise( int exerciseID )
 	{
-		exerciseService.stop( exercise.getID() );
+		exerciseService.stop( exerciseID );
 	}
 
 	@Override

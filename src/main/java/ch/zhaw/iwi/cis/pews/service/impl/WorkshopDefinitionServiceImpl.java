@@ -10,7 +10,7 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class WorkshopDefinitionServiceImpl extends WorkshopServiceImpl implements WorkshopDefinitionService
+public class WorkshopDefinitionServiceImpl extends IdentifiableObjectServiceImpl implements WorkshopDefinitionService
 {
 	private WorkshopDefinitionDao workshopDefinitionDao;
 

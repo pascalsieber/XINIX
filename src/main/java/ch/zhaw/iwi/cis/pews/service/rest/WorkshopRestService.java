@@ -62,16 +62,16 @@ public class WorkshopRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( START )
-	public void statWorkshop( WorkshopImpl workshop )
+	public void statWorkshop( int workshopID )
 	{
-		workshopService.start( workshop.getID() );
+		workshopService.start( workshopID );
 	}
 
 	@POST
 	@Path( STOP )
-	public void stopWorkshop( WorkshopImpl workshop )
+	public void stopWorkshop( int workshopID )
 	{
-		workshopService.stop( workshop.getID() );
+		workshopService.stop( workshopID );
 	}
 
 	@Override

@@ -24,12 +24,13 @@ public class ExerciseDataDaoImpl extends ExerciseDaoImpl implements ExerciseData
 	{
 		List< ExerciseDataImpl > data = getEntityManager().createQuery( "from ExerciseDataImpl d where d.workflowElement.id = " + exerciseID ).getResultList();
 		getEntityManager().clear();
-		
+
 		for ( ExerciseDataImpl element : data )
 		{
 			element.setWorkflowElement( null );
+			element.setOwner( null );
 		}
-		
+
 		return data;
 	}
 

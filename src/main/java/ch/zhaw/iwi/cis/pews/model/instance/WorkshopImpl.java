@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.instance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,10 +19,10 @@ public class WorkshopImpl extends WorkflowElementImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 
-	@OneToMany( cascade = CascadeType.ALL )
+	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workshop" )
 	private Set< SessionImpl > sessions;
 
-	@OneToMany( cascade = CascadeType.ALL )
+	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workshop" )
 	private List< ExerciseImpl > exercises;
 
 	public WorkshopImpl()
@@ -50,7 +51,9 @@ public class WorkshopImpl extends WorkflowElementImpl
 
 	public List< ExerciseImpl > getExercises()
 	{
-		return exercises;
+		List< ExerciseImpl > result = exercises;
+		Collections.sort( result, new ExerciseImplComparator() );
+		return result;
 	}
 
 	public void setExercises( List< ExerciseImpl > exercises )

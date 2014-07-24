@@ -23,7 +23,7 @@ public class SessionImpl extends WorkflowElementImpl
 	@ManyToOne
 	private WorkshopImpl workshop;
 
-	@ManyToOne( cascade = CascadeType.ALL )
+	@ManyToOne
 	private ExerciseImpl currentExercise;
 
 	@OneToMany( cascade = CascadeType.ALL )

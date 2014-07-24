@@ -18,13 +18,13 @@ public class UserServiceProxy extends IdentifiableObjectServiceProxy implements 
 	@Override
 	public PrincipalImpl findByLoginName( String loginName )
 	{
-		return getServiceTarget().path( UserRestService.FIND_BY_LOGIN_NAME ).request(MediaType.APPLICATION_JSON).post( Entity.json( loginName ) ).readEntity( PrincipalImpl.class );
+		return getServiceTarget().path( UserRestService.FIND_BY_LOGIN_NAME ).request( MediaType.APPLICATION_JSON ).post( Entity.json( loginName ) ).readEntity( PrincipalImpl.class );
 	}
 
 	@Override
 	public String requestNewPassword( int userID )
 	{
-		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request(MediaType.APPLICATION_JSON).post( Entity.json( "" ) ).readEntity( String.class );
+		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) ).readEntity( String.class );
 	}
 
 }

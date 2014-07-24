@@ -71,7 +71,7 @@ public class UserRestService extends IdentifiableObjectRestService
 	@Path( REQUEST_PASSWORD )
 	public String requestNewPassword( int userID )
 	{
-		return userService.requestNewPassword(userID);
+		return userService.requestNewPassword( userID );
 	}
 
 	@Override

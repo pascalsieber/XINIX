@@ -17,6 +17,7 @@ public class ExerciseImpl extends WorkflowElementImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
+	private int orderInWorkshop;
 
 	@ManyToOne
 	private WorkshopImpl workshop;
@@ -34,6 +35,7 @@ public class ExerciseImpl extends WorkflowElementImpl
 	{
 		super( name, description, definition );
 		this.workshop = workshop;
+		this.orderInWorkshop = workshop.getExercises().size();
 		this.participants = new HashSet< PrincipalImpl >();
 	}
 
@@ -55,6 +57,16 @@ public class ExerciseImpl extends WorkflowElementImpl
 	public void setParticipants( Set< PrincipalImpl > participants )
 	{
 		this.participants = participants;
+	}
+
+	public int getOrderInWorkshop()
+	{
+		return orderInWorkshop;
+	}
+
+	public void setOrderInWorkshop( int orderInWorkshop )
+	{
+		this.orderInWorkshop = orderInWorkshop;
 	}
 
 }

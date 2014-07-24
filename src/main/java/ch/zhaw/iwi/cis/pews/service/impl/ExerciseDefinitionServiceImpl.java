@@ -10,7 +10,7 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class ExerciseDefinitionServiceImpl extends ExerciseServiceImpl implements ExerciseDefinitionService
+public class ExerciseDefinitionServiceImpl extends IdentifiableObjectServiceImpl implements ExerciseDefinitionService
 {
 	private ExerciseDefinitionDao exerciseDefinitionDao;
 

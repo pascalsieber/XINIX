@@ -24,9 +24,9 @@ public class UserDaoImpl extends IdentifiableObjectDaoImpl implements UserDao
 	{
 		List< PrincipalImpl > results = getEntityManager()
 			.createQuery(
-				"select principal FROM PrincipalImpl principal " + "JOIN FETCH principal.credential as cred " + "JOIN FETCH principal.session as session "
-						+ "JOIN FETCH principal.sessionInvitations as invitations " + "JOIN FETCH principal.sessionAcceptances as acceptances "
-						+ "JOIN FETCH principal.sessionExecutions as executions " + "where principal.loginName = :login_name" )
+				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.session as session "
+						+ "LEFT JOIN FETCH principal.sessionInvitations as invitations " + "LEFT JOIN FETCH principal.sessionAcceptances as acceptances "
+						+ "LEFT JOIN FETCH principal.sessionExecutions as executions " + "where principal.loginName = :login_name" )
 			.setParameter( "login_name", loginName )
 			.getResultList();
 

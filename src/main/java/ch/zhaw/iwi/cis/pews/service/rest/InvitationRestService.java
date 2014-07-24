@@ -62,7 +62,7 @@ public class InvitationRestService extends IdentifiableObjectRestService
 	@Path( ACCEPT )
 	public void accept( int invitationID )
 	{
-		invitationService.accept(invitationID);
+		invitationService.accept( invitationID );
 	}
 
 	@Override

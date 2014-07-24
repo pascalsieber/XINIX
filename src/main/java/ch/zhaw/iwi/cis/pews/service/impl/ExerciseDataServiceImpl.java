@@ -13,7 +13,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class ExerciseDataServiceImpl extends ExerciseServiceImpl implements ExerciseDataService
+public class ExerciseDataServiceImpl extends IdentifiableObjectServiceImpl implements ExerciseDataService
 {
 	private ExerciseDataDao exerciseDataDao;
 
@@ -31,7 +31,7 @@ public class ExerciseDataServiceImpl extends ExerciseServiceImpl implements Exer
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( int exerciseID )
 	{
-		return exerciseDataDao.findByExerciseID(exerciseID);
+		return exerciseDataDao.findByExerciseID( exerciseID );
 	}
 
 }

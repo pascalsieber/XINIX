@@ -16,7 +16,7 @@ import ch.zhaw.iwi.cis.pews.service.InvitationService;
 public class InvitationServiceImpl extends IdentifiableObjectServiceImpl implements InvitationService
 {
 	private InvitationDao invitationDao;
-	
+
 	public InvitationServiceImpl()
 	{
 		invitationDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( InvitationDaoImpl.class.getSimpleName() );
@@ -34,17 +34,14 @@ public class InvitationServiceImpl extends IdentifiableObjectServiceImpl impleme
 		Invitation invitation = findByID( invitationID );
 		PrincipalImpl user = findByID( invitation.getInvitee().getID() );
 		SessionImpl session = findByID( invitation.getSession().getID() );
-		
+
 		user.setSession( session );
 		persist( user );
-		
+
 		session.getAcceptees().add( user );
 		persist( session );
-		
+
 		remove( invitation );
 	}
-	
-	
-	
-	
+
 }

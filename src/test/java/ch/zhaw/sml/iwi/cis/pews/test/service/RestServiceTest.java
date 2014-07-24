@@ -4,9 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +39,6 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.InvitationServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
@@ -70,7 +67,7 @@ public class RestServiceTest
 	private static int defaultExerciseID;
 	private static int defaultExerciseID2;
 	private static int defaultRoleID;
-	private static int defaultUserID;	
+	private static int defaultUserID;
 	private static int defaultExerciseDataID;
 	private static int defaultInvitationID;
 
@@ -395,8 +392,7 @@ public class RestServiceTest
 
 		// request new password
 		String password = userService.requestNewPassword( defaultUserID );
-		PrincipalImpl user = userService.findByID( defaultUserID );
-		assertTrue( user.getCredential().getPassword().equals( password ) );
+		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserID ) ).getCredential().getPassword().equals( password ) );
 	}
 
 	@Test
@@ -457,11 +453,11 @@ public class RestServiceTest
 	{
 		// start exercise
 		exerciseService.start( defaultExerciseID );
-		assertTrue( ((ExerciseImpl)exerciseService.findByID( defaultExerciseID )).getCurrentState().equalsIgnoreCase( "running" ) );
+		assertTrue( ( (ExerciseImpl)exerciseService.findByID( defaultExerciseID ) ).getCurrentState().equalsIgnoreCase( "running" ) );
 
 		// stop exercise
 		exerciseService.stop( defaultExerciseID );
-		assertTrue( ((ExerciseImpl)exerciseService.findByID( defaultExerciseID )).getCurrentState().equalsIgnoreCase( "terminated" ) );
+		assertTrue( ( (ExerciseImpl)exerciseService.findByID( defaultExerciseID ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// find data by exercise ID
 		assertTrue( exerciseDataService.findByExerciseID( defaultExerciseID ).size() > 0 );

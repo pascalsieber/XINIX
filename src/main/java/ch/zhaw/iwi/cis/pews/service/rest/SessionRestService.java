@@ -39,9 +39,6 @@ public class SessionRestService extends IdentifiableObjectRestService
 	public static final String JOIN = "/join";
 	public static final String LEAVE = "/leave";
 
-
-
-
 	public static final String ADD_EXECUTER = "/addExecuter";
 	public static final String REMOVE_EXECUTER = "/removeExecuter";
 
@@ -112,16 +109,16 @@ public class SessionRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( START )
-	public void start( SessionImpl session )
+	public void start( int sessionID )
 	{
-		sessionService.start( session.getID() );
+		sessionService.start( sessionID );
 	}
 
 	@POST
 	@Path( STOP )
-	public void stop( SessionImpl session )
+	public void stop( int sessionID )
 	{
-		sessionService.stop( session.getID() );
+		sessionService.stop( sessionID );
 	}
 
 	@POST
@@ -139,7 +136,6 @@ public class SessionRestService extends IdentifiableObjectRestService
 		PrincipalImpl user = userService.findByLoginName( ThreadLocalFilter.getServletRequest().getUserPrincipal().getName() );
 		sessionService.leave( sessionID, user.getID() );
 	}
-
 
 	@POST
 	@Path( ADD_EXECUTER )

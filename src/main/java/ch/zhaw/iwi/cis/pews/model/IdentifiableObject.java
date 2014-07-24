@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonTypeInfo( use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "class" )
-@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class, property="@id", scope=IdentifiableObject.class)
+@JsonIdentityInfo( generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id", scope = IdentifiableObject.class )
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
 public abstract class IdentifiableObject implements Serializable
