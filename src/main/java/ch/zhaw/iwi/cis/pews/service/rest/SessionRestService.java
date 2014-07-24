@@ -8,12 +8,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import ch.zhaw.iwi.cis.pews.framework.ThreadLocalFilter;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
@@ -123,18 +121,16 @@ public class SessionRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( JOIN )
-	public void join( int sessionID )
+	public void join( Invitation invitation )
 	{
-		PrincipalImpl user = userService.findByLoginName( ThreadLocalFilter.getServletRequest().getUserPrincipal().getName() );
-		sessionService.join( sessionID, user.getID() );
+		sessionService.join( invitation );
 	}
 
 	@POST
 	@Path( LEAVE )
-	public void leave( int sessionID )
+	public void leave( Invitation invitation )
 	{
-		PrincipalImpl user = userService.findByLoginName( ThreadLocalFilter.getServletRequest().getUserPrincipal().getName() );
-		sessionService.leave( sessionID, user.getID() );
+		sessionService.leave( invitation );
 	}
 
 	@POST

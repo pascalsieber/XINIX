@@ -78,7 +78,7 @@ public class RestServiceTest
 		defaultRoleID = roleService.persist( new RoleImpl( "user", "user role" ) );
 
 		// new User
-		defaultUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "password" ), (RoleImpl)roleService.findByID( defaultRoleID ), null, "John", "Smith", "john.smith@mail.com" ) );
+		defaultUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "john" ), (RoleImpl)roleService.findByID( defaultRoleID ), null, "John", "Smith", "john" ) );
 
 		// new workshop definition
 		defaultWorkshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition(
@@ -428,11 +428,11 @@ public class RestServiceTest
 		assertTrue( sessionService.getPreviousExercise( defaultSessionID ).getID() == defaultExerciseID );
 
 		// join Session
-		sessionService.join( defaultSessionID, defaultUserID );
+		sessionService.join( new Invitation( null, (PrincipalImpl)userService.findByID( defaultUserID ), (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getParticipants().contains( userService.findByID( defaultUserID ) ) );
 
 		// leave Session
-		sessionService.leave( defaultSessionID, defaultUserID );
+		sessionService.leave( new Invitation( null, (PrincipalImpl)userService.findByID( defaultUserID ), (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 		assertTrue( !( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getParticipants().contains( userService.findByID( defaultUserID ) ) );
 
 		// accept invitation

@@ -5,6 +5,8 @@ import java.util.List;
 import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.SessionDao;
 import ch.zhaw.iwi.cis.pews.dao.SessionDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.UserDao;
+import ch.zhaw.iwi.cis.pews.dao.UserDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -19,36 +21,28 @@ import ch.zhaw.iwi.cis.pews.service.SessionService;
 public class SessionServiceImpl extends WorkflowElementServiceImpl implements SessionService
 {
 	private SessionDao sessionDao;
+	private UserDao userDao;
 
 	public SessionServiceImpl()
 	{
 		sessionDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionDaoImpl.class.getSimpleName() );
+		userDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
-	public void join( int userID, int sessionID )
+	public void join( Invitation invitation )
 	{
-		SessionImpl session = findByID( sessionID );
-		PrincipalImpl principal = findByID( userID );
-
-		session.getParticipants().add( principal );
-		sessionDao.persist( session );
-
-		principal.setSession( (SessionImpl)findByID( sessionID ) );
-		persist( principal );
+		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
+		principal.setSession( (SessionImpl)findByID( invitation.getSession().getID() ) );
+		userDao.persist( principal );
 	}
 
 	@Override
-	public void leave( int userID, int sessionID )
+	public void leave( Invitation invitation )
 	{
-		SessionImpl session = findByID( sessionID );
-		PrincipalImpl principal = findByID( userID );
-
-		session.getParticipants().remove( principal );
-		persist( session );
-
+		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
 		principal.setSession( null );
-		persist( principal );
+		userDao.persist( principal );
 	}
 
 	@Override
@@ -108,17 +102,17 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	@Override
 	public void addExecuter( Invitation invitation )
 	{
-		SessionImpl session = findByID( invitation.getSession().getID() );
-		session.getExecuters().add( (PrincipalImpl)findByID( invitation.getInvitee().getID() ) );
-		persist( session );
+		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
+		principal.getSessionExecutions().add( (SessionImpl)findByID( invitation.getSession().getID() ) );
+		userDao.persist( principal );
 	}
 
 	@Override
 	public void removeExecuter( Invitation invitation )
 	{
-		SessionImpl session = findByID( invitation.getSession().getID() );
-		session.getExecuters().remove( (PrincipalImpl)findByID( invitation.getInvitee().getID() ) );
-		persist( session );
+		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
+		principal.getSessionExecutions().remove( (SessionImpl)findByID( invitation.getSession().getID() ) );
+		userDao.persist( principal );
 	}
 
 	@Override

@@ -26,16 +26,16 @@ public class SessionImpl extends WorkflowElementImpl
 	@ManyToOne
 	private ExerciseImpl currentExercise;
 
-	@OneToMany( cascade = CascadeType.ALL )
+	@OneToMany( cascade = CascadeType.ALL, mappedBy = "session" )
 	private Set< PrincipalImpl > participants;
 
-	@ManyToMany
+	@ManyToMany( mappedBy = "sessionAcceptances" )
 	private Set< PrincipalImpl > acceptees;
 
 	@OneToMany( cascade = CascadeType.ALL )
 	private Set< Invitation > invitations;
 
-	@ManyToMany( cascade = CascadeType.ALL )
+	@ManyToMany( mappedBy = "sessionExecutions" )
 	private Set< PrincipalImpl > executers;
 
 	public SessionImpl()

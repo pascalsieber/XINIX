@@ -53,15 +53,15 @@ public class SessionServiceProxy extends IdentifiableObjectServiceProxy implemen
 	}
 
 	@Override
-	public void join( int sessionID, int id )
+	public void join( Invitation invitation )
 	{
-		getServiceTarget().path( SessionRestService.JOIN ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) );
+		getServiceTarget().path( SessionRestService.JOIN ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitation ) );
 	}
 
 	@Override
-	public void leave( int sessionID, int id )
+	public void leave( Invitation invitation )
 	{
-		getServiceTarget().path( SessionRestService.LEAVE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) );
+		getServiceTarget().path( SessionRestService.LEAVE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitation ) );
 	}
 
 	@Override

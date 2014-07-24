@@ -14,9 +14,9 @@ public interface SessionService extends WorkflowElementService
 
 	public void setNextExercise( int sessionID );
 
-	public void join( int sessionID, int id );
+	public void join( Invitation invitation );
 
-	public void leave( int sessionID, int id );
+	public void leave( Invitation invitation );
 
 	public void addExecuter( Invitation invitation );
 
