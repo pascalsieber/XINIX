@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.util.security.Credential;
 
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
@@ -22,20 +23,27 @@ public class ZhawJDBCLoginService extends MappedLoginService
 		userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 	}
 
-	private UserIdentity loadUserHelper( UserImpl principal )
+	private UserIdentity loadUserHelper( PrincipalImpl principal )
 	{
+		
+		if ( principal == null )
+		{
+			return null;
+		}
+		
 		Credential credential = Credential.getCredential( principal.getCredential().getPassword() );
 
-		String[] roles = new String[ 1 ];
+		String[] roles = new String[ 2 ];
 		roles[ 0 ] = principal.getRole().getName();
+		roles[ 1 ] = "registered";
 
-		return putUser( principal.getLoginName(), credential, roles );
+		return putUser( ( (UserImpl)principal ).getLoginName(), credential, roles );
 	}
 
 	@Override
 	protected UserIdentity loadUser( String username )
 	{
-		return loadUserHelper( (UserImpl)userService.findByLoginName( username ) );
+		return loadUserHelper( (PrincipalImpl)userService.findByLoginName( username ) );
 	}
 
 	@Override

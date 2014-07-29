@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
@@ -39,7 +41,9 @@ import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
+import ch.zhaw.iwi.cis.pews.service.impl.RoleServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
@@ -78,9 +82,10 @@ public class ZhawEngine implements LifecycleObject
 	public void start()
 	{
 		startDatabase();
-		startWebServer();
+		
 		setupEntityManager();
-		// ensureRootUser();
+		startWebServer();
+		ensureRootUser();
 	}
 
 	private static void setupEntityManager()
@@ -121,7 +126,7 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startWebServer()
 	{
-		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8080 ) );
+		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8082 ) );
 
 		// Setup session ID manager.
 		webServer.setSessionIdManager( new HashSessionIdManager() );
@@ -185,22 +190,42 @@ public class ZhawEngine implements LifecycleObject
 
 	private static SecurityHandler getSecurityHandler( Handler delegateHandler )
 	{
-		URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
+//		URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
 
-		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
-		// ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
+//		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
+		ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
 
 		webServer.addBean( loginService );
 
-		Constraint constraint = new Constraint( Constraint.__BASIC_AUTH, "user" );
+		// secure all urls with basic auth
+		Constraint constraint = new Constraint( Constraint.__BASIC_AUTH, "registered" );
 		constraint.setAuthenticate( true );
 
 		ConstraintMapping mapping = new ConstraintMapping();
 		mapping.setPathSpec( "/*" );
 		mapping.setConstraint( constraint );
+		
+		// ping method and request new password go to whitelist
+		Constraint whitelist = new Constraint();
+		whitelist.setAuthenticate( false );
+		
+		ConstraintMapping pingMapping = new ConstraintMapping();
+		pingMapping.setPathSpec( "/pews/global/ping" );
+		pingMapping.setConstraint( whitelist );
+		
+		ConstraintMapping passwordHelpMapping = new ConstraintMapping();
+		passwordHelpMapping.setPathSpec( "/pews/userService/user/requestPassword" );
+		passwordHelpMapping.setConstraint( whitelist );
+		
+		List< ConstraintMapping > mappings = new ArrayList<>();
+		mappings.add( mapping );
+		mappings.add( pingMapping );
+		mappings.add( passwordHelpMapping );
 
 		ConstraintSecurityHandler handler = new ConstraintSecurityHandler();
-		handler.setConstraintMappings( Collections.singletonList( mapping ) );
+		handler.setConstraintMappings( mappings );
+		
+//		handler.setConstraintMappings( Collections.singletonList( mapping ) );
 		handler.setAuthenticator( new BasicAuthenticator() );
 		handler.setLoginService( loginService );
 
@@ -211,12 +236,13 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void ensureRootUser()
 	{
+		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 
 		boolean rootRegistered = false;
 		for ( IdentifiableObject user : userService.findAll( UserImpl.class ) )
 		{
-			if ( ( (UserImpl)user ).getLoginName().equalsIgnoreCase( "root" ) )
+			if ( ( (UserImpl)user ).getLoginName().equalsIgnoreCase( "root@pews" ) )
 			{
 				rootRegistered = true;
 				break;
@@ -225,8 +251,8 @@ public class ZhawEngine implements LifecycleObject
 
 		if ( !rootRegistered )
 		{
-			int roleID = userService.persist( new RoleImpl( "user", "user" ) );
-			userService.persist( new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)userService.findByID( roleID ), null, "root first name", "root last name", "root" ) );
+			int roleID = roleService.persist( new RoleImpl( "user", "user" ) );
+			userService.persist( new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
 			System.out.println( "root user registered initially" );
 		}
 
