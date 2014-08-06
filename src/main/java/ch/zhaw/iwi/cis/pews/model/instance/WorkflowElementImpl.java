@@ -27,7 +27,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 
 	private String name;
 	private String description;
-	private double ellapsedSeconds;
+	private double elapsedSeconds;
 
 	@OneToMany( cascade = CascadeType.ALL )
 	private List< WorkflowElementStatusHistoryElementImpl > statusHistory;
@@ -46,7 +46,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
 		this.data = new HashSet< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
-		this.ellapsedSeconds = 0;
+		this.elapsedSeconds = 0;
 	}
 
 	public WorkflowElementImpl( String name, String description, WorkflowElementDefinitionImpl definition )
@@ -58,7 +58,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 		this.definition = definition;
 		this.data = new HashSet< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
-		this.ellapsedSeconds = 0;
+		this.elapsedSeconds = 0;
 	}
 
 	public String getName()
@@ -122,13 +122,13 @@ public class WorkflowElementImpl extends IdentifiableObject
 		this.data = data;
 	}
 
-	public double getEllapsedSeconds()
+	public double getElapsedSeconds()
 	{
-		return ellapsedSeconds;
+		return elapsedSeconds;
 	}
 
-	public void setEllapsedSeconds( double ellapsedSeconds )
+	public void setElapsedSeconds( double ellapsedSeconds )
 	{
-		this.ellapsedSeconds = ellapsedSeconds;
+		this.elapsedSeconds = ellapsedSeconds;
 	}
 }

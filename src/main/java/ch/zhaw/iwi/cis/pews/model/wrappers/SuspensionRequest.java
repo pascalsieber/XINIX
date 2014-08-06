@@ -3,7 +3,7 @@ package ch.zhaw.iwi.cis.pews.model.wrappers;
 public class SuspensionRequest
 {
 	private int id;
-	private double	ellapsedSeconds;
+	private double	elapsedSeconds;
 	
 	public SuspensionRequest()
 	{
@@ -21,14 +21,14 @@ public class SuspensionRequest
 		this.id = id;
 	}
 
-	public double getEllapsedSeconds()
+	public double getElapsedSeconds()
 	{
-		return ellapsedSeconds;
+		return elapsedSeconds;
 	}
 
-	public void setEllapsedSeconds( double ellapsedSeconds )
+	public void setElapsedSeconds( double ellapsedSeconds )
 	{
-		this.ellapsedSeconds = ellapsedSeconds;
+		this.elapsedSeconds = ellapsedSeconds;
 	}
 	
 }
