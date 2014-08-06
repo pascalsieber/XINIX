@@ -391,8 +391,8 @@ public class RestServiceTest
 		assertTrue( searched.getID() == usr.getID() );
 
 		// request new password
-		String password = userService.requestNewPassword( defaultUserID );
-		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserID ) ).getCredential().getPassword().equals( password ) );
+		boolean password = userService.requestNewPassword( defaultUserID );
+		assertTrue( password );
 	}
 
 	@Test

@@ -2,6 +2,16 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
@@ -12,6 +22,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -37,12 +48,45 @@ public class UserServiceImpl extends IdentifiableObjectServiceImpl implements Us
 	}
 
 	@Override
-	public String requestNewPassword( int userID )
+	public boolean requestNewPassword( int userID )
 	{
 		PrincipalImpl user = findByID( userID );
 		user.setCredential( new PasswordCredentialImpl( new BigInteger( 130, new SecureRandom() ).toString( 32 ) ) );
 		persist( user );
-		return user.getCredential().getPassword();
+		return sendPasswordEmail( (UserImpl)user );
 	}
 
+	private boolean sendPasswordEmail( UserImpl user )
+	{
+		Properties props = new Properties();
+		props.put( "mail.smtp.host", "smtp.zhaw.ch" );
+		props.put( "mail.smtp.socketFactory.port", "25" );
+		props.put( "mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory" );
+		props.put( "mail.smtp.auth", "true" );
+		props.put( "mail.smtp.port", "25" );
+
+		Session mailSession = Session.getDefaultInstance( props, new Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication()
+			{
+				return new PasswordAuthentication( "user", "password" );
+			}
+		} );
+
+		try
+		{
+			Message message = new MimeMessage( mailSession );
+			message.setFrom( new InternetAddress( "passwordHelp@pews.ch" ) );
+			message.setRecipients( Message.RecipientType.TO, InternetAddress.parse( user.getLoginName() ) );
+			message.setSubject( "PEWS Password Reset" );
+			message.setText( "Dear " + user.getFirstName() + ", \n\n Your password has been successfully reset. \n Your new password is: " + user.getCredential().getPassword() );
+
+			Transport.send( message );
+			return true;
+		}
+		catch ( MessagingException e )
+		{
+			throw new RuntimeException( e );
+		}
+
+	}
 }

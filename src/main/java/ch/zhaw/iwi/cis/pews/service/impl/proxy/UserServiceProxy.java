@@ -22,9 +22,9 @@ public class UserServiceProxy extends IdentifiableObjectServiceProxy implements 
 	}
 
 	@Override
-	public String requestNewPassword( int userID )
+	public boolean requestNewPassword( int userID )
 	{
-		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) ).readEntity( String.class );
+		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) ).readEntity( boolean.class );
 	}
 
 }

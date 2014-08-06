@@ -69,7 +69,7 @@ public class UserRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( REQUEST_PASSWORD )
-	public String requestNewPassword( int userID )
+	public boolean requestNewPassword( int userID )
 	{
 		return userService.requestNewPassword( userID );
 	}
