@@ -25,12 +25,12 @@ public class ZhawJDBCLoginService extends MappedLoginService
 
 	private UserIdentity loadUserHelper( PrincipalImpl principal )
 	{
-		
+
 		if ( principal == null )
 		{
 			return null;
 		}
-		
+
 		Credential credential = Credential.getCredential( principal.getCredential().getPassword() );
 
 		String[] roles = new String[ 2 ];

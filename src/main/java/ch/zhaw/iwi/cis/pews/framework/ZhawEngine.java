@@ -1,11 +1,8 @@
 package ch.zhaw.iwi.cis.pews.framework;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,7 +13,6 @@ import javax.servlet.DispatcherType;
 import org.apache.derby.drda.NetworkServerControl;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
-import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Handler;
@@ -47,7 +43,6 @@ import ch.zhaw.iwi.cis.pews.service.impl.RoleServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
-import ch.zhaw.sml.iwi.cis.exwrapper.java.net.URIWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.apache.derby.drda.NetworkServerControlWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.eclipse.jetty.server.ServerWrapper;
 
@@ -82,10 +77,12 @@ public class ZhawEngine implements LifecycleObject
 	public void start()
 	{
 		startDatabase();
-		
+
 		setupEntityManager();
 		startWebServer();
 		ensureRootUser();
+		ensureDefaultRoles();
+		System.out.println( "PEWS running and ready to go!" );
 	}
 
 	private static void setupEntityManager()
@@ -190,9 +187,9 @@ public class ZhawEngine implements LifecycleObject
 
 	private static SecurityHandler getSecurityHandler( Handler delegateHandler )
 	{
-//		URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
+		// URL url = URIWrapper.toURL( new File( PewsConfig.getConfDir() + "/realm.properties" ).toURI() );
 
-//		HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
+		// HashLoginService loginService = new HashLoginService( "PewsRealm", url.toString() );
 		ZhawJDBCLoginService loginService = new ZhawJDBCLoginService();
 
 		webServer.addBean( loginService );
@@ -204,19 +201,19 @@ public class ZhawEngine implements LifecycleObject
 		ConstraintMapping mapping = new ConstraintMapping();
 		mapping.setPathSpec( "/*" );
 		mapping.setConstraint( constraint );
-		
+
 		// ping method and request new password go to whitelist
 		Constraint whitelist = new Constraint();
 		whitelist.setAuthenticate( false );
-		
+
 		ConstraintMapping pingMapping = new ConstraintMapping();
 		pingMapping.setPathSpec( "/pews/global/ping" );
 		pingMapping.setConstraint( whitelist );
-		
+
 		ConstraintMapping passwordHelpMapping = new ConstraintMapping();
 		passwordHelpMapping.setPathSpec( "/pews/userService/user/requestPassword" );
 		passwordHelpMapping.setConstraint( whitelist );
-		
+
 		List< ConstraintMapping > mappings = new ArrayList<>();
 		mappings.add( mapping );
 		mappings.add( pingMapping );
@@ -224,8 +221,8 @@ public class ZhawEngine implements LifecycleObject
 
 		ConstraintSecurityHandler handler = new ConstraintSecurityHandler();
 		handler.setConstraintMappings( mappings );
-		
-//		handler.setConstraintMappings( Collections.singletonList( mapping ) );
+
+		// handler.setConstraintMappings( Collections.singletonList( mapping ) );
 		handler.setAuthenticator( new BasicAuthenticator() );
 		handler.setLoginService( loginService );
 
@@ -251,11 +248,25 @@ public class ZhawEngine implements LifecycleObject
 
 		if ( !rootRegistered )
 		{
-			int roleID = roleService.persist( new RoleImpl( "user", "user" ) );
+			int roleID = roleService.persist( new RoleImpl( "root", "root" ) );
 			userService.persist( new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
 			System.out.println( "root user registered initially" );
 		}
 
+	}
+
+	private static void ensureDefaultRoles()
+	{
+		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
+
+		roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
+		System.out.println( "organizer role created initially" );
+
+		roleService.persist( new RoleImpl( "executer", "session executer" ) );
+		System.out.println( "executer role created initially" );
+
+		roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
+		System.out.println( "participant role created initially" );
 	}
 
 	private static void stopDatabase()

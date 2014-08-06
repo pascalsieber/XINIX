@@ -27,7 +27,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		ExerciseImpl exercise = findByID( suspensionRequest.getId() );
 		exercise.setCurrentState( WorkflowElementStatusImpl.SUSPENDED );
-		
+
 		exercise.setElapsedSeconds( suspensionRequest.getElapsedSeconds() );
 		persist( exercise );
 	}
@@ -37,12 +37,12 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		ExerciseImpl exercise = findByID( exerciseID );
 		exercise.setCurrentState( WorkflowElementStatusImpl.RUNNING );
-		
+
 		double ellapsedSeconds = exercise.getElapsedSeconds();
-		
+
 		exercise.setElapsedSeconds( 0 );
 		persist( exercise );
-		
+
 		return ellapsedSeconds;
 	}
 

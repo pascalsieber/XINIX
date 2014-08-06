@@ -3,8 +3,8 @@ package ch.zhaw.iwi.cis.pews.model.wrappers;
 public class SuspensionRequest
 {
 	private int id;
-	private double	elapsedSeconds;
-	
+	private double elapsedSeconds;
+
 	public SuspensionRequest()
 	{
 		super();
@@ -30,5 +30,5 @@ public class SuspensionRequest
 	{
 		this.elapsedSeconds = ellapsedSeconds;
 	}
-	
+
 }

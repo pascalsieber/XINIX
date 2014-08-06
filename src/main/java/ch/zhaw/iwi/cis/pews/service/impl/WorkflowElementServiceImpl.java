@@ -45,5 +45,4 @@ public class WorkflowElementServiceImpl extends IdentifiableObjectServiceImpl im
 		workflowElement.setCurrentState( newStatus );
 	}
 
-
 }

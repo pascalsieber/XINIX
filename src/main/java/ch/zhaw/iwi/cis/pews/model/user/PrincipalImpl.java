@@ -37,11 +37,11 @@ public class PrincipalImpl extends IdentifiableObject
 	private Set< Invitation > sessionInvitations;
 
 	@ManyToMany
-	@JoinTable(name="principalimpl_sessionimpl_accept")
+	@JoinTable( name = "principalimpl_sessionimpl_accept" )
 	private Set< SessionImpl > sessionAcceptances;
 
 	@ManyToMany
-	@JoinTable(name="principalimpl_sessionimpl_execute")
+	@JoinTable( name = "principalimpl_sessionimpl_execute" )
 	private Set< SessionImpl > sessionExecutions;
 
 	public PrincipalImpl()
