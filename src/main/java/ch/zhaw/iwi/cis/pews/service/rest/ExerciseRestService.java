@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -23,6 +24,8 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 	public final static String BASE = "/exerciseService/exercise";
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
+	public final static String SUSPEND = "/suspend";
+	public final static String RESUME = "/resume";
 
 	private ExerciseService exerciseService;
 
@@ -71,6 +74,20 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 	public void stopExercise( int exerciseID )
 	{
 		exerciseService.stop( exerciseID );
+	}
+
+	@POST
+	@Path( SUSPEND )
+	public void suspendExercise( SuspensionRequest suspensionRequest )
+	{
+		exerciseService.suspend( suspensionRequest );
+	}
+
+	@POST
+	@Path( RESUME )
+	public double resumeExercise( int exerciseID )
+	{
+		return exerciseService.resume( exerciseID );
 	}
 
 	@Override

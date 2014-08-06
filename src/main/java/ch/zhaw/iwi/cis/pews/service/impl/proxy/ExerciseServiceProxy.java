@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseRestService;
 
@@ -24,6 +25,18 @@ public class ExerciseServiceProxy extends IdentifiableObjectServiceProxy impleme
 	public void stop( int id )
 	{
 		getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+	}
+
+	@Override
+	public void suspend( SuspensionRequest suspensionRequest )
+	{
+		getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( suspensionRequest ) );
+	}
+
+	@Override
+	public double resume( int exerciseID )
+	{
+		return getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( double.class );
 	}
 
 }
