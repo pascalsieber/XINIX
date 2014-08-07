@@ -12,7 +12,7 @@ public abstract class IdentifiableObjectRestService extends RestService
 	public static final String FIND_BY_ID = "/findByID";
 	public static final String FIND_ALL = "/findAll";
 
-	public < T extends IdentifiableObject > int persist( T persistentObject )
+	public < T extends IdentifiableObject > String persist( T persistentObject )
 	{
 		return getPersistentObjectService().persist( persistentObject );
 	}
@@ -22,7 +22,7 @@ public abstract class IdentifiableObjectRestService extends RestService
 		getPersistentObjectService().remove( persistentObject );
 	}
 
-	public < T extends IdentifiableObject > T findByID( int id )
+	public < T extends IdentifiableObject > T findByID( String id )
 	{
 		return getPersistentObjectService().findByID( id );
 	}

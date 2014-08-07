@@ -6,13 +6,13 @@ import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 public interface SessionService extends WorkflowElementService
 {
 
-	public ExerciseImpl getCurrentExercise( int sessionID );
+	public ExerciseImpl getCurrentExercise( String sessionID );
 
-	public ExerciseImpl getNextExercise( int sessionID );
+	public ExerciseImpl getNextExercise( String sessionID );
 
-	public ExerciseImpl getPreviousExercise( int sessionID );
+	public ExerciseImpl getPreviousExercise( String sessionID );
 
-	public void setNextExercise( int sessionID );
+	public void setNextExercise( String sessionID );
 
 	public void join( Invitation invitation );
 

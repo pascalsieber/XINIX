@@ -32,14 +32,14 @@ public class InvitationRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public int persistInvitation( Invitation obj )
+	public String persistInvitation( Invitation obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public Invitation findInvitationByID( int id )
+	public Invitation findInvitationByID( String id )
 	{
 		return super.findByID( id );
 	}
@@ -60,7 +60,7 @@ public class InvitationRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( ACCEPT )
-	public void accept( int invitationID )
+	public void accept( String invitationID )
 	{
 		invitationService.accept( invitationID );
 	}

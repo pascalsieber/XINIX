@@ -34,14 +34,14 @@ public class UserRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public int persistUser( PrincipalImpl principal )
+	public String persistUser( PrincipalImpl principal )
 	{
 		return super.persist( principal );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public PrincipalImpl findUserById( int id )
+	public PrincipalImpl findUserById( String id )
 	{
 		return super.findByID( id );
 	}
@@ -69,7 +69,7 @@ public class UserRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( REQUEST_PASSWORD )
-	public boolean requestNewPassword( int userID )
+	public boolean requestNewPassword( String userID )
 	{
 		return userService.requestNewPassword( userID );
 	}

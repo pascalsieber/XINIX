@@ -20,7 +20,7 @@ public class ExerciseDataDaoImpl extends ExerciseDaoImpl implements ExerciseData
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl > findByExerciseID( int exerciseID )
+	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< ExerciseDataImpl > data = getEntityManager().createQuery( "from ExerciseDataImpl d where d.workflowElement.id = " + exerciseID ).getResultList();
 		getEntityManager().clear();

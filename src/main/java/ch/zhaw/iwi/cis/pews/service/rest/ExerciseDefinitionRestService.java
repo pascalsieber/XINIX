@@ -31,14 +31,14 @@ public class ExerciseDefinitionRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public int persistExerciseDefinition( ExerciseDefinitionImpl obj )
+	public String persistExerciseDefinition( ExerciseDefinitionImpl obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public ExerciseDefinitionImpl findExerciseDefinitionById( int id )
+	public ExerciseDefinitionImpl findExerciseDefinitionById( String id )
 	{
 		return super.findByID( id );
 	}

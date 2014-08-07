@@ -31,14 +31,14 @@ public class WorkshopDefinitionRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public int persistWorkshopDefinition( WorkshopDefinitionImpl obj )
+	public String persistWorkshopDefinition( WorkshopDefinitionImpl obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public WorkshopDefinitionImpl findWorkshopDefinitionById( int id )
+	public WorkshopDefinitionImpl findWorkshopDefinitionById( String id )
 	{
 		return super.findByID( id );
 	}

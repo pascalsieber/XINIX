@@ -7,6 +7,6 @@ public interface UserService extends IdentifiableObjectService
 
 	public PrincipalImpl findByLoginName( String loginName );
 
-	public boolean requestNewPassword( int userID );
+	public boolean requestNewPassword( String userID );
 
 }

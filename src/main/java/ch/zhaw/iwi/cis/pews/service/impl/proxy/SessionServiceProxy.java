@@ -17,37 +17,37 @@ public class SessionServiceProxy extends IdentifiableObjectServiceProxy implemen
 	}
 
 	@Override
-	public void start( int id )
+	public void start( String id )
 	{
 		getServiceTarget().path( SessionRestService.START ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
 	@Override
-	public void stop( int id )
+	public void stop( String id )
 	{
 		getServiceTarget().path( SessionRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
 	@Override
-	public ExerciseImpl getCurrentExercise( int sessionID )
+	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return getServiceTarget().path( SessionRestService.GET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( ExerciseImpl.class );
 	}
 
 	@Override
-	public ExerciseImpl getNextExercise( int sessionID )
+	public ExerciseImpl getNextExercise( String sessionID )
 	{
 		return getServiceTarget().path( SessionRestService.GET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( ExerciseImpl.class );
 	}
 
 	@Override
-	public ExerciseImpl getPreviousExercise( int sessionID )
+	public ExerciseImpl getPreviousExercise( String sessionID )
 	{
 		return getServiceTarget().path( SessionRestService.GET_PREVIOUS_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( ExerciseImpl.class );
 	}
 
 	@Override
-	public void setNextExercise( int sessionID )
+	public void setNextExercise( String sessionID )
 	{
 		getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) );
 	}

@@ -9,7 +9,7 @@ import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 public abstract class IdentifiableObjectServiceImpl implements IdentifiableObjectService
 {
 	@Override
-	public < T extends IdentifiableObject > int persist( T object )
+	public < T extends IdentifiableObject > String persist( T object )
 	{
 		return getIdentifiableObjectDao().persist( object );
 	}
@@ -21,7 +21,7 @@ public abstract class IdentifiableObjectServiceImpl implements IdentifiableObjec
 	}
 
 	@Override
-	public < T extends IdentifiableObject > T findByID( int id )
+	public < T extends IdentifiableObject > T findByID( String id )
 	{
 		return getIdentifiableObjectDao().findById( id );
 	}

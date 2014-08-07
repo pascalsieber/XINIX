@@ -1,12 +1,10 @@
 package ch.zhaw.iwi.cis.pews.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -15,8 +13,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonTypeInfo( use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "class" )
 @JsonIdentityInfo( generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id", scope = IdentifiableObject.class )
-@Entity
-@Inheritance( strategy = InheritanceType.JOINED )
+@MappedSuperclass
 public abstract class IdentifiableObject implements Serializable
 {
 	// TODO replace 1L with singleton constant.
@@ -24,14 +21,14 @@ public abstract class IdentifiableObject implements Serializable
 
 	// TODO replace int with special UID class.
 	@Id
-	@GeneratedValue
-	private int id;
+	private String id;
 
 	public IdentifiableObject()
 	{
+		this.id = UUID.randomUUID().toString();
 	}
 
-	public int getID()
+	public String getID()
 	{
 		return id;
 	}
@@ -39,10 +36,7 @@ public abstract class IdentifiableObject implements Serializable
 	@Override
 	public final int hashCode()
 	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
+		return id.hashCode();
 	}
 
 	@Override

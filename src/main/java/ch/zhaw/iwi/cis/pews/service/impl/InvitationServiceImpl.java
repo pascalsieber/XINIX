@@ -29,7 +29,7 @@ public class InvitationServiceImpl extends IdentifiableObjectServiceImpl impleme
 	}
 
 	@Override
-	public void accept( int invitationID )
+	public void accept( String invitationID )
 	{
 		Invitation invitation = findByID( invitationID );
 		PrincipalImpl user = findByID( invitation.getInvitee().getID() );

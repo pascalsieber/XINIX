@@ -60,16 +60,16 @@ public class RestServiceTest
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
 
-	private static int defaultWorkshopDefinitionID;
-	private static int defaultWorkshopID;
-	private static int defaultSessionID;
-	private static int defaultExerciseDefinitionID;
-	private static int defaultExerciseID;
-	private static int defaultExerciseID2;
-	private static int defaultRoleID;
-	private static int defaultUserID;
-	private static int defaultExerciseDataID;
-	private static int defaultInvitationID;
+	private static String defaultWorkshopDefinitionID;
+	private static String defaultWorkshopID;
+	private static String defaultSessionID;
+	private static String defaultExerciseDefinitionID;
+	private static String defaultExerciseID;
+	private static String defaultExerciseID2;
+	private static String defaultRoleID;
+	private static String defaultUserID;
+	private static String defaultExerciseDataID;
+	private static String defaultInvitationID;
 
 	@BeforeClass
 	public static void setupTest()
@@ -125,12 +125,12 @@ public class RestServiceTest
 	public void crudOperationsUserService()
 	{
 		// create role
-		int roleID = roleService.persist( new RoleImpl( "new role", "new role description" ) );
-		assertTrue( roleID > 0 );
+		String roleID = roleService.persist( new RoleImpl( "new role", "new role description" ) );
+		assertTrue( !roleID.equalsIgnoreCase( "" ) );
 
 		// read role
 		RoleImpl role = roleService.findByID( roleID );
-		assertTrue( role.getID() == roleID );
+		assertTrue( role.getID().equals( roleID ) );
 		assertTrue( role.getName().equalsIgnoreCase( "new role" ) );
 		assertTrue( role.getDescription().equalsIgnoreCase( "new role description" ) );
 
@@ -149,12 +149,12 @@ public class RestServiceTest
 		assertTrue( checkDelete( roles, roleID ) );
 
 		// create user
-		int userID = userService.persist( new UserImpl( new PasswordCredentialImpl( "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService
+		String userID = userService.persist( new UserImpl( new PasswordCredentialImpl( "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService
 			.findByID( defaultSessionID ), "firstname", "lastname", "login@name" ) );
 
 		// read user
 		UserImpl user = userService.findByID( userID );
-		assertTrue( user.getID() == userID );
+		assertTrue( user.getID().equals( userID ) );
 		assertTrue( user.getFirstName().equalsIgnoreCase( "firstname" ) );
 		assertTrue( user.getLastName().equalsIgnoreCase( "lastname" ) );
 		assertTrue( user.getLoginName().equalsIgnoreCase( "login@name" ) );
@@ -180,17 +180,17 @@ public class RestServiceTest
 	public void crudOperationsWorkshopService()
 	{
 		// create workshop definition
-		int workshopDefinitionID = workshopDefinitionService.persist( new WorkshopDefinitionImpl(
+		String workshopDefinitionID = workshopDefinitionService.persist( new WorkshopDefinitionImpl(
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			"workshop definition",
 			"workshop definition description" ) );
 
 		// read workshop definition
 		WorkshopDefinitionImpl workshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
-		assertTrue( workshopDefinition.getID() == workshopDefinitionID );
+		assertTrue( workshopDefinition.getID().equals( workshopDefinitionID ) );
 		assertTrue( workshopDefinition.getName().equalsIgnoreCase( "workshop definition" ) );
 		assertTrue( workshopDefinition.getDescription().equalsIgnoreCase( "workshop definition description" ) );
-		assertTrue( workshopDefinition.getOwner().getID() == defaultUserID );
+		assertTrue( workshopDefinition.getOwner().getID().equals( defaultUserID ) );
 
 		// update workshop definition
 		workshopDefinition.setName( "updated workshop definition" );
@@ -207,16 +207,16 @@ public class RestServiceTest
 		assertTrue( checkDelete( wsDefs, workshopDefinitionID ) );
 
 		// create workshop instance
-		int wsID = workshopService.persist( new WorkshopImpl( "workshop instance", "workshop instance description", (WorkflowElementDefinitionImpl)workshopDefinitionService
+		String wsID = workshopService.persist( new WorkshopImpl( "workshop instance", "workshop instance description", (WorkflowElementDefinitionImpl)workshopDefinitionService
 			.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// read workshop instance
 		WorkshopImpl ws = workshopService.findByID( wsID );
-		assertTrue( ws.getID() == wsID );
+		assertTrue( ws.getID().equals( wsID ) );
 		assertTrue( ws.getName().equalsIgnoreCase( "workshop instance" ) );
 		assertTrue( ws.getDescription().equalsIgnoreCase( "workshop instance description" ) );
 		assertTrue( ws.getCurrentState().equalsIgnoreCase( "new" ) );
-		assertTrue( ws.getDefinition().getID() == defaultWorkshopDefinitionID );
+		assertTrue( ws.getDefinition().getID().equals( defaultWorkshopDefinitionID ) );
 
 		// update workshop instance
 		ws.setName( "updated workshop instance" );
@@ -233,15 +233,15 @@ public class RestServiceTest
 		assertTrue( checkDelete( workshops, wsID ) );
 
 		// create session
-		int sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
 
 		// read session
 		SessionImpl session = sessionService.findByID( sessionID );
-		assertTrue( session.getID() == sessionID );
+		assertTrue( session.getID().equals( sessionID ) );
 		assertTrue( session.getName().equalsIgnoreCase( "session instance" ) );
 		assertTrue( session.getDescription().equalsIgnoreCase( "session description" ) );
 		assertTrue( session.getDefinition() == null );
-		assertTrue( session.getWorkshop().getID() == defaultWorkshopID );
+		assertTrue( session.getWorkshop().getID().equals( defaultWorkshopID ) );
 
 		// update session
 		session.setName( "updated session" );
@@ -262,7 +262,7 @@ public class RestServiceTest
 	public void crudOperationsExerciseService()
 	{
 		// create exercise definition
-		int exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
+		String exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			TimeUnit.MINUTES,
 			2,
@@ -271,11 +271,11 @@ public class RestServiceTest
 
 		// read exercise definition
 		ExerciseDefinitionImpl exDef = exerciseDefinitionService.findByID( exDefID );
-		assertTrue( exDef.getID() == exDefID );
+		assertTrue( exDef.getID().equals( exDefID ) );
 		assertTrue( exDef.getDuration() == 2 );
-		assertTrue( exDef.getOwner().getID() == defaultUserID );
+		assertTrue( exDef.getOwner().getID().equals( defaultUserID ) );
 		assertTrue( exDef.getTimeUnit().equals( TimeUnit.MINUTES ) );
-		assertTrue( exDef.getWorkshopDefinition().getID() == defaultWorkshopDefinitionID );
+		assertTrue( exDef.getWorkshopDefinition().getID().equals( defaultWorkshopDefinitionID ) );
 		assertTrue( ( (PinkLabsDefinition)exDef ).getQuestion().equalsIgnoreCase( "question" ) );
 
 		// update exercise definition
@@ -293,7 +293,7 @@ public class RestServiceTest
 		assertTrue( checkDelete( exDefs, exDefID ) );
 
 		// create exercise instance
-		int exID = exerciseService.persist( new ExerciseImpl(
+		String exID = exerciseService.persist( new ExerciseImpl(
 			"exercise",
 			"exercise description",
 			(ExerciseDefinitionImpl)exerciseDefinitionService.findByID( defaultExerciseDefinitionID ),
@@ -301,12 +301,12 @@ public class RestServiceTest
 
 		// read exercise instance
 		ExerciseImpl ex = exerciseService.findByID( exID );
-		assertTrue( ex.getID() == exID );
+		assertTrue( ex.getID().equals( exID ) );
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "new" ) );
-		assertTrue( ex.getDefinition().getID() == defaultExerciseDefinitionID );
+		assertTrue( ex.getDefinition().getID().equals( defaultExerciseDefinitionID ) );
 		assertTrue( ex.getName().equalsIgnoreCase( "exercise" ) );
 		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
-		assertTrue( ex.getWorkshop().getID() == defaultWorkshopID );
+		assertTrue( ex.getWorkshop().getID().equals( defaultWorkshopID ) );
 
 		// update exercise instance
 		ex.setName( "updated exercise" );
@@ -323,15 +323,17 @@ public class RestServiceTest
 		assertTrue( checkDelete( exs, exID ) );
 
 		// create exercise data
-		int dataID = exerciseDataService
-			.persist( new PinkLabsExerciseData( (PrincipalImpl)userService.findByID( defaultUserID ), (ExerciseImpl)exerciseService.findByID( defaultExerciseID ), "answer" ) );
+		String dataID = exerciseDataService.persist( new PinkLabsExerciseData(
+			(PrincipalImpl)userService.findByID( defaultUserID ),
+			(ExerciseImpl)exerciseService.findByID( defaultExerciseID ),
+			"answer" ) );
 
 		// read exercise data
 		ExerciseDataImpl data = exerciseDataService.findByID( dataID );
-		assertTrue( data.getID() == dataID );
+		assertTrue( data.getID().equals( dataID ) );
 		assertTrue( ( (PinkLabsExerciseData)data ).getAnswer().equalsIgnoreCase( "answer" ) );
-		assertTrue( data.getOwner().getID() == defaultUserID );
-		assertTrue( data.getWorkflowElement().getID() == defaultExerciseID );
+		assertTrue( data.getOwner().getID().equals( defaultUserID ) );
+		assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseID ) );
 
 		// update exercise data
 		( (PinkLabsExerciseData)data ).setAnswer( "updated answer" );
@@ -353,18 +355,18 @@ public class RestServiceTest
 	{
 
 		// create invitation
-		int invitationID = invitationService.persist( new Invitation(
+		String invitationID = invitationService.persist( new Invitation(
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			(SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 
 		// read invitation
 		Invitation invitation = invitationService.findByID( invitationID );
-		assertTrue( invitation.getID() == invitationID );
+		assertTrue( invitation.getID().equals( invitationID ) );
 		assertTrue( invitation.getDate() != null );
-		assertTrue( invitation.getInvitee().getID() == defaultUserID );
-		assertTrue( invitation.getInviter().getID() == defaultUserID );
-		assertTrue( invitation.getSession().getID() == defaultSessionID );
+		assertTrue( invitation.getInvitee().getID().equals( defaultUserID ) );
+		assertTrue( invitation.getInviter().getID().equals( defaultUserID ) );
+		assertTrue( invitation.getSession().getID().equals( defaultSessionID ) );
 
 		// update invitation
 		Date date = new Date();
@@ -388,7 +390,7 @@ public class RestServiceTest
 		// find by login name
 		PrincipalImpl usr = userService.findByID( defaultUserID );
 		PrincipalImpl searched = userService.findByLoginName( ( (UserImpl)usr ).getLoginName() );
-		assertTrue( searched.getID() == usr.getID() );
+		assertTrue( searched.getID().equals( usr.getID() ) );
 
 		// request new password
 		boolean password = userService.requestNewPassword( defaultUserID );
@@ -415,17 +417,17 @@ public class RestServiceTest
 		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// getCurrentExercise
-		assertTrue( sessionService.getCurrentExercise( defaultSessionID ).getID() == defaultExerciseID );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionID ).getID().equals( defaultExerciseID ) );
 
 		// getNextExercise
-		assertTrue( sessionService.getNextExercise( defaultSessionID ).getID() == defaultExerciseID2 );
+		assertTrue( sessionService.getNextExercise( defaultSessionID ).getID().equals( defaultExerciseID2 ) );
 
 		// setNextExercise
 		sessionService.setNextExercise( defaultSessionID );
-		assertTrue( sessionService.getCurrentExercise( defaultSessionID ).getID() == defaultExerciseID2 );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionID ).getID().equals( defaultExerciseID2 ) );
 
 		// getPreviousExercise
-		assertTrue( sessionService.getPreviousExercise( defaultSessionID ).getID() == defaultExerciseID );
+		assertTrue( sessionService.getPreviousExercise( defaultSessionID ).getID().equals( defaultExerciseID ) );
 
 		// join Session
 		sessionService.join( new Invitation( null, (PrincipalImpl)userService.findByID( defaultUserID ), (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
@@ -463,11 +465,11 @@ public class RestServiceTest
 		assertTrue( exerciseDataService.findByExerciseID( defaultExerciseID ).size() > 0 );
 	}
 
-	private < T extends IdentifiableObject > boolean checkSetOperation( Set< T > objects, int checkID, boolean initial )
+	private < T extends IdentifiableObject > boolean checkSetOperation( Set< T > objects, String checkID, boolean initial )
 	{
 		for ( IdentifiableObject obj : objects )
 		{
-			if ( obj.getID() == checkID )
+			if ( obj.getID().equals( checkID ) )
 			{
 				return !initial;
 			}
@@ -476,10 +478,10 @@ public class RestServiceTest
 		return initial;
 	}
 
-	private < T extends IdentifiableObject > boolean checkDelete( List< T > objects, int deletedID )
+	private < T extends IdentifiableObject > boolean checkDelete( List< T > objects, String deletedID )
 	{
 		boolean result = false;
-		ArrayList< Integer > ids = new ArrayList<>();
+		ArrayList< String > ids = new ArrayList<>();
 
 		for ( IdentifiableObject object : objects )
 		{

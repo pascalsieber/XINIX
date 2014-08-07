@@ -31,14 +31,14 @@ public class RoleRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public int persist( RoleImpl obj )
+	public String persist( RoleImpl obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public RoleImpl findById( int id )
+	public RoleImpl findById( String id )
 	{
 		return super.findByID( id );
 	}

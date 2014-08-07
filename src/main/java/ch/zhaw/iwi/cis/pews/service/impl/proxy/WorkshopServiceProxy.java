@@ -15,13 +15,13 @@ public class WorkshopServiceProxy extends IdentifiableObjectServiceProxy impleme
 	}
 
 	@Override
-	public void start( int id )
+	public void start( String id )
 	{
 		getServiceTarget().path( WorkshopRestService.START ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
 	@Override
-	public void stop( int id )
+	public void stop( String id )
 	{
 		getServiceTarget().path( WorkshopRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}

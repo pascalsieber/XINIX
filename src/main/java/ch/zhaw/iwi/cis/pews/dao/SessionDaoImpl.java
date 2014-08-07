@@ -14,7 +14,7 @@ public class SessionDaoImpl extends IdentifiableObjectDaoImpl implements Session
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public SessionImpl findById( Integer id )
+	public SessionImpl findById( String id )
 	{
 		List< SessionImpl > exercises = getEntityManager().createQuery( "from SessionImpl as s LEFT JOIN FETCH s.workshop as w LEFT JOIN FETCH w.exercises as ex where s.id = " + id ).getResultList();
 

@@ -24,9 +24,9 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 		super( hostName, port, userName, password, servicePath );
 	}
 
-	public < T extends IdentifiableObject > int persist( T persistentObject )
+	public < T extends IdentifiableObject > String persist( T persistentObject )
 	{
-		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) ).readEntity( int.class );
+		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) ).readEntity( String.class );
 	}
 
 	public < T extends IdentifiableObject > void remove( T persistentObject )
@@ -35,7 +35,7 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > T findByID( int persistentObjectID )
+	public < T extends IdentifiableObject > T findByID( String persistentObjectID )
 	{
 		return (T)getServiceTarget()
 			.path( IdentifiableObjectRestService.FIND_BY_ID )

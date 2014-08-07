@@ -46,13 +46,13 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	}
 
 	@Override
-	public ExerciseImpl getCurrentExercise( int sessionID )
+	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return ( (SessionImpl)findByID( sessionID ) ).getCurrentExercise();
 	}
 
 	@Override
-	public ExerciseImpl getNextExercise( int sessionID )
+	public ExerciseImpl getNextExercise( String sessionID )
 	{
 		SessionImpl session = findByID( sessionID );
 		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
@@ -69,7 +69,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	}
 
 	@Override
-	public ExerciseImpl getPreviousExercise( int sessionID )
+	public ExerciseImpl getPreviousExercise( String sessionID )
 	{
 		SessionImpl session = findByID( sessionID );
 		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
@@ -86,7 +86,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	}
 
 	@Override
-	public void setNextExercise( int sessionID )
+	public void setNextExercise( String sessionID )
 	{
 		SessionImpl session = findByID( sessionID );
 		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();

@@ -33,7 +33,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	}
 
 	@Override
-	public double resume( int exerciseID )
+	public double resume( String exerciseID )
 	{
 		ExerciseImpl exercise = findByID( exerciseID );
 		exercise.setCurrentState( WorkflowElementStatusImpl.RUNNING );

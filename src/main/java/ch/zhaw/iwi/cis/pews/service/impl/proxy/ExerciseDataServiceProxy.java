@@ -19,7 +19,7 @@ public class ExerciseDataServiceProxy extends IdentifiableObjectServiceProxy imp
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl > findByExerciseID( int exerciseID )
+	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		return getServiceTarget().path( ExerciseDataRestService.FIND_BY_EXERCISE_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( List.class );
 	}

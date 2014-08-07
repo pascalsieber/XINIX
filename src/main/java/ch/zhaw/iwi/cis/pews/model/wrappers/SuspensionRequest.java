@@ -2,7 +2,7 @@ package ch.zhaw.iwi.cis.pews.model.wrappers;
 
 public class SuspensionRequest
 {
-	private int id;
+	private String id;
 	private double elapsedSeconds;
 
 	public SuspensionRequest()
@@ -11,12 +11,12 @@ public class SuspensionRequest
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getId()
+	public String getId()
 	{
 		return id;
 	}
 
-	public void setId( int id )
+	public void setId( String id )
 	{
 		this.id = id;
 	}

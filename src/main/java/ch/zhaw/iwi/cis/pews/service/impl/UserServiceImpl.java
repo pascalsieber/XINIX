@@ -48,7 +48,7 @@ public class UserServiceImpl extends IdentifiableObjectServiceImpl implements Us
 	}
 
 	@Override
-	public boolean requestNewPassword( int userID )
+	public boolean requestNewPassword( String userID )
 	{
 		PrincipalImpl user = findByID( userID );
 		user.setCredential( new PasswordCredentialImpl( new BigInteger( 130, new SecureRandom() ).toString( 32 ) ) );

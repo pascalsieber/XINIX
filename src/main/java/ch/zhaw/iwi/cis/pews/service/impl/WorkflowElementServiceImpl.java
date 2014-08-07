@@ -28,18 +28,18 @@ public class WorkflowElementServiceImpl extends IdentifiableObjectServiceImpl im
 	}
 
 	@Override
-	public void start( int id )
+	public void start( String id )
 	{
 		changeStatus( id, WorkflowElementStatusImpl.RUNNING );
 	}
 
 	@Override
-	public void stop( int id )
+	public void stop( String id )
 	{
 		changeStatus( id, WorkflowElementStatusImpl.TERMINATED );
 	}
 
-	private void changeStatus( int id, WorkflowElementStatusImpl newStatus )
+	private void changeStatus( String id, WorkflowElementStatusImpl newStatus )
 	{
 		WorkflowElementImpl workflowElement = findByID( id );
 		workflowElement.setCurrentState( newStatus );

@@ -14,9 +14,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
-import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
-import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 
 @Path( SessionRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
@@ -41,24 +39,22 @@ public class SessionRestService extends IdentifiableObjectRestService
 	public static final String REMOVE_EXECUTER = "/removeExecuter";
 
 	private SessionService sessionService;
-	private UserService userService;
 
 	public SessionRestService()
 	{
 		sessionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-		userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 	}
 
 	@POST
 	@Path( PERSIST )
-	public int persistSession( SessionImpl obj )
+	public String persistSession( SessionImpl obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public SessionImpl findSessionById( int id )
+	public SessionImpl findSessionById( String id )
 	{
 		return super.findByID( id );
 	}
@@ -79,42 +75,42 @@ public class SessionRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( GET_CURRENT_EXERCISE )
-	public ExerciseImpl getCurrentExercise( int sessionID )
+	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return sessionService.getCurrentExercise( sessionID );
 	}
 
 	@POST
 	@Path( GET_NEXT_EXERCISE )
-	public ExerciseImpl getNextExercise( int sessionID )
+	public ExerciseImpl getNextExercise( String sessionID )
 	{
 		return sessionService.getNextExercise( sessionID );
 	}
 
 	@POST
 	@Path( GET_PREVIOUS_EXERCISE )
-	public ExerciseImpl getPreviousExercise( int sessionID )
+	public ExerciseImpl getPreviousExercise( String sessionID )
 	{
 		return sessionService.getPreviousExercise( sessionID );
 	}
 
 	@POST
 	@Path( SET_NEXT_EXERCISE )
-	public void setNextExercise( int sessionID )
+	public void setNextExercise( String sessionID )
 	{
 		sessionService.setNextExercise( sessionID );
 	}
 
 	@POST
 	@Path( START )
-	public void start( int sessionID )
+	public void start( String sessionID )
 	{
 		sessionService.start( sessionID );
 	}
 
 	@POST
 	@Path( STOP )
-	public void stop( int sessionID )
+	public void stop( String sessionID )
 	{
 		sessionService.stop( sessionID );
 	}

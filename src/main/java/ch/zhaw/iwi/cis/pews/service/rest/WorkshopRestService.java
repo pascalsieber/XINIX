@@ -34,14 +34,14 @@ public class WorkshopRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public int persistWorkshop( WorkshopImpl obj )
+	public String persistWorkshop( WorkshopImpl obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public WorkshopImpl findWorkshopById( int id )
+	public WorkshopImpl findWorkshopById( String id )
 	{
 		return super.findByID( id );
 	}
@@ -62,14 +62,14 @@ public class WorkshopRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( START )
-	public void statWorkshop( int workshopID )
+	public void statWorkshop( String workshopID )
 	{
 		workshopService.start( workshopID );
 	}
 
 	@POST
 	@Path( STOP )
-	public void stopWorkshop( int workshopID )
+	public void stopWorkshop( String workshopID )
 	{
 		workshopService.stop( workshopID );
 	}

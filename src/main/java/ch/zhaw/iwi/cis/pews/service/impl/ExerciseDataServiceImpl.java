@@ -29,7 +29,7 @@ public class ExerciseDataServiceImpl extends IdentifiableObjectServiceImpl imple
 	}
 
 	@Override
-	public List< ExerciseDataImpl > findByExerciseID( int exerciseID )
+	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		return exerciseDataDao.findByExerciseID( exerciseID );
 	}

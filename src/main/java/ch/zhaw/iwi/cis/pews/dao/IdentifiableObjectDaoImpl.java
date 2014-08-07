@@ -15,7 +15,7 @@ public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 	}
 
 	@Override
-	public < T extends IdentifiableObject > int persist( T object )
+	public < T extends IdentifiableObject > String persist( T object )
 	{
 		IdentifiableObject objectMerged = merge( object );
 		getEntityManager().persist( objectMerged );
@@ -37,7 +37,7 @@ public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 
 	@Override
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > T findById( Integer id )
+	public < T extends IdentifiableObject > T findById( String id )
 	{
 		return (T)getEntityManager().find( getPersistentObjectClass(), id );
 	}

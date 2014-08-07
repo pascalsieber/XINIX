@@ -36,14 +36,14 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public int persistExercise( ExerciseImpl obj )
+	public String persistExercise( ExerciseImpl obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public ExerciseImpl findExerciseById( int id )
+	public ExerciseImpl findExerciseById( String id )
 	{
 		return super.findByID( id );
 	}
@@ -64,14 +64,14 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( START )
-	public void statExercise( int exerciseID )
+	public void statExercise( String exerciseID )
 	{
 		exerciseService.start( exerciseID );
 	}
 
 	@POST
 	@Path( STOP )
-	public void stopExercise( int exerciseID )
+	public void stopExercise( String exerciseID )
 	{
 		exerciseService.stop( exerciseID );
 	}
@@ -85,7 +85,7 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( RESUME )
-	public double resumeExercise( int exerciseID )
+	public double resumeExercise( String exerciseID )
 	{
 		return exerciseService.resume( exerciseID );
 	}
