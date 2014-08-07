@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pinkelefant.workshop.definition;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -19,9 +20,9 @@ public class PinkElefantDefinition extends WorkshopDefinitionImpl
 		// TODO Auto-generated constructor stub
 	}
 
-	public PinkElefantDefinition( PrincipalImpl owner, String name, String description, String problem )
+	public PinkElefantDefinition( Client client, PrincipalImpl owner, String name, String description, String problem )
 	{
-		super( owner, name, description );
+		super( client, owner, name, description );
 		this.problem = problem;
 	}
 

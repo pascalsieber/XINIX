@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 
 @Entity
@@ -32,9 +33,9 @@ public class WorkshopImpl extends WorkflowElementImpl
 		this.exercises = new ArrayList< ExerciseImpl >();
 	}
 
-	public WorkshopImpl( String name, String description, WorkflowElementDefinitionImpl definition )
+	public WorkshopImpl( Client client, String name, String description, WorkflowElementDefinitionImpl definition )
 	{
-		super( name, description, definition );
+		super( client, name, description, definition );
 		this.sessions = new HashSet< SessionImpl >();
 		this.exercises = new ArrayList< ExerciseImpl >();
 	}

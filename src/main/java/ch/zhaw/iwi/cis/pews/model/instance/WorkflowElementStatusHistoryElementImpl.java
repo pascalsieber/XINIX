@@ -7,10 +7,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.Client;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
 @Entity
-public class WorkflowElementStatusHistoryElementImpl extends IdentifiableObject
+public class WorkflowElementStatusHistoryElementImpl extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -22,12 +23,11 @@ public class WorkflowElementStatusHistoryElementImpl extends IdentifiableObject
 	public WorkflowElementStatusHistoryElementImpl()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public WorkflowElementStatusHistoryElementImpl( Date date, WorkflowElementStatusImpl status )
+	public WorkflowElementStatusHistoryElementImpl( Client client, Date date, WorkflowElementStatusImpl status )
 	{
-		super();
+		super( client );
 		this.date = date;
 		this.status = status;
 	}

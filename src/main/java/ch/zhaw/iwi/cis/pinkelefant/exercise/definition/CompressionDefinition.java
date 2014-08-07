@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -18,13 +19,11 @@ public class CompressionDefinition extends ExerciseDefinitionImpl
 	public CompressionDefinition()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public CompressionDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
+	public CompressionDefinition( Client client, PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
-		// TODO Auto-generated constructor stub
+		super( client, owner, timeUnit, duration, workshopDefinition );
 	}
 
 }

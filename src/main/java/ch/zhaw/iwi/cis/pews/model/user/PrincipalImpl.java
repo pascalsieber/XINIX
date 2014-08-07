@@ -14,12 +14,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.Client;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
-public class PrincipalImpl extends IdentifiableObject
+public class PrincipalImpl extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -47,14 +48,11 @@ public class PrincipalImpl extends IdentifiableObject
 	public PrincipalImpl()
 	{
 		super();
-		this.sessionAcceptances = new HashSet< SessionImpl >();
-		this.sessionInvitations = new HashSet< Invitation >();
-		this.sessionExecutions = new HashSet< SessionImpl >();
 	}
 
-	public PrincipalImpl( PasswordCredentialImpl credential, RoleImpl role, SessionImpl session )
+	public PrincipalImpl( Client client, PasswordCredentialImpl credential, RoleImpl role, SessionImpl session )
 	{
-		super();
+		super( client );
 		this.credential = credential;
 		this.role = role;
 		this.session = session;

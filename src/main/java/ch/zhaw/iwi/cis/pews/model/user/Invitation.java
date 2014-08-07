@@ -6,11 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.Client;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 
 @Entity
-public class Invitation extends IdentifiableObject
+public class Invitation extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -29,12 +30,11 @@ public class Invitation extends IdentifiableObject
 	public Invitation()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Invitation( PrincipalImpl inviter, PrincipalImpl invitee, SessionImpl session )
+	public Invitation( Client client, PrincipalImpl inviter, PrincipalImpl invitee, SessionImpl session )
 	{
-		super();
+		super( client );
 		this.inviter = inviter;
 		this.invitee = invitee;
 		this.date = new Date();

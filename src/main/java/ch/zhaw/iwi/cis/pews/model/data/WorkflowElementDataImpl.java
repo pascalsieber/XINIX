@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -20,12 +21,11 @@ public class WorkflowElementDataImpl extends OwnableObject
 	public WorkflowElementDataImpl()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public WorkflowElementDataImpl( PrincipalImpl owner, WorkflowElementImpl workflowElement )
+	public WorkflowElementDataImpl( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement )
 	{
-		super( owner );
+		super( client, owner );
 		this.workflowElement = workflowElement;
 	}
 

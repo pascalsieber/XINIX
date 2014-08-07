@@ -10,7 +10,7 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
-public class OwnableObject extends IdentifiableObject
+public class OwnableObject extends WorkshopObject
 {
 
 	@Transient
@@ -22,12 +22,11 @@ public class OwnableObject extends IdentifiableObject
 	public OwnableObject()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public OwnableObject( PrincipalImpl owner )
+	public OwnableObject( Client client, PrincipalImpl owner )
 	{
-		super();
+		super( client );
 		this.owner = owner;
 	}
 

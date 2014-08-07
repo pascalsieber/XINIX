@@ -3,10 +3,11 @@ package ch.zhaw.iwi.cis.pews.model.user;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.Client;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
 @Entity
-public class RoleImpl extends IdentifiableObject
+public class RoleImpl extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -17,12 +18,11 @@ public class RoleImpl extends IdentifiableObject
 	public RoleImpl()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public RoleImpl( String name, String description )
+	public RoleImpl( Client client, String name, String description )
 	{
-		super();
+		super( client );
 		this.name = name;
 		this.description = description;
 	}

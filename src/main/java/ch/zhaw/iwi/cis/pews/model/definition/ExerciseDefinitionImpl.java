@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -22,12 +23,11 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 	public ExerciseDefinitionImpl()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public ExerciseDefinitionImpl( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
+	public ExerciseDefinitionImpl( Client client, PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
 	{
-		super( owner );
+		super( client, owner );
 		this.timeUnit = timeUnit;
 		this.duration = duration;
 		this.workshopDefinition = workshopDefinition;

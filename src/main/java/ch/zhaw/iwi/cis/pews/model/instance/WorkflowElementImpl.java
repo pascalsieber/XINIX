@@ -14,13 +14,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.Client;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
-public class WorkflowElementImpl extends IdentifiableObject
+public class WorkflowElementImpl extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -49,9 +50,9 @@ public class WorkflowElementImpl extends IdentifiableObject
 		this.elapsedSeconds = 0;
 	}
 
-	public WorkflowElementImpl( String name, String description, WorkflowElementDefinitionImpl definition )
+	public WorkflowElementImpl( Client client, String name, String description, WorkflowElementDefinitionImpl definition )
 	{
-		super();
+		super( client );
 		this.name = name;
 		this.description = description;
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
@@ -98,7 +99,7 @@ public class WorkflowElementImpl extends IdentifiableObject
 
 	public void setCurrentState( WorkflowElementStatusImpl currentState )
 	{
-		statusHistory.add( new WorkflowElementStatusHistoryElementImpl( new Date(), currentState ) );
+		statusHistory.add( new WorkflowElementStatusHistoryElementImpl( getClient(), new Date(), currentState ) );
 		this.currentState = currentState.toString();
 	}
 

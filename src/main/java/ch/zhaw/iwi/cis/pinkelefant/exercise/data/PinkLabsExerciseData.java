@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -16,14 +17,17 @@ public class PinkLabsExerciseData extends CompressableExerciseData
 	public PinkLabsExerciseData()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public PinkLabsExerciseData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String answer )
+	
+
+	public PinkLabsExerciseData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, String answer )
 	{
-		super( owner, workflowElement );
+		super( client, owner, workflowElement );
 		this.answer = answer;
 	}
+
+
 
 	public String getAnswer()
 	{

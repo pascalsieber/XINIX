@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -23,12 +24,11 @@ public class P2PTwoData extends CompressableExerciseData
 	public P2PTwoData()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public P2PTwoData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String answer, P2POneData post2paperOneDataOne, P2POneData post2paperOneDataTwo )
+	public P2PTwoData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, P2POneData post2paperOneDataOne, P2POneData post2paperOneDataTwo )
 	{
-		super( owner, workflowElement );
+		super( client, owner, workflowElement );
 		this.post2paperOneDataOne = post2paperOneDataOne;
 		this.post2paperOneDataTwo = post2paperOneDataTwo;
 	}

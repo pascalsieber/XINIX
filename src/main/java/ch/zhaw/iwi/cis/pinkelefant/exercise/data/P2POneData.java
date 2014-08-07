@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -16,12 +17,11 @@ public class P2POneData extends CompressableExerciseData
 	public P2POneData()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public P2POneData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String keyword )
+	public P2POneData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, String keyword )
 	{
-		super( owner, workflowElement );
+		super( client, owner, workflowElement );
 		this.keyword = keyword;
 	}
 

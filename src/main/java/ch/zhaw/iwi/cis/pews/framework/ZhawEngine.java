@@ -248,6 +248,7 @@ public class ZhawEngine implements LifecycleObject
 
 		if ( !rootRegistered )
 		{
+			String clientID = 
 			String roleID = roleService.persist( new RoleImpl( "root", "root" ) );
 			userService.persist( new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
 			System.out.println( "root user registered initially" );

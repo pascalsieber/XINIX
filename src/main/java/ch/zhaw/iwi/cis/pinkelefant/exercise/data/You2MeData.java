@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -19,12 +20,11 @@ public class You2MeData extends CompressableExerciseData
 	public You2MeData()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public You2MeData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String questionOne, String questionTwo, String responseOne, String responseTwo )
+	public You2MeData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, String questionOne, String questionTwo, String responseOne, String responseTwo )
 	{
-		super( owner, workflowElement );
+		super( client, owner, workflowElement );
 		this.questionOne = questionOne;
 		this.questionTwo = questionTwo;
 		this.responseOne = responseOne;
