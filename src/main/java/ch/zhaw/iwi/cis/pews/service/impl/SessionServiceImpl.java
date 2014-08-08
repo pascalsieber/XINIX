@@ -2,11 +2,11 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.util.List;
 
-import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.SessionDao;
-import ch.zhaw.iwi.cis.pews.dao.SessionDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
-import ch.zhaw.iwi.cis.pews.dao.UserDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.SessionDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -116,7 +116,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	}
 
 	@Override
-	protected IdentifiableObjectDao getIdentifiableObjectDao()
+	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return sessionDao;
 	}

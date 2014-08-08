@@ -1,8 +1,8 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
-import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.InvitationDao;
-import ch.zhaw.iwi.cis.pews.dao.InvitationDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.InvitationDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -13,7 +13,7 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class InvitationServiceImpl extends IdentifiableObjectServiceImpl implements InvitationService
+public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements InvitationService
 {
 	private InvitationDao invitationDao;
 
@@ -23,7 +23,7 @@ public class InvitationServiceImpl extends IdentifiableObjectServiceImpl impleme
 	}
 
 	@Override
-	protected IdentifiableObjectDao getIdentifiableObjectDao()
+	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return invitationDao;
 	}

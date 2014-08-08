@@ -6,7 +6,7 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
 import ch.zhaw.iwi.cis.pews.service.rest.WorkshopRestService;
 
-public class WorkshopServiceProxy extends IdentifiableObjectServiceProxy implements WorkshopService
+public class WorkshopServiceProxy extends WorkshopObjectServiceProxy implements WorkshopService
 {
 
 	protected WorkshopServiceProxy( String hostName, int port, String userName, String password )

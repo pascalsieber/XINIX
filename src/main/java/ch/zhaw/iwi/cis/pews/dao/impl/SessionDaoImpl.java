@@ -1,15 +1,16 @@
-package ch.zhaw.iwi.cis.pews.dao;
+package ch.zhaw.iwi.cis.pews.dao.impl;
 
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.SessionDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class SessionDaoImpl extends IdentifiableObjectDaoImpl implements SessionDao
+public class SessionDaoImpl extends WorkshopObjectDaoImpl implements SessionDao
 {
 
 	@SuppressWarnings( "unchecked" )
@@ -27,7 +28,7 @@ public class SessionDaoImpl extends IdentifiableObjectDaoImpl implements Session
 	}
 
 	@Override
-	protected Class< ? extends IdentifiableObject > getPersistentObjectClass()
+	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
 		return SessionImpl.class;
 	}

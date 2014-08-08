@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
+import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
@@ -7,7 +9,7 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.rest.UserRestService;
 
-public class UserServiceProxy extends IdentifiableObjectServiceProxy implements UserService
+public class UserServiceProxy extends WorkshopObjectServiceProxy implements UserService
 {
 
 	protected UserServiceProxy( String hostName, int port, String userName, String password )
@@ -25,6 +27,13 @@ public class UserServiceProxy extends IdentifiableObjectServiceProxy implements 
 	public boolean requestNewPassword( String userID )
 	{
 		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) ).readEntity( boolean.class );
+	}
+
+	@Override
+	public List< PrincipalImpl > findAllUsersForLoginService()
+	{
+		// method not to be exposed. used internally to find all users to be able to authenticate
+		throw new UnsupportedOperationException();
 	}
 
 }

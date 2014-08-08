@@ -6,7 +6,6 @@ import org.eclipse.jetty.security.MappedLoginService;
 import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.util.security.Credential;
 
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
@@ -49,9 +48,9 @@ public class ZhawJDBCLoginService extends MappedLoginService
 	@Override
 	protected void loadUsers() throws IOException
 	{
-		for ( IdentifiableObject user : userService.findAll( UserImpl.class ) )
+		for ( PrincipalImpl user : userService.findAllUsersForLoginService() )
 		{
-			loadUserHelper( (UserImpl)user );
+			loadUserHelper( user );
 		}
 	}
 

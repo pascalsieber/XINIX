@@ -12,13 +12,13 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
-import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 
 @Path( ExerciseRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class ExerciseRestService extends IdentifiableObjectRestService
+public class ExerciseRestService extends WorkshopObjectRestService
 {
 
 	public final static String BASE = "/exerciseService/exercise";
@@ -57,9 +57,9 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseImpl > findAllExercises()
+	public List< ExerciseImpl > findAllExercises(String clientID)
 	{
-		return super.findAll( ExerciseImpl.class );
+		return super.findAll( clientID );
 	}
 
 	@POST
@@ -91,7 +91,7 @@ public class ExerciseRestService extends IdentifiableObjectRestService
 	}
 
 	@Override
-	protected IdentifiableObjectService getPersistentObjectService()
+	protected WorkshopObjectService getWorkshopObjectService()
 	{
 		return exerciseService;
 	}

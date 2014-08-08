@@ -7,7 +7,7 @@ import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseRestService;
 
-public class ExerciseServiceProxy extends IdentifiableObjectServiceProxy implements ExerciseService
+public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements ExerciseService
 {
 
 	protected ExerciseServiceProxy( String hostName, int port, String userName, String password )

@@ -1,9 +1,10 @@
-package ch.zhaw.iwi.cis.pews.dao;
+package ch.zhaw.iwi.cis.pews.dao.impl;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 
@@ -44,9 +45,9 @@ public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 
 	@Override
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > List< T > findByAll( Class< ? > clazz )
+	public < T extends IdentifiableObject > List< T > findByAll()
 	{
-		return getEntityManager().createQuery( "from " + clazz.getSimpleName() ).getResultList();
+		return getEntityManager().createQuery( "from " + getPersistentObjectClass().getSimpleName() ).getResultList();
 	}
 
 	protected abstract Class< ? extends IdentifiableObject > getPersistentObjectClass();

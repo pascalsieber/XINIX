@@ -14,5 +14,5 @@ public interface IdentifiableObjectDao
 
 	public < T extends IdentifiableObject > T findById( String id );
 
-	public < T extends IdentifiableObject > List< T > findByAll( Class< ? > clazz );
+	public < T extends IdentifiableObject > List< T > findByAll();
 }

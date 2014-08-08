@@ -11,13 +11,13 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 
 @Path( ExerciseDataRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class ExerciseDataRestService extends IdentifiableObjectRestService
+public class ExerciseDataRestService extends WorkshopObjectRestService
 {
 	public final static String BASE = "/exerciseService/data";
 	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
@@ -52,9 +52,9 @@ public class ExerciseDataRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseDataImpl > findAll()
+	public List< ExerciseDataImpl > findAllExerciseData(String clientID)
 	{
-		return super.findAll( ExerciseDataImpl.class );
+		return super.findAll( clientID );
 	}
 
 	@POST
@@ -65,7 +65,7 @@ public class ExerciseDataRestService extends IdentifiableObjectRestService
 	}
 
 	@Override
-	protected IdentifiableObjectService getPersistentObjectService()
+	protected WorkshopObjectService getWorkshopObjectService()
 	{
 		return exerciseDataService;
 	}

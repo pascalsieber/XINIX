@@ -11,13 +11,13 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
-import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDefinitionServiceImpl;
 
 @Path( ExerciseDefinitionRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class ExerciseDefinitionRestService extends IdentifiableObjectRestService
+public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 {
 
 	public final static String BASE = "/exerciseService/definition";
@@ -50,15 +50,16 @@ public class ExerciseDefinitionRestService extends IdentifiableObjectRestService
 		super.remove( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseDefinitionImpl > findAll()
+	public List< ExerciseDefinitionImpl > findAll(String clientID)
 	{
-		return super.findAll( ExerciseDefinitionImpl.class );
+		return super.findAll(clientID );
 	}
 
 	@Override
-	protected IdentifiableObjectService getPersistentObjectService()
+	protected WorkshopObjectService getWorkshopObjectService()
 	{
 		return exerciseDefinitionService;
 	}

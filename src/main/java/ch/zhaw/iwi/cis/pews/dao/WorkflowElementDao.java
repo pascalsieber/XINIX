@@ -1,6 +1,6 @@
 package ch.zhaw.iwi.cis.pews.dao;
 
-public interface WorkflowElementDao extends IdentifiableObjectDao
+public interface WorkflowElementDao extends WorkshopObjectDao
 {
 
 }

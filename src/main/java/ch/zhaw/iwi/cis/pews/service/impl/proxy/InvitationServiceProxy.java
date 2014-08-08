@@ -6,7 +6,7 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
 import ch.zhaw.iwi.cis.pews.service.rest.InvitationRestService;
 
-public class InvitationServiceProxy extends IdentifiableObjectServiceProxy implements InvitationService
+public class InvitationServiceProxy extends WorkshopObjectServiceProxy implements InvitationService
 {
 
 	protected InvitationServiceProxy( String hostName, int port, String userName, String password )

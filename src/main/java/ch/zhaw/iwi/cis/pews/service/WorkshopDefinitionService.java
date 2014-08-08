@@ -1,6 +1,6 @@
 package ch.zhaw.iwi.cis.pews.service;
 
-public interface WorkshopDefinitionService extends IdentifiableObjectService
+public interface WorkshopDefinitionService extends WorkshopObjectService
 {
 
 }

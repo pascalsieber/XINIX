@@ -12,14 +12,14 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
 
 @Path( SessionRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class SessionRestService extends IdentifiableObjectRestService
+public class SessionRestService extends WorkshopObjectRestService
 {
 
 	public static final String BASE = "/workshopService/session";
@@ -68,9 +68,9 @@ public class SessionRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< SessionImpl > findAllSessions()
+	public List< SessionImpl > findAllSessions( String clientID )
 	{
-		return super.findAll( SessionImpl.class );
+		return super.findAll( clientID );
 	}
 
 	@POST
@@ -144,7 +144,7 @@ public class SessionRestService extends IdentifiableObjectRestService
 	}
 
 	@Override
-	protected IdentifiableObjectService getPersistentObjectService()
+	protected WorkshopObjectService getWorkshopObjectService()
 	{
 		return sessionService;
 	}

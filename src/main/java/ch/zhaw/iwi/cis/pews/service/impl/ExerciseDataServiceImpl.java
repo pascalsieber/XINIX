@@ -3,8 +3,8 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
-import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDaoImpl;
-import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -13,7 +13,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class ExerciseDataServiceImpl extends IdentifiableObjectServiceImpl implements ExerciseDataService
+public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implements ExerciseDataService
 {
 	private ExerciseDataDao exerciseDataDao;
 
@@ -23,7 +23,7 @@ public class ExerciseDataServiceImpl extends IdentifiableObjectServiceImpl imple
 	}
 
 	@Override
-	protected IdentifiableObjectDao getIdentifiableObjectDao()
+	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return exerciseDataDao;
 	}

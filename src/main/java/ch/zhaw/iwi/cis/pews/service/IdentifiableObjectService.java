@@ -12,5 +12,5 @@ public interface IdentifiableObjectService extends Service
 
 	public < T extends IdentifiableObject > T findByID( String id );
 
-	public < T extends IdentifiableObject > List< T > findAll( Class< ? > clazz );
+	public < T extends IdentifiableObject > List< T > findAll();
 }

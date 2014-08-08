@@ -11,14 +11,14 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
-import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 
 @Path( UserRestService.USER_BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class UserRestService extends IdentifiableObjectRestService
+public class UserRestService extends WorkshopObjectRestService
 {
 
 	public static final String USER_BASE = "/userService/user";
@@ -55,9 +55,9 @@ public class UserRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< UserImpl > findAllUsers()
+	public List< UserImpl > findAllUsers(String clientID)
 	{
-		return super.findAll( UserImpl.class );
+		return super.findAll( clientID );
 	}
 
 	@POST
@@ -75,7 +75,7 @@ public class UserRestService extends IdentifiableObjectRestService
 	}
 
 	@Override
-	protected IdentifiableObjectService getPersistentObjectService()
+	protected WorkshopObjectService getWorkshopObjectService()
 	{
 		return userService;
 	}

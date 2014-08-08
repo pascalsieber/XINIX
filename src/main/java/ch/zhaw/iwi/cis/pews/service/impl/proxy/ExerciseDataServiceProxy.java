@@ -9,7 +9,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseDataRestService;
 
-public class ExerciseDataServiceProxy extends IdentifiableObjectServiceProxy implements ExerciseDataService
+public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy implements ExerciseDataService
 {
 
 	protected ExerciseDataServiceProxy( String hostName, int port, String userName, String password )

@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -13,9 +14,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
-import ch.zhaw.iwi.cis.pews.dao.UserDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -26,7 +27,7 @@ import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class UserServiceImpl extends IdentifiableObjectServiceImpl implements UserService
+public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserService
 {
 	private UserDao userdao;
 
@@ -36,7 +37,7 @@ public class UserServiceImpl extends IdentifiableObjectServiceImpl implements Us
 	}
 
 	@Override
-	protected IdentifiableObjectDao getIdentifiableObjectDao()
+	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return userdao;
 	}
@@ -88,5 +89,11 @@ public class UserServiceImpl extends IdentifiableObjectServiceImpl implements Us
 			throw new RuntimeException( e );
 		}
 
+	}
+
+	@Override
+	public List< PrincipalImpl > findAllUsersForLoginService()
+	{
+		return userdao.finAllUsersForLoginService();
 	}
 }

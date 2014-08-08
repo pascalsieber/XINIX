@@ -1,6 +1,6 @@
 package ch.zhaw.iwi.cis.pews.dao;
 
-public interface SessionDao extends IdentifiableObjectDao
+public interface SessionDao extends WorkshopObjectDao
 {
 
 }

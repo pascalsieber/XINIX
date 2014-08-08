@@ -27,9 +27,9 @@ public abstract class IdentifiableObjectRestService extends RestService
 		return getPersistentObjectService().findByID( id );
 	}
 
-	public < T extends IdentifiableObject > List< T > findAll( Class< ? > clazz )
+	public < T extends IdentifiableObject > List< T > findAll()
 	{
-		return getPersistentObjectService().findAll( clazz );
+		return getPersistentObjectService().findAll();
 	}
 
 	protected abstract IdentifiableObjectService getPersistentObjectService();

@@ -1,15 +1,16 @@
-package ch.zhaw.iwi.cis.pews.dao;
+package ch.zhaw.iwi.cis.pews.dao.impl;
 
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.UserDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class UserDaoImpl extends IdentifiableObjectDaoImpl implements UserDao
+public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 {
 
 	public UserDaoImpl()
@@ -40,8 +41,15 @@ public class UserDaoImpl extends IdentifiableObjectDaoImpl implements UserDao
 		}
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@Override
-	protected Class< ? extends IdentifiableObject > getPersistentObjectClass()
+	public List< PrincipalImpl > finAllUsersForLoginService()
+	{
+		return getEntityManager().createQuery( "from " + getWorkshopObjectClass().getSimpleName() ).getResultList();
+	}
+
+	@Override
+	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
 		return PrincipalImpl.class;
 	}

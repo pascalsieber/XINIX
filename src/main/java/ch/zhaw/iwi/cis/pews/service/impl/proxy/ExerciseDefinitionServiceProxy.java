@@ -3,7 +3,7 @@ package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseDefinitionRestService;
 
-public class ExerciseDefinitionServiceProxy extends IdentifiableObjectServiceProxy implements ExerciseDefinitionService
+public class ExerciseDefinitionServiceProxy extends WorkshopObjectServiceProxy implements ExerciseDefinitionService
 {
 
 	protected ExerciseDefinitionServiceProxy( String hostName, int port, String userName, String password )

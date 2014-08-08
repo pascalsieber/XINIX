@@ -8,7 +8,7 @@ import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.rest.SessionRestService;
 
-public class SessionServiceProxy extends IdentifiableObjectServiceProxy implements SessionService
+public class SessionServiceProxy extends WorkshopObjectServiceProxy implements SessionService
 {
 
 	protected SessionServiceProxy( String hostName, int port, String userName, String password )
@@ -67,13 +67,13 @@ public class SessionServiceProxy extends IdentifiableObjectServiceProxy implemen
 	@Override
 	public void addExecuter( Invitation invitation )
 	{
-		getServiceTarget().path( SessionRestService.ADD_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( jsonStringify( invitation ) ) );
+		getServiceTarget().path( SessionRestService.ADD_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitation ) );
 	}
 
 	@Override
 	public void removeExecuter( Invitation invitation )
 	{
-		getServiceTarget().path( SessionRestService.REMOVE_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( jsonStringify( invitation ) ) );
+		getServiceTarget().path( SessionRestService.REMOVE_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitation ) );
 	}
 
 }

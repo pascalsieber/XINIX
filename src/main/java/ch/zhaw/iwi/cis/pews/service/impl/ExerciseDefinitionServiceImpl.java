@@ -1,8 +1,8 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDefinitionDao;
-import ch.zhaw.iwi.cis.pews.dao.ExerciseDefinitionDaoImpl;
-import ch.zhaw.iwi.cis.pews.dao.IdentifiableObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDefinitionDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -10,7 +10,7 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class ExerciseDefinitionServiceImpl extends IdentifiableObjectServiceImpl implements ExerciseDefinitionService
+public class ExerciseDefinitionServiceImpl extends WorkshopObjectServiceImpl implements ExerciseDefinitionService
 {
 	private ExerciseDefinitionDao exerciseDefinitionDao;
 
@@ -20,7 +20,7 @@ public class ExerciseDefinitionServiceImpl extends IdentifiableObjectServiceImpl
 	}
 
 	@Override
-	protected IdentifiableObjectDao getIdentifiableObjectDao()
+	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return exerciseDefinitionDao;
 	}

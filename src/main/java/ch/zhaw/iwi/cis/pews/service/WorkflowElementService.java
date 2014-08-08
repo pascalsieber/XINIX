@@ -1,6 +1,6 @@
 package ch.zhaw.iwi.cis.pews.service;
 
-public interface WorkflowElementService extends IdentifiableObjectService
+public interface WorkflowElementService extends WorkshopObjectService
 {
 	public void start( String id );
 

@@ -33,12 +33,15 @@ import org.glassfish.jersey.servlet.ServletContainer;
 
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
+import ch.zhaw.iwi.cis.pews.service.impl.ClientServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.RoleServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
@@ -52,6 +55,7 @@ public class ZhawEngine implements LifecycleObject
 	private static Server webServer;
 	private static ManagedObjectRegistry managedObjectRegistry;
 	private static ZhawEngine zhawEngine;
+	private static Client rootClient;
 
 	static
 	{
@@ -235,9 +239,10 @@ public class ZhawEngine implements LifecycleObject
 	{
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
+		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
 
 		boolean rootRegistered = false;
-		for ( IdentifiableObject user : userService.findAll( UserImpl.class ) )
+		for ( IdentifiableObject user : userService.findAll(rootClient.getID()) )
 		{
 			if ( ( (UserImpl)user ).getLoginName().equalsIgnoreCase( "root@pews" ) )
 			{
@@ -248,9 +253,9 @@ public class ZhawEngine implements LifecycleObject
 
 		if ( !rootRegistered )
 		{
-			String clientID = 
-			String roleID = roleService.persist( new RoleImpl( "root", "root" ) );
-			userService.persist( new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
+			rootClient = clientService.findByID( clientService.persist( new Client( "pews root client" ) ) );
+			String roleID = roleService.persist( new RoleImpl( rootClient, "root", "root" ) );
+			userService.persist( new UserImpl( rootClient, new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
 			System.out.println( "root user registered initially" );
 		}
 
@@ -260,13 +265,13 @@ public class ZhawEngine implements LifecycleObject
 	{
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 
-		roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
+		roleService.persist( new RoleImpl( rootClient, "organizer", "workshop organizer" ) );
 		System.out.println( "organizer role created initially" );
 
-		roleService.persist( new RoleImpl( "executer", "session executer" ) );
+		roleService.persist( new RoleImpl( rootClient, "executer", "session executer" ) );
 		System.out.println( "executer role created initially" );
 
-		roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
+		roleService.persist( new RoleImpl( rootClient, "participant", "workshop participant" ) );
 		System.out.println( "participant role created initially" );
 	}
 

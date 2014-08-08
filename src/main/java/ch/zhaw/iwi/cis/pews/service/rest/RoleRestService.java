@@ -10,14 +10,14 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
-import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.RoleServiceImpl;
 
 @Path( RoleRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class RoleRestService extends IdentifiableObjectRestService
+public class RoleRestService extends WorkshopObjectRestService
 {
 
 	public static final String BASE = "/userService/role";
@@ -31,34 +31,34 @@ public class RoleRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persist( RoleImpl obj )
+	public String persistRole( RoleImpl obj )
 	{
 		return super.persist( obj );
 	}
 
 	@POST
 	@Path( FIND_BY_ID )
-	public RoleImpl findById( String id )
+	public RoleImpl findRoleById( String id )
 	{
 		return super.findByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void remove( RoleImpl obj )
+	public void removeRole( RoleImpl obj )
 	{
 		super.remove( obj );
 	}
 
 	@POST
 	@Path( FIND_ALL )
-	public List< RoleImpl > findAll()
+	public List< RoleImpl > findAllRoles(String clientID)
 	{
-		return super.findAll( RoleImpl.class );
+		return super.findAll( clientID);
 	}
 
 	@Override
-	protected IdentifiableObjectService getPersistentObjectService()
+	protected WorkshopObjectService getWorkshopObjectService()
 	{
 		return roleService;
 	}

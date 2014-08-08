@@ -1,21 +1,16 @@
 package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.management.RuntimeErrorException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.service.IdentifiableObjectService;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implements IdentifiableObjectService
 {
@@ -44,24 +39,25 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 			.readEntity( IdentifiableObject.class );
 	}
 
-	public < T extends IdentifiableObject > List< T > findAll( Class< ? > clazz )
+	@SuppressWarnings( "unchecked" )
+	public < T extends IdentifiableObject > List< T > findAll()
 	{
-		Response response = getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( clazz ) );
-		String jsonString = response.readEntity( String.class );
+//		Response response = getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( clazz ) );
+//		String jsonString = response.readEntity( String.class );
+//
+//		try
+//		{
+//			List< T > list = new ArrayList<>();
+//			ObjectMapper mapper = new ObjectMapper();
+//			list = mapper.readValue( jsonString, TypeFactory.defaultInstance().constructCollectionType( ArrayList.class, clazz ) );
+//			return list;
+//		}
+//		catch ( IOException e )
+//		{
+//			throw new RuntimeErrorException( null, "IdentifiableObjectServiceProxy could not deserialize json response" );
+//		}
 
-		try
-		{
-			List< T > list = new ArrayList<>();
-			ObjectMapper mapper = new ObjectMapper();
-			list = mapper.readValue( jsonString, TypeFactory.defaultInstance().constructCollectionType( ArrayList.class, clazz ) );
-			return list;
-		}
-		catch ( IOException e )
-		{
-			throw new RuntimeErrorException( null, "IdentifiableObjectServiceProxy could not deserialize json response" );
-		}
-
-		// return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( className ) ).readEntity( List.class );
+		 return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
 
 	public < T extends Object > String jsonStringify( T object )
