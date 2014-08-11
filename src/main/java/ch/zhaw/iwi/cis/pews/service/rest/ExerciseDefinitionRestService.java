@@ -2,10 +2,12 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -26,6 +28,7 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 
 	public ExerciseDefinitionRestService()
 	{
+		super();
 		exerciseDefinitionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
 	}
 
@@ -50,12 +53,11 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 		super.remove( obj );
 	}
 
-	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseDefinitionImpl > findAll(String clientID)
+	public List< ExerciseDefinitionImpl > findAll( @Context HttpServletRequest request )
 	{
-		return super.findAll(clientID );
+		return super.findAll( getUserService().getClientFromAuth( request ) );
 	}
 
 	@Override

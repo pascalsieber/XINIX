@@ -241,6 +241,12 @@ public class ZhawEngine implements LifecycleObject
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
 
+		if ( rootClient == null )
+		{
+			rootClient = clientService.findByID( clientService.persist( new Client( "pews root client" ) ) );
+			System.out.println("root client registered");
+		}
+		
 		boolean rootRegistered = false;
 		for ( IdentifiableObject user : userService.findAll(rootClient.getID()) )
 		{
@@ -253,9 +259,8 @@ public class ZhawEngine implements LifecycleObject
 
 		if ( !rootRegistered )
 		{
-			rootClient = clientService.findByID( clientService.persist( new Client( "pews root client" ) ) );
 			String roleID = roleService.persist( new RoleImpl( rootClient, "root", "root" ) );
-			userService.persist( new UserImpl( rootClient, new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
+			userService.persist( new UserImpl( rootClient, new PasswordCredentialImpl( rootClient, "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
 			System.out.println( "root user registered initially" );
 		}
 

@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.model.user;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
+
 @Entity
 public class PasswordCredentialImpl extends CredentialImpl
 {
@@ -11,15 +13,16 @@ public class PasswordCredentialImpl extends CredentialImpl
 
 	private String password;
 
+	
 	public PasswordCredentialImpl()
 	{
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public PasswordCredentialImpl( String password )
+	public PasswordCredentialImpl( Client client, String password )
 	{
-		super();
+		super( client );
 		this.password = password;
 	}
 

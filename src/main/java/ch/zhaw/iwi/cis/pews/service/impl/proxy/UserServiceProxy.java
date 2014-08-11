@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
@@ -33,6 +34,13 @@ public class UserServiceProxy extends WorkshopObjectServiceProxy implements User
 	public List< PrincipalImpl > findAllUsersForLoginService()
 	{
 		// method not to be exposed. used internally to find all users to be able to authenticate
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getClientFromAuth( HttpServletRequest request )
+	{
+		// method not to be exposed. used internally to retrieve clientID from authenticated user
 		throw new UnsupportedOperationException();
 	}
 

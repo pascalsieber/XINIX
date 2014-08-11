@@ -53,7 +53,7 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 	@Override
 	public < T extends WorkshopObject > List< T > findByAll( String clientID )
 	{
-		return getEntityManager().createQuery( "from " + getWorkshopObjectClass().getSimpleName() + " where client.id = " + clientID ).getResultList();
+		return getEntityManager().createQuery( "from " + getWorkshopObjectClass().getSimpleName() + " where client.id = '" + clientID + "'" ).getResultList();
 	}
 
 	protected abstract Class< ? extends WorkshopObject > getWorkshopObjectClass();

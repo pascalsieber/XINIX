@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
@@ -25,6 +26,7 @@ import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -34,6 +36,7 @@ import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ClientServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDataServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
@@ -50,6 +53,7 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
 public class RestServiceTest
 {
+	private static ClientService clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
 	private static SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
 	private static RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
 	private static UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
@@ -60,6 +64,7 @@ public class RestServiceTest
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
 
+	private static Client defaultClient;
 	private static String defaultWorkshopDefinitionID;
 	private static String defaultWorkshopID;
 	private static String defaultSessionID;
@@ -74,50 +79,54 @@ public class RestServiceTest
 	@BeforeClass
 	public static void setupTest()
 	{
+		// new client
+		String defaultClientID = clientService.persist( new Client( "client1" ) );
+		defaultClient = clientService.findByID( defaultClientID );
+
 		// new role
-		defaultRoleID = roleService.persist( new RoleImpl( "user", "user role" ) );
+		defaultRoleID = roleService.persist( new RoleImpl( defaultClient, "user", "user role" ) );
 
 		// new User
-		defaultUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "john" ), (RoleImpl)roleService.findByID( defaultRoleID ), null, "John", "Smith", "john" ) );
+		defaultUserID = userService.persist( new UserImpl( defaultClient, new PasswordCredentialImpl( defaultClient, "john" ), (RoleImpl)roleService.findByID( defaultRoleID ), null, "John", "Smith", "john" ) );
 
 		// new workshop definition
 		defaultWorkshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition(
+			defaultClient,
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			"workshop definition",
 			"workshop definition test entry",
 			"problem description" ) );
 
 		// new workshop instance
-		defaultWorkshopID = workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", (WorkflowElementDefinitionImpl)workshopDefinitionService
+		defaultWorkshopID = workshopService.persist( new WorkshopImpl( defaultClient, "workshop", "workshop test instance", (WorkflowElementDefinitionImpl)workshopDefinitionService
 			.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// new session
-		defaultSessionID = sessionService.persist( new SessionImpl( "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		defaultSessionID = sessionService.persist( new SessionImpl( defaultClient, "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
 
 		defaultInvitationID = invitationService.persist( new Invitation(
+			defaultClient,
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			(SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 
 		// new exercise definition
 		defaultExerciseDefinitionID = exerciseDefinitionService.persist( new ExerciseDefinitionImpl(
+			defaultClient,
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			TimeUnit.SECONDS,
 			120,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// new exercise
-		defaultExerciseID = exerciseService.persist( new ExerciseImpl(
-			"exercise",
-			"exercise test instance",
-			(ExerciseDefinitionImpl)exerciseDefinitionService.findByID( defaultExerciseDefinitionID ),
-			(WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		defaultExerciseID = exerciseService.persist( new ExerciseImpl( defaultClient, "exercise", "exercise test instance", (ExerciseDefinitionImpl)exerciseDefinitionService
+			.findByID( defaultExerciseDefinitionID ), (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
 
-		defaultExerciseID2 = exerciseService.persist( new ExerciseImpl( "exercise2", "exercise test instance2", (ExerciseDefinitionImpl)exerciseDefinitionService
+		defaultExerciseID2 = exerciseService.persist( new ExerciseImpl( defaultClient, "exercise2", "exercise test instance2", (ExerciseDefinitionImpl)exerciseDefinitionService
 			.findByID( defaultExerciseDefinitionID ), (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
 
 		// new exercise data
-		defaultExerciseDataID = exerciseDataService.persist( new PinkLabsExerciseData( (PrincipalImpl)userService.findByID( defaultUserID ), (WorkflowElementImpl)exerciseService
+		defaultExerciseDataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), (WorkflowElementImpl)exerciseService
 			.findByID( defaultExerciseID ), "sample answer" ) );
 	}
 
@@ -125,7 +134,7 @@ public class RestServiceTest
 	public void crudOperationsUserService()
 	{
 		// create role
-		String roleID = roleService.persist( new RoleImpl( "new role", "new role description" ) );
+		String roleID = roleService.persist( new RoleImpl( null, "new role", "new role description" ) );
 		assertTrue( !roleID.equalsIgnoreCase( "" ) );
 
 		// read role
@@ -144,12 +153,12 @@ public class RestServiceTest
 		roleService.remove( roleService.findByID( roleID ) );
 
 		// find all checks delete
-		List< RoleImpl > roles = roleService.findAll( RoleImpl.class );
+		List< RoleImpl > roles = roleService.findAll( defaultClient.getID() );
 		assertTrue( roles.size() > 0 );
 		assertTrue( checkDelete( roles, roleID ) );
 
 		// create user
-		String userID = userService.persist( new UserImpl( new PasswordCredentialImpl( "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService
+		String userID = userService.persist( new UserImpl( defaultClient, new PasswordCredentialImpl( null, "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService
 			.findByID( defaultSessionID ), "firstname", "lastname", "login@name" ) );
 
 		// read user
@@ -170,7 +179,7 @@ public class RestServiceTest
 		userService.remove( userService.findByID( userID ) );
 
 		// find all checks delete
-		List< UserImpl > users = userService.findAll( UserImpl.class );
+		List< UserImpl > users = userService.findAll( defaultClient.getID() );
 		assertTrue( users.size() > 0 );
 		assertTrue( checkDelete( users, userID ) );
 
@@ -181,6 +190,7 @@ public class RestServiceTest
 	{
 		// create workshop definition
 		String workshopDefinitionID = workshopDefinitionService.persist( new WorkshopDefinitionImpl(
+			defaultClient,
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			"workshop definition",
 			"workshop definition description" ) );
@@ -202,12 +212,12 @@ public class RestServiceTest
 		workshopDefinitionService.remove( workshopDefinitionService.findByID( workshopDefinitionID ) );
 
 		// find all checks delete
-		List< WorkshopDefinitionImpl > wsDefs = workshopDefinitionService.findAll( WorkshopDefinitionImpl.class );
+		List< WorkshopDefinitionImpl > wsDefs = workshopDefinitionService.findAll( defaultClient.getID() );
 		assertTrue( wsDefs.size() > 0 );
 		assertTrue( checkDelete( wsDefs, workshopDefinitionID ) );
 
 		// create workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "workshop instance", "workshop instance description", (WorkflowElementDefinitionImpl)workshopDefinitionService
+		String wsID = workshopService.persist( new WorkshopImpl( defaultClient, "workshop instance", "workshop instance description", (WorkflowElementDefinitionImpl)workshopDefinitionService
 			.findByID( defaultWorkshopDefinitionID ) ) );
 
 		// read workshop instance
@@ -228,12 +238,12 @@ public class RestServiceTest
 		workshopService.remove( updatedWs );
 
 		// find all checks delete
-		List< WorkshopImpl > workshops = workshopService.findAll( WorkshopImpl.class );
+		List< WorkshopImpl > workshops = workshopService.findAll( defaultClient.getID() );
 		assertTrue( workshops.size() > 0 );
 		assertTrue( checkDelete( workshops, wsID ) );
 
 		// create session
-		String sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( defaultClient, "session instance", "session description", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
 
 		// read session
 		SessionImpl session = sessionService.findByID( sessionID );
@@ -253,7 +263,7 @@ public class RestServiceTest
 		sessionService.remove( updatedSession );
 
 		// find all checks delete
-		List< SessionImpl > sessions = sessionService.findAll( SessionImpl.class );
+		List< SessionImpl > sessions = sessionService.findAll( defaultClient.getID() );
 		assertTrue( sessions.size() > 0 );
 		assertTrue( checkDelete( sessions, sessionID ) );
 	}
@@ -263,6 +273,7 @@ public class RestServiceTest
 	{
 		// create exercise definition
 		String exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
+			defaultClient,
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			TimeUnit.MINUTES,
 			2,
@@ -288,13 +299,13 @@ public class RestServiceTest
 		exerciseDefinitionService.remove( updatedExDef );
 
 		// find all checks delete
-		List< ExerciseDefinitionImpl > exDefs = exerciseDefinitionService.findAll( ExerciseDefinitionImpl.class );
+		List< ExerciseDefinitionImpl > exDefs = exerciseDefinitionService.findAll( defaultClient.getID() );
 		assertTrue( exDefs.size() > 0 );
 		assertTrue( checkDelete( exDefs, exDefID ) );
 
 		// create exercise instance
 		String exID = exerciseService.persist( new ExerciseImpl(
-			"exercise",
+			defaultClient, "exercise",
 			"exercise description",
 			(ExerciseDefinitionImpl)exerciseDefinitionService.findByID( defaultExerciseDefinitionID ),
 			(WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
@@ -318,13 +329,13 @@ public class RestServiceTest
 		exerciseService.remove( updatedEx );
 
 		// find all checks delete
-		List< ExerciseImpl > exs = exerciseService.findAll( ExerciseImpl.class );
+		List< ExerciseImpl > exs = exerciseService.findAll( defaultClient.getID() );
 		assertTrue( exs.size() > 0 );
 		assertTrue( checkDelete( exs, exID ) );
 
 		// create exercise data
 		String dataID = exerciseDataService.persist( new PinkLabsExerciseData(
-			(PrincipalImpl)userService.findByID( defaultUserID ),
+			defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ),
 			(ExerciseImpl)exerciseService.findByID( defaultExerciseID ),
 			"answer" ) );
 
@@ -345,7 +356,7 @@ public class RestServiceTest
 		exerciseDataService.remove( updatedData );
 
 		// find all checks delete
-		List< ExerciseDataImpl > datas = exerciseDataService.findAll( ExerciseDataImpl.class );
+		List< ExerciseDataImpl > datas = exerciseDataService.findAll( defaultClient.getID() );
 		assertTrue( datas.size() > 0 );
 		assertTrue( checkDelete( datas, dataID ) );
 	}
@@ -356,7 +367,7 @@ public class RestServiceTest
 
 		// create invitation
 		String invitationID = invitationService.persist( new Invitation(
-			(PrincipalImpl)userService.findByID( defaultUserID ),
+			defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ),
 			(PrincipalImpl)userService.findByID( defaultUserID ),
 			(SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 
@@ -379,7 +390,7 @@ public class RestServiceTest
 		invitationService.remove( invitation );
 
 		// find all check delete
-		List< Invitation > invitations = invitationService.findAll( Invitation.class );
+		List< Invitation > invitations = invitationService.findAll( defaultClient.getID() );
 		assertTrue( invitations.size() > 0 );
 		assertTrue( checkDelete( invitations, invitationID ) );
 	}
@@ -430,11 +441,11 @@ public class RestServiceTest
 		assertTrue( sessionService.getPreviousExercise( defaultSessionID ).getID().equals( defaultExerciseID ) );
 
 		// join Session
-		sessionService.join( new Invitation( null, (PrincipalImpl)userService.findByID( defaultUserID ), (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
+		sessionService.join( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getParticipants().contains( userService.findByID( defaultUserID ) ) );
 
 		// leave Session
-		sessionService.leave( new Invitation( null, (PrincipalImpl)userService.findByID( defaultUserID ), (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
+		sessionService.leave( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 		assertTrue( !( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getParticipants().contains( userService.findByID( defaultUserID ) ) );
 
 		// accept invitation
@@ -442,11 +453,11 @@ public class RestServiceTest
 		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getInvitations(), defaultInvitationID, true ) );
 
 		// add executer
-		sessionService.addExecuter( new Invitation( null, (PrincipalImpl)userService.findByID( defaultUserID ), (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
+		sessionService.addExecuter( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getExecuters(), defaultUserID, false ) );
 
 		// remove executer
-		sessionService.removeExecuter( new Invitation( null, (PrincipalImpl)userService.findByID( defaultUserID ), (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
+		sessionService.removeExecuter( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
 		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getExecuters(), defaultUserID, true ) );
 	}
 

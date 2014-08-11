@@ -2,10 +2,12 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -26,6 +28,7 @@ public class RoleRestService extends WorkshopObjectRestService
 
 	public RoleRestService()
 	{
+		super();
 		roleService = ZhawEngine.getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 	}
 
@@ -52,9 +55,9 @@ public class RoleRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< RoleImpl > findAllRoles(String clientID)
+	public List< RoleImpl > findAllRoles( @Context HttpServletRequest request )
 	{
-		return super.findAll( clientID);
+		return super.findAll( getUserService().getClientFromAuth( request ) );
 	}
 
 	@Override

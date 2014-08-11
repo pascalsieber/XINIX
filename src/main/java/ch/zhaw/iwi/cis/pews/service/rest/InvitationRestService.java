@@ -2,10 +2,12 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -27,6 +29,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 
 	public InvitationRestService()
 	{
+		super();
 		invitationService = ZhawEngine.getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
 	}
 
@@ -53,9 +56,9 @@ public class InvitationRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< Invitation > findAllInvitations(String clientID)
+	public List< Invitation > findAllInvitations( @Context HttpServletRequest request )
 	{
-		return super.findAll( clientID );
+		return super.findAll( getUserService().getClientFromAuth( request ) );
 	}
 
 	@POST

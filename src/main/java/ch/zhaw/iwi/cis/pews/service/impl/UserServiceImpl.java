@@ -13,6 +13,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
@@ -52,7 +53,7 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 	public boolean requestNewPassword( String userID )
 	{
 		PrincipalImpl user = findByID( userID );
-		user.setCredential( new PasswordCredentialImpl( new BigInteger( 130, new SecureRandom() ).toString( 32 ) ) );
+		user.setCredential( new PasswordCredentialImpl( user.getClient(), new BigInteger( 130, new SecureRandom() ).toString( 32 ) ) );
 		persist( user );
 		return sendPasswordEmail( (UserImpl)user );
 	}
@@ -95,5 +96,11 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 	public List< PrincipalImpl > findAllUsersForLoginService()
 	{
 		return userdao.finAllUsersForLoginService();
+	}
+
+	@Override
+	public String getClientFromAuth( HttpServletRequest request )
+	{
+		return findByLoginName( request.getUserPrincipal().getName() ).getClient().getID();
 	}
 }
