@@ -8,9 +8,9 @@ import ch.zhaw.sml.iwi.cis.exwrapper.java.lang.reflect.ConstructorWrapper;
 public class ServiceProxyManager
 {
 	public static final String HOST_NAME = "localhost";
-	public static final int PORT = 8080;
-	public static final String USER_NAME = "john";
-	public static final String PASSWORD = "john";
+	public static final int PORT = 8082;
+	public static final String USER_NAME = "root@pews";
+	public static final String PASSWORD = "root";
 
 	public static < T extends ServiceProxy > T createServiceProxy( Class< T > proxyClass )
 	{

@@ -14,7 +14,6 @@ import com.fasterxml.jackson.datatype.guava.GuavaModule;
 public abstract class ServiceProxy
 {
 	private WebTarget serviceTarget;
-	private ObjectMapper mapper;
 
 	@SuppressWarnings( "static-access" )
 	protected ServiceProxy( String hostName, int port, String userName, String password, String servicePath )
@@ -25,24 +24,12 @@ public abstract class ServiceProxy
 		Client client = ClientBuilder.newBuilder().newClient().register( basicAuth );
 		WebTarget baseTarget = client.target( "http://" + hostName + ":" + port + IdentifiableObjectRestService.SERVICES_BASE );
 		serviceTarget = baseTarget.path( servicePath );
-		mapper = new ObjectMapper();
-		mapper.enableDefaultTyping();
-		mapper.registerModule( new GuavaModule() );
+		
 	}
 
 	protected WebTarget getServiceTarget()
 	{
 		return serviceTarget;
-	}
-
-	public ObjectMapper getMapper()
-	{
-		return mapper;
-	}
-
-	public void setMapper( ObjectMapper mapper )
-	{
-		this.mapper = mapper;
 	}
 
 }

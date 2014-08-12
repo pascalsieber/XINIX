@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
@@ -26,6 +26,7 @@ import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
@@ -47,8 +48,17 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
 public class RestServiceTest
@@ -64,70 +74,114 @@ public class RestServiceTest
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
 
-	private static Client defaultClient;
-	private static String defaultWorkshopDefinitionID;
-	private static String defaultWorkshopID;
-	private static String defaultSessionID;
-	private static String defaultExerciseDefinitionID;
-	private static String defaultExerciseID;
-	private static String defaultExerciseID2;
-	private static String defaultRoleID;
-	private static String defaultUserID;
-	private static String defaultExerciseDataID;
-	private static String defaultInvitationID;
+	// using stub objects (only ID) to avoid json mapping problems and to
+	// mimic the way API will be used
+	private static Client defaultClientStub = new Client();
+	private static RoleImpl defaultRoleStub = new RoleImpl();
+	private static UserImpl defaultUserStub = new UserImpl();
+	private static PinkElefantDefinition defaultWorkshopDefinitionStub = new PinkElefantDefinition();
+	private static WorkshopImpl defaultWorkshopStub = new WorkshopImpl();
+	private static SessionImpl defaultSessionStub = new SessionImpl();
+	private static ExerciseImpl defaultExerciseStub1 = new ExerciseImpl();
+	private static ExerciseImpl defaultExerciseStub2 = new ExerciseImpl();
+	private static Invitation defaultInvitationStub = new Invitation();
+
+	private static PinkLabsDefinition pinklabsDefinitionStub = new PinkLabsDefinition();
+	private static P2POneDefinition p2poneDefinitionStub = new P2POneDefinition();
+	private static P2PTwoDefinition p2ptwoDefinitionStub = new P2PTwoDefinition();
+	private static XinixDefinition xinixDefinitionStub = new XinixDefinition();
+	private static You2MeDefinition you2meDefinitionStub = new You2MeDefinition();
+
+	private static XinixImage xinixImageStub = new XinixImage();
+	private static PinkLabsExerciseData pinklabsDataStub = new PinkLabsExerciseData();
+	private static P2POneData p2poneDataStub = new P2POneData();
+	private static P2PTwoData p2ptwoDataStub = new P2PTwoData();
+	private static XinixData xinixDataStub = new XinixData();
+	private static You2MeData you2meDataStub = new You2MeData();
 
 	@BeforeClass
 	public static void setupTest()
 	{
-		// new client
-		String defaultClientID = clientService.persist( new Client( "client1" ) );
-		defaultClient = clientService.findByID( defaultClientID );
+		defaultClientStub.setID( clientService.persist( new Client( "test client" ) ) );
 
-		// new role
-		defaultRoleID = roleService.persist( new RoleImpl( defaultClient, "user", "user role" ) );
+		// role
+		defaultRoleStub.setID( roleService.persist( new RoleImpl( defaultClientStub, "user", "user role" ) ) );
 
-		// new User
-		defaultUserID = userService.persist( new UserImpl( defaultClient, new PasswordCredentialImpl( defaultClient, "john" ), (RoleImpl)roleService.findByID( defaultRoleID ), null, "John", "Smith", "john" ) );
+		// User
+		defaultUserStub.setID( userService.persist( new UserImpl( defaultClientStub, new PasswordCredentialImpl( defaultClientStub, "john" ), defaultRoleStub, null, "John", "Smith", "john" ) ) );
 
-		// new workshop definition
-		defaultWorkshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition(
-			defaultClient,
-			(PrincipalImpl)userService.findByID( defaultUserID ),
+		// workshop definition (pinkelefantDefinition)
+		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantDefinition(
+			defaultClientStub,
+			defaultUserStub,
 			"workshop definition",
 			"workshop definition test entry",
-			"problem description" ) );
+			"problem description" ) ) );
 
-		// new workshop instance
-		defaultWorkshopID = workshopService.persist( new WorkshopImpl( defaultClient, "workshop", "workshop test instance", (WorkflowElementDefinitionImpl)workshopDefinitionService
-			.findByID( defaultWorkshopDefinitionID ) ) );
+		// workshop instance
+		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( defaultClientStub, "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
 
-		// new session
-		defaultSessionID = sessionService.persist( new SessionImpl( defaultClient, "session", "test session", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		// session
+		defaultSessionStub.setID( sessionService.persist( new SessionImpl( defaultClientStub, "session", "test session", null, defaultWorkshopStub ) ) );
 
-		defaultInvitationID = invitationService.persist( new Invitation(
-			defaultClient,
-			(PrincipalImpl)userService.findByID( defaultUserID ),
-			(PrincipalImpl)userService.findByID( defaultUserID ),
-			(SessionImpl)sessionService.findByID( defaultSessionID ) ) );
+		// pinklabs definition
+		pinklabsDefinitionStub.setID( exerciseDefinitionService
+			.persist( new PinkLabsDefinition( defaultClientStub, defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "pinklabs?" ) ) );
 
-		// new exercise definition
-		defaultExerciseDefinitionID = exerciseDefinitionService.persist( new ExerciseDefinitionImpl(
-			defaultClient,
-			(PrincipalImpl)userService.findByID( defaultUserID ),
+		// p2pone definition
+		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition(
+			defaultClientStub,
+			defaultUserStub,
 			TimeUnit.SECONDS,
 			120,
-			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( defaultWorkshopDefinitionID ) ) );
+			defaultWorkshopDefinitionStub,
+			"urltopicture",
+			"theme" ) ) );
 
-		// new exercise
-		defaultExerciseID = exerciseService.persist( new ExerciseImpl( defaultClient, "exercise", "exercise test instance", (ExerciseDefinitionImpl)exerciseDefinitionService
-			.findByID( defaultExerciseDefinitionID ), (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		// p2ptwo definition
+		p2ptwoDefinitionStub.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultClientStub, defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question?" ) ) );
 
-		defaultExerciseID2 = exerciseService.persist( new ExerciseImpl( defaultClient, "exercise2", "exercise test instance2", (ExerciseDefinitionImpl)exerciseDefinitionService
-			.findByID( defaultExerciseDefinitionID ), (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		// xinix definition
+		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition(
+			defaultClientStub,
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			120,
+			defaultWorkshopDefinitionStub,
+			"question",
+			"keyword" ) ) );
 
-		// new exercise data
-		defaultExerciseDataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), (WorkflowElementImpl)exerciseService
-			.findByID( defaultExerciseID ), "sample answer" ) );
+		// you2me definition
+		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition(
+			defaultClientStub,
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			120,
+			defaultWorkshopDefinitionStub,
+			"question?",
+			"counterquestion?" ) ) );
+
+		// exercise one
+		defaultExerciseStub1.setID( exerciseService.persist( new ExerciseImpl( defaultClientStub, "exercise1", "instance of exercise 1", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
+
+		// xinix image
+		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultClientStub, defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
+
+		// pinklabs data
+		pinklabsDataStub.setID( exerciseDataService.persist( new PinkLabsExerciseData( defaultClientStub, defaultUserStub, defaultExerciseStub1, "my answer" ) ) );
+
+		// p2pone data
+		p2poneDataStub.setID( exerciseDataService.persist( new P2POneData( defaultClientStub, defaultUserStub, defaultExerciseStub1, "my keyword" ) ) );
+
+		// p2ptwo data
+		p2ptwoDataStub.setID( exerciseDataService.persist( new P2PTwoData( defaultClientStub, defaultUserStub, defaultExerciseStub1, p2poneDataStub, p2poneDataStub, "my answer" ) ) );
+
+		// xinix data
+		xinixDataStub.setID( exerciseDataService.persist( new XinixData( defaultClientStub, defaultUserStub, defaultExerciseStub1, "my association", xinixImageStub ) ) );
+
+		// you2me data
+		you2meDataStub
+			.setID( exerciseDataService.persist( new You2MeData( defaultClientStub, defaultUserStub, defaultExerciseStub1, "question one", "question two", "repsonse one", "response two" ) ) );
 	}
 
 	@Test
@@ -139,6 +193,7 @@ public class RestServiceTest
 
 		// read role
 		RoleImpl role = roleService.findByID( roleID );
+		assertTrue( role.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( role.getID().equals( roleID ) );
 		assertTrue( role.getName().equalsIgnoreCase( "new role" ) );
 		assertTrue( role.getDescription().equalsIgnoreCase( "new role description" ) );
@@ -153,16 +208,23 @@ public class RestServiceTest
 		roleService.remove( roleService.findByID( roleID ) );
 
 		// find all checks delete
-		List< RoleImpl > roles = roleService.findAll( defaultClient.getID() );
+		List< RoleImpl > roles = roleService.findAll( defaultClientStub.getID() );
 		assertTrue( roles.size() > 0 );
 		assertTrue( checkDelete( roles, roleID ) );
 
 		// create user
-		String userID = userService.persist( new UserImpl( defaultClient, new PasswordCredentialImpl( null, "my password" ), (RoleImpl)userService.findByID( defaultRoleID ), (SessionImpl)userService
-			.findByID( defaultSessionID ), "firstname", "lastname", "login@name" ) );
+		String userID = userService.persist( new UserImpl(
+			defaultClientStub,
+			new PasswordCredentialImpl( null, "my password" ),
+			defaultRoleStub,
+			defaultSessionStub,
+			"firstname",
+			"lastname",
+			"login@name" ) );
 
 		// read user
 		UserImpl user = userService.findByID( userID );
+		assertTrue( user.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( user.getID().equals( userID ) );
 		assertTrue( user.getFirstName().equalsIgnoreCase( "firstname" ) );
 		assertTrue( user.getLastName().equalsIgnoreCase( "lastname" ) );
@@ -179,7 +241,7 @@ public class RestServiceTest
 		userService.remove( userService.findByID( userID ) );
 
 		// find all checks delete
-		List< UserImpl > users = userService.findAll( defaultClient.getID() );
+		List< UserImpl > users = userService.findAll( defaultClientStub.getID() );
 		assertTrue( users.size() > 0 );
 		assertTrue( checkDelete( users, userID ) );
 
@@ -189,18 +251,20 @@ public class RestServiceTest
 	public void crudOperationsWorkshopService()
 	{
 		// create workshop definition
-		String workshopDefinitionID = workshopDefinitionService.persist( new WorkshopDefinitionImpl(
-			defaultClient,
-			(PrincipalImpl)userService.findByID( defaultUserID ),
+		String workshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition(
+			defaultClientStub,
+			defaultUserStub,
 			"workshop definition",
-			"workshop definition description" ) );
+			"workshop definition description",
+			"problem" ) );
 
 		// read workshop definition
 		WorkshopDefinitionImpl workshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
+		assertTrue( workshopDefinition.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( workshopDefinition.getID().equals( workshopDefinitionID ) );
 		assertTrue( workshopDefinition.getName().equalsIgnoreCase( "workshop definition" ) );
 		assertTrue( workshopDefinition.getDescription().equalsIgnoreCase( "workshop definition description" ) );
-		assertTrue( workshopDefinition.getOwner().getID().equals( defaultUserID ) );
+		assertTrue( workshopDefinition.getOwner().getID().equals( defaultUserStub.getID() ) );
 
 		// update workshop definition
 		workshopDefinition.setName( "updated workshop definition" );
@@ -212,21 +276,21 @@ public class RestServiceTest
 		workshopDefinitionService.remove( workshopDefinitionService.findByID( workshopDefinitionID ) );
 
 		// find all checks delete
-		List< WorkshopDefinitionImpl > wsDefs = workshopDefinitionService.findAll( defaultClient.getID() );
+		List< WorkshopDefinitionImpl > wsDefs = workshopDefinitionService.findAll( defaultClientStub.getID() );
 		assertTrue( wsDefs.size() > 0 );
 		assertTrue( checkDelete( wsDefs, workshopDefinitionID ) );
 
 		// create workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( defaultClient, "workshop instance", "workshop instance description", (WorkflowElementDefinitionImpl)workshopDefinitionService
-			.findByID( defaultWorkshopDefinitionID ) ) );
+		String wsID = workshopService.persist( new WorkshopImpl( defaultClientStub, "workshop instance", "workshop instance description", defaultWorkshopDefinitionStub ) );
 
 		// read workshop instance
 		WorkshopImpl ws = workshopService.findByID( wsID );
+		assertTrue( ws.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( ws.getID().equals( wsID ) );
 		assertTrue( ws.getName().equalsIgnoreCase( "workshop instance" ) );
 		assertTrue( ws.getDescription().equalsIgnoreCase( "workshop instance description" ) );
 		assertTrue( ws.getCurrentState().equalsIgnoreCase( "new" ) );
-		assertTrue( ws.getDefinition().getID().equals( defaultWorkshopDefinitionID ) );
+		assertTrue( ws.getDefinition().getID().equals( defaultWorkshopDefinitionStub.getID() ) );
 
 		// update workshop instance
 		ws.setName( "updated workshop instance" );
@@ -238,20 +302,21 @@ public class RestServiceTest
 		workshopService.remove( updatedWs );
 
 		// find all checks delete
-		List< WorkshopImpl > workshops = workshopService.findAll( defaultClient.getID() );
+		List< WorkshopImpl > workshops = workshopService.findAll( defaultClientStub.getID() );
 		assertTrue( workshops.size() > 0 );
 		assertTrue( checkDelete( workshops, wsID ) );
 
 		// create session
-		String sessionID = sessionService.persist( new SessionImpl( defaultClient, "session instance", "session description", null, (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( defaultClientStub, "session instance", "session description", null, defaultWorkshopStub ) );
 
 		// read session
 		SessionImpl session = sessionService.findByID( sessionID );
+		assertTrue( session.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( session.getID().equals( sessionID ) );
 		assertTrue( session.getName().equalsIgnoreCase( "session instance" ) );
 		assertTrue( session.getDescription().equalsIgnoreCase( "session description" ) );
 		assertTrue( session.getDefinition() == null );
-		assertTrue( session.getWorkshop().getID().equals( defaultWorkshopID ) );
+		assertTrue( session.getWorkshop().getID().equals( defaultWorkshopStub.getID() ) );
 
 		// update session
 		session.setName( "updated session" );
@@ -263,7 +328,7 @@ public class RestServiceTest
 		sessionService.remove( updatedSession );
 
 		// find all checks delete
-		List< SessionImpl > sessions = sessionService.findAll( defaultClient.getID() );
+		List< SessionImpl > sessions = sessionService.findAll( defaultClientStub.getID() );
 		assertTrue( sessions.size() > 0 );
 		assertTrue( checkDelete( sessions, sessionID ) );
 	}
@@ -272,21 +337,16 @@ public class RestServiceTest
 	public void crudOperationsExerciseService()
 	{
 		// create exercise definition
-		String exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
-			defaultClient,
-			(PrincipalImpl)userService.findByID( defaultUserID ),
-			TimeUnit.MINUTES,
-			2,
-			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( defaultWorkshopDefinitionID ),
-			"question" ) );
+		String exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition( defaultClientStub, defaultUserStub, TimeUnit.MINUTES, 2, defaultWorkshopDefinitionStub, "question" ) );
 
 		// read exercise definition
 		ExerciseDefinitionImpl exDef = exerciseDefinitionService.findByID( exDefID );
+		assertTrue( exDef.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( exDef.getID().equals( exDefID ) );
 		assertTrue( exDef.getDuration() == 2 );
-		assertTrue( exDef.getOwner().getID().equals( defaultUserID ) );
+		assertTrue( exDef.getOwner().getID().equals( defaultUserStub.getID() ) );
 		assertTrue( exDef.getTimeUnit().equals( TimeUnit.MINUTES ) );
-		assertTrue( exDef.getWorkshopDefinition().getID().equals( defaultWorkshopDefinitionID ) );
+		assertTrue( exDef.getWorkshopDefinition().getID().equals( defaultWorkshopDefinitionStub.getID() ) );
 		assertTrue( ( (PinkLabsDefinition)exDef ).getQuestion().equalsIgnoreCase( "question" ) );
 
 		// update exercise definition
@@ -299,25 +359,22 @@ public class RestServiceTest
 		exerciseDefinitionService.remove( updatedExDef );
 
 		// find all checks delete
-		List< ExerciseDefinitionImpl > exDefs = exerciseDefinitionService.findAll( defaultClient.getID() );
+		List< ExerciseDefinitionImpl > exDefs = exerciseDefinitionService.findAll( defaultClientStub.getID() );
 		assertTrue( exDefs.size() > 0 );
 		assertTrue( checkDelete( exDefs, exDefID ) );
 
 		// create exercise instance
-		String exID = exerciseService.persist( new ExerciseImpl(
-			defaultClient, "exercise",
-			"exercise description",
-			(ExerciseDefinitionImpl)exerciseDefinitionService.findByID( defaultExerciseDefinitionID ),
-			(WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ) );
+		String exID = exerciseService.persist( new ExerciseImpl( defaultClientStub, "exercise", "exercise description", pinklabsDefinitionStub, defaultWorkshopStub ) );
 
 		// read exercise instance
 		ExerciseImpl ex = exerciseService.findByID( exID );
+		assertTrue( ex.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( ex.getID().equals( exID ) );
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "new" ) );
-		assertTrue( ex.getDefinition().getID().equals( defaultExerciseDefinitionID ) );
+		assertTrue( ex.getDefinition().getID().equals( pinklabsDefinitionStub.getID() ) );
 		assertTrue( ex.getName().equalsIgnoreCase( "exercise" ) );
 		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
-		assertTrue( ex.getWorkshop().getID().equals( defaultWorkshopID ) );
+		assertTrue( ex.getWorkshop().getID().equals( defaultWorkshopStub.getID() ) );
 
 		// update exercise instance
 		ex.setName( "updated exercise" );
@@ -329,22 +386,20 @@ public class RestServiceTest
 		exerciseService.remove( updatedEx );
 
 		// find all checks delete
-		List< ExerciseImpl > exs = exerciseService.findAll( defaultClient.getID() );
+		List< ExerciseImpl > exs = exerciseService.findAll( defaultClientStub.getID() );
 		assertTrue( exs.size() > 0 );
 		assertTrue( checkDelete( exs, exID ) );
 
 		// create exercise data
-		String dataID = exerciseDataService.persist( new PinkLabsExerciseData(
-			defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ),
-			(ExerciseImpl)exerciseService.findByID( defaultExerciseID ),
-			"answer" ) );
+		String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultClientStub, defaultUserStub, defaultExerciseStub1, "answer" ) );
 
 		// read exercise data
 		ExerciseDataImpl data = exerciseDataService.findByID( dataID );
+		assertTrue( data.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( data.getID().equals( dataID ) );
 		assertTrue( ( (PinkLabsExerciseData)data ).getAnswer().equalsIgnoreCase( "answer" ) );
-		assertTrue( data.getOwner().getID().equals( defaultUserID ) );
-		assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseID ) );
+		assertTrue( data.getOwner().getID().equals( defaultUserStub.getID() ) );
+		assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseStub1.getID() ) );
 
 		// update exercise data
 		( (PinkLabsExerciseData)data ).setAnswer( "updated answer" );
@@ -356,7 +411,7 @@ public class RestServiceTest
 		exerciseDataService.remove( updatedData );
 
 		// find all checks delete
-		List< ExerciseDataImpl > datas = exerciseDataService.findAll( defaultClient.getID() );
+		List< ExerciseDataImpl > datas = exerciseDataService.findAll( defaultClientStub.getID() );
 		assertTrue( datas.size() > 0 );
 		assertTrue( checkDelete( datas, dataID ) );
 	}
@@ -366,18 +421,16 @@ public class RestServiceTest
 	{
 
 		// create invitation
-		String invitationID = invitationService.persist( new Invitation(
-			defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ),
-			(PrincipalImpl)userService.findByID( defaultUserID ),
-			(SessionImpl)sessionService.findByID( defaultSessionID ) ) );
+		String invitationID = invitationService.persist( new Invitation( defaultClientStub, defaultUserStub, defaultUserStub, defaultSessionStub ) );
 
 		// read invitation
 		Invitation invitation = invitationService.findByID( invitationID );
+		assertTrue( invitation.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( invitation.getID().equals( invitationID ) );
 		assertTrue( invitation.getDate() != null );
-		assertTrue( invitation.getInvitee().getID().equals( defaultUserID ) );
-		assertTrue( invitation.getInviter().getID().equals( defaultUserID ) );
-		assertTrue( invitation.getSession().getID().equals( defaultSessionID ) );
+		assertTrue( invitation.getInvitee().getID().equals( defaultUserStub.getID() ) );
+		assertTrue( invitation.getInviter().getID().equals( defaultUserStub.getID() ) );
+		assertTrue( invitation.getSession().getID().equals( defaultSessionStub.getID() ) );
 
 		// update invitation
 		Date date = new Date();
@@ -390,7 +443,7 @@ public class RestServiceTest
 		invitationService.remove( invitation );
 
 		// find all check delete
-		List< Invitation > invitations = invitationService.findAll( defaultClient.getID() );
+		List< Invitation > invitations = invitationService.findAll( defaultClientStub.getID() );
 		assertTrue( invitations.size() > 0 );
 		assertTrue( checkDelete( invitations, invitationID ) );
 	}
@@ -399,81 +452,98 @@ public class RestServiceTest
 	public void functionalUserService()
 	{
 		// find by login name
-		PrincipalImpl usr = userService.findByID( defaultUserID );
+		PrincipalImpl usr = userService.findByID( defaultUserStub.getID() );
 		PrincipalImpl searched = userService.findByLoginName( ( (UserImpl)usr ).getLoginName() );
 		assertTrue( searched.getID().equals( usr.getID() ) );
 
 		// request new password
-		boolean password = userService.requestNewPassword( defaultUserID );
-		assertTrue( password );
+		assertTrue( userService.requestNewPassword( defaultUserStub.getID() ) );
 	}
 
 	@Test
 	public void functionalWorkshopService()
 	{
 		// start workshop
-		workshopService.start( defaultWorkshopID );
-		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ).getCurrentState().equalsIgnoreCase( "running" ) );
+		workshopService.start( defaultWorkshopStub.getID() );
+		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ).getCurrentState().equalsIgnoreCase( "running" ) );
 
 		// stop workshop
-		workshopService.stop( defaultWorkshopID );
-		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopID ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
+		workshopService.stop( defaultWorkshopStub.getID() );
+		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// start session
-		sessionService.start( defaultSessionID );
-		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getCurrentState().equalsIgnoreCase( "running" ) );
+		sessionService.start( defaultSessionStub.getID() );
+		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "running" ) );
 
 		// stop session
-		sessionService.stop( defaultSessionID );
-		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
+		sessionService.stop( defaultSessionStub.getID() );
+		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// getCurrentExercise
-		assertTrue( sessionService.getCurrentExercise( defaultSessionID ).getID().equals( defaultExerciseID ) );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub1.getID() ) );
 
 		// getNextExercise
-		assertTrue( sessionService.getNextExercise( defaultSessionID ).getID().equals( defaultExerciseID2 ) );
+		assertTrue( sessionService.getNextExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub2.getID() ) );
 
 		// setNextExercise
-		sessionService.setNextExercise( defaultSessionID );
-		assertTrue( sessionService.getCurrentExercise( defaultSessionID ).getID().equals( defaultExerciseID2 ) );
+		sessionService.setNextExercise( defaultSessionStub.getID() );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub2.getID() ) );
 
 		// getPreviousExercise
-		assertTrue( sessionService.getPreviousExercise( defaultSessionID ).getID().equals( defaultExerciseID ) );
+		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub1.getID() ) );
 
 		// join Session
-		sessionService.join( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
-		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getParticipants().contains( userService.findByID( defaultUserID ) ) );
+		Invitation wrappedJoinRequest = new Invitation();
+		wrappedJoinRequest.setInvitee( defaultUserStub );
+		wrappedJoinRequest.setSession( defaultSessionStub );
+
+		sessionService.join( wrappedJoinRequest );
+		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getParticipants().contains( userService.findByID( defaultUserStub.getID() ) ) );
 
 		// leave Session
-		sessionService.leave( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
-		assertTrue( !( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getParticipants().contains( userService.findByID( defaultUserID ) ) );
+		sessionService.leave( wrappedJoinRequest );
+		assertTrue( !( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getParticipants().contains( userService.findByID( defaultUserStub.getID() ) ) );
 
 		// accept invitation
-		invitationService.accept( defaultInvitationID );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getInvitations(), defaultInvitationID, true ) );
+		invitationService.accept( defaultInvitationStub.getID() );
+		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getInvitations(), defaultInvitationStub.getID(), true ) );
 
 		// add executer
-		sessionService.addExecuter( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getExecuters(), defaultUserID, false ) );
+		sessionService.addExecuter( wrappedJoinRequest );
+		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), false ) );
 
 		// remove executer
-		sessionService.removeExecuter( new Invitation( defaultClient, (PrincipalImpl)userService.findByID( defaultUserID ), null, (SessionImpl)sessionService.findByID( defaultSessionID ) ) );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionID ) ).getExecuters(), defaultUserID, true ) );
+		sessionService.removeExecuter( wrappedJoinRequest );
+		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), true ) );
 	}
 
 	@Test
 	public void functionalExerciseService()
 	{
 		// start exercise
-		exerciseService.start( defaultExerciseID );
-		assertTrue( ( (ExerciseImpl)exerciseService.findByID( defaultExerciseID ) ).getCurrentState().equalsIgnoreCase( "running" ) );
+		exerciseService.start( defaultExerciseStub1.getID() );
+		ExerciseImpl ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
+
+		// suspend exercise
+		exerciseService.suspend( new SuspensionRequest( defaultExerciseStub1.getID(), 12.5 ) );
+		ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "suspended" ) );
+		assertTrue( ex.getElapsedSeconds() == 12.5 );
+
+		// resume exercise
+		assertTrue( exerciseService.resume( defaultExerciseStub1.getID() ) == 12.5 );
+		ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
+		assertTrue( ex.getElapsedSeconds() == 0.0 );
 
 		// stop exercise
-		exerciseService.stop( defaultExerciseID );
-		assertTrue( ( (ExerciseImpl)exerciseService.findByID( defaultExerciseID ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
+		exerciseService.stop( defaultExerciseStub1.getID() );
+		ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// find data by exercise ID
-		assertTrue( exerciseDataService.findByExerciseID( defaultExerciseID ).size() > 0 );
+		assertTrue( exerciseDataService.findByExerciseID( defaultExerciseStub1.getID() ).size() > 0 );
 	}
 
 	private < T extends IdentifiableObject > boolean checkSetOperation( Set< T > objects, String checkID, boolean initial )

@@ -59,16 +59,4 @@ public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implem
 
 		 return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
-
-	public < T extends Object > String jsonStringify( T object )
-	{
-		try
-		{
-			return getMapper().writeValueAsString( object );
-		}
-		catch ( JsonProcessingException e )
-		{
-			throw new RuntimeErrorException( null );
-		}
-	}
 }

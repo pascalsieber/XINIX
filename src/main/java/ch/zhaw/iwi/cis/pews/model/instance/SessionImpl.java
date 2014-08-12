@@ -46,6 +46,7 @@ public class SessionImpl extends WorkflowElementImpl
 		this.acceptees = new HashSet< PrincipalImpl >();
 		this.invitations = new HashSet< Invitation >();
 		this.executers = new HashSet< PrincipalImpl >();
+		this.currentExercise = null;
 	}
 
 	public SessionImpl( Client client, String name, String description, WorkflowElementDefinitionImpl definition, WorkshopImpl workshop )
@@ -56,6 +57,7 @@ public class SessionImpl extends WorkflowElementImpl
 		this.invitations = new HashSet< Invitation >();
 		this.executers = new HashSet< PrincipalImpl >();
 		this.workshop = workshop;
+		this.currentExercise = null;
 	}
 
 	public WorkshopImpl getWorkshop()

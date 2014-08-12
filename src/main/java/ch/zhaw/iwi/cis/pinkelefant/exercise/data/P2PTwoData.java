@@ -26,11 +26,12 @@ public class P2PTwoData extends CompressableExerciseData
 		super();
 	}
 
-	public P2PTwoData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, P2POneData post2paperOneDataOne, P2POneData post2paperOneDataTwo )
+	public P2PTwoData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, P2POneData post2paperOneDataOne, P2POneData post2paperOneDataTwo, String answer )
 	{
 		super( client, owner, workflowElement );
 		this.post2paperOneDataOne = post2paperOneDataOne;
 		this.post2paperOneDataTwo = post2paperOneDataTwo;
+		this.answer = answer;
 	}
 
 	public String getAnswer()

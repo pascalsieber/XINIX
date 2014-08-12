@@ -244,11 +244,11 @@ public class ZhawEngine implements LifecycleObject
 		if ( rootClient == null )
 		{
 			rootClient = clientService.findByID( clientService.persist( new Client( "pews root client" ) ) );
-			System.out.println("root client registered");
+			System.out.println( "root client registered" );
 		}
-		
+
 		boolean rootRegistered = false;
-		for ( IdentifiableObject user : userService.findAll(rootClient.getID()) )
+		for ( IdentifiableObject user : userService.findAll( rootClient.getID() ) )
 		{
 			if ( ( (UserImpl)user ).getLoginName().equalsIgnoreCase( "root@pews" ) )
 			{
@@ -260,7 +260,14 @@ public class ZhawEngine implements LifecycleObject
 		if ( !rootRegistered )
 		{
 			String roleID = roleService.persist( new RoleImpl( rootClient, "root", "root" ) );
-			userService.persist( new UserImpl( rootClient, new PasswordCredentialImpl( rootClient, "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", "root@pews" ) );
+			userService.persist( new UserImpl(
+				rootClient,
+				new PasswordCredentialImpl( rootClient, "root" ),
+				(RoleImpl)roleService.findByID( roleID ),
+				null,
+				"root first name",
+				"root last name",
+				"root@pews" ) );
 			System.out.println( "root user registered initially" );
 		}
 
@@ -288,5 +295,10 @@ public class ZhawEngine implements LifecycleObject
 	private static void stopWebServer()
 	{
 		ServerWrapper.stop( webServer );
+	}
+
+	public Client getRootClient()
+	{
+		return rootClient;
 	}
 }

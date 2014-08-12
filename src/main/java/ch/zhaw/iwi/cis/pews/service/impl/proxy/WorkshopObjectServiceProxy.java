@@ -40,7 +40,7 @@ public class WorkshopObjectServiceProxy extends ServiceProxy implements Workshop
 	@Override
 	public < T extends WorkshopObject > List< T > findAll( String clientID )
 	{
-		return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( clientID ) ).readEntity( List.class );
+		return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
 
 }

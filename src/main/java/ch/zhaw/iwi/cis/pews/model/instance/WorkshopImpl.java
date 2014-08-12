@@ -53,7 +53,11 @@ public class WorkshopImpl extends WorkflowElementImpl
 	public List< ExerciseImpl > getExercises()
 	{
 		List< ExerciseImpl > result = exercises;
-		Collections.sort( result, new ExerciseImplComparator() );
+		if ( result.size() > 0 )
+		{
+			Collections.sort( result, new ExerciseImplComparator() );
+		}	
+			
 		return result;
 	}
 

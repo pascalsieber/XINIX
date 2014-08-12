@@ -33,6 +33,11 @@ public abstract class IdentifiableObject implements Serializable
 		return id;
 	}
 
+	public void setID( String id )
+	{
+		this.id = id;
+	}
+
 	@Override
 	public final int hashCode()
 	{

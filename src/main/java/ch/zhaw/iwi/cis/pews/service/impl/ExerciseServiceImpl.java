@@ -25,7 +25,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public void suspend( SuspensionRequest suspensionRequest )
 	{
-		ExerciseImpl exercise = findByID( suspensionRequest.getId() );
+		ExerciseImpl exercise = findByID( suspensionRequest.getSuspendedElementid() );
 		exercise.setCurrentState( WorkflowElementStatusImpl.SUSPENDED );
 
 		exercise.setElapsedSeconds( suspensionRequest.getElapsedSeconds() );
