@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
@@ -34,16 +35,49 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.model.Client;
+import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseService;
+import ch.zhaw.iwi.cis.pews.service.InvitationService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
+import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopService;
 import ch.zhaw.iwi.cis.pews.service.impl.ClientServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDefinitionServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.InvitationServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.RoleServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.apache.derby.drda.NetworkServerControlWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.eclipse.jetty.server.ServerWrapper;
@@ -55,6 +89,7 @@ public class ZhawEngine implements LifecycleObject
 	private static ManagedObjectRegistry managedObjectRegistry;
 	private static ZhawEngine zhawEngine;
 	private static Client rootClient;
+	private static UserImpl rootUser;
 
 	static
 	{
@@ -84,7 +119,7 @@ public class ZhawEngine implements LifecycleObject
 		setupEntityManager();
 		startWebServer();
 		configureRootUser();
-		ensureDefaultRoles();
+		configureSampleWorkshop();
 		System.out.println( "PEWS running and ready to go!" );
 	}
 
@@ -247,7 +282,7 @@ public class ZhawEngine implements LifecycleObject
 		}
 
 		String roleID = roleService.persist( new RoleImpl( rootClient, "root", "root" ) );
-		userService.persist( new UserImpl(
+		String rootUserID = userService.persist( new UserImpl(
 			rootClient,
 			new PasswordCredentialImpl( rootClient, "root" ),
 			(RoleImpl)roleService.findByID( roleID ),
@@ -255,14 +290,24 @@ public class ZhawEngine implements LifecycleObject
 			"root first name",
 			"root last name",
 			"root@pews" ) );
+
+		rootUser = userService.findByID( rootUserID );
 		System.out.println( "root user registered initially" );
 
 	}
 
-	private static void ensureDefaultRoles()
+	private static void configureSampleWorkshop()
 	{
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
+		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
+		WorkshopDefinitionService workshopDefinitionService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
+		ExerciseDefinitionService exerciseDefinitionService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
+		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
+		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
+		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
 
+		// configure default roles
 		roleService.persist( new RoleImpl( rootClient, "organizer", "workshop organizer" ) );
 		System.out.println( "organizer role created initially" );
 
@@ -271,6 +316,140 @@ public class ZhawEngine implements LifecycleObject
 
 		roleService.persist( new RoleImpl( rootClient, "participant", "workshop participant" ) );
 		System.out.println( "participant role created initially" );
+
+		// sample workshop definition (pinkelefant)
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
+			rootClient,
+			rootUser,
+			"Sample PinkElefant Definition",
+			"Definition for Pinkelefant Workshop",
+			"how do we communicate our vision?" ) );
+
+		// sample workshop instance
+		String wsID = workshopService
+			.persist( new WorkshopImpl( rootClient, "Sample Workshop", "Sample Workshop Instance", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
+
+		// pinklabs definition
+		String pinklabsDefID = exerciseDefinitionService.persist( new PinkLabsDefinition( rootClient, rootUser, TimeUnit.SECONDS, 120, (WorkshopDefinitionImpl)workshopDefinitionService
+			.findByID( wsDefID ), "how do you inform yourself?" ) );
+
+		// p2pOne definition
+		String p2poneDefID = exerciseDefinitionService.persist( new P2POneDefinition(
+			rootClient,
+			rootUser,
+			TimeUnit.SECONDS,
+			120,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"http://learnwithharsha.com/wp-content/uploads/2013/06/Free.jpg",
+			"theme is education" ) );
+
+		// p2ptwo definition
+		String p2ptwoDefID = exerciseDefinitionService.persist( new P2PTwoDefinition(
+			rootClient,
+			rootUser,
+			TimeUnit.SECONDS,
+			180,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"how do you combine the two selected pieces of information" ) );
+
+		// xinix definition
+		String xinixDefID = exerciseDefinitionService.persist( new XinixDefinition(
+			rootClient,
+			rootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"what comes to mind?",
+			"transportation" ) );
+
+		// you2me definition
+		String you2meDefID = exerciseDefinitionService.persist( new You2MeDefinition(
+			rootClient,
+			rootUser,
+			TimeUnit.SECONDS,
+			180,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"what do you want to learn?",
+			"how do you teach that?" ) );
+
+		// pinklabs exercise
+		String pinklabsExID = exerciseService.persist( new ExerciseImpl(
+			rootClient,
+			"pinkLabs",
+			"pinklabs exercise",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2p one exercise
+		String p2poneExID = exerciseService.persist( new ExerciseImpl(
+			rootClient,
+			"p2p one",
+			"p2p one exercise",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2poneDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// you2me exercise
+		String you2meExID = exerciseService.persist( new ExerciseImpl(
+			rootClient,
+			"you2me",
+			"you2me exercise",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( you2meDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2p two exercise
+		String p2ptwoExID = exerciseService.persist( new ExerciseImpl(
+			rootClient,
+			"p2p two",
+			"p2p two exercise",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2ptwoDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// xinix exercise
+		String xinixExID = exerciseService.persist( new ExerciseImpl(
+			rootClient,
+			"xinix",
+			"xinix exercise",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// xinix image -> used for xinix exercise data
+		String xinixImageID = exerciseDataService.persist( new XinixImage( rootClient, rootUser, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) );
+
+		// pinklabs data
+		exerciseDataService.persist( new PinkLabsExerciseData( rootClient, rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "internet" ) );
+		exerciseDataService.persist( new PinkLabsExerciseData( rootClient, rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "newspaper" ) );
+
+		// p2p one data
+		String p2poneDataID = exerciseDataService.persist( new P2POneData( rootClient, rootUser, (WorkflowElementImpl)exerciseService.findByID( p2poneExID ), "school" ) );
+
+		// p2p two data
+		exerciseDataService.persist( new P2PTwoData(
+			rootClient,
+			rootUser,
+			(WorkflowElementImpl)exerciseService.findByID( p2ptwoExID ),
+			(P2POneData)exerciseDataService.findByID( p2poneDataID ),
+			(P2POneData)exerciseDataService.findByID( p2poneDataID ),
+			"public funding" ) );
+
+		// xinix data
+		exerciseDataService.persist( new XinixData( rootClient, rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), "no idea", (XinixImage)exerciseDataService
+			.findByID( xinixImageID ) ) );
+
+		// you2me dat
+		exerciseDataService
+			.persist( new You2MeData( rootClient, rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), "question one", "question two", "response one", "response two" ) );
+
+		// session
+		String sessionID = sessionService.persist( new SessionImpl( rootClient, "sample session", "sample workshop session", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		
+		// invitation (so that at leaste on is there) :)
+		invitationService.persist( new Invitation( rootClient, rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
+
+		// user joins session (and by that all exercises in workshop)
+		sessionService.join( new Invitation( null, null, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
+		
+		System.out.println("sample workshop configured");
+		
 	}
 
 	private static void stopDatabase()
@@ -283,7 +462,7 @@ public class ZhawEngine implements LifecycleObject
 		ServerWrapper.stop( webServer );
 	}
 
-	public Client getRootClient()
+	public static Client getRootClient()
 	{
 		return rootClient;
 	}
