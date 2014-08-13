@@ -1,8 +1,12 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
 import ch.zhaw.iwi.cis.pews.dao.InvitationDao;
+import ch.zhaw.iwi.cis.pews.dao.SessionDao;
+import ch.zhaw.iwi.cis.pews.dao.UserDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.InvitationDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.SessionDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -16,10 +20,14 @@ import ch.zhaw.iwi.cis.pews.service.InvitationService;
 public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements InvitationService
 {
 	private InvitationDao invitationDao;
+	private UserDao userDao;
+	private SessionDao sessionDao;
 
 	public InvitationServiceImpl()
 	{
 		invitationDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( InvitationDaoImpl.class.getSimpleName() );
+		userDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
+		sessionDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
@@ -32,14 +40,11 @@ public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements 
 	public void accept( String invitationID )
 	{
 		Invitation invitation = findByID( invitationID );
-		PrincipalImpl user = findByID( invitation.getInvitee().getID() );
-		SessionImpl session = findByID( invitation.getSession().getID() );
+		PrincipalImpl user = userDao.findById( invitation.getInvitee().getID() );
+		SessionImpl session = sessionDao.findById( invitation.getSession().getID() );
 
-		user.setSession( session );
-		persist( user );
-
-		session.getAcceptees().add( user );
-		persist( session );
+		user.getSessionAcceptances().add( session );
+		userDao.persist( user );
 
 		remove( invitation );
 	}

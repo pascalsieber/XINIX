@@ -27,6 +27,7 @@ public class GlobalServiceImpl implements GlobalService
 		return "principal=" + ThreadLocalFilter.getServletRequest().getUserPrincipal();
 	}
 
+	@SuppressWarnings( "static-access" )
 	@Override
 	public Client getRootClient()
 	{
