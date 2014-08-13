@@ -36,7 +36,7 @@
 			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/pewsDB;create=true" />
 			<property name="javax.persistence.jdbc.user" value="pews" />
 			<property name="javax.persistence.jdbc.password" value="pews" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.hbm2ddl.auto" value="create" />
 			<property name="hibernate.show_sql" value="true" />
 		</properties>
 	</persistence-unit>
