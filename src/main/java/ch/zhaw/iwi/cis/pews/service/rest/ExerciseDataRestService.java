@@ -55,7 +55,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseDataImpl > findAllExerciseData(@Context HttpServletRequest request)
+	public List< ExerciseDataImpl > findAllExerciseData( @Context HttpServletRequest request )
 	{
 		return super.findAll( getUserService().getClientFromAuth( request ) );
 	}

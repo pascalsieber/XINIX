@@ -32,6 +32,6 @@ public abstract class WorkshopObjectServiceImpl implements WorkshopObjectService
 	{
 		return getWorkshopObjectDao().findByAll( clientID );
 	}
-	
+
 	protected abstract WorkshopObjectDao getWorkshopObjectDao();
 }

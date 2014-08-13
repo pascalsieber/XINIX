@@ -60,7 +60,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseImpl > findAllExercises(@Context HttpServletRequest request)
+	public List< ExerciseImpl > findAllExercises( @Context HttpServletRequest request )
 	{
 		return super.findAll( getUserService().getClientFromAuth( request ) );
 	}

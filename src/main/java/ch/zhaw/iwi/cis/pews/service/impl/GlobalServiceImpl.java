@@ -4,6 +4,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ThreadLocalFilter;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.service.GlobalService;
 
 @ManagedObject( scope = Scope.THREAD )
@@ -24,5 +25,11 @@ public class GlobalServiceImpl implements GlobalService
 	public String showPrincipal()
 	{
 		return "principal=" + ThreadLocalFilter.getServletRequest().getUserPrincipal();
+	}
+
+	@Override
+	public Client getRootClient()
+	{
+		return ZhawEngine.getEngine().getRootClient();
 	}
 }

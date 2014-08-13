@@ -19,15 +19,11 @@ public class PinkLabsExerciseData extends CompressableExerciseData
 		super();
 	}
 
-	
-
 	public PinkLabsExerciseData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, String answer )
 	{
 		super( client, owner, workflowElement );
 		this.answer = answer;
 	}
-
-
 
 	public String getAnswer()
 	{

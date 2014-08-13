@@ -30,13 +30,13 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	@Override
 	public void suspend( SuspensionRequest suspensionRequest )
 	{
-		getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( suspensionRequest ) );
+		getServiceTarget().path( ExerciseRestService.SUSPEND ).request( MediaType.APPLICATION_JSON ).post( Entity.json( suspensionRequest ) );
 	}
 
 	@Override
 	public double resume( String exerciseID )
 	{
-		return getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( double.class );
+		return getServiceTarget().path( ExerciseRestService.RESUME ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( double.class );
 	}
 
 }

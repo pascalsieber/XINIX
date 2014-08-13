@@ -17,5 +17,4 @@ public class ExerciseDefinitionDaoImpl extends WorkshopObjectDaoImpl implements 
 		return ExerciseDefinitionImpl.class;
 	}
 
-
 }

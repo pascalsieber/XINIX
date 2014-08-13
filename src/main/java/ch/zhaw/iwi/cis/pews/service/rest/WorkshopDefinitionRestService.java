@@ -55,7 +55,7 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< WorkshopDefinitionImpl > findAllWorkshopDefinitions(@Context HttpServletRequest request)
+	public List< WorkshopDefinitionImpl > findAllWorkshopDefinitions( @Context HttpServletRequest request )
 	{
 		return super.findAll( getUserService().getClientFromAuth( request ) );
 	}

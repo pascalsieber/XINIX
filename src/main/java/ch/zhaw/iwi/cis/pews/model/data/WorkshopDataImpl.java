@@ -23,6 +23,4 @@ public class WorkshopDataImpl extends WorkflowElementDataImpl
 		super( client, owner, workflowElement );
 	}
 
-	
-
 }

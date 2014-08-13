@@ -6,13 +6,15 @@ import java.util.UUID;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import ch.zhaw.iwi.cis.pews.framework.CustomObjectIDResolver;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonTypeInfo( use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "class" )
-@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
+@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = CustomObjectIDResolver.class )
 @MappedSuperclass
 public abstract class IdentifiableObject implements Serializable
 {

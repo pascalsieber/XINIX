@@ -70,7 +70,7 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 		Session mailSession = Session.getDefaultInstance( props, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication()
 			{
-				return new PasswordAuthentication( "user", "password" );
+				return new PasswordAuthentication( "fueg@zhaw.ch", "Sschrei3" );
 			}
 		} );
 

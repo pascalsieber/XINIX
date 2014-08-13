@@ -2,7 +2,6 @@ package ch.zhaw.sml.iwi.cis.pews.test.service;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
@@ -19,7 +17,6 @@ import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
@@ -27,20 +24,20 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
-import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
+import ch.zhaw.iwi.cis.pews.service.GlobalService;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ClientServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDataServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.GlobalServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.InvitationServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
@@ -63,7 +60,7 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
 public class RestServiceTest
 {
-	private static ClientService clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
+	private static GlobalService globalService = ServiceProxyManager.createServiceProxy( GlobalServiceProxy.class );
 	private static SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
 	private static RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
 	private static UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
@@ -102,13 +99,14 @@ public class RestServiceTest
 	@BeforeClass
 	public static void setupTest()
 	{
-		defaultClientStub.setID( clientService.persist( new Client( "test client" ) ) );
+		defaultClientStub.setID( globalService.getRootClient().getID() );
 
 		// role
 		defaultRoleStub.setID( roleService.persist( new RoleImpl( defaultClientStub, "user", "user role" ) ) );
 
 		// User
-		defaultUserStub.setID( userService.persist( new UserImpl( defaultClientStub, new PasswordCredentialImpl( defaultClientStub, "john" ), defaultRoleStub, null, "John", "Smith", "john" ) ) );
+		defaultUserStub
+			.setID( userService.persist( new UserImpl( defaultClientStub, new PasswordCredentialImpl( defaultClientStub, "john" ), defaultRoleStub, null, "John", "Smith", "fueg@zhaw.ch" ) ) );
 
 		// workshop definition (pinkelefantDefinition)
 		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantDefinition(
@@ -120,9 +118,6 @@ public class RestServiceTest
 
 		// workshop instance
 		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( defaultClientStub, "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
-
-		// session
-		defaultSessionStub.setID( sessionService.persist( new SessionImpl( defaultClientStub, "session", "test session", null, defaultWorkshopStub ) ) );
 
 		// pinklabs definition
 		pinklabsDefinitionStub.setID( exerciseDefinitionService
@@ -164,6 +159,9 @@ public class RestServiceTest
 		// exercise one
 		defaultExerciseStub1.setID( exerciseService.persist( new ExerciseImpl( defaultClientStub, "exercise1", "instance of exercise 1", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
 
+		// exercise two
+		defaultExerciseStub2.setID( exerciseService.persist( new ExerciseImpl( defaultClientStub, "exercise2", "instance of exercise 2", xinixDefinitionStub, defaultWorkshopStub ) ) );
+
 		// xinix image
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultClientStub, defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 
@@ -182,13 +180,19 @@ public class RestServiceTest
 		// you2me data
 		you2meDataStub
 			.setID( exerciseDataService.persist( new You2MeData( defaultClientStub, defaultUserStub, defaultExerciseStub1, "question one", "question two", "repsonse one", "response two" ) ) );
+
+		// session
+		defaultSessionStub.setID( sessionService.persist( new SessionImpl( defaultClientStub, "session", "test session", null, defaultWorkshopStub ) ) );
+
+		// invitation
+		defaultInvitationStub.setID( invitationService.persist( new Invitation( defaultClientStub, defaultUserStub, defaultUserStub, defaultSessionStub ) ) );
 	}
 
 	@Test
 	public void crudOperationsUserService()
 	{
 		// create role
-		String roleID = roleService.persist( new RoleImpl( null, "new role", "new role description" ) );
+		String roleID = roleService.persist( new RoleImpl( defaultClientStub, "new role", "new role description" ) );
 		assertTrue( !roleID.equalsIgnoreCase( "" ) );
 
 		// read role
@@ -205,17 +209,18 @@ public class RestServiceTest
 		assertTrue( updatedRole.getName().equalsIgnoreCase( "updated role" ) );
 
 		// delete role
+		int nbrRolesBefore = roleService.findAll( defaultClientStub.getID() ).size();
 		roleService.remove( roleService.findByID( roleID ) );
 
 		// find all checks delete
 		List< RoleImpl > roles = roleService.findAll( defaultClientStub.getID() );
 		assertTrue( roles.size() > 0 );
-		assertTrue( checkDelete( roles, roleID ) );
+		assertTrue( nbrRolesBefore - roles.size() == 1 );
 
 		// create user
 		String userID = userService.persist( new UserImpl(
 			defaultClientStub,
-			new PasswordCredentialImpl( null, "my password" ),
+			new PasswordCredentialImpl( defaultClientStub, "my password" ),
 			defaultRoleStub,
 			defaultSessionStub,
 			"firstname",
@@ -238,12 +243,13 @@ public class RestServiceTest
 		assertTrue( updatedUser.getFirstName().equalsIgnoreCase( "updated firstname" ) );
 
 		// delete user
+		int usersBefore = userService.findAll( defaultClientStub.getID() ).size();
 		userService.remove( userService.findByID( userID ) );
 
 		// find all checks delete
 		List< UserImpl > users = userService.findAll( defaultClientStub.getID() );
 		assertTrue( users.size() > 0 );
-		assertTrue( checkDelete( users, userID ) );
+		assertTrue( usersBefore - users.size() == 1 );
 
 	}
 
@@ -273,12 +279,13 @@ public class RestServiceTest
 		assertTrue( updatedWorkshopDefinition.getName().equalsIgnoreCase( "updated workshop definition" ) );
 
 		// delete workshop definition
+		int wsDefBefore = workshopDefinitionService.findAll( defaultClientStub.getID() ).size();
 		workshopDefinitionService.remove( workshopDefinitionService.findByID( workshopDefinitionID ) );
 
 		// find all checks delete
 		List< WorkshopDefinitionImpl > wsDefs = workshopDefinitionService.findAll( defaultClientStub.getID() );
 		assertTrue( wsDefs.size() > 0 );
-		assertTrue( checkDelete( wsDefs, workshopDefinitionID ) );
+		assertTrue( wsDefBefore - wsDefs.size() == 1 );
 
 		// create workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( defaultClientStub, "workshop instance", "workshop instance description", defaultWorkshopDefinitionStub ) );
@@ -299,12 +306,13 @@ public class RestServiceTest
 		assertTrue( updatedWs.getName().equalsIgnoreCase( "updated workshop instance" ) );
 
 		// delete workshop instance
+		int wsBefore = workshopService.findAll( defaultClientStub.getID() ).size();
 		workshopService.remove( updatedWs );
 
 		// find all checks delete
 		List< WorkshopImpl > workshops = workshopService.findAll( defaultClientStub.getID() );
 		assertTrue( workshops.size() > 0 );
-		assertTrue( checkDelete( workshops, wsID ) );
+		assertTrue( wsBefore - workshops.size() == 1 );
 
 		// create session
 		String sessionID = sessionService.persist( new SessionImpl( defaultClientStub, "session instance", "session description", null, defaultWorkshopStub ) );
@@ -325,12 +333,13 @@ public class RestServiceTest
 		assertTrue( updatedSession.getName().equalsIgnoreCase( "updated session" ) );
 
 		// delete session
+		int sessionsBefore = sessionService.findAll( defaultClientStub.getID() ).size();
 		sessionService.remove( updatedSession );
 
 		// find all checks delete
 		List< SessionImpl > sessions = sessionService.findAll( defaultClientStub.getID() );
 		assertTrue( sessions.size() > 0 );
-		assertTrue( checkDelete( sessions, sessionID ) );
+		assertTrue( sessionsBefore - sessions.size() == 1 );
 	}
 
 	@Test
@@ -356,12 +365,13 @@ public class RestServiceTest
 		assertTrue( updatedExDef.getDuration() == 12 );
 
 		// delete exercise definition
+		int exDefBefore = exerciseDefinitionService.findAll( defaultClientStub.getID() ).size();
 		exerciseDefinitionService.remove( updatedExDef );
 
 		// find all checks delete
 		List< ExerciseDefinitionImpl > exDefs = exerciseDefinitionService.findAll( defaultClientStub.getID() );
 		assertTrue( exDefs.size() > 0 );
-		assertTrue( checkDelete( exDefs, exDefID ) );
+		assertTrue( exDefBefore - exDefs.size() == 1 );
 
 		// create exercise instance
 		String exID = exerciseService.persist( new ExerciseImpl( defaultClientStub, "exercise", "exercise description", pinklabsDefinitionStub, defaultWorkshopStub ) );
@@ -383,12 +393,13 @@ public class RestServiceTest
 		assertTrue( updatedEx.getName().equalsIgnoreCase( "updated exercise" ) );
 
 		// delete exercise instance
+		int exBefore = exerciseService.findAll( defaultClientStub.getID() ).size();
 		exerciseService.remove( updatedEx );
 
 		// find all checks delete
 		List< ExerciseImpl > exs = exerciseService.findAll( defaultClientStub.getID() );
 		assertTrue( exs.size() > 0 );
-		assertTrue( checkDelete( exs, exID ) );
+		assertTrue( exBefore - exs.size() == 1 );
 
 		// create exercise data
 		String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultClientStub, defaultUserStub, defaultExerciseStub1, "answer" ) );
@@ -408,12 +419,13 @@ public class RestServiceTest
 		assertTrue( updatedData.getAnswer().equalsIgnoreCase( "updated answer" ) );
 
 		// delete exercise data
+		int dataBefore = exerciseDataService.findAll( defaultClientStub.getID() ).size();
 		exerciseDataService.remove( updatedData );
 
 		// find all checks delete
 		List< ExerciseDataImpl > datas = exerciseDataService.findAll( defaultClientStub.getID() );
 		assertTrue( datas.size() > 0 );
-		assertTrue( checkDelete( datas, dataID ) );
+		assertTrue( dataBefore - datas.size() == 1 );
 	}
 
 	@Test
@@ -440,12 +452,13 @@ public class RestServiceTest
 		assertTrue( updatedInvitation.getDate().getTime() == date.getTime() );
 
 		// delete invitation
+		int invitBefore = invitationService.findAll( defaultClientStub.getID() ).size();
 		invitationService.remove( invitation );
 
 		// find all check delete
 		List< Invitation > invitations = invitationService.findAll( defaultClientStub.getID() );
 		assertTrue( invitations.size() > 0 );
-		assertTrue( checkDelete( invitations, invitationID ) );
+		assertTrue( invitBefore - invitations.size() == 1 );
 	}
 
 	@Test
@@ -498,11 +511,11 @@ public class RestServiceTest
 		wrappedJoinRequest.setSession( defaultSessionStub );
 
 		sessionService.join( wrappedJoinRequest );
-		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getParticipants().contains( userService.findByID( defaultUserStub.getID() ) ) );
+		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserStub.getID() ) ).getSession().getID().equals( defaultSessionStub.getID() ) );
 
 		// leave Session
 		sessionService.leave( wrappedJoinRequest );
-		assertTrue( !( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getParticipants().contains( userService.findByID( defaultUserStub.getID() ) ) );
+		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserStub.getID() ) ).getSession() == null );
 
 		// accept invitation
 		invitationService.accept( defaultInvitationStub.getID() );
@@ -559,21 +572,4 @@ public class RestServiceTest
 		return initial;
 	}
 
-	private < T extends IdentifiableObject > boolean checkDelete( List< T > objects, String deletedID )
-	{
-		boolean result = false;
-		ArrayList< String > ids = new ArrayList<>();
-
-		for ( IdentifiableObject object : objects )
-		{
-			ids.add( object.getID() );
-		}
-
-		if ( !ids.contains( deletedID ) )
-		{
-			result = true;
-		}
-
-		return result;
-	}
 }

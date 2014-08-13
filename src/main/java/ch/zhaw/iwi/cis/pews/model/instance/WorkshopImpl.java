@@ -56,8 +56,8 @@ public class WorkshopImpl extends WorkflowElementImpl
 		if ( result.size() > 0 )
 		{
 			Collections.sort( result, new ExerciseImplComparator() );
-		}	
-			
+		}
+
 		return result;
 	}
 

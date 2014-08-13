@@ -22,10 +22,10 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 		{
 			throw new UnsupportedOperationException( "reference to client is missing!" );
 		}
-		
+
 		WorkshopObject objectMerged = merge( object );
 		getEntityManager().persist( objectMerged );
-		
+
 		return objectMerged.getID();
 	}
 

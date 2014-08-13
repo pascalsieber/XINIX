@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.service.GlobalService;
 import ch.zhaw.iwi.cis.pews.service.rest.GlobalRestService;
 
@@ -28,5 +29,11 @@ public class GlobalServiceProxy extends ServiceProxy implements GlobalService
 	public String showPrincipal()
 	{
 		return getServiceTarget().path( GlobalRestService.SHOW_PRINCIPAL ).request( MediaType.APPLICATION_JSON ).get().readEntity( String.class );
+	}
+
+	@Override
+	public Client getRootClient()
+	{
+		return getServiceTarget().path( GlobalRestService.GET_ROOT_CLIENT ).request( MediaType.APPLICATION_JSON ).get().readEntity( Client.class );
 	}
 }

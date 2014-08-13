@@ -13,7 +13,6 @@ public class PasswordCredentialImpl extends CredentialImpl
 
 	private String password;
 
-	
 	public PasswordCredentialImpl()
 	{
 		super();

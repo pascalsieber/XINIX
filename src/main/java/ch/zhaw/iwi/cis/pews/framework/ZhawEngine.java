@@ -34,7 +34,6 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.model.Client;
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
@@ -84,7 +83,7 @@ public class ZhawEngine implements LifecycleObject
 
 		setupEntityManager();
 		startWebServer();
-		ensureRootUser();
+		configureRootUser();
 		ensureDefaultRoles();
 		System.out.println( "PEWS running and ready to go!" );
 	}
@@ -235,7 +234,7 @@ public class ZhawEngine implements LifecycleObject
 		return handler;
 	}
 
-	private static void ensureRootUser()
+	private static void configureRootUser()
 	{
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
@@ -244,32 +243,19 @@ public class ZhawEngine implements LifecycleObject
 		if ( rootClient == null )
 		{
 			rootClient = clientService.findByID( clientService.persist( new Client( "pews root client" ) ) );
-			System.out.println( "root client registered" );
+			System.out.println( "root client registered initially" );
 		}
 
-		boolean rootRegistered = false;
-		for ( IdentifiableObject user : userService.findAll( rootClient.getID() ) )
-		{
-			if ( ( (UserImpl)user ).getLoginName().equalsIgnoreCase( "root@pews" ) )
-			{
-				rootRegistered = true;
-				break;
-			}
-		}
-
-		if ( !rootRegistered )
-		{
-			String roleID = roleService.persist( new RoleImpl( rootClient, "root", "root" ) );
-			userService.persist( new UserImpl(
-				rootClient,
-				new PasswordCredentialImpl( rootClient, "root" ),
-				(RoleImpl)roleService.findByID( roleID ),
-				null,
-				"root first name",
-				"root last name",
-				"root@pews" ) );
-			System.out.println( "root user registered initially" );
-		}
+		String roleID = roleService.persist( new RoleImpl( rootClient, "root", "root" ) );
+		userService.persist( new UserImpl(
+			rootClient,
+			new PasswordCredentialImpl( rootClient, "root" ),
+			(RoleImpl)roleService.findByID( roleID ),
+			null,
+			"root first name",
+			"root last name",
+			"root@pews" ) );
+		System.out.println( "root user registered initially" );
 
 	}
 
