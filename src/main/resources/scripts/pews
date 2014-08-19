@@ -2,6 +2,11 @@
 
 PEWS_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 
+#create directories that can't be included in .tar.gz
+mkdir $PEWS_HOME/log
+mkdir $PEWS_HOME/db
+
+
 LIB=${PEWS_HOME}/lib
 PLUGIN=${PEWS_HOME}/plugin
 PEWS_HOME_PROP=-Dch.zhaw.iwi.cis.pews.pewsHome=${PEWS_HOME}
