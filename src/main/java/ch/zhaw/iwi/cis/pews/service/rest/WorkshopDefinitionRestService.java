@@ -2,12 +2,10 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -34,30 +32,32 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persistWorkshopDefinition( WorkshopDefinitionImpl obj )
+	public String persist( WorkshopDefinitionImpl obj )
 	{
 		return super.persist( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
-	public WorkshopDefinitionImpl findWorkshopDefinitionById( String id )
+	public WorkshopDefinitionImpl findByID( String id )
 	{
 		return super.findByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void removeWorkshopDefinition( WorkshopDefinitionImpl obj )
+	public void remove( WorkshopDefinitionImpl obj )
 	{
 		super.remove( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< WorkshopDefinitionImpl > findAllWorkshopDefinitions( @Context HttpServletRequest request )
+	public List< WorkshopDefinitionImpl > findAll()
 	{
-		return super.findAll( getUserService().getClientFromAuth( request ) );
+		return super.findAll();
 	}
 
 	@Override

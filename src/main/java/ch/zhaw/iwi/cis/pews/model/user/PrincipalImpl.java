@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 
@@ -50,9 +49,8 @@ public class PrincipalImpl extends WorkshopObject
 		super();
 	}
 
-	public PrincipalImpl( Client client, PasswordCredentialImpl credential, RoleImpl role, SessionImpl session )
+	public PrincipalImpl( PasswordCredentialImpl credential, RoleImpl role, SessionImpl session )
 	{
-		super( client );
 		this.credential = credential;
 		this.role = role;
 		this.session = session;

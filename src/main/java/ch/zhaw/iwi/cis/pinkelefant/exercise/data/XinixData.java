@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -21,12 +20,11 @@ public class XinixData extends CompressableExerciseData
 	public XinixData()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public XinixData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, String association, XinixImage xinixImage )
+	public XinixData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String association, XinixImage xinixImage )
 	{
-		super( client, owner, workflowElement );
+		super( owner, workflowElement );
 		this.association = association;
 		this.xinixImage = xinixImage;
 	}

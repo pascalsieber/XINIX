@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 
@@ -32,9 +31,8 @@ public class Invitation extends WorkshopObject
 		super();
 	}
 
-	public Invitation( Client client, PrincipalImpl inviter, PrincipalImpl invitee, SessionImpl session )
+	public Invitation( PrincipalImpl inviter, PrincipalImpl invitee, SessionImpl session )
 	{
-		super( client );
 		this.inviter = inviter;
 		this.invitee = invitee;
 		this.date = new Date();

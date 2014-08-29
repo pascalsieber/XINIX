@@ -21,7 +21,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 	}
-
+	
 	@Override
 	public void suspend( SuspensionRequest suspensionRequest )
 	{

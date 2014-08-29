@@ -2,12 +2,10 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -35,30 +33,32 @@ public class InvitationRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persistInvitation( Invitation obj )
+	public String persist( Invitation obj )
 	{
 		return super.persist( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
-	public Invitation findInvitationByID( String id )
+	public Invitation findByID( String id )
 	{
 		return super.findByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void removeInvitation( Invitation obj )
+	public void remove( Invitation obj )
 	{
 		super.remove( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< Invitation > findAllInvitations( @Context HttpServletRequest request )
+	public List< Invitation > findAll()
 	{
-		return super.findAll( getUserService().getClientFromAuth( request ) );
+		return super.findAll();
 	}
 
 	@POST

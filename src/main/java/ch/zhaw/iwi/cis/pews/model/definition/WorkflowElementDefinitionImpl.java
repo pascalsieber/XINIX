@@ -5,7 +5,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -21,9 +20,8 @@ public class WorkflowElementDefinitionImpl extends OwnableObject
 		super();
 	}
 
-	public WorkflowElementDefinitionImpl( Client client, PrincipalImpl owner )
+	public WorkflowElementDefinitionImpl( PrincipalImpl owner )
 	{
-		super( client, owner );
+		super( owner );
 	}
-
 }

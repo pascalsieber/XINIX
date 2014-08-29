@@ -3,7 +3,6 @@ package ch.zhaw.iwi.cis.pews.model.user;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
 @MappedSuperclass
@@ -15,11 +14,6 @@ public class CredentialImpl extends WorkshopObject
 	public CredentialImpl()
 	{
 		super();
-	}
-
-	public CredentialImpl( Client client )
-	{
-		super( client );
 	}
 
 }

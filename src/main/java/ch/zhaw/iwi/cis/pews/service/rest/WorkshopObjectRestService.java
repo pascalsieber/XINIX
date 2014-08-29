@@ -38,9 +38,9 @@ public abstract class WorkshopObjectRestService extends RestService
 		return getWorkshopObjectService().findByID( id );
 	}
 
-	public < T extends WorkshopObject > List< T > findAll( String clientID )
+	public < T extends WorkshopObject > List< T > findAll()
 	{
-		return getWorkshopObjectService().findAll( clientID );
+		return getWorkshopObjectService().findAll();
 	}
 
 	public UserService getUserService()

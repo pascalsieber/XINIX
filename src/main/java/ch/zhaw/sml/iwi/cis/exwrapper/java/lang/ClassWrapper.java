@@ -77,7 +77,7 @@ public class ClassWrapper
 		}
 	}
 
-	public static Method getMethod( Class< ? > theClass, String name, Class< ? >[] parameterTypes )
+	public static Method getMethod( Class< ? > theClass, String name, Class< ? > ... parameterTypes )
 	{
 		try
 		{

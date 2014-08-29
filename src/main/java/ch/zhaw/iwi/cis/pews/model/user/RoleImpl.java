@@ -3,7 +3,6 @@ package ch.zhaw.iwi.cis.pews.model.user;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
 @Entity
@@ -20,9 +19,8 @@ public class RoleImpl extends WorkshopObject
 		super();
 	}
 
-	public RoleImpl( Client client, String name, String description )
+	public RoleImpl( String name, String description )
 	{
-		super( client );
 		this.name = name;
 		this.description = description;
 	}

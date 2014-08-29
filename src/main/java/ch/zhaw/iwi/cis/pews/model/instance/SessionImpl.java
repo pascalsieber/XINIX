@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -49,9 +48,9 @@ public class SessionImpl extends WorkflowElementImpl
 		this.currentExercise = null;
 	}
 
-	public SessionImpl( Client client, String name, String description, WorkflowElementDefinitionImpl definition, WorkshopImpl workshop )
+	public SessionImpl( String name, String description, WorkflowElementDefinitionImpl definition, WorkshopImpl workshop )
 	{
-		super( client, name, description, definition );
+		super( name, description, definition );
 		this.participants = new HashSet< PrincipalImpl >();
 		this.acceptees = new HashSet< PrincipalImpl >();
 		this.invitations = new HashSet< Invitation >();

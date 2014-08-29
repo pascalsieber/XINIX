@@ -18,12 +18,6 @@ public class WorkshopObject extends IdentifiableObject
 		super();
 	}
 
-	public WorkshopObject( Client client )
-	{
-		super();
-		this.client = client;
-	}
-
 	public Client getClient()
 	{
 		return client;

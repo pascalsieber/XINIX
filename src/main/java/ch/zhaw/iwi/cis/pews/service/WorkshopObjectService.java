@@ -12,5 +12,5 @@ public interface WorkshopObjectService extends Service
 
 	public < T extends WorkshopObject > T findByID( String id );
 
-	public < T extends WorkshopObject > List< T > findAll( String clientID );
+	public < T extends WorkshopObject > List< T > findAll();
 }

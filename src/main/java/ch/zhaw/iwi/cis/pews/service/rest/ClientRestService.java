@@ -30,28 +30,30 @@ public class ClientRestService extends IdentifiableObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persistClient( Client obj )
+	public String persist( Client obj )
 	{
 		return super.persist( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
-	public Client findClientByID( String id )
+	public Client findByID( String id )
 	{
 		return super.findByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void removeClient( Client obj )
+	public void remove( Client obj )
 	{
 		super.remove( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< Client > findAllClients()
+	public List< Client > findAll()
 	{
 		return super.findAll();
 	}

@@ -7,8 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class UserImpl extends PrincipalImpl
@@ -29,9 +30,9 @@ public class UserImpl extends PrincipalImpl
 		this.groups = new HashSet< GroupImpl >();
 	}
 
-	public UserImpl( Client client, PasswordCredentialImpl credential, RoleImpl role, SessionImpl session, String firstName, String lastName, String loginName )
+	public UserImpl( PasswordCredentialImpl credential, RoleImpl role, SessionImpl session, String firstName, String lastName, String loginName )
 	{
-		super( client, credential, role, session );
+		super( credential, role, session );
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.loginName = loginName;
@@ -66,6 +67,20 @@ public class UserImpl extends PrincipalImpl
 	public void setLoginName( String loginName )
 	{
 		this.loginName = loginName;
+	}
+	
+	// Note that the login name is assumed to be in the format: client/email,
+	// i.e., zhaw/john.brush@zhaw.ch
+	@JsonIgnore
+	public String getLoginNameEmailPart()
+	{
+		return loginName.substring( 0, loginName.indexOf( "/" ) );
+	}
+	
+	@JsonIgnore
+	public String getLoginNameClientPart()
+	{
+		return loginName.substring( loginName.indexOf( "/" ) + 1 );
 	}
 
 	public Set< GroupImpl > getGroups()

@@ -3,7 +3,6 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -21,9 +20,9 @@ public class CompressionData extends CompressableExerciseData
 		// TODO Auto-generated constructor stub
 	}
 
-	public CompressionData( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, String title, String description )
+	public CompressionData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String title, String description )
 	{
-		super( client, owner, workflowElement );
+		super( owner, workflowElement );
 		this.title = title;
 		this.description = description;
 	}

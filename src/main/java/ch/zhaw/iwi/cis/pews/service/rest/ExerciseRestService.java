@@ -2,12 +2,10 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -39,30 +37,32 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persistExercise( ExerciseImpl obj )
+	public String persist( ExerciseImpl obj )
 	{
 		return super.persist( obj );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
-	public ExerciseImpl findExerciseById( String id )
+	public ExerciseImpl findByID( String id )
 	{
 		return super.findByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void removeExercise( ExerciseImpl exercise )
+	public void remove( ExerciseImpl exercise )
 	{
 		super.remove( exercise );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseImpl > findAllExercises( @Context HttpServletRequest request )
+	public List< ExerciseImpl > findAll()
 	{
-		return super.findAll( getUserService().getClientFromAuth( request ) );
+		return super.findAll();
 	}
 
 	@POST

@@ -24,9 +24,8 @@ public class OwnableObject extends WorkshopObject
 		super();
 	}
 
-	public OwnableObject( Client client, PrincipalImpl owner )
+	public OwnableObject( PrincipalImpl owner )
 	{
-		super( client );
 		this.owner = owner;
 	}
 
@@ -39,5 +38,4 @@ public class OwnableObject extends WorkshopObject
 	{
 		this.owner = owner;
 	}
-
 }

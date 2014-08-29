@@ -2,7 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
-import ch.zhaw.iwi.cis.pews.framework.ThreadLocalFilter;
+import ch.zhaw.iwi.cis.pews.framework.ServletContextFilter;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.service.GlobalService;
@@ -24,13 +24,12 @@ public class GlobalServiceImpl implements GlobalService
 
 	public String showPrincipal()
 	{
-		return "principal=" + ThreadLocalFilter.getServletRequest().getUserPrincipal();
+		return "principal=" + ServletContextFilter.getServletRequest().getUserPrincipal();
 	}
 
-	@SuppressWarnings( "static-access" )
 	@Override
 	public Client getRootClient()
 	{
-		return ZhawEngine.getEngine().getRootClient();
+		return ZhawEngine.getRootClient();
 	}
 }

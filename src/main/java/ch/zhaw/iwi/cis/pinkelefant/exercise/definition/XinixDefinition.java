@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -31,9 +30,9 @@ public class XinixDefinition extends ExerciseDefinitionImpl
 		this.images = new HashSet< XinixImage >();
 	}
 
-	public XinixDefinition( Client client, PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, String keyword )
+	public XinixDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, String keyword )
 	{
-		super( client, owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition );
 		this.question = question;
 		this.keyword = keyword;
 		this.images = new HashSet< XinixImage >();

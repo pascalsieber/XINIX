@@ -38,9 +38,9 @@ public class WorkshopObjectServiceProxy extends ServiceProxy implements Workshop
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public < T extends WorkshopObject > List< T > findAll( String clientID )
+	public < T extends WorkshopObject > List< T > findAll()
 	{
-		return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
+		return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( null ) ).readEntity( List.class );
 	}
 
 }

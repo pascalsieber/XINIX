@@ -2,12 +2,10 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -31,30 +29,32 @@ public class UserRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persistUser( PrincipalImpl principal )
+	public String persist( PrincipalImpl principal )
 	{
 		return super.persist( principal );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
-	public PrincipalImpl findUserById( String id )
+	public PrincipalImpl findByID( String id )
 	{
 		return super.findByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void removeUser( PrincipalImpl principal )
+	public void remove( PrincipalImpl principal )
 	{
 		super.remove( principal );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< UserImpl > findAllUsers( @Context HttpServletRequest request )
+	public List< UserImpl > findAll()
 	{
-		return super.findAll( getUserService().getClientFromAuth( request ) );
+		return super.findAll();
 	}
 
 	@POST

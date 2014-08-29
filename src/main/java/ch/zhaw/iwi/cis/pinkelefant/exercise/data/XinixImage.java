@@ -3,7 +3,6 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -20,9 +19,9 @@ public class XinixImage extends ExerciseDataImpl
 		super();
 	}
 
-	public XinixImage( Client client, PrincipalImpl owner, WorkflowElementImpl workflowElement, String url )
+	public XinixImage( PrincipalImpl owner, WorkflowElementImpl workflowElement, String url )
 	{
-		super( client, owner, workflowElement );
+		super( owner, workflowElement );
 		this.url = url;
 	}
 

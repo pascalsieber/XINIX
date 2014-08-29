@@ -33,5 +33,4 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	{
 		return exerciseDataDao.findByExerciseID( exerciseID );
 	}
-
 }

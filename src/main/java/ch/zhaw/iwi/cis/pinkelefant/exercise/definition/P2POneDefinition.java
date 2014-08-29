@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -23,9 +22,9 @@ public class P2POneDefinition extends ExerciseDefinitionImpl
 		super();
 	}
 
-	public P2POneDefinition( Client client, PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String picture, String theme )
+	public P2POneDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String picture, String theme )
 	{
-		super( client, owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition );
 		this.picture = picture;
 		this.theme = theme;
 	}

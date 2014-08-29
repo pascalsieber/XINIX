@@ -7,7 +7,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
 @Entity
@@ -25,9 +24,8 @@ public class WorkflowElementStatusHistoryElementImpl extends WorkshopObject
 		super();
 	}
 
-	public WorkflowElementStatusHistoryElementImpl( Client client, Date date, WorkflowElementStatusImpl status )
+	public WorkflowElementStatusHistoryElementImpl( Date date, WorkflowElementStatusImpl status )
 	{
-		super( client );
 		this.date = date;
 		this.status = status;
 	}
