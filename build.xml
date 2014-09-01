@@ -142,6 +142,7 @@
 				<exclude name="persistence.xml"/>
 			</tarfileset>
 			<tarfileset file="${src.main.resources}/scripts/pews" filemode="755" username="*" group="*" prefix="pews/bin"/>
+			<tarfileset file="${src.main.resources}/scripts/pews.bat" filemode="755" username="*" group="*" prefix="pews/bin"/>
 		</tar>
 		<gzip destfile="${pews-release.tar.gz}" src="${pews-release.tar}"/>
 	</target>
