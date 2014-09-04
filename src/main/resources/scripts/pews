@@ -3,8 +3,8 @@
 PEWS_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 
 #create directories that can't be included in .tar.gz
-mkdir $PEWS_HOME/log
-mkdir $PEWS_HOME/db
+nohup mkdir $PEWS_HOME/log >/dev/null
+nohup mkdir $PEWS_HOME/db >/dev/null
 
 
 LIB=${PEWS_HOME}/lib
@@ -15,6 +15,9 @@ LOGGING_PROP=-Djava.util.logging.config.file=${PEWS_HOME}/conf/logging.propertie
 for arg in "$@" ; do
   if [ "$arg" = "-debug" ] ; then
     DEBUG="-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y"
+  elif [ "$arg" = "-service" ]
+  then
+  	SERVICE=true
   fi
 done
 
@@ -25,4 +28,8 @@ do
 	CLASSPATH=${CLASSPATH}:$jar
 done
 
-java -classpath ${CLASSPATH} ${DEBUG} ${PEWS_HOME_PROP} ${LOGGING_PROP} ch.zhaw.iwi.cis.pews.framework.ZhawEngine $*
+if [ "$SERVICE" = true ] ; then
+	nohup java -classpath ${CLASSPATH} ${DEBUG} ${PEWS_HOME_PROP} ${LOGGING_PROP} ch.zhaw.iwi.cis.pews.framework.ZhawEngine $* >${PEWS_HOME}/log/service.log & echo $!
+else
+	java -classpath ${CLASSPATH} ${DEBUG} ${PEWS_HOME_PROP} ${LOGGING_PROP} ch.zhaw.iwi.cis.pews.framework.ZhawEngine $*
+fi

@@ -252,7 +252,7 @@ public class ZhawEngine implements LifecycleObject
 		passwordHelpMapping.setPathSpec( "/pews/userService/user/requestPassword" );
 		passwordHelpMapping.setConstraint( whitelist );
 
-		List< ConstraintMapping > mappings = new ArrayList<>();
+		List< ConstraintMapping > mappings = new ArrayList< ConstraintMapping >();
 		mappings.add( mapping );
 		mappings.add( pingMapping );
 		mappings.add( passwordHelpMapping );
