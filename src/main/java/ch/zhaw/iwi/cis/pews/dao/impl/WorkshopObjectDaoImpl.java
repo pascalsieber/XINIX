@@ -1,10 +1,16 @@
 package ch.zhaw.iwi.cis.pews.dao.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.framework.LazyLoadingHandlingOutputStream;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
@@ -57,4 +63,26 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 	}
 
 	protected abstract Class< ? extends WorkshopObject > getWorkshopObjectClass();
+	
+	@SuppressWarnings( "resource" )
+	public Object cloneResult (Object object)
+	{
+		try
+		{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream ooStream = new LazyLoadingHandlingOutputStream( baos );
+			ooStream.writeObject( object );
+
+			byte[] bytes = baos.toByteArray();
+
+			ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
+			ObjectInputStream oiStream = new ObjectInputStream( bais );
+			return oiStream.readObject();
+		}
+		catch ( IOException | ClassNotFoundException e )
+		{
+			throw new RuntimeException( e );
+		}
+
+	}
 }

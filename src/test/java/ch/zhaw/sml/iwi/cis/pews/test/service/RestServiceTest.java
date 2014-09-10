@@ -141,8 +141,7 @@ public class RestServiceTest
 			TimeUnit.SECONDS,
 			120,
 			defaultWorkshopDefinitionStub,
-			"question",
-			"keyword" ) ) );
+			"question" ) ) );
 
 		// you2me definition
 		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition(

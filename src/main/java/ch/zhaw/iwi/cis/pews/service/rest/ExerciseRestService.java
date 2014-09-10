@@ -8,8 +8,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
@@ -26,6 +29,8 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public final static String STOP = "/stop";
 	public final static String SUSPEND = "/suspend";
 	public final static String RESUME = "/resume";
+	public final static String GETINPUT = "/getInput";
+	public final static String SETOUTPUT = "/setOutput";
 
 	private ExerciseService exerciseService;
 
@@ -91,6 +96,20 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public double resumeExercise( String exerciseID )
 	{
 		return exerciseService.resume( exerciseID );
+	}
+
+	@POST
+	@Path( GETINPUT )
+	public Input getExerciseInput()
+	{
+		return exerciseService.getInput();
+	}
+
+	@POST
+	@Path( SETOUTPUT )
+	public void setOutput( Output output )
+	{
+		exerciseService.setOutput( output );
 	}
 
 	@Override

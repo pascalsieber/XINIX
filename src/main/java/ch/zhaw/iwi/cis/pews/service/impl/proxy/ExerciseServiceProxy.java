@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.model.input.Input;
+import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseRestService;
@@ -37,6 +39,18 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	public double resume( String exerciseID )
 	{
 		return getServiceTarget().path( ExerciseRestService.RESUME ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( double.class );
+	}
+
+	@Override
+	public Input getInput()
+	{
+		return getServiceTarget().path( ExerciseRestService.GETINPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( Input.class );
+	}
+
+	@Override
+	public void setOutput( Output output )
+	{
+		getServiceTarget().path( ExerciseRestService.GETINPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
 	}
 
 }

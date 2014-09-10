@@ -51,4 +51,5 @@ public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 	}
 
 	protected abstract Class< ? extends IdentifiableObject > getPersistentObjectClass();
+	
 }

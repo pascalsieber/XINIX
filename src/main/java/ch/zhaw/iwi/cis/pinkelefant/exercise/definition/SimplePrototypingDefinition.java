@@ -1,39 +1,32 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 
 @Entity
-public class XinixDefinition extends ExerciseDefinitionImpl
+public class SimplePrototypingDefinition extends ExerciseDefinitionImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String question;
+	private String mimeType;
 
-	@ManyToMany
-	private Set< XinixImage > images;
-
-	public XinixDefinition()
+	public SimplePrototypingDefinition()
 	{
 		super();
-		this.images = new HashSet< XinixImage >();
 	}
 
-	public XinixDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question )
+	public SimplePrototypingDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, String mimeType )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
 		this.question = question;
-		this.images = new HashSet< XinixImage >();
+		this.mimeType = mimeType;
 	}
 
 	public String getQuestion()
@@ -46,14 +39,19 @@ public class XinixDefinition extends ExerciseDefinitionImpl
 		this.question = question;
 	}
 
-	public Set< XinixImage > getImages()
+	public String getMimeType()
 	{
-		return images;
+		return mimeType;
 	}
 
-	public void setImages( Set< XinixImage > images )
+	public void setMimeType( String mimeType )
 	{
-		this.images = images;
+		this.mimeType = mimeType;
+	}
+
+	public static long getSerialversionuid()
+	{
+		return serialVersionUID;
 	}
 
 }

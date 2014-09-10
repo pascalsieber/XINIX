@@ -369,8 +369,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"what comes to mind?",
-			"transportation" ) );
+			"what comes to mind?" ) );
 
 		// you2me definition
 		String you2meDefID = exerciseDefinitionService.persist( new You2MeDefinition(
