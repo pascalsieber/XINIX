@@ -1,5 +1,9 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
@@ -12,7 +16,9 @@ public class XinixData extends CompressableExerciseData
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String association;
+
+	@ElementCollection
+	private Set< String > associations;
 
 	@ManyToOne
 	private XinixImage xinixImage;
@@ -20,23 +26,24 @@ public class XinixData extends CompressableExerciseData
 	public XinixData()
 	{
 		super();
+		this.associations = new HashSet<>();
 	}
 
-	public XinixData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String association, XinixImage xinixImage )
+	public XinixData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Set< String > associations, XinixImage xinixImage )
 	{
 		super( owner, workflowElement );
-		this.association = association;
+		this.associations = associations;
 		this.xinixImage = xinixImage;
 	}
 
-	public String getAssociation()
+	public Set< String > getAssociations()
 	{
-		return association;
+		return associations;
 	}
 
-	public void setAssociation( String association )
+	public void setAssociations( Set< String > associations )
 	{
-		this.association = association;
+		this.associations = associations;
 	}
 
 	public XinixImage getXinixImage()

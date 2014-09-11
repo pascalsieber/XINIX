@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
+import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -38,6 +40,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
 {
 	private ExerciseDao exerciseDao;
+	private ExerciseDataDao exerciseDataDao;
 	private static final Map< String, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseServiceImpl >>();
 
 	static
@@ -60,6 +63,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	public ExerciseServiceImpl()
 	{
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
+		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
@@ -105,4 +109,11 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
 			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).setOutput( output );
 	}
+
+	public ExerciseDataDao getExerciseDataDao()
+	{
+		return exerciseDataDao;
+	}
+	
+	
 }

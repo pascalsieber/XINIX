@@ -1,5 +1,9 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -11,27 +15,30 @@ public class PinkLabsExerciseData extends CompressableExerciseData
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String answer;
+
+	@ElementCollection
+	private List< String > answers;
 
 	public PinkLabsExerciseData()
 	{
 		super();
+		this.answers = new ArrayList<>();
 	}
 
-	public PinkLabsExerciseData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String answer )
+	public PinkLabsExerciseData( PrincipalImpl owner, WorkflowElementImpl workflowElement, List< String > answers )
 	{
 		super( owner, workflowElement );
-		this.answer = answer;
+		this.answers = answers;
 	}
 
-	public String getAnswer()
+	public List< String > getAnswers()
 	{
-		return answer;
+		return answers;
 	}
 
-	public void setAnswer( String answer )
+	public void setAnswers( List< String > answers )
 	{
-		this.answer = answer;
+		this.answers = answers;
 	}
 
 }

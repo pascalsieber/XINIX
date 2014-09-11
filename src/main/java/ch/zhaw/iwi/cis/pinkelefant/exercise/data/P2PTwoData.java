@@ -1,7 +1,11 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
@@ -12,55 +16,45 @@ public class P2PTwoData extends CompressableExerciseData
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String answer;
 
-	@ManyToOne
-	private P2POneData post2paperOneDataOne;
+	@ElementCollection
+	private Set< String > answers;
 
-	@ManyToOne
-	private P2POneData post2paperOneDataTwo;
+	@ManyToMany
+	private Set< String > selectedKeywords;
 
 	public P2PTwoData()
 	{
 		super();
+		this.selectedKeywords = new HashSet<>();
+		this.answers = new HashSet<>();
 	}
 
-	public P2PTwoData( PrincipalImpl owner, WorkflowElementImpl workflowElement, P2POneData post2paperOneDataOne, P2POneData post2paperOneDataTwo, String answer )
+	public P2PTwoData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Set< String > answers, Set< String > selectedKeywords )
 	{
 		super( owner, workflowElement );
-		this.post2paperOneDataOne = post2paperOneDataOne;
-		this.post2paperOneDataTwo = post2paperOneDataTwo;
-		this.answer = answer;
+		this.answers = answers;
+		this.selectedKeywords = selectedKeywords;
 	}
 
-	public String getAnswer()
+	public Set< String > getAnswers()
 	{
-		return answer;
+		return answers;
 	}
 
-	public void setAnswer( String answer )
+	public void setAnswers( Set< String > answers )
 	{
-		this.answer = answer;
+		this.answers = answers;
 	}
 
-	public P2POneData getPost2paperOneDataOne()
+	public Set< String > getSelectedKeywords()
 	{
-		return post2paperOneDataOne;
+		return selectedKeywords;
 	}
 
-	public void setPost2paperOneDataOne( P2POneData post2paperOneDataOne )
+	public void setSelectedKeywords( Set< String > selectedKeywords )
 	{
-		this.post2paperOneDataOne = post2paperOneDataOne;
-	}
-
-	public P2POneData getPost2paperOneDataTwo()
-	{
-		return post2paperOneDataTwo;
-	}
-
-	public void setPost2paperOneDataTwo( P2POneData post2paperOneDataTwo )
-	{
-		this.post2paperOneDataTwo = post2paperOneDataTwo;
+		this.selectedKeywords = selectedKeywords;
 	}
 
 }

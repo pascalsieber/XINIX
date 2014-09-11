@@ -1,5 +1,8 @@
 package ch.zhaw.iwi.cis.pews.model.output;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Score
 {
 	private int score;

@@ -1,8 +1,14 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -11,27 +17,35 @@ public class P2POneData extends CompressableExerciseData
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String keyword;
+
+	@OneToMany( cascade = CascadeType.ALL )
+	private List< P2POneKeyword > keywords;
 
 	public P2POneData()
 	{
 		super();
+		this.keywords = new ArrayList<>();
 	}
 
-	public P2POneData( PrincipalImpl owner, WorkflowElementImpl workflowElement, String keyword )
+	public P2POneData( PrincipalImpl owner, WorkflowElementImpl workflowElement, List< String > keywordStrings )
 	{
 		super( owner, workflowElement );
-		this.keyword = keyword;
+		this.keywords = new ArrayList<>();
+		
+		for ( String string : keywordStrings )
+		{
+			keywords.add( new P2POneKeyword( UserContext.getCurrentUser(), string ) );
+		}
 	}
 
-	public String getKeyword()
+	public List< P2POneKeyword > getKeywords()
 	{
-		return keyword;
+		return keywords;
 	}
 
-	public void setKeyword( String keyword )
+	public void setKeywords( List< P2POneKeyword > keywords )
 	{
-		this.keyword = keyword;
+		this.keywords = keywords;
 	}
 
 }

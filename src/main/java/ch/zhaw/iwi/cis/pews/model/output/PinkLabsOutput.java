@@ -1,30 +1,30 @@
 package ch.zhaw.iwi.cis.pews.model.output;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PinkLabsOutput extends Output
 {
-	private Set< String > answers;
+	private List< String > answers;
 
 	public PinkLabsOutput()
 	{
 		super();
-		this.answers = new HashSet<>();
+		this.answers = new ArrayList<>();
 	}
 
-	public PinkLabsOutput( Set< String > answers )
+	public PinkLabsOutput( List< String > answers )
 	{
 		super();
 		this.answers = answers;
 	}
 
-	public Set< String > getAnswers()
+	public List< String > getAnswers()
 	{
 		return answers;
 	}
 
-	public void setAnswers( Set< String > answers )
+	public void setAnswers( List< String > answers )
 	{
 		this.answers = answers;
 	}

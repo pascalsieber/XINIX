@@ -14,10 +14,11 @@ public class EvaluationInput extends Input
 		this.solutions = new ArrayList<>();
 	}
 
-	public EvaluationInput( List< String > solutions )
+	public EvaluationInput( List< String > solutions, String question )
 	{
 		super();
 		this.solutions = solutions;
+		this.question = question;
 	}
 
 	public List< String > getSolutions()

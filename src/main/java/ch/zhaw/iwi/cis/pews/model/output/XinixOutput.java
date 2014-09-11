@@ -1,12 +1,13 @@
 package ch.zhaw.iwi.cis.pews.model.output;
 
 import java.util.List;
+import java.util.Set;
 
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 
 public class XinixOutput extends Output
 {
-	private List< String > answers;
+	private Set< String > answers;
 	private XinixImage chosenImage;
 
 	public XinixOutput()
@@ -15,19 +16,19 @@ public class XinixOutput extends Output
 		// TODO Auto-generated constructor stub
 	}
 
-	public XinixOutput( List< String > answers, XinixImage chosenImage )
+	public XinixOutput( Set< String > answers, XinixImage chosenImage )
 	{
 		super();
 		this.answers = answers;
 		this.chosenImage = chosenImage;
 	}
 
-	public List< String > getAnswers()
+	public Set< String > getAnswers()
 	{
 		return answers;
 	}
 
-	public void setAnswers( List< String > answers )
+	public void setAnswers( Set< String > answers )
 	{
 		this.answers = answers;
 	}

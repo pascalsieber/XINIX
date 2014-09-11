@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImageMatrix;
+
 
 public class XinixInput extends Input
 {
@@ -11,7 +13,7 @@ public class XinixInput extends Input
 		super();
 	}
 
-	public XinixInput( String question, String keyword, XinixImageMatrix xinixImages )
+	public XinixInput( String question, XinixImageMatrix xinixImages )
 	{
 		super();
 		this.question = question;

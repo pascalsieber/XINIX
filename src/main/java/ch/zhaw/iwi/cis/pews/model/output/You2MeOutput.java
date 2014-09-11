@@ -2,9 +2,11 @@ package ch.zhaw.iwi.cis.pews.model.output;
 
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
+
 public class You2MeOutput extends Output
 {
-	private List< DialogEntry > dialogEntries;
+	private List< DialogEntry > dialog;
 
 	public You2MeOutput()
 	{
@@ -12,20 +14,20 @@ public class You2MeOutput extends Output
 		// TODO Auto-generated constructor stub
 	}
 
-	public You2MeOutput( List< DialogEntry > dialogEntries )
+	public You2MeOutput( List< DialogEntry > dialog )
 	{
 		super();
-		this.dialogEntries = dialogEntries;
+		this.dialog = dialog;
 	}
 
-	public List< DialogEntry > getDialogEntries()
+	public List< DialogEntry > getDialog()
 	{
-		return dialogEntries;
+		return dialog;
 	}
 
-	public void setDialogEntries( List< DialogEntry > dialogEntries )
+	public void setDialog( List< DialogEntry > dialog )
 	{
-		this.dialogEntries = dialogEntries;
+		this.dialog = dialog;
 	}
 
 }

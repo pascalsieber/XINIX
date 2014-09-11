@@ -15,18 +15,18 @@ public class P2POneDefinition extends ExerciseDefinitionImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String picture;
-	private String theme;
+	private String question;
 
 	public P2POneDefinition()
 	{
 		super();
 	}
 
-	public P2POneDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String picture, String theme )
+	public P2POneDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String picture, String question )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
 		this.picture = picture;
-		this.theme = theme;
+		this.question = question;
 	}
 
 	public String getPicture()
@@ -39,14 +39,14 @@ public class P2POneDefinition extends ExerciseDefinitionImpl
 		this.picture = picture;
 	}
 
-	public String getTheme()
+	public String getQuestion()
 	{
-		return theme;
+		return question;
 	}
 
-	public void setTheme( String theme )
+	public void setQuestion( String question )
 	{
-		this.theme = theme;
+		this.question = question;
 	}
 
 }

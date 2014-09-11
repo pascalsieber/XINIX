@@ -71,7 +71,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
@@ -439,7 +439,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// you2me dat
 		exerciseDataService
-			.persist( new You2MeData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), "question one", "question two", "response one", "response two" ) );
+			.persist( new You2MeExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), "question one", "question two", "response one", "response two" ) );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl( "sample session", "sample workshop session", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
