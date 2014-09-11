@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Entity;
@@ -14,40 +16,28 @@ public class You2MeDefinition extends ExerciseDefinitionImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String question;
-	private String counterQuestion;
+	private List< String > questions;
 
 	public You2MeDefinition()
 	{
 		super();
-		// TODO Auto-generated constructor stub
+		this.questions = new ArrayList<>();
 	}
 
-	public You2MeDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, String counterQuestion )
+	public You2MeDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, List< String > questions )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
-		this.question = question;
-		this.counterQuestion = counterQuestion;
+		this.questions = questions;
 	}
 
-	public String getQuestion()
+	public List< String > getQuestions()
 	{
-		return question;
+		return questions;
 	}
 
-	public void setQuestion( String question )
+	public void setQuestions( List< String > questions )
 	{
-		this.question = question;
-	}
-
-	public String getCounterQuestion()
-	{
-		return counterQuestion;
-	}
-
-	public void setCounterQuestion( String counterQuestion )
-	{
-		this.counterQuestion = counterQuestion;
+		this.questions = questions;
 	}
 
 }

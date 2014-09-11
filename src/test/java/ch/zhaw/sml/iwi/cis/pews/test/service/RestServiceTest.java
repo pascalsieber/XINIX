@@ -2,6 +2,7 @@ package ch.zhaw.sml.iwi.cis.pews.test.service;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -149,8 +150,7 @@ public class RestServiceTest
 			TimeUnit.SECONDS,
 			120,
 			defaultWorkshopDefinitionStub,
-			"question?",
-			"counterquestion?" ) ) );
+			Arrays.asList( "question?", "counter question?" ) ) ) );
 
 		// exercise one
 		defaultExerciseStub1.setID( exerciseService.persist( new ExerciseImpl( "exercise1", "instance of exercise 1", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
