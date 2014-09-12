@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 
 @Entity
 public class GroupImpl extends PrincipalImpl
@@ -26,9 +26,9 @@ public class GroupImpl extends PrincipalImpl
 		this.members = new HashSet< UserImpl >();
 	}
 
-	public GroupImpl( PasswordCredentialImpl credential, RoleImpl role, SessionImpl session, String name )
+	public GroupImpl( PasswordCredentialImpl credential, RoleImpl role, Participant participation, String name )
 	{
-		super( credential, role, session );
+		super( credential, role, participation );
 		this.name = name;
 		this.members = new HashSet< UserImpl >();
 	}

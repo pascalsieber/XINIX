@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
+import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 
 @Entity
@@ -30,8 +31,8 @@ public class PrincipalImpl extends WorkshopObject
 	@ManyToOne
 	private RoleImpl role;
 
-	@ManyToOne
-	private SessionImpl session;
+	@OneToOne
+	private Participant participation;
 
 	@OneToMany( mappedBy = "invitee" )
 	private Set< Invitation > sessionInvitations;
@@ -49,11 +50,11 @@ public class PrincipalImpl extends WorkshopObject
 		super();
 	}
 
-	public PrincipalImpl( PasswordCredentialImpl credential, RoleImpl role, SessionImpl session )
+	public PrincipalImpl( PasswordCredentialImpl credential, RoleImpl role, Participant participation )
 	{
 		this.credential = credential;
 		this.role = role;
-		this.session = session;
+		this.participation = participation;
 		this.sessionAcceptances = new HashSet< SessionImpl >();
 		this.sessionInvitations = new HashSet< Invitation >();
 		this.sessionExecutions = new HashSet< SessionImpl >();
@@ -79,15 +80,6 @@ public class PrincipalImpl extends WorkshopObject
 		this.role = role;
 	}
 
-	public SessionImpl getSession()
-	{
-		return session;
-	}
-
-	public void setSession( SessionImpl session )
-	{
-		this.session = session;
-	}
 
 	public Set< Invitation > getSessionInvitations()
 	{
@@ -117,6 +109,22 @@ public class PrincipalImpl extends WorkshopObject
 	public void setSessionExecutions( Set< SessionImpl > sessionExecutions )
 	{
 		this.sessionExecutions = sessionExecutions;
+	}
+
+	public Participant getParticipation()
+	{
+		return participation;
+	}
+
+	public void setParticipation( Participant participation )
+	{
+		this.participation = participation;
+	}
+	
+	// helper method to not have to refactor every instance where principal.getSession() is called
+	public SessionImpl getSession()
+	{
+		return participation.getSession();
 	}
 
 }

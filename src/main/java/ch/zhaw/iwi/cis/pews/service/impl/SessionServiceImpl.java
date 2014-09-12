@@ -12,6 +12,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -32,17 +33,33 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	@Override
 	public void join( Invitation invitation )
 	{
+		SessionImpl session = sessionDao.findById( invitation.getSession().getID() );
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
-		principal.setSession( (SessionImpl)findByID( invitation.getSession().getID() ) );
-		userDao.persist( principal );
+		session.getParticipants().add( new Participant( principal, session ) );
+		sessionDao.persist( session );
 	}
 
 	@Override
 	public void leave( Invitation invitation )
 	{
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
-		principal.setSession( null );
+		SessionImpl session = sessionDao.findById( principal.getParticipation().getSession().getID() );
+		
+		principal.setParticipation( null );
 		userDao.persist( principal );
+		
+		Participant removable = null;
+		
+		for ( Participant participant : session.getParticipants() )
+		{
+			if ( participant.getPrincipal().getID().equalsIgnoreCase( principal.getID() ) )
+			{
+				removable = participant;
+			}
+		}
+		
+		session.getParticipants().remove( removable );
+		sessionDao.persist( session );
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 
 
 public class XinixInput extends Input

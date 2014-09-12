@@ -27,7 +27,7 @@ public class SessionImpl extends WorkflowElementImpl
 	private ExerciseImpl currentExercise;
 
 	@OneToMany( cascade = CascadeType.ALL, mappedBy = "session" )
-	private Set< PrincipalImpl > participants;
+	private Set< Participant > participants;
 
 	@ManyToMany( mappedBy = "sessionAcceptances" )
 	private Set< PrincipalImpl > acceptees;
@@ -41,7 +41,7 @@ public class SessionImpl extends WorkflowElementImpl
 	public SessionImpl()
 	{
 		super();
-		this.participants = new HashSet< PrincipalImpl >();
+		this.participants = new HashSet< Participant >();
 		this.acceptees = new HashSet< PrincipalImpl >();
 		this.invitations = new HashSet< Invitation >();
 		this.executers = new HashSet< PrincipalImpl >();
@@ -51,7 +51,7 @@ public class SessionImpl extends WorkflowElementImpl
 	public SessionImpl( String name, String description, WorkflowElementDefinitionImpl definition, WorkshopImpl workshop )
 	{
 		super( name, description, definition );
-		this.participants = new HashSet< PrincipalImpl >();
+		this.participants = new HashSet< Participant >();
 		this.acceptees = new HashSet< PrincipalImpl >();
 		this.invitations = new HashSet< Invitation >();
 		this.executers = new HashSet< PrincipalImpl >();
@@ -88,12 +88,12 @@ public class SessionImpl extends WorkflowElementImpl
 		this.currentExercise = currentExercise;
 	}
 
-	public Set< PrincipalImpl > getParticipants()
+	public Set< Participant > getParticipants()
 	{
 		return participants;
 	}
 
-	public void setParticipants( Set< PrincipalImpl > participants )
+	public void setParticipants( Set< Participant > participants )
 	{
 		this.participants = participants;
 	}

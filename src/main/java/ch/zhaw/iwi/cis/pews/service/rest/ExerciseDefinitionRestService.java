@@ -59,7 +59,7 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	{
 		return super.findAll();
 	}
-
+	
 	@Override
 	protected WorkshopObjectService getWorkshopObjectService()
 	{
