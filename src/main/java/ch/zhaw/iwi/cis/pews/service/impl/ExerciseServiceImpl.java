@@ -18,6 +18,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.CompressionExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationExerciseService;
@@ -110,10 +111,50 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).setOutput( output );
 	}
 
+	@Override
+	public void startUser()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void stopUser()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resetUser()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void suspendUser( TimerRequest request )
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public TimerRequest resumeUser()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void cancelUser()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 	public ExerciseDataDao getExerciseDataDao()
 	{
 		return exerciseDataDao;
 	}
-	
-	
 }

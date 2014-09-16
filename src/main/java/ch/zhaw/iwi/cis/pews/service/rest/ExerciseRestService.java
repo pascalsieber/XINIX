@@ -8,12 +8,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -25,10 +25,19 @@ public class ExerciseRestService extends WorkshopObjectRestService
 {
 
 	public final static String BASE = "/exerciseService/exercise";
+
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
 	public final static String SUSPEND = "/suspend";
 	public final static String RESUME = "/resume";
+
+	public final static String START_USER = "/user/start";
+	public final static String STOP_USER = "/user/stop";
+	public final static String RESET_USER = "/user/reset";
+	public final static String SUSPEND_USER = "/user/suspend";
+	public final static String RESUME_USER = "/user/resume";
+	public final static String CANCEL_USER = "/user/cancel";
+
 	public final static String GETINPUT = "/getInput";
 	public final static String SETOUTPUT = "/setOutput";
 
@@ -72,7 +81,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( START )
-	public void statExercise( String exerciseID )
+	public void startExercise( String exerciseID )
 	{
 		exerciseService.start( exerciseID );
 	}
@@ -110,6 +119,48 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public void setOutput( Output output )
 	{
 		exerciseService.setOutput( output );
+	}
+
+	@POST
+	@Path( START_USER )
+	public void startUser()
+	{
+		exerciseService.startUser();
+	}
+
+	@POST
+	@Path( STOP_USER )
+	public void stopUser()
+	{
+		exerciseService.stopUser();
+	}
+
+	@POST
+	@Path( RESET_USER )
+	public void resetUser()
+	{
+		exerciseService.resetUser();
+	}
+
+	@POST
+	@Path( SUSPEND )
+	public void suspendUser( TimerRequest request )
+	{
+		exerciseService.suspendUser(request);
+	}
+
+	@POST
+	@Path( RESUME_USER )
+	public TimerRequest resumeUser()
+	{
+		return exerciseService.resumeUser();
+	}
+
+	@POST
+	@Path( CANCEL_USER )
+	public void cancelUser()
+	{
+		exerciseService.cancelUser();
 	}
 
 	@Override

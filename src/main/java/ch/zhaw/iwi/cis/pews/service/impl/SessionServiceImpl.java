@@ -14,6 +14,8 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.Timer;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
@@ -35,7 +37,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	{
 		SessionImpl session = sessionDao.findById( invitation.getSession().getID() );
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
-		session.getParticipants().add( new Participant( principal, session ) );
+		session.getParticipants().add( new Participant( principal, session, new Timer( null, 0, WorkflowElementStatusImpl.NEW ) ) );
 		sessionDao.persist( session );
 	}
 
