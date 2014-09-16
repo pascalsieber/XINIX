@@ -47,15 +47,17 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
@@ -91,12 +93,16 @@ public class RestServiceTest
 	private static You2MeDefinition you2meDefinitionStub = new You2MeDefinition();
 
 	private static XinixImage xinixImageStub = new XinixImage();
+	private static XinixImageMatrix xinixImageMatrixStub = new XinixImageMatrix();
 	private static PinkLabsExerciseData pinklabsDataStub = new PinkLabsExerciseData();
+	private static P2POneKeyword p2poneKeywordStub1 = new P2POneKeyword();
+	private static P2POneKeyword p2poneKeywordStub2 = new P2POneKeyword();
 	private static P2POneData p2poneDataStub = new P2POneData();
 	private static P2PTwoData p2ptwoDataStub = new P2PTwoData();
 	private static XinixData xinixDataStub = new XinixData();
-	private static You2MeData you2meDataStub = new You2MeData();
+	private static You2MeExerciseData you2meDataStub = new You2MeExerciseData();
 
+	@SuppressWarnings( "unchecked" )
 	@BeforeClass
 	public static void setupTest()
 	{
@@ -137,12 +143,7 @@ public class RestServiceTest
 		p2ptwoDefinitionStub.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question?" ) ) );
 
 		// xinix definition
-		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition(
-			defaultUserStub,
-			TimeUnit.SECONDS,
-			120,
-			defaultWorkshopDefinitionStub,
-			"question" ) ) );
+		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question", images ) ) );
 
 		// you2me definition
 		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition(
@@ -160,22 +161,26 @@ public class RestServiceTest
 
 		// xinix image
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
+		
+		// xinix image matrix
+		xinixImageMatrixStub.setID( workflow );
 
 		// pinklabs data
 		pinklabsDataStub.setID( exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, "my answer" ) ) );
 
 		// p2pone data
-		p2poneDataStub.setID( exerciseDataService.persist( new P2POneData( defaultUserStub, defaultExerciseStub1, "my keyword" ) ) );
+		p2poneDataStub.setID( exerciseDataService.persist( new P2POneData( defaultUserStub, defaultExerciseStub1, Arrays.asList( new P2POneKeyword( defaultUserStub, "keyword 1" ), new P2POneKeyword( defaultUserStub, "keyword 2" ) ) ) ) );
 
 		// p2ptwo data
-		p2ptwoDataStub.setID( exerciseDataService.persist( new P2PTwoData( defaultUserStub, defaultExerciseStub1, p2poneDataStub, p2poneDataStub, "my answer" ) ) );
+		P2POneData p2pOneDataObject = exerciseDataService.findByID( p2poneDataStub.getID() );
+		p2ptwoDataStub.setID( exerciseDataService.persist( new P2PTwoData( defaultUserStub, defaultExerciseStub1, (Set< P2POneKeyword >)Arrays.asList( p2pOneDataObject.getKeywords().get( 0 ), p2pOneDataObject.getKeywords().get( 1 ) ) ) ) );
 
 		// xinix data
 		xinixDataStub.setID( exerciseDataService.persist( new XinixData( defaultUserStub, defaultExerciseStub1, "my association", xinixImageStub ) ) );
 
 		// you2me data
 		you2meDataStub
-			.setID( exerciseDataService.persist( new You2MeData( defaultUserStub, defaultExerciseStub1, "question one", "question two", "repsonse one", "response two" ) ) );
+			.setID( exerciseDataService.persist( new You2MeExerciseData( defaultUserStub, defaultExerciseStub1, "question one", "question two", "repsonse one", "response two" ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
