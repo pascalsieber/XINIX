@@ -6,6 +6,7 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseRestService;
 
@@ -50,7 +51,44 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	@Override
 	public void setOutput( Output output )
 	{
-		getServiceTarget().path( ExerciseRestService.GETINPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
+		getServiceTarget().path( ExerciseRestService.GETINPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( output ) );
 	}
+
+	@Override
+	public void startUser()
+	{
+		getServiceTarget().path( ExerciseRestService.START_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
+	}
+
+	@Override
+	public void stopUser()
+	{
+		getServiceTarget().path( ExerciseRestService.STOP_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
+	}
+
+	@Override
+	public void resetUser()
+	{
+		getServiceTarget().path( ExerciseRestService.RESET_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
+	}
+
+	@Override
+	public void suspendUser( TimerRequest request )
+	{
+		getServiceTarget().path( ExerciseRestService.SUSPEND_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
+	}
+
+	@Override
+	public TimerRequest resumeUser()
+	{
+		return getServiceTarget().path( ExerciseRestService.RESUME_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( TimerRequest.class );
+	}
+
+	@Override
+	public void cancelUser()
+	{
+		getServiceTarget().path( ExerciseRestService.CANCEL_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
+	}
+
 
 }

@@ -5,9 +5,11 @@ import java.util.Map;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.ParticipantDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.ParticipantDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -15,6 +17,7 @@ import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
@@ -42,6 +45,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 {
 	private ExerciseDao exerciseDao;
 	private ExerciseDataDao exerciseDataDao;
+	private ParticipantDao participantDao;
 	private static final Map< String, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseServiceImpl >>();
 
 	static
@@ -65,6 +69,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
+		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
@@ -114,47 +119,62 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public void startUser()
 	{
-		// TODO Auto-generated method stub
-
+		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		participant.getTimer().setStatus( WorkflowElementStatusImpl.RUNNING );
+		participantDao.persist( participant );
 	}
 
 	@Override
 	public void stopUser()
 	{
-		// TODO Auto-generated method stub
-
+		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		participant.getTimer().setStatus( WorkflowElementStatusImpl.TERMINATED );
+		participantDao.persist( participant );
 	}
 
 	@Override
 	public void resetUser()
 	{
-		// TODO Auto-generated method stub
-
+		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		participant.getTimer().setStatus( WorkflowElementStatusImpl.NEW );
+		participant.getTimer().setTimeUnit( null );
+		participant.getTimer().setValue( 0 );
+		participantDao.persist( participant );
 	}
 
 	@Override
-	public void suspendUser( TimerRequest request )
+	public void suspendUser( TimerRequest request)
 	{
-		// TODO Auto-generated method stub
-
+		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		participant.getTimer().setStatus( WorkflowElementStatusImpl.SUSPENDED );
+		participant.getTimer().setTimeUnit( request.getTimeUnit() );
+		participant.getTimer().setValue( request.getValue() );
+		participantDao.persist( participant );
 	}
 
 	@Override
 	public TimerRequest resumeUser()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		participant.getTimer().setStatus( WorkflowElementStatusImpl.RUNNING );
+		participantDao.persist( participant );
+		
+		return new TimerRequest( participant.getTimer().getTimeUnit(), participant.getTimer().getValue() );
 	}
 
 	@Override
 	public void cancelUser()
 	{
-		// TODO Auto-generated method stub
-
+		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		participant.getTimer().setStatus( WorkflowElementStatusImpl.NEW );
+		participant.getTimer().setTimeUnit( null );
+		participant.getTimer().setValue( 0 );
+		participantDao.persist( participant );
 	}
 
 	public ExerciseDataDao getExerciseDataDao()
 	{
 		return exerciseDataDao;
 	}
+
 }
