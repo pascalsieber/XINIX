@@ -25,9 +25,10 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 	{
 		List< PrincipalImpl > results = getEntityManager()
 			.createQuery(
-				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.session as session "
-						+ "LEFT JOIN FETCH principal.sessionInvitations as invitations " + "LEFT JOIN FETCH principal.sessionAcceptances as acceptances "
-						+ "LEFT JOIN FETCH principal.sessionExecutions as executions " + "where principal.loginName = :login_name" )
+				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.sessionInvitations as invitations "
+						+ "LEFT JOIN FETCH principal.participation as participation " + "LEFT JOIN FETCH participation.session as session " + "LEFT JOIN FETCH session.workshop as workshop "
+						+ "LEFT JOIN FETCH workshop.exercises as ex " + "LEFT JOIN FETCH principal.sessionAcceptances as acceptances " + "LEFT JOIN FETCH principal.sessionExecutions as executions "
+						+ "where principal.loginName = :login_name" )
 			.setParameter( "login_name", loginName )
 			.getResultList();
 

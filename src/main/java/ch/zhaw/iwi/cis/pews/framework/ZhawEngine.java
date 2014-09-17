@@ -3,8 +3,11 @@ package ch.zhaw.iwi.cis.pews.framework;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -39,7 +42,6 @@ import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
@@ -66,16 +68,15 @@ import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
@@ -268,7 +269,7 @@ public class ZhawEngine implements LifecycleObject
 
 		return handler;
 	}
-	
+
 	public static final String ROOT_CLIENT_NAME = "pews_root_client";
 	public static final String ROOT_USER_LOGIN_NAME = ROOT_CLIENT_NAME + "/root@pews";
 
@@ -290,19 +291,13 @@ public class ZhawEngine implements LifecycleObject
 			UserImpl bootstrapUser = new UserImpl( null, null, null, null, null, null );
 			bootstrapUser.setClient( rootClient );
 			UserContext.setCurrentUser( bootstrapUser );
-			
+
 			System.out.println( "root client registered initially" );
 		}
 
 		String roleID = roleService.persist( new RoleImpl( "root", "root" ) );
-		
-		UserImpl user = new UserImpl(
-			new PasswordCredentialImpl( "root" ),
-			(RoleImpl)roleService.findByID( roleID ),
-			null,
-			"root first name",
-			"root last name",
-			ROOT_USER_LOGIN_NAME );
+
+		UserImpl user = new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( roleID ), null, "root first name", "root last name", ROOT_USER_LOGIN_NAME );
 		String rootUserID = userService.persist( user );
 
 		rootUser = userService.findByID( rootUserID );
@@ -339,12 +334,15 @@ public class ZhawEngine implements LifecycleObject
 			"how do we communicate our vision?" ) );
 
 		// sample workshop instance
-		String wsID = workshopService
-			.persist( new WorkshopImpl( "Sample Workshop", "Sample Workshop Instance", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
+		String wsID = workshopService.persist( new WorkshopImpl( "Sample Workshop", "Sample Workshop Instance", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
 
 		// pinklabs definition
-		String pinklabsDefID = exerciseDefinitionService.persist( new PinkLabsDefinition( rootUser, TimeUnit.SECONDS, 120, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "how do you inform yourself?" ) );
+		String pinklabsDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
+			rootUser,
+			TimeUnit.SECONDS,
+			120,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"how do you inform yourself?" ) );
 
 		// p2pOne definition
 		String p2poneDefID = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -363,22 +361,50 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"how do you combine the two selected pieces of information" ) );
 
+		// xinix image -> used for xinix definition (as part of XinixImageMatrix)
+		String xinixImageID = exerciseDataService.persist( new XinixImage( rootUser, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) );
+		XinixImage xinixImage = exerciseDataService.findByID( xinixImageID );
+
+		Set< XinixImage > setOfXinixImages = new HashSet<>();
+		setOfXinixImages.add( xinixImage );
+
+		// xinix image matrix (subclass of ExerciseDefinitionImpl)
+		String xinixImageMatrixID = exerciseDefinitionService
+			.persist( new XinixImageMatrix( rootUser, null, 0, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), setOfXinixImages ) );
+
 		// xinix definition
 		String xinixDefID = exerciseDefinitionService.persist( new XinixDefinition(
 			rootUser,
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"what comes to mind?" ) );
+			"what comes to mind?",
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
 
 		// you2me definition
-		String you2meDefID = exerciseDefinitionService.persist( new You2MeDefinition(
+		String you2meDefID = exerciseDefinitionService.persist( new You2MeDefinition( rootUser, TimeUnit.MINUTES, 2, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), Arrays
+			.asList( "what do you want to learn?", "how can you help me?" ) ) );
+
+		// simple prototyping definition
+		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( rootUser, TimeUnit.SECONDS, 240, (WorkshopDefinitionImpl)workshopDefinitionService
+			.findByID( wsDefID ), "what is the universe?", "my mimetype" ) );
+
+		// compression definition
+		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition(
 			rootUser,
-			TimeUnit.SECONDS,
-			180,
+			TimeUnit.MINUTES,
+			20,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"what do you want to learn?",
-			"how do you teach that?" ) );
+			"what have we learned?",
+			Arrays.asList( "usability", "maintainability", "customer satisfaction" ) ) );
+
+		// evaluation definition
+		String evaluationDefID = exerciseDefinitionService.persist( new EvaluationDefinition(
+			rootUser,
+			TimeUnit.MINUTES,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"is this a good solution?" ) );
 
 		// pinklabs exercise
 		String pinklabsExID = exerciseService.persist( new ExerciseImpl(
@@ -415,43 +441,56 @@ public class ZhawEngine implements LifecycleObject
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
-		// xinix image -> used for xinix exercise data
-		String xinixImageID = exerciseDataService.persist( new XinixImage( rootUser, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) );
+		// simple prototyping exercise
+		String simplePrototypingExID = exerciseService.persist( new ExerciseImpl( "simple prototyping", "simple prototyping exercise", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( simplePrototypingDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
-		// pinklabs data
-		exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "internet" ) );
-		exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "newspaper" ) );
+		// compression exercise
+		String compressionExID = exerciseService.persist( new ExerciseImpl(
+			"compression",
+			"compression exercise",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( compressionDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
-		// p2p one data
-		String p2poneDataID = exerciseDataService.persist( new P2POneData( rootUser, (WorkflowElementImpl)exerciseService.findByID( p2poneExID ), "school" ) );
+		// evaluation exercise
+		String evaluationExID = exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( simplePrototypingDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
-		// p2p two data
-		exerciseDataService.persist( new P2PTwoData(
-			rootUser,
-			(WorkflowElementImpl)exerciseService.findByID( p2ptwoExID ),
-			(P2POneData)exerciseDataService.findByID( p2poneDataID ),
-			(P2POneData)exerciseDataService.findByID( p2poneDataID ),
-			"public funding" ) );
+		// TODO update sample exercise data
 
-		// xinix data
-		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), "no idea", (XinixImage)exerciseDataService
-			.findByID( xinixImageID ) ) );
-
-		// you2me dat
-		exerciseDataService
-			.persist( new You2MeExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), "question one", "question two", "response one", "response two" ) );
+		// // pinklabs data
+		// exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "internet" ) );
+		// exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "newspaper" ) );
+		//
+		// // p2p one data
+		// String p2poneDataID = exerciseDataService.persist( new P2POneData( rootUser, (WorkflowElementImpl)exerciseService.findByID( p2poneExID ), "school" ) );
+		//
+		// // p2p two data
+		// exerciseDataService.persist( new P2PTwoData(
+		// rootUser,
+		// (WorkflowElementImpl)exerciseService.findByID( p2ptwoExID ),
+		// (P2POneData)exerciseDataService.findByID( p2poneDataID ),
+		// (P2POneData)exerciseDataService.findByID( p2poneDataID ),
+		// "public funding" ) );
+		//
+		// // xinix data
+		// exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), "no idea", (XinixImage)exerciseDataService.findByID( xinixImageID ) ) );
+		//
+		// // you2me data
+		// exerciseDataService.persist( new You2MeExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), "question one", "question two", "response one", "response two" )
+		// );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl( "sample session", "sample workshop session", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
-		
+
 		// invitation (so that at leaste on is there) :)
 		invitationService.persist( new Invitation( rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
 
 		// user joins session (and by that all exercises in workshop)
 		sessionService.join( new Invitation( null, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
-		
-		System.out.println("sample workshop configured");
-		
+
+		System.out.println( "sample workshop configured" );
+
 	}
 
 	private static void stopDatabase()

@@ -1,7 +1,9 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
@@ -51,9 +53,15 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	@Override
 	public void setOutput( Output output )
 	{
+		Set< P2POneKeyword > chosenP2POneKeywords = new HashSet<>();
+		
+		for ( String keywordID : ( (P2PTwoOutput)output ).getChosenKeywords() )
+		{
+			chosenP2POneKeywords.add( (P2POneKeyword)getExerciseDataDao().findById( keywordID ) );
+		}
+
 		getExerciseDataDao().persist(
-			new P2PTwoData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), ( (P2PTwoOutput)output ).getAnswers(), ( (P2PTwoOutput)output )
-				.getChosenKeywords() ) );
+			new P2PTwoData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), ( (P2PTwoOutput)output ).getAnswers(), chosenP2POneKeywords ) );
 	}
 
 }

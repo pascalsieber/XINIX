@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -113,8 +114,7 @@ public class RestServiceTest
 		defaultRoleStub.setID( roleService.persist( new RoleImpl( "user", "user role" ) ) );
 
 		// User
-		defaultUserStub
-			.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "john" ), defaultRoleStub, null, "John", "Smith", rootClient.getName() + "/fueg@zhaw.ch" ) ) );
+		defaultUserStub.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "john" ), defaultRoleStub, null, "John", "Smith", rootClient.getName() + "/fueg@zhaw.ch" ) ) );
 
 		// workshop definition (pinkelefantDefinition)
 		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantDefinition(
@@ -127,31 +127,22 @@ public class RestServiceTest
 		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
 
 		// pinklabs definition
-		pinklabsDefinitionStub.setID( exerciseDefinitionService
-			.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "pinklabs?" ) ) );
+		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "pinklabs?" ) ) );
 
 		// p2pone definition
-		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition(
-			defaultUserStub,
-			TimeUnit.SECONDS,
-			120,
-			defaultWorkshopDefinitionStub,
-			"urltopicture",
-			"theme" ) ) );
+		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "urltopicture", "theme" ) ) );
 
 		// p2ptwo definition
 		p2ptwoDefinitionStub.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question?" ) ) );
 
 		// xinix definition
-		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question", images ) ) );
+		// TODO fix this!
+		// xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question", images ) ) );
 
 		// you2me definition
-		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition(
-			defaultUserStub,
-			TimeUnit.SECONDS,
-			120,
-			defaultWorkshopDefinitionStub,
-			Arrays.asList( "question?", "counter question?" ) ) ) );
+		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, Arrays.asList(
+			"question?",
+			"counter question?" ) ) ) );
 
 		// exercise one
 		defaultExerciseStub1.setID( exerciseService.persist( new ExerciseImpl( "exercise1", "instance of exercise 1", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
@@ -161,26 +152,27 @@ public class RestServiceTest
 
 		// xinix image
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
-		
+
 		// xinix image matrix
-		xinixImageMatrixStub.setID( workflow );
+		// TODO finsh
 
 		// pinklabs data
-		pinklabsDataStub.setID( exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, "my answer" ) ) );
+		pinklabsDataStub.setID( exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer one", "answer two" ) ) ) );
 
 		// p2pone data
-		p2poneDataStub.setID( exerciseDataService.persist( new P2POneData( defaultUserStub, defaultExerciseStub1, Arrays.asList( new P2POneKeyword( defaultUserStub, "keyword 1" ), new P2POneKeyword( defaultUserStub, "keyword 2" ) ) ) ) );
+		p2poneDataStub.setID( exerciseDataService.persist( new P2POneData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "keyword one", "keyword two" ) ) ) );
 
 		// p2ptwo data
-		P2POneData p2pOneDataObject = exerciseDataService.findByID( p2poneDataStub.getID() );
-		p2ptwoDataStub.setID( exerciseDataService.persist( new P2PTwoData( defaultUserStub, defaultExerciseStub1, (Set< P2POneKeyword >)Arrays.asList( p2pOneDataObject.getKeywords().get( 0 ), p2pOneDataObject.getKeywords().get( 1 ) ) ) ) );
+		p2ptwoDataStub.setID( exerciseDataService.persist( new P2PTwoData( defaultUserStub, defaultExerciseStub1, new HashSet<>( Arrays.asList( "answer one", "answer two" ) ), new HashSet<>(
+			( (P2POneData)exerciseDataService.findByID( p2poneDataStub.getID() ) ).getKeywords() ) ) ) );
 
 		// xinix data
-		xinixDataStub.setID( exerciseDataService.persist( new XinixData( defaultUserStub, defaultExerciseStub1, "my association", xinixImageStub ) ) );
+		// TODO fix this!
+		// xinixDataStub.setID( exerciseDataService.persist( new XinixData( defaultUserStub, defaultExerciseStub1, "my association", xinixImageStub ) ) );
 
 		// you2me data
-		you2meDataStub
-			.setID( exerciseDataService.persist( new You2MeExerciseData( defaultUserStub, defaultExerciseStub1, "question one", "question two", "repsonse one", "response two" ) ) );
+		// TODO fix this!
+		// you2meDataStub.setID( exerciseDataService.persist( new You2MeExerciseData( defaultUserStub, defaultExerciseStub1, "question one", "question two", "response one", "response two" ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
@@ -219,13 +211,7 @@ public class RestServiceTest
 		assertTrue( nbrRolesBefore - roles.size() == 1 );
 
 		// create user
-		String userID = userService.persist( new UserImpl(
-			new PasswordCredentialImpl( "my password" ),
-			defaultRoleStub,
-			defaultSessionStub,
-			"firstname",
-			"lastname",
-			"login@name" ) );
+		String userID = userService.persist( new UserImpl( new PasswordCredentialImpl( "my password" ), defaultRoleStub, null, "firstname", "lastname", "login@name" ) );
 
 		// read user
 		UserImpl user = userService.findByID( userID );
@@ -257,11 +243,7 @@ public class RestServiceTest
 	public void crudOperationsWorkshopService()
 	{
 		// create workshop definition
-		String workshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition(
-			defaultUserStub,
-			"workshop definition",
-			"workshop definition description",
-			"problem" ) );
+		String workshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition( defaultUserStub, "workshop definition", "workshop definition description", "problem" ) );
 
 		// read workshop definition
 		WorkshopDefinitionImpl workshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
@@ -401,21 +383,22 @@ public class RestServiceTest
 		assertTrue( exBefore - exs.size() == 1 );
 
 		// create exercise data
-		String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, "answer" ) );
+		String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer1", "answer2" ) ) );
 
 		// read exercise data
 		ExerciseDataImpl data = exerciseDataService.findByID( dataID );
 		assertTrue( data.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( data.getID().equals( dataID ) );
-		assertTrue( ( (PinkLabsExerciseData)data ).getAnswer().equalsIgnoreCase( "answer" ) );
+		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer1" ) );
+		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer2" ) );
 		assertTrue( data.getOwner().getID().equals( defaultUserStub.getID() ) );
 		assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseStub1.getID() ) );
 
 		// update exercise data
-		( (PinkLabsExerciseData)data ).setAnswer( "updated answer" );
+		( (PinkLabsExerciseData)data ).setAnswers( Arrays.asList( "updatedanswer1", "answer2" ) );
 		exerciseDataService.persist( data );
 		PinkLabsExerciseData updatedData = exerciseDataService.findByID( dataID );
-		assertTrue( updatedData.getAnswer().equalsIgnoreCase( "updated answer" ) );
+		assertTrue( updatedData.getAnswers().contains( "updatedanswer1" ) );
 
 		// delete exercise data
 		int dataBefore = exerciseDataService.findAll().size();

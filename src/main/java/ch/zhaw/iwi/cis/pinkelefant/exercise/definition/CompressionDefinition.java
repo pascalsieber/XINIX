@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -17,6 +18,8 @@ public class CompressionDefinition extends ExerciseDefinitionImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String question;
+	
+	@ElementCollection
 	private List< String > solutionCriteria;
 
 	public CompressionDefinition()

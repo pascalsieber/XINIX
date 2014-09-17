@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -16,6 +17,8 @@ public class You2MeDefinition extends ExerciseDefinitionImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
+	
+	@ElementCollection
 	private List< String > questions;
 
 	public You2MeDefinition()

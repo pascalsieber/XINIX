@@ -11,6 +11,19 @@
 		<class>ch.zhaw.iwi.cis.pews.model.OwnableObject</class>
 		
 		<class>ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData</class>		
+		
 		<class>ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.data.WorkshopDataImpl</class>
 		

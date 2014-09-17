@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
@@ -16,7 +18,7 @@ public class Timer extends WorkshopObject
 	private TimeUnit timeUnit;
 	private int value;
 
-	@Embedded
+	@Enumerated( EnumType.STRING )
 	private WorkflowElementStatusImpl status;
 
 	public Timer()

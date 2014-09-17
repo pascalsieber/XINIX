@@ -143,7 +143,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	}
 
 	@POST
-	@Path( SUSPEND )
+	@Path( SUSPEND_USER )
 	public void suspendUser( TimerRequest request )
 	{
 		exerciseService.suspendUser(request);

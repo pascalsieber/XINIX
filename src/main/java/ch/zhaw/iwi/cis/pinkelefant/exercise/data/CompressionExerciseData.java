@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -15,6 +16,8 @@ public class CompressionExerciseData extends ExerciseDataImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
+	
+	@ElementCollection
 	private List< String > solutions;
 
 	public CompressionExerciseData()

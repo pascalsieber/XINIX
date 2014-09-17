@@ -21,7 +21,7 @@ public class P2PTwoData extends CompressableExerciseData
 	private Set< String > answers;
 
 	@ManyToMany
-	private Set< String > selectedKeywords;
+	private Set< P2POneKeyword > selectedKeywords;
 
 	public P2PTwoData()
 	{
@@ -30,7 +30,7 @@ public class P2PTwoData extends CompressableExerciseData
 		this.answers = new HashSet<>();
 	}
 
-	public P2PTwoData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Set< String > answers, Set< String > selectedKeywords )
+	public P2PTwoData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Set< String > answers, Set< P2POneKeyword > selectedKeywords )
 	{
 		super( owner, workflowElement );
 		this.answers = answers;
@@ -47,12 +47,12 @@ public class P2PTwoData extends CompressableExerciseData
 		this.answers = answers;
 	}
 
-	public Set< String > getSelectedKeywords()
+	public Set< P2POneKeyword > getSelectedKeywords()
 	{
 		return selectedKeywords;
 	}
 
-	public void setSelectedKeywords( Set< String > selectedKeywords )
+	public void setSelectedKeywords( Set< P2POneKeyword > selectedKeywords )
 	{
 		this.selectedKeywords = selectedKeywords;
 	}

@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
@@ -31,7 +33,7 @@ public class PrincipalImpl extends WorkshopObject
 	@ManyToOne
 	private RoleImpl role;
 
-	@OneToOne
+	@OneToOne( mappedBy = "principal" )
 	private Participant participation;
 
 	@OneToMany( mappedBy = "invitee" )
@@ -80,7 +82,6 @@ public class PrincipalImpl extends WorkshopObject
 		this.role = role;
 	}
 
-
 	public Set< Invitation > getSessionInvitations()
 	{
 		return sessionInvitations;
@@ -120,8 +121,9 @@ public class PrincipalImpl extends WorkshopObject
 	{
 		this.participation = participation;
 	}
-	
+
 	// helper method to not have to refactor every instance where principal.getSession() is called
+	@JsonIgnore
 	public SessionImpl getSession()
 	{
 		return participation.getSession();
