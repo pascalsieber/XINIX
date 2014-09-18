@@ -1,5 +1,6 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +14,6 @@ import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
@@ -51,17 +51,27 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
-		Set< P2POneKeyword > chosenP2POneKeywords = new HashSet<>();
-		
-		for ( String keywordID : ( (P2PTwoOutput)output ).getChosenKeywords() )
+		try
 		{
-			chosenP2POneKeywords.add( (P2POneKeyword)getExerciseDataDao().findById( keywordID ) );
-		}
+			P2PTwoOutput finalOutput = getObjectMapper().readValue( output, P2PTwoOutput.class );
 
-		getExerciseDataDao().persist(
-			new P2PTwoData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), ( (P2PTwoOutput)output ).getAnswers(), chosenP2POneKeywords ) );
+			Set< P2POneKeyword > chosenP2POneKeywords = new HashSet<>();
+
+			for ( String keywordID : finalOutput.getChosenKeywords() )
+			{
+				chosenP2POneKeywords.add( (P2POneKeyword)getExerciseDataDao().findById( keywordID ) );
+			}
+
+			getExerciseDataDao()
+				.persist( new P2PTwoData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), finalOutput.getAnswers(), chosenP2POneKeywords ) );
+
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + P2PTwoOutput.class.getSimpleName() );
+		}
 	}
 
 }

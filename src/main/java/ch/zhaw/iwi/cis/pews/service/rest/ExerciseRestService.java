@@ -11,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -116,7 +115,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( SETOUTPUT )
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
 		exerciseService.setOutput( output );
 	}

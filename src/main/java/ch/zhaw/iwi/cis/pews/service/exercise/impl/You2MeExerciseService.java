@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
+import java.io.IOException;
+
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -7,7 +9,6 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
@@ -31,9 +32,17 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
-		getExerciseDataDao().persist( new You2MeExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), ( (You2MeOutput)output ).getDialog() ) );
+		try
+		{
+			You2MeOutput finalOutput = getObjectMapper().readValue( output, You2MeOutput.class );
+			getExerciseDataDao().persist( new You2MeExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), finalOutput.getDialog() ) );
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + You2MeOutput.class.getSimpleName() );
+		}
 	}
 
 }

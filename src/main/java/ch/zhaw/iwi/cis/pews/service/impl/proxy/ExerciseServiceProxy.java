@@ -4,7 +4,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.input.Input;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -49,7 +48,7 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	}
 
 	@Override
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
 		getServiceTarget().path( ExerciseRestService.GETINPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( output ) );
 	}

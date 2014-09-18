@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.framework.LazyLoadingHandlingOutputStream;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
@@ -26,7 +27,9 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 	{
 		if ( object.getClient() == null )
 		{
-			throw new UnsupportedOperationException( "reference to client is missing!" );
+			//TODO double check with John!
+//			throw new UnsupportedOperationException( "reference to client is missing!" );
+			object.setClient( UserContext.getCurrentUser().getClient() );
 		}
 
 		WorkshopObject objectMerged = merge( object );

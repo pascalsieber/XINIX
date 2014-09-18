@@ -454,7 +454,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// evaluation exercise
 		String evaluationExID = exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", (WorkflowElementDefinitionImpl)exerciseDefinitionService
-			.findByID( simplePrototypingDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+			.findByID( evaluationDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// TODO update sample exercise data
 

@@ -1,6 +1,5 @@
 package ch.zhaw.iwi.cis.pews.model.output;
 
-import java.util.List;
 import java.util.Set;
 
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;

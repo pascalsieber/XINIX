@@ -16,6 +16,7 @@ public class Evaluation extends OwnableObject
 	private static final long serialVersionUID = 1L;
 	private String solution;
 	
+	//TODO change to int instead of score object
 	@Embedded
 	private Score score;
 

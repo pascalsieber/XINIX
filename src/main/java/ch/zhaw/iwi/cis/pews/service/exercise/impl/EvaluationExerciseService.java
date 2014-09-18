@@ -1,5 +1,6 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
@@ -45,10 +45,21 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
-		getExerciseDataDao().persist(
-			new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), ( (EvaluationOutput)output ).getEvaluations() ) );
+		try
+		{
+			EvaluationOutput finalOutput = getObjectMapper().readValue( output, EvaluationOutput.class );
+			getExerciseDataDao().persist(
+				new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), finalOutput.getEvaluations() ) );
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + EvaluationOutput.class.getSimpleName() );
+		}
+		
+		
+		
 	}
 
 }

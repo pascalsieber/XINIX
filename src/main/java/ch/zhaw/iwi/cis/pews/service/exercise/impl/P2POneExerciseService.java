@@ -1,13 +1,14 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
+import java.io.IOException;
+
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
@@ -31,9 +32,17 @@ public class P2POneExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
-		getExerciseDataDao().persist( new P2POneData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), ( (P2POneOutput)output ).getAnswers() ) );
+		try
+		{
+			P2POneOutput finalOutput = getObjectMapper().readValue( output, P2POneOutput.class );
+			getExerciseDataDao().persist( new P2POneData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), finalOutput.getAnswers() ) );
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + P2POneOutput.class.getSimpleName() );
+		}
 	}
 
 }

@@ -1,30 +1,30 @@
 package ch.zhaw.iwi.cis.pews.model.output;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompressionOutput extends Output
 {
-	private Set< String > solutions;
+	private List< String > solutions;
 
 	public CompressionOutput()
 	{
 		super();
-		this.solutions = new HashSet<>();
+		this.solutions = new ArrayList<>();
 	}
 
-	public CompressionOutput( Set< String > solutions )
+	public CompressionOutput( List< String > solutions )
 	{
 		super();
 		this.solutions = solutions;
 	}
 
-	public Set< String > getSolutions()
+	public List< String > getSolutions()
 	{
 		return solutions;
 	}
 
-	public void setSolutions( Set< String > solutions )
+	public void setSolutions( List< String > solutions )
 	{
 		this.solutions = solutions;
 	}

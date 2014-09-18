@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.ParticipantDao;
@@ -19,7 +21,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -43,6 +44,8 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
 {
+	private ObjectMapper objectMapper;
+
 	private ExerciseDao exerciseDao;
 	private ExerciseDataDao exerciseDataDao;
 	private ParticipantDao participantDao;
@@ -70,6 +73,12 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
 		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
+		objectMapper = new ObjectMapper();
+	}
+
+	public ObjectMapper getObjectMapper()
+	{
+		return objectMapper;
 	}
 
 	@Override
@@ -110,7 +119,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	}
 
 	@Override
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
 		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
 			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).setOutput( output );
@@ -143,7 +152,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	}
 
 	@Override
-	public void suspendUser( TimerRequest request)
+	public void suspendUser( TimerRequest request )
 	{
 		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
 		participant.getTimer().setStatus( WorkflowElementStatusImpl.SUSPENDED );
@@ -158,7 +167,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
 		participant.getTimer().setStatus( WorkflowElementStatusImpl.RUNNING );
 		participantDao.persist( participant );
-		
+
 		return new TimerRequest( participant.getTimer().getTimeUnit(), participant.getTimer().getValue() );
 	}
 

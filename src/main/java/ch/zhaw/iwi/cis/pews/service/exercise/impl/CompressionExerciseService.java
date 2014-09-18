@@ -1,5 +1,6 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
@@ -11,7 +12,6 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.service.CompressableExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.impl.CompressableExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -40,12 +40,19 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 		return new CompressionInput( definition.getQuestion(), definition.getSolutionCriteria(), compressableData );
 	}
 
-	@SuppressWarnings( "unchecked" )
 	@Override
-	public void setOutput( Output output )
+	public void setOutput( String output )
 	{
-		getExerciseDataDao().persist(
-			new CompressionExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), (List< String >)( (CompressionOutput)output ).getSolutions() ) );
+		try
+		{
+			CompressionOutput finalOutput = getObjectMapper().readValue( output, CompressionOutput.class );
+			getExerciseDataDao().persist(
+				new CompressionExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), (List< String >)finalOutput.getSolutions() ) );
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + CompressionOutput.class.getSimpleName() );
+		}
 	}
 
 }
