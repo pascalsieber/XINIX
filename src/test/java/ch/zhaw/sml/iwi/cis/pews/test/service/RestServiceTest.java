@@ -47,16 +47,22 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
@@ -75,35 +81,44 @@ public class RestServiceTest
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
 
-	// using stub objects (only ID) to avoid json mapping problems and to
-	// mimic the way API will be used
+	// using stub objects to mimic the way API will be used
 	private static Client defaultClientStub = new Client();
 	private static RoleImpl defaultRoleStub = new RoleImpl();
 	private static UserImpl defaultUserStub = new UserImpl();
 	private static PinkElefantDefinition defaultWorkshopDefinitionStub = new PinkElefantDefinition();
 	private static WorkshopImpl defaultWorkshopStub = new WorkshopImpl();
 	private static SessionImpl defaultSessionStub = new SessionImpl();
-	private static ExerciseImpl defaultExerciseStub1 = new ExerciseImpl();
-	private static ExerciseImpl defaultExerciseStub2 = new ExerciseImpl();
 	private static Invitation defaultInvitationStub = new Invitation();
 
 	private static PinkLabsDefinition pinklabsDefinitionStub = new PinkLabsDefinition();
 	private static P2POneDefinition p2poneDefinitionStub = new P2POneDefinition();
 	private static P2PTwoDefinition p2ptwoDefinitionStub = new P2PTwoDefinition();
+	private static XinixImageMatrix xinixImageMatrixStub = new XinixImageMatrix();
 	private static XinixDefinition xinixDefinitionStub = new XinixDefinition();
 	private static You2MeDefinition you2meDefinitionStub = new You2MeDefinition();
+	private static SimplePrototypingDefinition simpleprototypingDefinitionStub = new SimplePrototypingDefinition();
+	private static CompressionDefinition compressionDefinitionStub = new CompressionDefinition();
+	private static EvaluationDefinition evaluationDefinitionStub = new EvaluationDefinition();
+
+	private static ExerciseImpl pinklabsExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl you2meExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl p2pOneExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl p2pTwoExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl simpleprototypingExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl xinixExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl compressionExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl evaluationExerciseStub = new ExerciseImpl();
 
 	private static XinixImage xinixImageStub = new XinixImage();
-	private static XinixImageMatrix xinixImageMatrixStub = new XinixImageMatrix();
 	private static PinkLabsExerciseData pinklabsDataStub = new PinkLabsExerciseData();
-	private static P2POneKeyword p2poneKeywordStub1 = new P2POneKeyword();
-	private static P2POneKeyword p2poneKeywordStub2 = new P2POneKeyword();
 	private static P2POneData p2poneDataStub = new P2POneData();
 	private static P2PTwoData p2ptwoDataStub = new P2PTwoData();
 	private static XinixData xinixDataStub = new XinixData();
 	private static You2MeExerciseData you2meDataStub = new You2MeExerciseData();
+	private static SimplePrototypingData simpleprototypingDataStub = new SimplePrototypingData();
+	private static CompressionExerciseData compressionDataStub = new CompressionExerciseData();
+	private static EvaluationExerciseData evaluationDataStub = new EvaluationExerciseData();
 
-	@SuppressWarnings( "unchecked" )
 	@BeforeClass
 	public static void setupTest()
 	{
@@ -126,36 +141,61 @@ public class RestServiceTest
 		// workshop instance
 		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
 
-		// pinklabs definition
+		// exercise definitions
 		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "pinklabs?" ) ) );
-
-		// p2pone definition
 		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "urltopicture", "theme" ) ) );
-
-		// p2ptwo definition
 		p2ptwoDefinitionStub.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question?" ) ) );
 
 		// xinix definition
 		// TODO fix this!
 		// xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question", images ) ) );
 
-		// you2me definition
 		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, Arrays.asList(
 			"question?",
 			"counter question?" ) ) ) );
+		
+		simpleprototypingDefinitionStub.setID( exerciseDefinitionService.persist( new SimplePrototypingDefinition(
+			defaultUserStub,
+			TimeUnit.MINUTES,
+			2,
+			defaultWorkshopDefinitionStub,
+			"prototyping question",
+			"my mimetype" ) ) );
 
-		// exercise one
-		defaultExerciseStub1.setID( exerciseService.persist( new ExerciseImpl( "exercise1", "instance of exercise 1", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
+		compressionDefinitionStub.setID( exerciseDefinitionService.persist( new CompressionDefinition(
+			defaultUserStub,
+			TimeUnit.HOURS,
+			1,
+			defaultWorkshopDefinitionStub,
+			"compression question",
+			Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
 
-		// exercise two
-		defaultExerciseStub2.setID( exerciseService.persist( new ExerciseImpl( "exercise2", "instance of exercise 2", xinixDefinitionStub, defaultWorkshopStub ) ) );
-
-		// xinix image
+		evaluationDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub, "evaluation question" ) ) );
+		
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
+		Set< XinixImage > images = new HashSet<>();
+		images.add( (XinixImage)exerciseDataService.findByID( xinixImageStub.getID() ) );
+		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrix( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, images ) ) );
 
-		// xinix image matrix
-		// TODO finsh
-
+		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition(
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			60,
+			defaultWorkshopDefinitionStub,
+			"xinix question",
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
+		
+		
+		// exercises
+		pinklabsExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "pinklabs", "pinklabs exercise", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
+		you2meExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "you2me", "you2me exercise", you2meDefinitionStub, defaultWorkshopStub ) ) );
+		p2pOneExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "p2pone", "p2pone exercise", p2poneDefinitionStub, defaultWorkshopStub ) ) );
+		p2pTwoExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "p2ptwo", "p2ptwo exercise", p2ptwoDefinitionStub, defaultWorkshopStub ) ) );
+		simpleprototypingExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "simple proto", "simple proto exercise", simpleprototypingDefinitionStub, defaultWorkshopStub ) ) );
+		xinixExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "xinix", "xinix exercise", xinixDefinitionStub, defaultWorkshopStub ) ) );
+		compressionExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "compression", "compression exercise", compressionDefinitionStub, defaultWorkshopStub ) ) );
+		evaluationExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", evaluationDefinitionStub, defaultWorkshopStub ) ) ); 
+		
 		// pinklabs data
 		pinklabsDataStub.setID( exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer one", "answer two" ) ) ) );
 
@@ -382,34 +422,40 @@ public class RestServiceTest
 		assertTrue( exs.size() > 0 );
 		assertTrue( exBefore - exs.size() == 1 );
 
-		// create exercise data
-		String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer1", "answer2" ) ) );
-
-		// read exercise data
-		ExerciseDataImpl data = exerciseDataService.findByID( dataID );
-		assertTrue( data.getClient().getID().equals( defaultClientStub.getID() ) );
-		assertTrue( data.getID().equals( dataID ) );
-		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer1" ) );
-		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer2" ) );
-		assertTrue( data.getOwner().getID().equals( defaultUserStub.getID() ) );
-		assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseStub1.getID() ) );
-
-		// update exercise data
-		( (PinkLabsExerciseData)data ).setAnswers( Arrays.asList( "updatedanswer1", "answer2" ) );
-		exerciseDataService.persist( data );
-		PinkLabsExerciseData updatedData = exerciseDataService.findByID( dataID );
-		assertTrue( updatedData.getAnswers().contains( "updatedanswer1" ) );
-
-		// delete exercise data
-		int dataBefore = exerciseDataService.findAll().size();
-		exerciseDataService.remove( updatedData );
-
-		// find all checks delete
-		List< ExerciseDataImpl > datas = exerciseDataService.findAll();
-		assertTrue( datas.size() > 0 );
-		assertTrue( dataBefore - datas.size() == 1 );
+//		// create exercise data
+//		String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer1", "answer2" ) ) );
+//
+//		// read exercise data
+//		ExerciseDataImpl data = exerciseDataService.findByID( dataID );
+//		assertTrue( data.getClient().getID().equals( defaultClientStub.getID() ) );
+//		assertTrue( data.getID().equals( dataID ) );
+//		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer1" ) );
+//		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer2" ) );
+//		assertTrue( data.getOwner().getID().equals( defaultUserStub.getID() ) );
+//		assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseStub1.getID() ) );
+//
+//		// update exercise data
+//		( (PinkLabsExerciseData)data ).setAnswers( Arrays.asList( "updatedanswer1", "answer2" ) );
+//		exerciseDataService.persist( data );
+//		PinkLabsExerciseData updatedData = exerciseDataService.findByID( dataID );
+//		assertTrue( updatedData.getAnswers().contains( "updatedanswer1" ) );
+//
+//		// delete exercise data
+//		int dataBefore = exerciseDataService.findAll().size();
+//		exerciseDataService.remove( updatedData );
+//
+//		// find all checks delete
+//		List< ExerciseDataImpl > datas = exerciseDataService.findAll();
+//		assertTrue( datas.size() > 0 );
+//		assertTrue( dataBefore - datas.size() == 1 );
 	}
 
+	@Test
+	public void crudOperationsExerciseData()
+	{
+		
+	}
+	
 	@Test
 	public void crudOperationsInvitationService()
 	{
@@ -539,6 +585,24 @@ public class RestServiceTest
 
 		// find data by exercise ID
 		assertTrue( exerciseDataService.findByExerciseID( defaultExerciseStub1.getID() ).size() > 0 );
+		
+		// start exercise for user
+		
+		// stop exercise for user
+		
+		// suspend exercise for user
+		
+		// resume exercise for user
+		
+		// reset exercise for user
+		
+		// cancel
+	}
+	
+	@Test
+	public void getInputSetOutput()
+	{
+		
 	}
 
 	private < T extends IdentifiableObject > boolean checkSetOperation( Set< T > objects, String checkID, boolean initial )
