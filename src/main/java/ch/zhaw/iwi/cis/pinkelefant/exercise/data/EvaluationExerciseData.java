@@ -9,7 +9,6 @@ import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
-import ch.zhaw.iwi.cis.pews.model.output.Evaluation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity

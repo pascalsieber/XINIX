@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -36,6 +37,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public final static String SUSPEND_USER = "/user/suspend";
 	public final static String RESUME_USER = "/user/resume";
 	public final static String CANCEL_USER = "/user/cancel";
+	public final static String GET_USER_PARTICIPANT = "/user/getParticipant";
 
 	public final static String GETINPUT = "/getInput";
 	public final static String SETOUTPUT = "/setOutput";
@@ -145,7 +147,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	@Path( SUSPEND_USER )
 	public void suspendUser( TimerRequest request )
 	{
-		exerciseService.suspendUser(request);
+		exerciseService.suspendUser( request );
 	}
 
 	@POST
@@ -160,6 +162,13 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public void cancelUser()
 	{
 		exerciseService.cancelUser();
+	}
+
+	@POST
+	@Path( GET_USER_PARTICIPANT )
+	public Participant findUserParticipant()
+	{
+		return exerciseService.findUserParticipant();
 	}
 
 	@Override

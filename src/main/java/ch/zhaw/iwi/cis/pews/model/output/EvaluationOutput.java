@@ -2,6 +2,8 @@ package ch.zhaw.iwi.cis.pews.model.output;
 
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
+
 public class EvaluationOutput extends Output
 {
 	private List< Evaluation > evaluations;

@@ -1,7 +1,8 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
@@ -12,23 +13,22 @@ public class DialogEntry extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
+	
+	@Enumerated(EnumType.STRING)
 	private DialogRole role;
+	
 	private String text;
-
-	@ManyToOne
-	private You2MeExerciseData you2MeExerciseDataObject;
 
 	public DialogEntry()
 	{
 		super();
 	}
 
-	public DialogEntry( DialogRole role, String text, You2MeExerciseData you2MeExerciseDataObject )
+	public DialogEntry( DialogRole role, String text )
 	{
 		super();
 		this.role = role;
 		this.text = text;
-		this.you2MeExerciseDataObject = you2MeExerciseDataObject;
 	}
 
 	public DialogRole getRole()
@@ -49,16 +49,6 @@ public class DialogEntry extends WorkshopObject
 	public void setText( String text )
 	{
 		this.text = text;
-	}
-
-	public You2MeExerciseData getYou2MeExerciseDataObject()
-	{
-		return you2MeExerciseDataObject;
-	}
-
-	public void setYou2MeExerciseDataObject( You2MeExerciseData you2MeExerciseDataObject )
-	{
-		this.you2MeExerciseDataObject = you2MeExerciseDataObject;
 	}
 
 }

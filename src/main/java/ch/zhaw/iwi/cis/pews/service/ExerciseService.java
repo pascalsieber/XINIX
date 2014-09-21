@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service;
 
 import ch.zhaw.iwi.cis.pews.model.input.Input;
+import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 
@@ -25,4 +26,6 @@ public interface ExerciseService extends WorkflowElementService
 	public TimerRequest resumeUser();
 
 	public void cancelUser();
+
+	public Participant findUserParticipant();
 }

@@ -4,6 +4,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.input.Input;
+import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -89,5 +90,10 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 		getServiceTarget().path( ExerciseRestService.CANCEL_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
 	}
 
+	@Override
+	public Participant findUserParticipant()
+	{
+		return getServiceTarget().path( ExerciseRestService.GET_USER_PARTICIPANT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( Participant.class );
+	}
 
 }

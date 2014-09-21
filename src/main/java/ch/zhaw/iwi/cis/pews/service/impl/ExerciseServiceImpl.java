@@ -186,4 +186,10 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		return exerciseDataDao;
 	}
 
+	@Override
+	public Participant findUserParticipant()
+	{
+		return participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+	}
+
 }

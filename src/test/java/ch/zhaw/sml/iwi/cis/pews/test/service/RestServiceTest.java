@@ -2,6 +2,7 @@ package ch.zhaw.sml.iwi.cis.pews.test.service;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,15 +18,35 @@ import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
+import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
+import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
+import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
+import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
+import ch.zhaw.iwi.cis.pews.model.input.SimplePrototypingInput;
+import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
+import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
+import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
+import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
+import ch.zhaw.iwi.cis.pews.model.output.Output;
+import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
+import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
+import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
+import ch.zhaw.iwi.cis.pews.model.output.Score;
+import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
+import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
+import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -48,6 +69,8 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
@@ -68,8 +91,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class RestServiceTest
 {
+	private static ObjectMapper mapper = new ObjectMapper();
+
 	private static GlobalService globalService = ServiceProxyManager.createServiceProxy( GlobalServiceProxy.class );
 	private static SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
 	private static RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
@@ -153,7 +181,7 @@ public class RestServiceTest
 		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, Arrays.asList(
 			"question?",
 			"counter question?" ) ) ) );
-		
+
 		simpleprototypingDefinitionStub.setID( exerciseDefinitionService.persist( new SimplePrototypingDefinition(
 			defaultUserStub,
 			TimeUnit.MINUTES,
@@ -171,7 +199,7 @@ public class RestServiceTest
 			Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
 
 		evaluationDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub, "evaluation question" ) ) );
-		
+
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		Set< XinixImage > images = new HashSet<>();
 		images.add( (XinixImage)exerciseDataService.findByID( xinixImageStub.getID() ) );
@@ -184,35 +212,16 @@ public class RestServiceTest
 			defaultWorkshopDefinitionStub,
 			"xinix question",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
-		
-		
+
 		// exercises
 		pinklabsExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "pinklabs", "pinklabs exercise", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
-		you2meExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "you2me", "you2me exercise", you2meDefinitionStub, defaultWorkshopStub ) ) );
 		p2pOneExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "p2pone", "p2pone exercise", p2poneDefinitionStub, defaultWorkshopStub ) ) );
+		you2meExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "you2me", "you2me exercise", you2meDefinitionStub, defaultWorkshopStub ) ) );
 		p2pTwoExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "p2ptwo", "p2ptwo exercise", p2ptwoDefinitionStub, defaultWorkshopStub ) ) );
 		simpleprototypingExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "simple proto", "simple proto exercise", simpleprototypingDefinitionStub, defaultWorkshopStub ) ) );
 		xinixExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "xinix", "xinix exercise", xinixDefinitionStub, defaultWorkshopStub ) ) );
 		compressionExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "compression", "compression exercise", compressionDefinitionStub, defaultWorkshopStub ) ) );
-		evaluationExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", evaluationDefinitionStub, defaultWorkshopStub ) ) ); 
-		
-		// pinklabs data
-		pinklabsDataStub.setID( exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer one", "answer two" ) ) ) );
-
-		// p2pone data
-		p2poneDataStub.setID( exerciseDataService.persist( new P2POneData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "keyword one", "keyword two" ) ) ) );
-
-		// p2ptwo data
-		p2ptwoDataStub.setID( exerciseDataService.persist( new P2PTwoData( defaultUserStub, defaultExerciseStub1, new HashSet<>( Arrays.asList( "answer one", "answer two" ) ), new HashSet<>(
-			( (P2POneData)exerciseDataService.findByID( p2poneDataStub.getID() ) ).getKeywords() ) ) ) );
-
-		// xinix data
-		// TODO fix this!
-		// xinixDataStub.setID( exerciseDataService.persist( new XinixData( defaultUserStub, defaultExerciseStub1, "my association", xinixImageStub ) ) );
-
-		// you2me data
-		// TODO fix this!
-		// you2meDataStub.setID( exerciseDataService.persist( new You2MeExerciseData( defaultUserStub, defaultExerciseStub1, "question one", "question two", "response one", "response two" ) ) );
+		evaluationExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", evaluationDefinitionStub, defaultWorkshopStub ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
@@ -422,40 +431,40 @@ public class RestServiceTest
 		assertTrue( exs.size() > 0 );
 		assertTrue( exBefore - exs.size() == 1 );
 
-//		// create exercise data
-//		String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer1", "answer2" ) ) );
-//
-//		// read exercise data
-//		ExerciseDataImpl data = exerciseDataService.findByID( dataID );
-//		assertTrue( data.getClient().getID().equals( defaultClientStub.getID() ) );
-//		assertTrue( data.getID().equals( dataID ) );
-//		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer1" ) );
-//		assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer2" ) );
-//		assertTrue( data.getOwner().getID().equals( defaultUserStub.getID() ) );
-//		assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseStub1.getID() ) );
-//
-//		// update exercise data
-//		( (PinkLabsExerciseData)data ).setAnswers( Arrays.asList( "updatedanswer1", "answer2" ) );
-//		exerciseDataService.persist( data );
-//		PinkLabsExerciseData updatedData = exerciseDataService.findByID( dataID );
-//		assertTrue( updatedData.getAnswers().contains( "updatedanswer1" ) );
-//
-//		// delete exercise data
-//		int dataBefore = exerciseDataService.findAll().size();
-//		exerciseDataService.remove( updatedData );
-//
-//		// find all checks delete
-//		List< ExerciseDataImpl > datas = exerciseDataService.findAll();
-//		assertTrue( datas.size() > 0 );
-//		assertTrue( dataBefore - datas.size() == 1 );
+		// // create exercise data
+		// String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer1", "answer2" ) ) );
+		//
+		// // read exercise data
+		// ExerciseDataImpl data = exerciseDataService.findByID( dataID );
+		// assertTrue( data.getClient().getID().equals( defaultClientStub.getID() ) );
+		// assertTrue( data.getID().equals( dataID ) );
+		// assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer1" ) );
+		// assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer2" ) );
+		// assertTrue( data.getOwner().getID().equals( defaultUserStub.getID() ) );
+		// assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseStub1.getID() ) );
+		//
+		// // update exercise data
+		// ( (PinkLabsExerciseData)data ).setAnswers( Arrays.asList( "updatedanswer1", "answer2" ) );
+		// exerciseDataService.persist( data );
+		// PinkLabsExerciseData updatedData = exerciseDataService.findByID( dataID );
+		// assertTrue( updatedData.getAnswers().contains( "updatedanswer1" ) );
+		//
+		// // delete exercise data
+		// int dataBefore = exerciseDataService.findAll().size();
+		// exerciseDataService.remove( updatedData );
+		//
+		// // find all checks delete
+		// List< ExerciseDataImpl > datas = exerciseDataService.findAll();
+		// assertTrue( datas.size() > 0 );
+		// assertTrue( dataBefore - datas.size() == 1 );
 	}
 
 	@Test
 	public void crudOperationsExerciseData()
 	{
-		
+
 	}
-	
+
 	@Test
 	public void crudOperationsInvitationService()
 	{
@@ -521,17 +530,17 @@ public class RestServiceTest
 		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// getCurrentExercise
-		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub1.getID() ) );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
 
 		// getNextExercise
-		assertTrue( sessionService.getNextExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub2.getID() ) );
+		assertTrue( sessionService.getNextExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
 
 		// setNextExercise
 		sessionService.setNextExercise( defaultSessionStub.getID() );
-		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub2.getID() ) );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
 
 		// getPreviousExercise
-		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( defaultExerciseStub1.getID() ) );
+		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
 
 		// join Session
 		Invitation wrappedJoinRequest = new Invitation();
@@ -562,47 +571,361 @@ public class RestServiceTest
 	public void functionalExerciseService()
 	{
 		// start exercise
-		exerciseService.start( defaultExerciseStub1.getID() );
-		ExerciseImpl ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		exerciseService.start( pinklabsExerciseStub.getID() );
+		ExerciseImpl ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
 
 		// suspend exercise
-		exerciseService.suspend( new SuspensionRequest( defaultExerciseStub1.getID(), 12.5 ) );
-		ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		exerciseService.suspend( new SuspensionRequest( pinklabsExerciseStub.getID(), 12.5 ) );
+		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "suspended" ) );
 		assertTrue( ex.getElapsedSeconds() == 12.5 );
 
 		// resume exercise
-		assertTrue( exerciseService.resume( defaultExerciseStub1.getID() ) == 12.5 );
-		ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		assertTrue( exerciseService.resume( pinklabsExerciseStub.getID() ) == 12.5 );
+		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
 		assertTrue( ex.getElapsedSeconds() == 0.0 );
 
 		// stop exercise
-		exerciseService.stop( defaultExerciseStub1.getID() );
-		ex = exerciseService.findByID( defaultExerciseStub1.getID() );
+		exerciseService.stop( pinklabsExerciseStub.getID() );
+		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// find data by exercise ID
-		assertTrue( exerciseDataService.findByExerciseID( defaultExerciseStub1.getID() ).size() > 0 );
-		
+		assertTrue( exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() ).size() > 0 );
+
 		// start exercise for user
-		
+		exerciseService.startUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
+
 		// stop exercise for user
-		
+		exerciseService.stopUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
+
 		// suspend exercise for user
-		
+		exerciseService.suspendUser( new TimerRequest( TimeUnit.SECONDS, 22 ) );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "suspended" ) );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == TimeUnit.SECONDS );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 22 );
+
 		// resume exercise for user
-		
-		// reset exercise for user
-		
+		TimerRequest timer = exerciseService.resumeUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
+		assertTrue( timer.getTimeUnit() == TimeUnit.SECONDS );
+		assertTrue( timer.getValue() == 22 );
+
 		// cancel
+		exerciseService.cancelUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
+
+		// reset exercise for user
+		exerciseService.resetUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "new" ) );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == null );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 0 );
 	}
-	
+
 	@Test
-	public void getInputSetOutput()
+	public void getInputSetOutput() throws JsonProcessingException
 	{
+		Output output = null;
+		List< String > p2pOneKeywordIDs = new ArrayList<>();
+		boolean success = false;
+
+		// pinklabs
+		setExerciseOnDefaultSession( pinklabsExerciseStub );
+		PinkLabsInput pinklabsInput = (PinkLabsInput)exerciseService.getInput();
+		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
+
+		output = new PinkLabsOutput( Arrays.asList( "answer1", "answer2", "answer3" ) );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() ) )
+		{
+			if ( ( (PinkLabsExerciseData)d ).getAnswers().containsAll( Arrays.asList( "answer1", "answer2", "answer3" ) ) )
+			{
+				success = true;
+				break;
+			}
+		}
+
+		assertTrue( success );
+
+		// p2pone
+		setExerciseOnDefaultSession( p2pOneExerciseStub );
+		P2POneInput p2pOneInput = (P2POneInput)exerciseService.getInput();
+		assertTrue( p2pOneInput.getQuestion().equalsIgnoreCase( ( (P2POneDefinition)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( p2pOneInput.getPicture().equalsIgnoreCase( ( (P2POneDefinition)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getPicture() ) );
+
+		output = new P2POneOutput( Arrays.asList( "p1", "p2", "p3" ) );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() ) )
+		{
+			int count = 0;
+
+			for ( P2POneKeyword keyword : ( (P2POneData)d ).getKeywords() )
+			{
+				p2pOneKeywordIDs.add( keyword.getID() );
+
+				if ( keyword.getKeyword().equalsIgnoreCase( "p1" ) || keyword.getKeyword().equalsIgnoreCase( "p2" ) || keyword.getKeyword().equalsIgnoreCase( "p3" ) )
+				{
+					count += 1;
+				}
+
+				if ( count == 3 )
+				{
+					success = true;
+					break;
+				}
+			}
+		}
+
+		assertTrue( success );
+
+		// you2me
+		setExerciseOnDefaultSession( you2meExerciseStub );
+		You2MeInput you2meInput = (You2MeInput)exerciseService.getInput();
+
+		for ( String string : ( (You2MeDefinition)exerciseDefinitionService.findByID( you2meDefinitionStub.getID() ) ).getQuestions() )
+		{
+			assertTrue( you2meInput.getQuestions().contains( string ) );
+		}
+
+		output = new You2MeOutput( Arrays.asList( new DialogEntry( DialogRole.RoleA, "roleA" ), new DialogEntry( DialogRole.RoleB, "roleB" ) ) );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( you2meExerciseStub.getID() ) )
+		{
+			int count = 0;
+
+			for ( DialogEntry entry : ( (You2MeExerciseData)d ).getDialog() )
+			{
+				if ( entry.getRole().toString().equalsIgnoreCase( DialogRole.RoleA.toString() ) && entry.getText().equalsIgnoreCase( "roleA" ) )
+				{
+					count += 1;
+				}
+
+				if ( entry.getRole().toString().equalsIgnoreCase( DialogRole.RoleB.toString() ) && entry.getText().equalsIgnoreCase( "roleB" ) )
+				{
+					count += 1;
+				}
+
+				if ( count == 2 )
+				{
+					success = true;
+					break;
+				}
+			}
+
+		}
+
+		assertTrue( success );
+
+		// p2ptwo
+		setExerciseOnDefaultSession( p2pTwoExerciseStub );
+		P2PTwoInput p2ptwoInput = (P2PTwoInput)exerciseService.getInput();
+
+		assertTrue( p2ptwoInput.getQuestion().equalsIgnoreCase( ( (P2PTwoDefinition)exerciseDefinitionService.findByID( p2ptwoDefinitionStub.getID() ) ).getQuestion() ) );
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() ) )
+		{
+			for ( P2POneKeyword keyword : ( (P2POneData)d ).getKeywords() )
+			{
+				assertTrue( p2ptwoInput.getCascade1Keywords().contains( keyword.getKeyword() ) );
+			}
+		}
+
+		Set< String > p2ptwoAnswers = new HashSet<>();
+		p2ptwoAnswers.addAll( Arrays.asList( "p21", "p22", "p23" ) );
+
+		Set< String > keywordIDs = new HashSet<>();
+		keywordIDs.add( p2pOneKeywordIDs.get( 0 ) );
+		keywordIDs.add( p2pOneKeywordIDs.get( 1 ) );
+
+		output = new P2PTwoOutput( keywordIDs, p2ptwoAnswers );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( p2pTwoExerciseStub.getID() ) )
+		{
+			if ( ( (P2PTwoData)d ).getAnswers().containsAll( p2ptwoAnswers ) )
+			{
+				for ( P2POneKeyword keyword : ( (P2PTwoData)d ).getSelectedKeywords() )
+				{
+					assertTrue( keywordIDs.contains( keyword.getID() ) );
+				}
+
+				success = true;
+			}
+		}
+
+		assertTrue( success );
+
+		// simple prototyping
+		setExerciseOnDefaultSession( simpleprototypingExerciseStub );
+		SimplePrototypingInput simpleprotoInput = (SimplePrototypingInput)exerciseService.getInput();
+		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase(
+			( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase(
+			( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getMimeType() ) );
+
+		output = new SimplePrototypingOutput( "simpleprototyping".getBytes() );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( simpleprototypingExerciseStub.getID() ) )
+		{
+			if ( ( (SimplePrototypingData)d ).getBlob().equals( "simpleprototyping".getBytes() ) )
+			{
+				success = true;
+				break;
+			}
+		}
+
+		assertTrue( success );
+
+		// xinix
+		setExerciseOnDefaultSession( xinixExerciseStub );
+		XinixInput xinixInput = (XinixInput)exerciseService.getInput();
+		assertTrue( xinixInput.getQuestion().equalsIgnoreCase( ( (XinixDefinition)exerciseDefinitionService.findByID( xinixDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( xinixInput.getXinixImages().getID().equalsIgnoreCase( xinixImageMatrixStub.getID() ) );
+
+		List< String > imageIDs = new ArrayList<>();
+		for ( XinixImage img : ( xinixInput ).getXinixImages().getXinixImages() )
+		{
+			imageIDs.add( img.getID() );
+		}
+
+		for ( XinixImage img : ( (XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
+		{
+			assertTrue( imageIDs.contains( img.getID() ) );
+		}
+
+		output = new XinixOutput( new HashSet<>( Arrays.asList( "x1", "x2", "x3" ) ), xinixImageStub );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( xinixExerciseStub.getID() ) )
+		{
+			int count = 0;
+
+			if ( ( (XinixData)d ).getXinixImage().getID().equalsIgnoreCase( xinixImageStub.getID() ) )
+			{
+				for ( String association : ( (XinixData)d ).getAssociations() )
+				{
+					if ( association.equalsIgnoreCase( "x1" ) || association.equalsIgnoreCase( "x2" ) || association.equalsIgnoreCase( "x3" ) )
+					{
+						count += 1;
+					}
+
+					if ( count == 3 )
+					{
+						success = true;
+						break;
+					}
+				}
+			}
+		}
+
+		assertTrue( success );
+
+		// compression
+		setExerciseOnDefaultSession( compressionExerciseStub );
+		CompressionInput compressionInput = (CompressionInput)exerciseService.getInput();
+		assertTrue( compressionInput.getQuestion().equalsIgnoreCase( ( (CompressionDefinition)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( compressionInput.getCompressableExerciseData().size() > 0 );
+
+		for ( String criterion : compressionInput.getSolutionCriteria() )
+		{
+			( (CompressionDefinition)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getSolutionCriteria().contains( criterion );
+		}
+
+		output = new CompressionOutput( Arrays.asList( "c1", "c2", "c3" ) );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) )
+		{
+			int count = 0;
+
+			for ( String string : ( (CompressionExerciseData)d ).getSolutions() )
+			{
+				if ( string.equalsIgnoreCase( "c1" ) || string.equalsIgnoreCase( "c2" ) || string.equalsIgnoreCase( "c3" ) )
+				{
+					count += 1;
+				}
+			}
+
+			if ( count == 3 )
+			{
+				success = true;
+			}
+		}
+
+		assertTrue( success );
+
+		// evaluation
+		setExerciseOnDefaultSession( evaluationExerciseStub );
+		EvaluationInput evaluationInput = (EvaluationInput)exerciseService.getInput();
+		assertTrue( evaluationInput.getQuestion().equalsIgnoreCase( ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getQuestion() ) );
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) )
+		{
+			for ( String solution : ( (CompressionExerciseData)d ).getSolutions() )
+			{
+				assertTrue( evaluationInput.getSolutions().contains( solution ) );
+			}
+		}
+
+		output = new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, "solution1", new Score( 5 ) ), new Evaluation( defaultUserStub, "solution2", new Score( 2 ) ) ) );
+		exerciseService.setOutput( mapper.writeValueAsString( output ) );
+
+		success = false;
+
+		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( evaluationExerciseStub.getID() ) )
+		{
+			int count = 0;
+
+			for ( Evaluation evaluation : ( (EvaluationExerciseData)d ).getEvaluations() )
+			{
+				if ( evaluation.getSolution().equalsIgnoreCase( "solution1" ) && evaluation.getScore().getScore() == 5 )
+				{
+					count += 1;
+				}
+				
+				if ( evaluation.getSolution().equalsIgnoreCase( "solution2" ) && evaluation.getScore().getScore() == 2 )
+				{
+					count += 1;
+				}
+			}
+
+			if ( count == 2 )
+			{
+				success = true;
+			}
+		}
 		
+		assertTrue( success );
+
+	}
+
+	private void setExerciseOnDefaultSession( ExerciseImpl exercise )
+	{
+		SessionImpl session = sessionService.findByID( defaultSessionStub.getID() );
+		session.setCurrentExercise( exercise );
+		sessionService.persist( session );
 	}
 
 	private < T extends IdentifiableObject > boolean checkSetOperation( Set< T > objects, String checkID, boolean initial )
