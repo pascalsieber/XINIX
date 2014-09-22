@@ -2,6 +2,7 @@ package ch.zhaw.sml.iwi.cis.pews.test.service;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
@@ -91,7 +93,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RestServiceTest
@@ -157,7 +158,7 @@ public class RestServiceTest
 		defaultRoleStub.setID( roleService.persist( new RoleImpl( "user", "user role" ) ) );
 
 		// User
-		defaultUserStub.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "john" ), defaultRoleStub, null, "John", "Smith", rootClient.getName() + "/fueg@zhaw.ch" ) ) );
+		defaultUserStub.setID( userService.findByLoginName( ZhawEngine.ROOT_USER_LOGIN_NAME ).getID());
 
 		// workshop definition (pinkelefantDefinition)
 		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantDefinition(
@@ -225,6 +226,9 @@ public class RestServiceTest
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
+		
+		// set default user's session to newly configured session for testing
+		sessionService.join( new Invitation( null, defaultUserStub, defaultSessionStub ) );
 
 		// invitation
 		defaultInvitationStub.setID( invitationService.persist( new Invitation( defaultUserStub, defaultUserStub, defaultSessionStub ) ) );
@@ -627,7 +631,7 @@ public class RestServiceTest
 	}
 
 	@Test
-	public void getInputSetOutput() throws JsonProcessingException
+	public void getInputSetOutput() throws IOException
 	{
 		Output output = null;
 		List< String > p2pOneKeywordIDs = new ArrayList<>();
@@ -635,7 +639,7 @@ public class RestServiceTest
 
 		// pinklabs
 		setExerciseOnDefaultSession( pinklabsExerciseStub );
-		PinkLabsInput pinklabsInput = (PinkLabsInput)exerciseService.getInput();
+		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputAsString(), PinkLabsInput.class );
 		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
 		output = new PinkLabsOutput( Arrays.asList( "answer1", "answer2", "answer3" ) );
@@ -643,7 +647,8 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() ) )
+		List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() );
+		for ( ExerciseDataImpl d : data )
 		{
 			if ( ( (PinkLabsExerciseData)d ).getAnswers().containsAll( Arrays.asList( "answer1", "answer2", "answer3" ) ) )
 			{
@@ -656,7 +661,7 @@ public class RestServiceTest
 
 		// p2pone
 		setExerciseOnDefaultSession( p2pOneExerciseStub );
-		P2POneInput p2pOneInput = (P2POneInput)exerciseService.getInput();
+		P2POneInput p2pOneInput = mapper.readValue( exerciseService.getInputAsString(), P2POneInput.class );
 		assertTrue( p2pOneInput.getQuestion().equalsIgnoreCase( ( (P2POneDefinition)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getQuestion() ) );
 		assertTrue( p2pOneInput.getPicture().equalsIgnoreCase( ( (P2POneDefinition)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getPicture() ) );
 
@@ -690,7 +695,7 @@ public class RestServiceTest
 
 		// you2me
 		setExerciseOnDefaultSession( you2meExerciseStub );
-		You2MeInput you2meInput = (You2MeInput)exerciseService.getInput();
+		You2MeInput you2meInput = mapper.readValue( exerciseService.getInputAsString(), You2MeInput.class );
 
 		for ( String string : ( (You2MeDefinition)exerciseDefinitionService.findByID( you2meDefinitionStub.getID() ) ).getQuestions() )
 		{
@@ -731,7 +736,7 @@ public class RestServiceTest
 
 		// p2ptwo
 		setExerciseOnDefaultSession( p2pTwoExerciseStub );
-		P2PTwoInput p2ptwoInput = (P2PTwoInput)exerciseService.getInput();
+		P2PTwoInput p2ptwoInput = mapper.readValue( exerciseService.getInputAsString(), P2PTwoInput.class );
 
 		assertTrue( p2ptwoInput.getQuestion().equalsIgnoreCase( ( (P2PTwoDefinition)exerciseDefinitionService.findByID( p2ptwoDefinitionStub.getID() ) ).getQuestion() ) );
 
@@ -772,7 +777,7 @@ public class RestServiceTest
 
 		// simple prototyping
 		setExerciseOnDefaultSession( simpleprototypingExerciseStub );
-		SimplePrototypingInput simpleprotoInput = (SimplePrototypingInput)exerciseService.getInput();
+		SimplePrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplePrototypingInput.class );
 		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase(
 			( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
 		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase(
@@ -796,7 +801,7 @@ public class RestServiceTest
 
 		// xinix
 		setExerciseOnDefaultSession( xinixExerciseStub );
-		XinixInput xinixInput = (XinixInput)exerciseService.getInput();
+		XinixInput xinixInput = mapper.readValue( exerciseService.getInputAsString(), XinixInput.class );
 		assertTrue( xinixInput.getQuestion().equalsIgnoreCase( ( (XinixDefinition)exerciseDefinitionService.findByID( xinixDefinitionStub.getID() ) ).getQuestion() ) );
 		assertTrue( xinixInput.getXinixImages().getID().equalsIgnoreCase( xinixImageMatrixStub.getID() ) );
 
@@ -842,7 +847,7 @@ public class RestServiceTest
 
 		// compression
 		setExerciseOnDefaultSession( compressionExerciseStub );
-		CompressionInput compressionInput = (CompressionInput)exerciseService.getInput();
+		CompressionInput compressionInput = mapper.readValue( exerciseService.getInputAsString(), CompressionInput.class );
 		assertTrue( compressionInput.getQuestion().equalsIgnoreCase( ( (CompressionDefinition)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getQuestion() ) );
 		assertTrue( compressionInput.getCompressableExerciseData().size() > 0 );
 
@@ -878,7 +883,7 @@ public class RestServiceTest
 
 		// evaluation
 		setExerciseOnDefaultSession( evaluationExerciseStub );
-		EvaluationInput evaluationInput = (EvaluationInput)exerciseService.getInput();
+		EvaluationInput evaluationInput = mapper.readValue( exerciseService.getInputAsString(), EvaluationInput.class );
 		assertTrue( evaluationInput.getQuestion().equalsIgnoreCase( ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getQuestion() ) );
 
 		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) )

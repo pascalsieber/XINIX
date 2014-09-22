@@ -28,4 +28,6 @@ public interface ExerciseService extends WorkflowElementService
 	public void cancelUser();
 
 	public Participant findUserParticipant();
+
+	public String getInputAsString();
 }

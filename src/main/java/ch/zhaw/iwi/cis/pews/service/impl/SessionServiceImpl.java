@@ -2,9 +2,11 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.ParticipantDao;
 import ch.zhaw.iwi.cis.pews.dao.SessionDao;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.ParticipantDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.SessionDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
@@ -25,16 +27,23 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 {
 	private SessionDao sessionDao;
 	private UserDao userDao;
+	private ParticipantDao participantDao;
 
 	public SessionServiceImpl()
 	{
 		sessionDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionDaoImpl.class.getSimpleName() );
 		userDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
+		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
 	public void join( Invitation invitation )
 	{
+		if ( ( (PrincipalImpl)userDao.findById( invitation.getInvitee().getID() ) ).getParticipation() != null)
+		{
+			leave( invitation );
+		}
+				
 		SessionImpl session = sessionDao.findById( invitation.getSession().getID() );
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
 		session.getParticipants().add( new Participant( principal, session, new Timer( null, 0, WorkflowElementStatusImpl.NEW ) ) );
@@ -46,10 +55,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	{
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
 		SessionImpl session = sessionDao.findById( principal.getParticipation().getSession().getID() );
-		
-		principal.setParticipation( null );
-		userDao.persist( principal );
-		
+				
 		Participant removable = null;
 		
 		for ( Participant participant : session.getParticipants() )
@@ -57,11 +63,14 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 			if ( participant.getPrincipal().getID().equalsIgnoreCase( principal.getID() ) )
 			{
 				removable = participant;
+				break;
 			}
 		}
 		
-		session.getParticipants().remove( removable );
-		sessionDao.persist( session );
+//		session.getParticipants().remove( participantDao.findById( removable.getID() ) );
+//		sessionDao.persist( session );
+		
+		participantDao.remove( participantDao.findById( removable.getID() ) );
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
@@ -117,6 +118,19 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
 			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).getInput();
 	}
+	
+	@Override
+	public String getInputAsString()
+	{
+		try
+		{
+			return objectMapper.writeValueAsString( getInput() );
+		}
+		catch ( JsonProcessingException e )
+		{
+			throw new RuntimeException( "error in converting getInput() to String" );
+		}
+	}
 
 	@Override
 	public void setOutput( String output )
@@ -191,5 +205,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		return participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
 	}
+
+	
 
 }

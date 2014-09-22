@@ -49,6 +49,12 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	}
 
 	@Override
+	public String getInputAsString()
+	{
+		return getServiceTarget().path( ExerciseRestService.GETINPUT_AS_STRING ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( String.class );
+	}
+	
+	@Override
 	public void setOutput( String output )
 	{
 		getServiceTarget().path( ExerciseRestService.GETINPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( output ) );
@@ -95,5 +101,7 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	{
 		return getServiceTarget().path( ExerciseRestService.GET_USER_PARTICIPANT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( Participant.class );
 	}
+
+	
 
 }

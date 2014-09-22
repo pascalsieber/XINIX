@@ -41,6 +41,9 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	public final static String GETINPUT = "/getInput";
 	public final static String SETOUTPUT = "/setOutput";
+	
+	// only for testing
+	public final static String GETINPUT_AS_STRING = "/getInputAsString";
 
 	private ExerciseService exerciseService;
 
@@ -113,6 +116,13 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public Input getExerciseInput()
 	{
 		return exerciseService.getInput();
+	}
+	
+	@POST
+	@Path( GETINPUT_AS_STRING )
+	public String getExerciseInputAsString()
+	{
+		return exerciseService.getInputAsString();
 	}
 
 	@POST
