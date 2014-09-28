@@ -126,7 +126,14 @@ public class PrincipalImpl extends WorkshopObject
 	@JsonIgnore
 	public SessionImpl getSession()
 	{
-		return participation.getSession();
+		if ( participation == null )
+		{
+			return null;
+		}
+		else
+		{
+			return participation.getSession();
+		}
 	}
 
 }

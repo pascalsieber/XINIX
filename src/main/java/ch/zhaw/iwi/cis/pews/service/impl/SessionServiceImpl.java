@@ -46,7 +46,13 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 				
 		SessionImpl session = sessionDao.findById( invitation.getSession().getID() );
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
-		session.getParticipants().add( new Participant( principal, session, new Timer( null, 0, WorkflowElementStatusImpl.NEW ) ) );
+		
+		String participantID = participantDao.persist( new Participant( principal, session, new Timer( null, 0, WorkflowElementStatusImpl.NEW ) ) );
+		
+		principal.setParticipation( (Participant)participantDao.findById( participantID ) );
+		userDao.persist( principal );
+		
+		session.getParticipants().add( (Participant)participantDao.findById( participantID ) );
 		sessionDao.persist( session );
 	}
 
@@ -67,10 +73,10 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 			}
 		}
 		
-//		session.getParticipants().remove( participantDao.findById( removable.getID() ) );
-//		sessionDao.persist( session );
+		session.getParticipants().remove( participantDao.findById( removable.getID() ) );
+		sessionDao.persist( session );
 		
-		participantDao.remove( participantDao.findById( removable.getID() ) );
+//		participantDao.remove( participantDao.findById( removable.getID() ) );
 	}
 
 	@Override

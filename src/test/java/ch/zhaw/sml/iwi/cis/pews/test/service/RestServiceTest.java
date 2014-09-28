@@ -158,7 +158,7 @@ public class RestServiceTest
 		defaultRoleStub.setID( roleService.persist( new RoleImpl( "user", "user role" ) ) );
 
 		// User
-		defaultUserStub.setID( userService.findByLoginName( ZhawEngine.ROOT_USER_LOGIN_NAME ).getID());
+		defaultUserStub.setID( userService.findByLoginName( ZhawEngine.ROOT_USER_LOGIN_NAME ).getID() );
 
 		// workshop definition (pinkelefantDefinition)
 		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantDefinition(
@@ -174,10 +174,6 @@ public class RestServiceTest
 		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "pinklabs?" ) ) );
 		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "urltopicture", "theme" ) ) );
 		p2ptwoDefinitionStub.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question?" ) ) );
-
-		// xinix definition
-		// TODO fix this!
-		// xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question", images ) ) );
 
 		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, Arrays.asList(
 			"question?",
@@ -226,7 +222,7 @@ public class RestServiceTest
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
-		
+
 		// set default user's session to newly configured session for testing
 		sessionService.join( new Invitation( null, defaultUserStub, defaultSessionStub ) );
 
@@ -511,123 +507,7 @@ public class RestServiceTest
 		assertTrue( searched.getID().equals( usr.getID() ) );
 
 		// request new password
-		assertTrue( userService.requestNewPassword( defaultUserStub.getID() ) );
-	}
-
-	@Test
-	public void functionalWorkshopService()
-	{
-		// start workshop
-		workshopService.start( defaultWorkshopStub.getID() );
-		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ).getCurrentState().equalsIgnoreCase( "running" ) );
-
-		// stop workshop
-		workshopService.stop( defaultWorkshopStub.getID() );
-		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
-
-		// start session
-		sessionService.start( defaultSessionStub.getID() );
-		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "running" ) );
-
-		// stop session
-		sessionService.stop( defaultSessionStub.getID() );
-		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
-
-		// getCurrentExercise
-		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
-
-		// getNextExercise
-		assertTrue( sessionService.getNextExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
-
-		// setNextExercise
-		sessionService.setNextExercise( defaultSessionStub.getID() );
-		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
-
-		// getPreviousExercise
-		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
-
-		// join Session
-		Invitation wrappedJoinRequest = new Invitation();
-		wrappedJoinRequest.setInvitee( defaultUserStub );
-		wrappedJoinRequest.setSession( defaultSessionStub );
-
-		sessionService.join( wrappedJoinRequest );
-		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserStub.getID() ) ).getSession().getID().equals( defaultSessionStub.getID() ) );
-
-		// leave Session
-		sessionService.leave( wrappedJoinRequest );
-		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserStub.getID() ) ).getSession() == null );
-
-		// accept invitation
-		invitationService.accept( defaultInvitationStub.getID() );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getInvitations(), defaultInvitationStub.getID(), true ) );
-
-		// add executer
-		sessionService.addExecuter( wrappedJoinRequest );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), false ) );
-
-		// remove executer
-		sessionService.removeExecuter( wrappedJoinRequest );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), true ) );
-	}
-
-	@Test
-	public void functionalExerciseService()
-	{
-		// start exercise
-		exerciseService.start( pinklabsExerciseStub.getID() );
-		ExerciseImpl ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
-		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
-
-		// suspend exercise
-		exerciseService.suspend( new SuspensionRequest( pinklabsExerciseStub.getID(), 12.5 ) );
-		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
-		assertTrue( ex.getCurrentState().equalsIgnoreCase( "suspended" ) );
-		assertTrue( ex.getElapsedSeconds() == 12.5 );
-
-		// resume exercise
-		assertTrue( exerciseService.resume( pinklabsExerciseStub.getID() ) == 12.5 );
-		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
-		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
-		assertTrue( ex.getElapsedSeconds() == 0.0 );
-
-		// stop exercise
-		exerciseService.stop( pinklabsExerciseStub.getID() );
-		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
-		assertTrue( ex.getCurrentState().equalsIgnoreCase( "terminated" ) );
-
-		// find data by exercise ID
-		assertTrue( exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() ).size() > 0 );
-
-		// start exercise for user
-		exerciseService.startUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
-
-		// stop exercise for user
-		exerciseService.stopUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
-
-		// suspend exercise for user
-		exerciseService.suspendUser( new TimerRequest( TimeUnit.SECONDS, 22 ) );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "suspended" ) );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == TimeUnit.SECONDS );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 22 );
-
-		// resume exercise for user
-		TimerRequest timer = exerciseService.resumeUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
-		assertTrue( timer.getTimeUnit() == TimeUnit.SECONDS );
-		assertTrue( timer.getValue() == 22 );
-
-		// cancel
-		exerciseService.cancelUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
-
-		// reset exercise for user
-		exerciseService.resetUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "new" ) );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == null );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 0 );
+//		assertTrue( userService.requestNewPassword( defaultUserStub.getID() ) );
 	}
 
 	@Test
@@ -778,10 +658,8 @@ public class RestServiceTest
 		// simple prototyping
 		setExerciseOnDefaultSession( simpleprototypingExerciseStub );
 		SimplePrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplePrototypingInput.class );
-		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase(
-			( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
-		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase(
-			( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getMimeType() ) );
+		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getMimeType() ) );
 
 		output = new SimplePrototypingOutput( "simpleprototyping".getBytes() );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
@@ -909,7 +787,7 @@ public class RestServiceTest
 				{
 					count += 1;
 				}
-				
+
 				if ( evaluation.getSolution().equalsIgnoreCase( "solution2" ) && evaluation.getScore().getScore() == 2 )
 				{
 					count += 1;
@@ -921,9 +799,125 @@ public class RestServiceTest
 				success = true;
 			}
 		}
-		
+
 		assertTrue( success );
 
+	}
+
+	@Test
+	public void functionalWorkshopService()
+	{
+		// start workshop
+		workshopService.start( defaultWorkshopStub.getID() );
+		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ).getCurrentState().equalsIgnoreCase( "running" ) );
+
+		// stop workshop
+		workshopService.stop( defaultWorkshopStub.getID() );
+		assertTrue( ( (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
+
+		// start session
+		sessionService.start( defaultSessionStub.getID() );
+		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "running" ) );
+
+		// stop session
+		sessionService.stop( defaultSessionStub.getID() );
+		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
+
+		// getCurrentExercise
+		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
+
+		// getNextExercise
+		assertTrue( sessionService.getNextExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
+
+		// setNextExercise
+		sessionService.setNextExercise( defaultSessionStub.getID() );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
+
+		// getPreviousExercise
+		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
+
+		// join Session
+		Invitation wrappedJoinRequest = new Invitation();
+		wrappedJoinRequest.setInvitee( defaultUserStub );
+		wrappedJoinRequest.setSession( defaultSessionStub );
+
+		sessionService.join( wrappedJoinRequest );
+		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserStub.getID() ) ).getSession().getID().equals( defaultSessionStub.getID() ) );
+
+		// leave Session
+		sessionService.leave( wrappedJoinRequest );
+		assertTrue( ( (PrincipalImpl)userService.findByID( defaultUserStub.getID() ) ).getSession() == null );
+
+		// accept invitation
+		invitationService.accept( defaultInvitationStub.getID() );
+		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getInvitations(), defaultInvitationStub.getID(), true ) );
+
+		// add executer
+		sessionService.addExecuter( wrappedJoinRequest );
+		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), false ) );
+
+		// remove executer
+		sessionService.removeExecuter( wrappedJoinRequest );
+		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), true ) );
+	}
+
+	@Test
+	public void functionalExerciseService()
+	{
+		// start exercise
+		exerciseService.start( pinklabsExerciseStub.getID() );
+		ExerciseImpl ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
+
+		// suspend exercise
+		exerciseService.suspend( new SuspensionRequest( pinklabsExerciseStub.getID(), 12.5 ) );
+		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "suspended" ) );
+		assertTrue( ex.getElapsedSeconds() == 12.5 );
+
+		// resume exercise
+		assertTrue( exerciseService.resume( pinklabsExerciseStub.getID() ) == 12.5 );
+		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
+		assertTrue( ex.getElapsedSeconds() == 0.0 );
+
+		// stop exercise
+		exerciseService.stop( pinklabsExerciseStub.getID() );
+		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
+		assertTrue( ex.getCurrentState().equalsIgnoreCase( "terminated" ) );
+
+		// find data by exercise ID
+		assertTrue( exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() ).size() > 0 );
+
+		// start exercise for user
+		exerciseService.startUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
+
+		// stop exercise for user
+		exerciseService.stopUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
+
+		// suspend exercise for user
+		exerciseService.suspendUser( new TimerRequest( TimeUnit.SECONDS, 22 ) );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "suspended" ) );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == TimeUnit.SECONDS );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 22 );
+
+		// resume exercise for user
+		TimerRequest timer = exerciseService.resumeUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
+		assertTrue( timer.getTimeUnit() == TimeUnit.SECONDS );
+		assertTrue( timer.getValue() == 22 );
+
+		// cancel
+		exerciseService.cancelUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
+
+		// reset exercise for user
+		exerciseService.resetUser();
+		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "new" ) );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == null );
+		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 0 );
 	}
 
 	private void setExerciseOnDefaultSession( ExerciseImpl exercise )
