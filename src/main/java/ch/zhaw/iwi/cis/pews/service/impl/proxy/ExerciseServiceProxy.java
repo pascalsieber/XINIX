@@ -57,7 +57,7 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	@Override
 	public void setOutput( String output )
 	{
-		getServiceTarget().path( ExerciseRestService.GETINPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( output ) );
+		getServiceTarget().path( ExerciseRestService.SETOUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( output ) );
 	}
 
 	@Override

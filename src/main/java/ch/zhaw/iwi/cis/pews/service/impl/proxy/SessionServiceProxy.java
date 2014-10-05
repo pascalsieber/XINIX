@@ -4,6 +4,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.rest.SessionRestService;
@@ -74,6 +75,12 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public void removeExecuter( Invitation invitation )
 	{
 		getServiceTarget().path( SessionRestService.REMOVE_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitation ) );
+	}
+
+	@Override
+	public void setCurrentExercise( SessionImpl request )
+	{
+		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
 	}
 
 }

@@ -2,10 +2,12 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ParticipantDao;
 import ch.zhaw.iwi.cis.pews.dao.SessionDao;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ParticipantDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.SessionDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
@@ -28,30 +30,32 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	private SessionDao sessionDao;
 	private UserDao userDao;
 	private ParticipantDao participantDao;
+	private ExerciseDao exerciseDao;
 
 	public SessionServiceImpl()
 	{
 		sessionDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionDaoImpl.class.getSimpleName() );
 		userDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
 		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
+		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
 	public void join( Invitation invitation )
 	{
-		if ( ( (PrincipalImpl)userDao.findById( invitation.getInvitee().getID() ) ).getParticipation() != null)
+		if ( ( (PrincipalImpl)userDao.findById( invitation.getInvitee().getID() ) ).getParticipation() != null )
 		{
 			leave( invitation );
 		}
-				
+
 		SessionImpl session = sessionDao.findById( invitation.getSession().getID() );
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
-		
+
 		String participantID = participantDao.persist( new Participant( principal, session, new Timer( null, 0, WorkflowElementStatusImpl.NEW ) ) );
-		
+
 		principal.setParticipation( (Participant)participantDao.findById( participantID ) );
 		userDao.persist( principal );
-		
+
 		session.getParticipants().add( (Participant)participantDao.findById( participantID ) );
 		sessionDao.persist( session );
 	}
@@ -61,9 +65,9 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	{
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
 		SessionImpl session = sessionDao.findById( principal.getParticipation().getSession().getID() );
-				
+
 		Participant removable = null;
-		
+
 		for ( Participant participant : session.getParticipants() )
 		{
 			if ( participant.getPrincipal().getID().equalsIgnoreCase( principal.getID() ) )
@@ -72,17 +76,34 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 				break;
 			}
 		}
-		
+
 		session.getParticipants().remove( participantDao.findById( removable.getID() ) );
 		sessionDao.persist( session );
-		
-//		participantDao.remove( participantDao.findById( removable.getID() ) );
+
+		// participantDao.remove( participantDao.findById( removable.getID() ) );
 	}
 
 	@Override
 	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return ( (SessionImpl)findByID( sessionID ) ).getCurrentExercise();
+	}
+
+	@Override
+	public void setCurrentExercise( SessionImpl request )
+	{
+		SessionImpl session = sessionDao.findById( request.getID() );
+		ExerciseImpl exercise = exerciseDao.findById( request.getCurrentExercise().getID() );
+
+		if ( session.getWorkshop().getID().equalsIgnoreCase( exercise.getWorkshop().getID() ) )
+		{
+			session.setCurrentExercise( exercise );
+			sessionDao.persist( session );
+		}
+		else
+		{
+			throw new UnsupportedOperationException( "the requested session and exercise are not part of the same workshop!" );
+		}
 	}
 
 	@Override

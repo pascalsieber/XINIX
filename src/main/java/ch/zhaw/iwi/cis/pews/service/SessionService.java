@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 
 public interface SessionService extends WorkflowElementService
@@ -21,5 +22,7 @@ public interface SessionService extends WorkflowElementService
 	public void addExecuter( Invitation invitation );
 
 	public void removeExecuter( Invitation invitation );
+
+	public void setCurrentExercise( SessionImpl request );
 
 }

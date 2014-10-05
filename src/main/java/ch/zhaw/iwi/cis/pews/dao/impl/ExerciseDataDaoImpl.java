@@ -28,18 +28,16 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< ExerciseDataImpl > data = getEntityManager().createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
-		getEntityManager().clear();
-
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl> findByWorkshopAndExerciseDataClass( Class< ? > dataClass )
+	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( Class< ? > dataClass )
 	{
 		List< ExerciseDataImpl > result = new ArrayList<>();
-		
-		WorkshopImpl workshop = getEntityManager().find( WorkshopImpl.class, UserContext.getCurrentUser().getSession().getWorkshop() );
+
+		WorkshopImpl workshop = getEntityManager().find( WorkshopImpl.class, UserContext.getCurrentUser().getSession().getWorkshop().getID() );
 
 		for ( ExerciseImpl ex : workshop.getExercises() )
 		{
@@ -51,9 +49,9 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 				}
 			}
 		}
-		
+
 		getEntityManager().clear();
-		
+
 		return (List< ExerciseDataImpl >)cloneResult( result );
 	}
 }

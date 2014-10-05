@@ -59,6 +59,7 @@ import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
+import ch.zhaw.iwi.cis.pews.service.exercise.impl.XinixExerciseService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDataServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
@@ -94,6 +95,8 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class RestServiceTest
 {
@@ -507,7 +510,7 @@ public class RestServiceTest
 		assertTrue( searched.getID().equals( usr.getID() ) );
 
 		// request new password
-//		assertTrue( userService.requestNewPassword( defaultUserStub.getID() ) );
+		// assertTrue( userService.requestNewPassword( defaultUserStub.getID() ) );
 	}
 
 	@Test
@@ -528,9 +531,11 @@ public class RestServiceTest
 		success = false;
 
 		List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() );
-		for ( ExerciseDataImpl d : data )
+		List< PinkLabsExerciseData > prepedData = mapper.readValue( mapper.writeValueAsString( data ), makeCollectionType( PinkLabsExerciseData.class ) );
+
+		for ( PinkLabsExerciseData d : prepedData )
 		{
-			if ( ( (PinkLabsExerciseData)d ).getAnswers().containsAll( Arrays.asList( "answer1", "answer2", "answer3" ) ) )
+			if ( d.getAnswers().containsAll( Arrays.asList( "answer1", "answer2", "answer3" ) ) )
 			{
 				success = true;
 				break;
@@ -550,7 +555,10 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() ) )
+		List< ExerciseDataImpl > p2pOneData = exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() );
+		List< P2POneData > p2pOneDataPrepped = mapper.readValue( mapper.writeValueAsString( p2pOneData ), makeCollectionType( P2POneData.class ) );
+
+		for ( P2POneData d : p2pOneDataPrepped )
 		{
 			int count = 0;
 
@@ -575,7 +583,8 @@ public class RestServiceTest
 
 		// you2me
 		setExerciseOnDefaultSession( you2meExerciseStub );
-		You2MeInput you2meInput = mapper.readValue( exerciseService.getInputAsString(), You2MeInput.class );
+		String you2meInputString = exerciseService.getInputAsString();
+		You2MeInput you2meInput = mapper.readValue( you2meInputString, You2MeInput.class );
 
 		for ( String string : ( (You2MeDefinition)exerciseDefinitionService.findByID( you2meDefinitionStub.getID() ) ).getQuestions() )
 		{
@@ -587,11 +596,14 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( you2meExerciseStub.getID() ) )
+		List< ExerciseDataImpl > you2meData = exerciseDataService.findByExerciseID( you2meExerciseStub.getID() );
+		List< You2MeExerciseData > you2meDataPrepped = mapper.readValue( mapper.writeValueAsString( you2meData ), makeCollectionType( You2MeExerciseData.class ) );
+
+		for ( You2MeExerciseData d : you2meDataPrepped )
 		{
 			int count = 0;
 
-			for ( DialogEntry entry : ( (You2MeExerciseData)d ).getDialog() )
+			for ( DialogEntry entry : d.getDialog() )
 			{
 				if ( entry.getRole().toString().equalsIgnoreCase( DialogRole.RoleA.toString() ) && entry.getText().equalsIgnoreCase( "roleA" ) )
 				{
@@ -616,7 +628,8 @@ public class RestServiceTest
 
 		// p2ptwo
 		setExerciseOnDefaultSession( p2pTwoExerciseStub );
-		P2PTwoInput p2ptwoInput = mapper.readValue( exerciseService.getInputAsString(), P2PTwoInput.class );
+		String p2ptwoInputString = exerciseService.getInputAsString();
+		P2PTwoInput p2ptwoInput = mapper.readValue( p2ptwoInputString, P2PTwoInput.class );
 
 		assertTrue( p2ptwoInput.getQuestion().equalsIgnoreCase( ( (P2PTwoDefinition)exerciseDefinitionService.findByID( p2ptwoDefinitionStub.getID() ) ).getQuestion() ) );
 
@@ -640,11 +653,14 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( p2pTwoExerciseStub.getID() ) )
+		List< ExerciseDataImpl > p2ptwoData = exerciseDataService.findByExerciseID( p2pTwoExerciseStub.getID() );
+		List< P2PTwoData > p2ptwoDataPrepped = mapper.readValue( mapper.writeValueAsString( p2ptwoData ), makeCollectionType( P2PTwoData.class ) );
+
+		for ( P2PTwoData d : p2ptwoDataPrepped )
 		{
-			if ( ( (P2PTwoData)d ).getAnswers().containsAll( p2ptwoAnswers ) )
+			if ( d.getAnswers().containsAll( p2ptwoAnswers ) )
 			{
-				for ( P2POneKeyword keyword : ( (P2PTwoData)d ).getSelectedKeywords() )
+				for ( P2POneKeyword keyword : d.getSelectedKeywords() )
 				{
 					assertTrue( keywordIDs.contains( keyword.getID() ) );
 				}
@@ -666,9 +682,12 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( simpleprototypingExerciseStub.getID() ) )
+		List< ExerciseDataImpl > simpleProtoData = exerciseDataService.findByExerciseID( simpleprototypingExerciseStub.getID() );
+		List< SimplePrototypingData > simpleProtoDataPrepped = mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( SimplePrototypingData.class ) );
+
+		for ( SimplePrototypingData d : simpleProtoDataPrepped )
 		{
-			if ( ( (SimplePrototypingData)d ).getBlob().equals( "simpleprototyping".getBytes() ) )
+			if ( d.getBlob().equals( "simpleprototyping".getBytes() ) )
 			{
 				success = true;
 				break;
@@ -699,13 +718,16 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( xinixExerciseStub.getID() ) )
+		List< ExerciseDataImpl > xinixData = exerciseDataService.findByExerciseID( xinixExerciseStub.getID() );
+		List< XinixData > xinixDataPrepped = mapper.readValue( mapper.writeValueAsString( xinixData ), makeCollectionType( XinixData.class ) );
+
+		for ( XinixData d : xinixDataPrepped )
 		{
 			int count = 0;
 
-			if ( ( (XinixData)d ).getXinixImage().getID().equalsIgnoreCase( xinixImageStub.getID() ) )
+			if ( d.getXinixImage().getID().equalsIgnoreCase( xinixImageStub.getID() ) )
 			{
-				for ( String association : ( (XinixData)d ).getAssociations() )
+				for ( String association : d.getAssociations() )
 				{
 					if ( association.equalsIgnoreCase( "x1" ) || association.equalsIgnoreCase( "x2" ) || association.equalsIgnoreCase( "x3" ) )
 					{
@@ -739,11 +761,14 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) )
+		List< ExerciseDataImpl > compressionData = exerciseDataService.findByExerciseID( compressionExerciseStub.getID() );
+		List< CompressionExerciseData > compressionDataPrepped = mapper.readValue( mapper.writeValueAsString( compressionData ), makeCollectionType( CompressionExerciseData.class ) );
+
+		for ( CompressionExerciseData d : compressionDataPrepped )
 		{
 			int count = 0;
 
-			for ( String string : ( (CompressionExerciseData)d ).getSolutions() )
+			for ( String string : d.getSolutions() )
 			{
 				if ( string.equalsIgnoreCase( "c1" ) || string.equalsIgnoreCase( "c2" ) || string.equalsIgnoreCase( "c3" ) )
 				{
@@ -777,11 +802,14 @@ public class RestServiceTest
 
 		success = false;
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( evaluationExerciseStub.getID() ) )
+		List< ExerciseDataImpl > evaluationData = exerciseDataService.findByExerciseID( evaluationExerciseStub.getID() );
+		List< EvaluationExerciseData > evaluationDataPrepped = mapper.readValue( mapper.writeValueAsString( evaluationData ), makeCollectionType( EvaluationExerciseData.class ) );
+
+		for ( EvaluationExerciseData d : evaluationDataPrepped )
 		{
 			int count = 0;
 
-			for ( Evaluation evaluation : ( (EvaluationExerciseData)d ).getEvaluations() )
+			for ( Evaluation evaluation : d.getEvaluations() )
 			{
 				if ( evaluation.getSolution().equalsIgnoreCase( "solution1" ) && evaluation.getScore().getScore() == 5 )
 				{
@@ -802,6 +830,11 @@ public class RestServiceTest
 
 		assertTrue( success );
 
+	}
+
+	private CollectionType makeCollectionType( Class< ? > elementClass )
+	{
+		return TypeFactory.defaultInstance().constructCollectionType( ArrayList.class, elementClass );
 	}
 
 	@Test
@@ -835,6 +868,9 @@ public class RestServiceTest
 
 		// getPreviousExercise
 		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
+
+		// TODO finish this!
+		// setCurrentExericse
 
 		// join Session
 		Invitation wrappedJoinRequest = new Invitation();

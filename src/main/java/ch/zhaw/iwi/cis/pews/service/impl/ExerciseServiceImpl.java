@@ -124,7 +124,8 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		try
 		{
-			return objectMapper.writeValueAsString( getInput() );
+			Input input = getInput();
+			return objectMapper.writeValueAsString( input );
 		}
 		catch ( JsonProcessingException e )
 		{

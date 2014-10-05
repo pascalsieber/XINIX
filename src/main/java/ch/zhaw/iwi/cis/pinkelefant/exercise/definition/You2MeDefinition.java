@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
@@ -17,8 +18,8 @@ public class You2MeDefinition extends ExerciseDefinitionImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	
-	@ElementCollection
+
+	@ElementCollection( fetch = FetchType.EAGER )
 	private List< String > questions;
 
 	public You2MeDefinition()

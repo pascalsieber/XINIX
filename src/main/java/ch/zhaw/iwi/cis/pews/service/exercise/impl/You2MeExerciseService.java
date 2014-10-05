@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
@@ -28,7 +29,7 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 	public Input getInput()
 	{
 		You2MeDefinition definition = (You2MeDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new You2MeInput( definition.getQuestions() );
+		return new You2MeInput( new ArrayList<>( definition.getQuestions() ) );
 	}
 
 	@Override

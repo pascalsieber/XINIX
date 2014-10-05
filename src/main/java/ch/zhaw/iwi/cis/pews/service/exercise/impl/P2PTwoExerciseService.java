@@ -6,11 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
@@ -26,9 +29,12 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 public class P2PTwoExerciseService extends ExerciseServiceImpl
 {
 
+	private ExerciseDataDao specificExerciseDataDao;
+	
 	public P2PTwoExerciseService()
 	{
 		super();
+		this.specificExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneDataDao.class.getSimpleName() );
 	}
 
 	@Override
@@ -37,7 +43,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 		P2PTwoDefinition definition = (P2PTwoDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		List< String > keywords = new ArrayList<>();
 
-		List< ExerciseDataImpl > cascadeOneData = getExerciseDataDao().findByWorkshopAndExerciseDataClass( P2POneData.class );
+		List< ExerciseDataImpl > cascadeOneData = specificExerciseDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
 
 		for ( ExerciseDataImpl data : cascadeOneData )
 		{

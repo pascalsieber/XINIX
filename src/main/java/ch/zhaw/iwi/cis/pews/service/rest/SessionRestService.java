@@ -25,6 +25,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	public static final String BASE = "/workshopService/session";
 
 	public final static String GET_CURRENT_EXERCISE = "/getCurrentExercise";
+	public final static String SET_CURRENT_EXERCISE = "/setCurrentExericse";
 	public final static String GET_NEXT_EXERCISE = "/getNextExercise";
 	public final static String GET_PREVIOUS_EXERCISE = "/getPreviousExercise";
 	public final static String SET_NEXT_EXERCISE = "/setNextExercise";
@@ -81,6 +82,13 @@ public class SessionRestService extends WorkshopObjectRestService
 	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return sessionService.getCurrentExercise( sessionID );
+	}
+
+	@POST
+	@Path( SET_CURRENT_EXERCISE )
+	public void setCurrentExercise( SessionImpl request )
+	{
+		sessionService.setCurrentExercise( request );
 	}
 
 	@POST
