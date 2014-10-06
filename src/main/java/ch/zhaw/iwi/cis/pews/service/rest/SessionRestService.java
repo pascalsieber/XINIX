@@ -25,7 +25,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	public static final String BASE = "/workshopService/session";
 
 	public final static String GET_CURRENT_EXERCISE = "/getCurrentExercise";
-	public final static String SET_CURRENT_EXERCISE = "/setCurrentExericse";
+	public final static String SET_CURRENT_EXERCISE = "/setCurrentExercise";
 	public final static String GET_NEXT_EXERCISE = "/getNextExercise";
 	public final static String GET_PREVIOUS_EXERCISE = "/getPreviousExercise";
 	public final static String SET_NEXT_EXERCISE = "/setNextExercise";

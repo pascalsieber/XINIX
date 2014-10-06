@@ -71,15 +71,27 @@ public class SessionImpl extends WorkflowElementImpl
 
 	public ExerciseImpl getCurrentExercise()
 	{
+		// need this in case we operate on a non-persisted session object
+		// for example in SessionServiceImpl.setCurrentExercise() an incomplete session object
+		// is used which is constructed as part of the REST service call
+		if (currentExercise != null) {
+			return currentExercise;
+		}
+		
+		// if session has no workshop, there can be no exercises
 		if ( workshop == null )
 		{
-			return null;
+			throw new RuntimeException( "error: no workshop defined for Session with ID = " + this.getID() );
 		}
 
+		// if no currentExercise is set, we assume that session has not kicked off,
+		// so we set the first exercise defined in the session's workshop as 
+		// the currentExercise
 		if ( currentExercise == null && workshop.getExercises().size() > 0 )
 		{
 			setCurrentExercise( getWorkshop().getExercises().get( 0 ) );
 		}
+		
 		return currentExercise;
 	}
 
