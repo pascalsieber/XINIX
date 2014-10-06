@@ -59,7 +59,6 @@ import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
-import ch.zhaw.iwi.cis.pews.service.exercise.impl.XinixExerciseService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDataServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
