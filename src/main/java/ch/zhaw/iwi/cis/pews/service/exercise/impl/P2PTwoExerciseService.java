@@ -8,6 +8,7 @@ import java.util.Set;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneDataDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneKeywordDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -29,12 +30,14 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 public class P2PTwoExerciseService extends ExerciseServiceImpl
 {
 
-	private ExerciseDataDao specificExerciseDataDao;
+	private ExerciseDataDao p2pOneDataDao;
+	private ExerciseDataDao p2pOneKeywordDao;
 	
 	public P2PTwoExerciseService()
 	{
 		super();
-		this.specificExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneDataDao.class.getSimpleName() );
+		this.p2pOneDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneDataDao.class.getSimpleName() );
+		this.p2pOneKeywordDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneKeywordDao.class.getSimpleName() );
 	}
 
 	@Override
@@ -43,7 +46,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 		P2PTwoDefinition definition = (P2PTwoDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		List< String > keywords = new ArrayList<>();
 
-		List< ExerciseDataImpl > cascadeOneData = specificExerciseDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
+		List< ExerciseDataImpl > cascadeOneData = p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
 
 		for ( ExerciseDataImpl data : cascadeOneData )
 		{
@@ -67,7 +70,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 
 			for ( String keywordID : finalOutput.getChosenKeywords() )
 			{
-				chosenP2POneKeywords.add( (P2POneKeyword)getExerciseDataDao().findById( keywordID ) );
+				chosenP2POneKeywords.add( (P2POneKeyword)p2pOneKeywordDao.findById( keywordID ) );
 			}
 
 			getExerciseDataDao()

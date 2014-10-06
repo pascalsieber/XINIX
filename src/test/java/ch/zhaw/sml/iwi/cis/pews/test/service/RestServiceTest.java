@@ -632,9 +632,12 @@ public class RestServiceTest
 
 		assertTrue( p2ptwoInput.getQuestion().equalsIgnoreCase( ( (P2PTwoDefinition)exerciseDefinitionService.findByID( p2ptwoDefinitionStub.getID() ) ).getQuestion() ) );
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() ) )
+		List< ExerciseDataImpl > p2pOneDataForP2PTwoTest = exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() );
+		List< P2POneData > p2pOneDataForP2PTwoTestPrepped = mapper.readValue( mapper.writeValueAsString( p2pOneDataForP2PTwoTest ), makeCollectionType( P2POneData.class ) );
+		
+		for ( P2POneData d : p2pOneDataForP2PTwoTestPrepped )
 		{
-			for ( P2POneKeyword keyword : ( (P2POneData)d ).getKeywords() )
+			for ( P2POneKeyword keyword : d.getKeywords() )
 			{
 				assertTrue( p2ptwoInput.getCascade1Keywords().contains( keyword.getKeyword() ) );
 			}
@@ -686,7 +689,7 @@ public class RestServiceTest
 
 		for ( SimplePrototypingData d : simpleProtoDataPrepped )
 		{
-			if ( d.getBlob().equals( "simpleprototyping".getBytes() ) )
+			if ( Arrays.equals( "simpleprototyping".getBytes(), d.getBlob() ) )
 			{
 				success = true;
 				break;

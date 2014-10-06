@@ -81,7 +81,7 @@ public class SessionImpl extends WorkflowElementImpl
 		// if session has no workshop, there can be no exercises
 		if ( workshop == null )
 		{
-			throw new RuntimeException( "error: no workshop defined for Session with ID = " + this.getID() );
+			return null;
 		}
 
 		// if no currentExercise is set, we assume that session has not kicked off,

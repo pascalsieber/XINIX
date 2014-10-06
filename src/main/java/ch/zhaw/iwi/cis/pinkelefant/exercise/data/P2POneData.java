@@ -24,14 +24,14 @@ public class P2POneData extends CompressableExerciseData
 	public P2POneData()
 	{
 		super();
-		this.keywords = new ArrayList<>();
+		this.keywords = new ArrayList< P2POneKeyword >();
 	}
 
 	public P2POneData( PrincipalImpl owner, WorkflowElementImpl workflowElement, List< String > keywordStrings )
 	{
 		super( owner, workflowElement );
-		this.keywords = new ArrayList<>();
-		
+		this.keywords = new ArrayList< P2POneKeyword >();
+
 		for ( String string : keywordStrings )
 		{
 			keywords.add( new P2POneKeyword( UserContext.getCurrentUser(), string ) );
