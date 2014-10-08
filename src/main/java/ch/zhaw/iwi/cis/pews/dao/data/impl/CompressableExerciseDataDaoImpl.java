@@ -1,6 +1,7 @@
-package ch.zhaw.iwi.cis.pews.dao.impl;
+package ch.zhaw.iwi.cis.pews.dao.data.impl;
 
 import ch.zhaw.iwi.cis.pews.dao.CompressableExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopObjectDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;

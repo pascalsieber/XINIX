@@ -2,7 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import ch.zhaw.iwi.cis.pews.dao.CompressableExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
-import ch.zhaw.iwi.cis.pews.dao.impl.CompressableExerciseDataDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressableExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
