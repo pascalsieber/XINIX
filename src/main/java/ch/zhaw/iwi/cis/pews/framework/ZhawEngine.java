@@ -42,7 +42,9 @@ import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
@@ -68,7 +70,18 @@ import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
@@ -453,32 +466,45 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// evaluation exercise
-		String evaluationExID = exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", (WorkflowElementDefinitionImpl)exerciseDefinitionService
-			.findByID( evaluationDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String evaluationExID = exerciseService.persist( new ExerciseImpl(
+			"evaluation",
+			"evaluation exercise",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
-		// TODO update sample exercise data
+		// pinklabs data
+		exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), Arrays.asList( "internet", "newspaper" ) ) );
 
-		// // pinklabs data
-		// exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "internet" ) );
-		// exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), "newspaper" ) );
-		//
-		// // p2p one data
-		// String p2poneDataID = exerciseDataService.persist( new P2POneData( rootUser, (WorkflowElementImpl)exerciseService.findByID( p2poneExID ), "school" ) );
-		//
-		// // p2p two data
-		// exerciseDataService.persist( new P2PTwoData(
-		// rootUser,
-		// (WorkflowElementImpl)exerciseService.findByID( p2ptwoExID ),
-		// (P2POneData)exerciseDataService.findByID( p2poneDataID ),
-		// (P2POneData)exerciseDataService.findByID( p2poneDataID ),
-		// "public funding" ) );
-		//
-		// // xinix data
-		// exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), "no idea", (XinixImage)exerciseDataService.findByID( xinixImageID ) ) );
-		//
-		// // you2me data
-		// exerciseDataService.persist( new You2MeExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), "question one", "question two", "response one", "response two" )
-		// );
+		// p2pone data
+		String p2pOneDataID = exerciseDataService.persist( new P2POneData( rootUser, (WorkflowElementImpl)exerciseService.findByID( p2poneExID ), Arrays.asList( "privacy", "fun" ) ) );
+
+		// you2me data
+		exerciseDataService.persist( new You2MeExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), Arrays.asList( new DialogEntry(
+			DialogRole.RoleA,
+			"A says something" ), new DialogEntry( DialogRole.RoleB, "B says something else" ) ) ) );
+
+		// p2ptwo data
+		Set< P2POneKeyword > keywords = new HashSet<>();
+		P2POneData p2pOneData = exerciseDataService.findByID( p2pOneDataID );
+		keywords.add( p2pOneData.getKeywords().get( 0 ) );
+		keywords.add( p2pOneData.getKeywords().get( 1 ) );
+
+		exerciseDataService.persist( new P2PTwoData( rootUser, (WorkflowElementImpl)exerciseService.findByID( p2ptwoExID ), Arrays.asList( "one answer", "another answer" ), keywords ) );
+
+		// xinix data
+		Set< String > associations = new HashSet<>();
+		associations.addAll( Arrays.asList( "school", "stress", "party" ) );
+		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, xinixImage ) );
+
+		// simpleprototyping data
+		exerciseDataService.persist( new SimplePrototypingData( rootUser, (WorkflowElementImpl)exerciseService.findByID( simplePrototypingExID ), "my blob".getBytes() ) );
+
+		// compression data
+		exerciseDataService.persist( new CompressionExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( compressionExID ), Arrays.asList( "solution", "another solution" ) ) );
+
+		// evaluation data
+		exerciseDataService
+			.persist( new EvaluationExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( evaluationExID ), Arrays.asList( new Evaluation( rootUser, "solution", 4 ) ) ) );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl( "sample session", "sample workshop session", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );

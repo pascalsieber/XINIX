@@ -68,6 +68,7 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 	protected abstract Class< ? extends WorkshopObject > getWorkshopObjectClass();
 	
 	@SuppressWarnings( "resource" )
+	@Override
 	public Object cloneResult (Object object)
 	{
 		try

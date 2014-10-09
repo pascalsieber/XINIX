@@ -15,6 +15,8 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.CompressionExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationExerciseDataService;
@@ -77,11 +79,34 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		String defName = ex.getDefinition().getClass().getSimpleName();
 		Class< ? > serviceClass = getExerciseDataSpecificService( defName );
 		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
-		return service.findByExerciseID( exerciseID );
+		return cleanseData( service.findByExerciseID( exerciseID ) );
 	}
 
 	public List< ExerciseDataImpl > genericFindByExerciseID( String exerciseID )
 	{
-		return exerciseDataDao.findByExerciseID( exerciseID );
+		return cleanseData( exerciseDataDao.findByExerciseID( exerciseID ) );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private List< ExerciseDataImpl > cleanseData( List< ExerciseDataImpl > data )
+	{
+		List< ExerciseDataImpl > cleansed = (List< ExerciseDataImpl >)exerciseDataDao.cloneResult( data );
+		for ( ExerciseDataImpl d : cleansed )
+		{
+			UserImpl oldUser = (UserImpl)d.getOwner();
+			UserImpl newUser = new UserImpl( null, null, null, oldUser.getFirstName(), oldUser.getLastName(), oldUser.getLoginName() );
+			newUser.setID( oldUser.getID() );
+			newUser.setClient( oldUser.getClient() );
+			d.setOwner( newUser );
+			
+			WorkflowElementImpl oldWF = d.getWorkflowElement();
+			WorkflowElementImpl newWF = new WorkflowElementImpl( oldWF.getName(), oldWF.getDescription(), null );
+			newWF.setClient( oldWF.getClient() );
+			newWF.setID( oldWF.getID() );
+			newWF.setStatusHistory( oldWF.getStatusHistory() );
+			d.setWorkflowElement( newWF );
+		}
+
+		return cleansed;
 	}
 }

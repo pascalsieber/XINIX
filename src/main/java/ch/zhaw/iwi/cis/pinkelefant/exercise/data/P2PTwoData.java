@@ -1,6 +1,8 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.ElementCollection;
@@ -18,7 +20,7 @@ public class P2PTwoData extends CompressableExerciseData
 	private static final long serialVersionUID = 1L;
 
 	@ElementCollection
-	private Set< String > answers;
+	private List< String > answers;
 
 	@ManyToMany
 	private Set< P2POneKeyword > selectedKeywords;
@@ -27,22 +29,22 @@ public class P2PTwoData extends CompressableExerciseData
 	{
 		super();
 		this.selectedKeywords = new HashSet<>();
-		this.answers = new HashSet<>();
+		this.answers = new ArrayList<>();
 	}
 
-	public P2PTwoData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Set< String > answers, Set< P2POneKeyword > selectedKeywords )
+	public P2PTwoData( PrincipalImpl owner, WorkflowElementImpl workflowElement, List< String > answers, Set< P2POneKeyword > selectedKeywords )
 	{
 		super( owner, workflowElement );
 		this.answers = answers;
 		this.selectedKeywords = selectedKeywords;
 	}
 
-	public Set< String > getAnswers()
+	public List< String > getAnswers()
 	{
 		return answers;
 	}
 
-	public void setAnswers( Set< String > answers )
+	public void setAnswers( List< String > answers )
 	{
 		this.answers = answers;
 	}

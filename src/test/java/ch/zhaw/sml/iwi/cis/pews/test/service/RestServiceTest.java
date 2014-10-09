@@ -431,38 +431,218 @@ public class RestServiceTest
 		List< ExerciseImpl > exs = exerciseService.findAll();
 		assertTrue( exs.size() > 0 );
 		assertTrue( exBefore - exs.size() == 1 );
+	}
 
-		// // create exercise data
-		// String dataID = exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, defaultExerciseStub1, Arrays.asList( "answer1", "answer2" ) ) );
-		//
-		// // read exercise data
-		// ExerciseDataImpl data = exerciseDataService.findByID( dataID );
-		// assertTrue( data.getClient().getID().equals( defaultClientStub.getID() ) );
-		// assertTrue( data.getID().equals( dataID ) );
-		// assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer1" ) );
-		// assertTrue( ( (PinkLabsExerciseData)data ).getAnswers().contains( "answer2" ) );
-		// assertTrue( data.getOwner().getID().equals( defaultUserStub.getID() ) );
-		// assertTrue( data.getWorkflowElement().getID().equals( defaultExerciseStub1.getID() ) );
-		//
-		// // update exercise data
-		// ( (PinkLabsExerciseData)data ).setAnswers( Arrays.asList( "updatedanswer1", "answer2" ) );
-		// exerciseDataService.persist( data );
-		// PinkLabsExerciseData updatedData = exerciseDataService.findByID( dataID );
-		// assertTrue( updatedData.getAnswers().contains( "updatedanswer1" ) );
-		//
-		// // delete exercise data
-		// int dataBefore = exerciseDataService.findAll().size();
-		// exerciseDataService.remove( updatedData );
-		//
-		// // find all checks delete
-		// List< ExerciseDataImpl > datas = exerciseDataService.findAll();
-		// assertTrue( datas.size() > 0 );
-		// assertTrue( dataBefore - datas.size() == 1 );
+	/**
+	 * helper method for validating exercise data objects (ID, Client, Owner, WorkflowElement)
+	 */
+	private void checkExerciseData( ExerciseImpl exercise, ExerciseDataImpl data, ExerciseDataImpl dataStub )
+	{
+		assertTrue( data.getID().equalsIgnoreCase( dataStub.getID() ) );
+		assertTrue( data.getClient().getID().equalsIgnoreCase( defaultClientStub.getID() ) );
+		assertTrue( data.getOwner().getID().equalsIgnoreCase( defaultUserStub.getID() ) );
+		assertTrue( data.getWorkflowElement().getID().equalsIgnoreCase( exercise.getID() ) );
 	}
 
 	@Test
-	public void crudOperationsExerciseData()
+	public void crudOperationsPinklabsExerciseData()
 	{
+		// create
+		pinklabsDataStub.setID( exerciseDataService.persist( new PinkLabsExerciseData( defaultUserStub, pinklabsExerciseStub, Arrays.asList( "answer1", "answer2", "answer3" ) ) ) );
+
+		// read
+		PinkLabsExerciseData data = exerciseDataService.findByID( pinklabsDataStub.getID() );
+		checkExerciseData( pinklabsExerciseStub, data, pinklabsDataStub );
+		assertTrue( data.getAnswers().containsAll( Arrays.asList( "answer1", "answer2", "answer3" ) ) );
+
+		// update
+
+		// delete
+
+	}
+
+	@Test
+	public void crudOperationsP2POneExerciseData()
+	{
+		// create
+		p2poneDataStub.setID( exerciseDataService.persist( new P2POneData( defaultUserStub, p2pOneExerciseStub, Arrays.asList( "keyword1", "keyword2", "keyword3" ) ) ) );
+
+		// read
+		P2POneData data = exerciseDataService.findByID( p2poneDataStub.getID() );
+		checkExerciseData( p2pOneExerciseStub, data, p2poneDataStub );
+
+		int count = 0;
+
+		for ( P2POneKeyword keyword : data.getKeywords() )
+		{
+			if ( keyword.getKeyword().equalsIgnoreCase( "keyword1" ) || keyword.getKeyword().equalsIgnoreCase( "keyword2" ) || keyword.getKeyword().equalsIgnoreCase( "keyword3" ) )
+			{
+				count += 1;
+			}
+		}
+
+		assertTrue( count == 3 );
+
+		// update
+
+		// delete
+
+	}
+
+	@Test
+	public void crudOperationsYou2MeExerciseData()
+	{
+		// create
+		DialogEntry dialogEntry1 = new DialogEntry( DialogRole.RoleA, "what" );
+		DialogEntry dialogEntry2 = new DialogEntry( DialogRole.RoleB, "why" );
+		you2meDataStub.setID( exerciseDataService.persist( new You2MeExerciseData( defaultUserStub, you2meExerciseStub, Arrays.asList( dialogEntry1, dialogEntry2 ) ) ) );
+
+		// read
+		You2MeExerciseData data = exerciseDataService.findByID( you2meDataStub.getID() );
+		checkExerciseData( you2meExerciseStub, data, you2meDataStub );
+
+		int count = 0;
+
+		for ( DialogEntry entry : data.getDialog() )
+		{
+			if ( entry.getRole().toString().equalsIgnoreCase( DialogRole.RoleA.toString() ) && entry.getText().equalsIgnoreCase( "what" ) )
+			{
+				count += 1;
+			}
+
+			if ( entry.getRole().toString().equalsIgnoreCase( DialogRole.RoleB.toString() ) && entry.getText().equalsIgnoreCase( "why" ) )
+			{
+				count += 1;
+			}
+		}
+
+		assertTrue( count == 2 );
+
+		// update
+
+		// delete
+
+	}
+
+	@Test
+	public void crudOperationsP2PTwoExerciseData()
+	{
+		// create
+		P2POneData p2pOneData = exerciseDataService.findByID( exerciseDataService.persist( new P2POneData( defaultUserStub, p2pOneExerciseStub, Arrays.asList( "key1", "key2" ) ) ) );
+		Set< P2POneKeyword > selectedKeywords = new HashSet<>();
+		selectedKeywords.add( p2pOneData.getKeywords().get( 0 ) );
+		selectedKeywords.add( p2pOneData.getKeywords().get( 1 ) );
+		p2ptwoDataStub.setID( exerciseDataService.persist( new P2PTwoData( defaultUserStub, p2pTwoExerciseStub, Arrays.asList( "answer1", "answer2" ), selectedKeywords ) ) );
+
+		// read
+		P2PTwoData data = exerciseDataService.findByID( p2ptwoDataStub.getID() );
+		checkExerciseData( p2pTwoExerciseStub, data, p2ptwoDataStub );
+		assertTrue( data.getAnswers().containsAll( Arrays.asList( "answer1", "answer2" ) ) );
+
+		int count = 0;
+
+		for ( P2POneKeyword keyword : data.getSelectedKeywords() )
+		{
+			if ( keyword.getKeyword().equalsIgnoreCase( "key1" ) || keyword.getKeyword().equalsIgnoreCase( "key2" ) )
+			{
+				count += 1;
+			}
+		}
+
+		assertTrue( count == 2 );
+
+		// update
+
+		// delete
+
+	}
+
+	@Test
+	public void crudOperationsXinixExerciseData()
+	{
+		// create
+		Set< String > associations = new HashSet<>();
+		associations.addAll( Arrays.asList( "assoc1", "assoc2", "assoc3" ) );
+		xinixDataStub.setID( exerciseDataService.persist( new XinixData( defaultUserStub, xinixExerciseStub, associations, xinixImageStub ) ) );
+
+		// read
+		XinixData data = exerciseDataService.findByID( xinixDataStub.getID() );
+		checkExerciseData( xinixExerciseStub, data, xinixDataStub );
+		assertTrue( data.getXinixImage().getID().equalsIgnoreCase( xinixImageStub.getID() ) );
+		assertTrue( data.getAssociations().containsAll( associations ) );
+
+		// update
+
+		// delete
+
+	}
+
+	@Test
+	public void crudOperationsSimplePrototypeExerciseData()
+	{
+		// create
+		simpleprototypingDataStub.setID( exerciseDataService.persist( new SimplePrototypingData( defaultUserStub, simpleprototypingExerciseStub, "blob".getBytes() ) ) );
+
+		// read
+		SimplePrototypingData data = exerciseDataService.findByID( simpleprototypingDataStub.getID() );
+		checkExerciseData( simpleprototypingExerciseStub, data, simpleprototypingDataStub );
+		assertTrue( Arrays.equals( "blob".getBytes(), data.getBlob() ) );
+
+		// update
+
+		// delete
+
+	}
+
+	@Test
+	public void crudOperationsCompressionExerciseData()
+	{
+		// create
+		compressionDataStub.setID( exerciseDataService.persist( new CompressionExerciseData( defaultUserStub, compressionExerciseStub, Arrays.asList( "sol1", "sol2", "sol3" ) ) ) );
+
+		// read
+		CompressionExerciseData data = exerciseDataService.findByID( compressionDataStub.getID() );
+		checkExerciseData( compressionExerciseStub, data, compressionDataStub );
+		assertTrue( data.getSolutions().containsAll( Arrays.asList( "sol1", "sol2", "sol3" ) ) );
+
+		// update
+
+		// delete
+
+	}
+
+	@Test
+	public void crudOperationsEvaluationExerciseData()
+	{
+		// create
+		evaluationDataStub.setID( exerciseDataService.persist( new EvaluationExerciseData( defaultUserStub, evaluationExerciseStub, Arrays.asList(
+			new Evaluation( defaultUserStub, "solution1", 3 ),
+			new Evaluation( defaultUserStub, "solution2", 4 ) ) ) ) );
+
+		// read
+		EvaluationExerciseData data = exerciseDataService.findByID( evaluationDataStub.getID() );
+		checkExerciseData( evaluationExerciseStub, data, evaluationDataStub );
+
+		int count = 0;
+
+		for ( Evaluation evaluation : data.getEvaluations() )
+		{
+			if ( evaluation.getScore() == 3 && evaluation.getSolution().equalsIgnoreCase( "solution1" ) )
+			{
+				count += 1;
+			}
+
+			if ( evaluation.getScore() == 4 && evaluation.getSolution().equalsIgnoreCase( "solution2" ) )
+			{
+				count += 1;
+			}
+		}
+
+		assertTrue( count == 2 );
+
+		// update
+
+		// delete
 
 	}
 
@@ -642,14 +822,11 @@ public class RestServiceTest
 			}
 		}
 
-		Set< String > p2ptwoAnswers = new HashSet<>();
-		p2ptwoAnswers.addAll( Arrays.asList( "p21", "p22", "p23" ) );
-
 		Set< String > keywordIDs = new HashSet<>();
 		keywordIDs.add( p2pOneKeywordIDs.get( 0 ) );
 		keywordIDs.add( p2pOneKeywordIDs.get( 1 ) );
 
-		output = new P2PTwoOutput( keywordIDs, p2ptwoAnswers );
+		output = new P2PTwoOutput( keywordIDs, Arrays.asList( "p21", "p22", "p23" ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
 
 		success = false;
@@ -659,7 +836,7 @@ public class RestServiceTest
 
 		for ( P2PTwoData d : p2ptwoDataPrepped )
 		{
-			if ( d.getAnswers().containsAll( p2ptwoAnswers ) )
+			if ( d.getAnswers().containsAll( Arrays.asList( "p21", "p22", "p23" ) ) )
 			{
 				for ( P2POneKeyword keyword : d.getSelectedKeywords() )
 				{
@@ -968,8 +1145,7 @@ public class RestServiceTest
 	}
 
 	/**
-	 * helper method, extensively used in getInputSetOutput
-	 * could use sessionService.setCurrentExercise, but this is faster
+	 * helper method, extensively used in getInputSetOutput could use sessionService.setCurrentExercise, but this is faster
 	 */
 	private void setExerciseOnDefaultSession( ExerciseImpl exercise )
 	{

@@ -15,4 +15,6 @@ public interface WorkshopObjectDao
 	public < T extends WorkshopObject > T findById( String id );
 
 	public < T extends WorkshopObject > List< T > findByAll( String clientID );
+
+	public Object cloneResult( Object object );
 }

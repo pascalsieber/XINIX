@@ -1,21 +1,23 @@
 package ch.zhaw.iwi.cis.pews.model.output;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class P2PTwoOutput extends Output
 {
 	private Set< String > chosenKeywords;
-	private Set< String > answers;
+	private List< String > answers;
 
 	public P2PTwoOutput()
 	{
 		super();
 		this.chosenKeywords = new HashSet<>();
-		this.answers = new HashSet<>();
+		this.answers = new ArrayList<>();
 	}
 
-	public P2PTwoOutput( Set< String > chosenKeywords, Set< String > answers )
+	public P2PTwoOutput( Set< String > chosenKeywords, List< String > answers )
 	{
 		super();
 		this.chosenKeywords = chosenKeywords;
@@ -32,12 +34,12 @@ public class P2PTwoOutput extends Output
 		this.chosenKeywords = chosenKeywords;
 	}
 
-	public Set< String > getAnswers()
+	public List< String > getAnswers()
 	{
 		return answers;
 	}
 
-	public void setAnswers( Set< String > answers )
+	public void setAnswers( List< String > answers )
 	{
 		this.answers = answers;
 	}

@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -34,7 +33,7 @@ public class P2POneData extends CompressableExerciseData
 
 		for ( String string : keywordStrings )
 		{
-			keywords.add( new P2POneKeyword( UserContext.getCurrentUser(), string ) );
+			keywords.add( new P2POneKeyword( owner, string ) );
 		}
 	}
 
