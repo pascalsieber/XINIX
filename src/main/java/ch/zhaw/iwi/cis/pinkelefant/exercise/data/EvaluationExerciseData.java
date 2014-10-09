@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -17,7 +18,7 @@ public class EvaluationExerciseData extends ExerciseDataImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List< Evaluation > evaluations;
 
 	public EvaluationExerciseData()

@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
@@ -22,10 +25,12 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 @ExerciseSpecificService( exerciseDefinition = EvaluationDefinition.class )
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
-
+	private ExerciseDataDao compressionDataDao;
+	
 	public EvaluationExerciseService()
 	{
 		super();
+		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDao.class.getSimpleName() );
 	}
 
 	@Override
@@ -33,7 +38,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	{
 
 		List< String > solutions = new ArrayList<>();
-		List< ExerciseDataImpl > compressionData = getExerciseDataDao().findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
+		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
 		
 		for ( ExerciseDataImpl data : compressionData )
 		{

@@ -10,19 +10,18 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class P2POneDataDao extends ExerciseDataDaoImpl
+public class CompressionDataDao extends ExerciseDataDaoImpl
 {
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< P2POneData > data = getEntityManager()
-			.createQuery( "from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + exerciseID + "'" )
-			.getResultList();
+		List< CompressionExerciseData > data = getEntityManager().createQuery(
+			"from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
@@ -30,17 +29,18 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( Class< ? > dataClass )
 	{
-		List< P2POneData > data = new ArrayList<>();
+		List< CompressionExerciseData > data = new ArrayList<>();
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( P2POneDefinition.class.getSimpleName() ) )
+			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( CompressionDefinition.class.getSimpleName() ) )
 			{
-				data
-					.addAll( getEntityManager().createQuery( "from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + ex.getID() + "'" ).getResultList() );
+				data.addAll( getEntityManager()
+					.createQuery( "from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + ex.getID() + "'" )
+					.getResultList() );
 			}
 		}
-
+		
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 }

@@ -38,7 +38,6 @@ import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
 import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
-import ch.zhaw.iwi.cis.pews.model.output.Score;
 import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
@@ -634,7 +633,7 @@ public class RestServiceTest
 
 		List< ExerciseDataImpl > p2pOneDataForP2PTwoTest = exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() );
 		List< P2POneData > p2pOneDataForP2PTwoTestPrepped = mapper.readValue( mapper.writeValueAsString( p2pOneDataForP2PTwoTest ), makeCollectionType( P2POneData.class ) );
-		
+
 		for ( P2POneData d : p2pOneDataForP2PTwoTestPrepped )
 		{
 			for ( P2POneKeyword keyword : d.getKeywords() )
@@ -791,15 +790,19 @@ public class RestServiceTest
 		EvaluationInput evaluationInput = mapper.readValue( exerciseService.getInputAsString(), EvaluationInput.class );
 		assertTrue( evaluationInput.getQuestion().equalsIgnoreCase( ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getQuestion() ) );
 
-		for ( ExerciseDataImpl d : exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) )
+		List< CompressionExerciseData > dataFromCompression = mapper.readValue(
+			mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
+			makeCollectionType( CompressionExerciseData.class ) );
+
+		for ( CompressionExerciseData d : dataFromCompression )
 		{
-			for ( String solution : ( (CompressionExerciseData)d ).getSolutions() )
+			for ( String solution : d.getSolutions() )
 			{
 				assertTrue( evaluationInput.getSolutions().contains( solution ) );
 			}
 		}
 
-		output = new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, "solution1", new Score( 5 ) ), new Evaluation( defaultUserStub, "solution2", new Score( 2 ) ) ) );
+		output = new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, "solution1", 5 ), new Evaluation( defaultUserStub, "solution2", 2 ) ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
 
 		success = false;
@@ -813,12 +816,12 @@ public class RestServiceTest
 
 			for ( Evaluation evaluation : d.getEvaluations() )
 			{
-				if ( evaluation.getSolution().equalsIgnoreCase( "solution1" ) && evaluation.getScore().getScore() == 5 )
+				if ( evaluation.getSolution().equalsIgnoreCase( "solution1" ) && evaluation.getScore() == 5 )
 				{
 					count += 1;
 				}
 
-				if ( evaluation.getSolution().equalsIgnoreCase( "solution2" ) && evaluation.getScore().getScore() == 2 )
+				if ( evaluation.getSolution().equalsIgnoreCase( "solution2" ) && evaluation.getScore() == 2 )
 				{
 					count += 1;
 				}
@@ -827,6 +830,7 @@ public class RestServiceTest
 			if ( count == 2 )
 			{
 				success = true;
+				break;
 			}
 		}
 

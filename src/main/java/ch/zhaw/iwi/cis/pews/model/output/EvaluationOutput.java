@@ -11,7 +11,6 @@ public class EvaluationOutput extends Output
 	public EvaluationOutput()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public EvaluationOutput( List< Evaluation > evaluations )

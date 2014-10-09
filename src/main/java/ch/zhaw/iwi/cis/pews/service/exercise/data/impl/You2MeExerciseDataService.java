@@ -14,16 +14,16 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class You2MeExerciseDataService extends ExerciseDataServiceImpl
 {
-	private ExerciseDataDao dataDao;
+	private ExerciseDataDao specificDataDao;
 	
 	public You2MeExerciseDataService()
 	{
-		dataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( You2MeExerciseDataDao.class.getSimpleName() );
+		specificDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( You2MeExerciseDataDao.class.getSimpleName() );
 	}
 
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		return dataDao.findByExerciseID( exerciseID );
+		return specificDataDao.findByExerciseID( exerciseID );
 	}
 }
