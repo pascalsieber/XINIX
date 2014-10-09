@@ -863,6 +863,7 @@ public class RestServiceTest
 		assertTrue( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// getCurrentExercise
+		setExerciseOnDefaultSession( pinklabsExerciseStub );
 		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
 
 		// getNextExercise
@@ -875,8 +876,12 @@ public class RestServiceTest
 		// getPreviousExercise
 		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
 
-		// TODO finish this!
 		// setCurrentExericse
+		SessionImpl sessionRequestWrapper = new SessionImpl();
+		sessionRequestWrapper.setID( defaultSessionStub.getID() );
+		sessionRequestWrapper.setCurrentExercise( compressionExerciseStub );
+		sessionService.setCurrentExercise( sessionRequestWrapper );
+		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( compressionExerciseStub.getID() ) );
 
 		// join Session
 		Invitation wrappedJoinRequest = new Invitation();
@@ -929,7 +934,7 @@ public class RestServiceTest
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "terminated" ) );
 
 		// find data by exercise ID
-		assertTrue( exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() ).size() > 0 );
+		// not testing here as already tested in depth in getInputSetOutput();
 
 		// start exercise for user
 		exerciseService.startUser();
@@ -962,6 +967,10 @@ public class RestServiceTest
 		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 0 );
 	}
 
+	/**
+	 * helper method, extensively used in getInputSetOutput
+	 * could use sessionService.setCurrentExercise, but this is faster
+	 */
 	private void setExerciseOnDefaultSession( ExerciseImpl exercise )
 	{
 		SessionImpl session = sessionService.findByID( defaultSessionStub.getID() );

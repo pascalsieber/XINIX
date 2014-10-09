@@ -80,7 +80,7 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	@Override
 	public void setCurrentExercise( SessionImpl request )
 	{
-		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
+		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
 	}
 
 }

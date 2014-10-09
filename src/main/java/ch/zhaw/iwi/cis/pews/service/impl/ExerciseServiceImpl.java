@@ -189,11 +189,8 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public void cancelUser()
 	{
-		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
-		participant.getTimer().setStatus( WorkflowElementStatusImpl.NEW );
-		participant.getTimer().setTimeUnit( null );
-		participant.getTimer().setValue( 0 );
-		participantDao.persist( participant );
+		// same operation as stopUser();
+		stopUser();
 	}
 
 	public ExerciseDataDao getExerciseDataDao()
