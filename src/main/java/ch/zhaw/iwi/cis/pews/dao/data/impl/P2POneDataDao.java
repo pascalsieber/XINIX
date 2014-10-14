@@ -21,7 +21,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< P2POneData > data = getEntityManager()
-			.createQuery( "from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + exerciseID + "'" )
+			.createQuery( "select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + exerciseID + "'" )
 			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
@@ -37,7 +37,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( P2POneDefinition.class.getSimpleName() ) )
 			{
 				data
-					.addAll( getEntityManager().createQuery( "from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + ex.getID() + "'" ).getResultList() );
+					.addAll( getEntityManager().createQuery( "select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + ex.getID() + "'" ).getResultList() );
 			}
 		}
 

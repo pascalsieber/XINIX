@@ -21,7 +21,7 @@ public class CompressionDataDao extends ExerciseDataDaoImpl
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< CompressionExerciseData > data = getEntityManager().createQuery(
-			"from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
+			"select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
@@ -36,7 +36,7 @@ public class CompressionDataDao extends ExerciseDataDaoImpl
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( CompressionDefinition.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
-					.createQuery( "from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + ex.getID() + "'" )
+					.createQuery( "select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + ex.getID() + "'" )
 					.getResultList() );
 			}
 		}

@@ -26,6 +26,12 @@ import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PinkLabsExerciseDataServi
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.SimplePrototypingExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
@@ -105,6 +111,51 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			newWF.setID( oldWF.getID() );
 			newWF.setStatusHistory( oldWF.getStatusHistory() );
 			d.setWorkflowElement( newWF );
+			
+			if ( d instanceof P2POneData )
+			{
+				for ( P2POneKeyword keyword : ( (P2POneData)d ).getKeywords() )
+				{
+					UserImpl keywordOldUser = (UserImpl)keyword.getOwner();
+					UserImpl keywordNewUser = new UserImpl( null, null, null, keywordOldUser.getFirstName(), keywordOldUser.getLastName(), keywordOldUser.getLoginName() );
+					keywordNewUser.setID( keywordOldUser.getID() );
+					keywordNewUser.setClient( keywordOldUser.getClient() );
+					keyword.setOwner( keywordNewUser );
+				}
+			}
+			
+			if ( d instanceof P2PTwoData )
+			{
+				for ( P2POneKeyword keyword : ( (P2PTwoData)d ).getSelectedKeywords() )
+				{
+					UserImpl keywordOldUser = (UserImpl)keyword.getOwner();
+					UserImpl keywordNewUser = new UserImpl( null, null, null, keywordOldUser.getFirstName(), keywordOldUser.getLastName(), keywordOldUser.getLoginName() );
+					keywordNewUser.setID( keywordOldUser.getID() );
+					keywordNewUser.setClient( keywordOldUser.getClient() );
+					keyword.setOwner( keywordNewUser );
+				}
+			}
+			
+			if ( d instanceof XinixData )
+			{
+				UserImpl imageOldUser = (UserImpl)( (XinixData)d ).getXinixImage().getOwner();
+				UserImpl imageNewUser = new UserImpl( null, null, null, imageOldUser.getFirstName(), imageOldUser.getLastName(), imageOldUser.getLoginName() );
+				imageNewUser.setID( imageOldUser.getID() );
+				imageNewUser.setClient( imageOldUser.getClient() );
+				( (XinixData)d ).getXinixImage().setOwner( imageNewUser );
+			}
+			
+			if ( d instanceof EvaluationExerciseData )
+			{
+				for ( Evaluation evaluation : ( (EvaluationExerciseData)d ).getEvaluations() )
+				{
+					UserImpl evalOldUser = (UserImpl)evaluation.getOwner();
+					UserImpl evalNewUser = new UserImpl( null, null, null, evalOldUser.getFirstName(), evalOldUser.getLastName(), evalOldUser.getLoginName() );
+					evalNewUser.setID( evalOldUser.getID() );
+					evalNewUser.setClient( evalOldUser.getClient() );
+					evaluation.setOwner( evalNewUser );
+				}
+			}
 		}
 
 		return cleansed;
