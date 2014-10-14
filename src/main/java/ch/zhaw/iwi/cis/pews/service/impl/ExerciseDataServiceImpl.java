@@ -1,5 +1,9 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,14 +13,13 @@ import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
+import ch.zhaw.iwi.cis.pews.framework.CleanExerciseDataOutputStream;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
-import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.CompressionExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationExerciseDataService;
@@ -26,12 +29,6 @@ import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PinkLabsExerciseDataServi
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.SimplePrototypingExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
@@ -78,6 +75,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return exerciseDataDao;
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
@@ -85,79 +83,33 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		String defName = ex.getDefinition().getClass().getSimpleName();
 		Class< ? > serviceClass = getExerciseDataSpecificService( defName );
 		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
-		return cleanseData( service.findByExerciseID( exerciseID ) );
-	}
-
-	public List< ExerciseDataImpl > genericFindByExerciseID( String exerciseID )
-	{
-		return cleanseData( exerciseDataDao.findByExerciseID( exerciseID ) );
+		return (List< ExerciseDataImpl >)cleanseData( service.findByExerciseID( exerciseID ) );
 	}
 
 	@SuppressWarnings( "unchecked" )
-	private List< ExerciseDataImpl > cleanseData( List< ExerciseDataImpl > data )
+	public List< ExerciseDataImpl > genericFindByExerciseID( String exerciseID )
 	{
-		List< ExerciseDataImpl > cleansed = (List< ExerciseDataImpl >)exerciseDataDao.cloneResult( data );
-		for ( ExerciseDataImpl d : cleansed )
-		{
-			UserImpl oldUser = (UserImpl)d.getOwner();
-			UserImpl newUser = new UserImpl( null, null, null, oldUser.getFirstName(), oldUser.getLastName(), oldUser.getLoginName() );
-			newUser.setID( oldUser.getID() );
-			newUser.setClient( oldUser.getClient() );
-			d.setOwner( newUser );
-			
-			WorkflowElementImpl oldWF = d.getWorkflowElement();
-			WorkflowElementImpl newWF = new WorkflowElementImpl( oldWF.getName(), oldWF.getDescription(), null );
-			newWF.setClient( oldWF.getClient() );
-			newWF.setID( oldWF.getID() );
-			newWF.setStatusHistory( oldWF.getStatusHistory() );
-			d.setWorkflowElement( newWF );
-			
-			if ( d instanceof P2POneData )
-			{
-				for ( P2POneKeyword keyword : ( (P2POneData)d ).getKeywords() )
-				{
-					UserImpl keywordOldUser = (UserImpl)keyword.getOwner();
-					UserImpl keywordNewUser = new UserImpl( null, null, null, keywordOldUser.getFirstName(), keywordOldUser.getLastName(), keywordOldUser.getLoginName() );
-					keywordNewUser.setID( keywordOldUser.getID() );
-					keywordNewUser.setClient( keywordOldUser.getClient() );
-					keyword.setOwner( keywordNewUser );
-				}
-			}
-			
-			if ( d instanceof P2PTwoData )
-			{
-				for ( P2POneKeyword keyword : ( (P2PTwoData)d ).getSelectedKeywords() )
-				{
-					UserImpl keywordOldUser = (UserImpl)keyword.getOwner();
-					UserImpl keywordNewUser = new UserImpl( null, null, null, keywordOldUser.getFirstName(), keywordOldUser.getLastName(), keywordOldUser.getLoginName() );
-					keywordNewUser.setID( keywordOldUser.getID() );
-					keywordNewUser.setClient( keywordOldUser.getClient() );
-					keyword.setOwner( keywordNewUser );
-				}
-			}
-			
-			if ( d instanceof XinixData )
-			{
-				UserImpl imageOldUser = (UserImpl)( (XinixData)d ).getXinixImage().getOwner();
-				UserImpl imageNewUser = new UserImpl( null, null, null, imageOldUser.getFirstName(), imageOldUser.getLastName(), imageOldUser.getLoginName() );
-				imageNewUser.setID( imageOldUser.getID() );
-				imageNewUser.setClient( imageOldUser.getClient() );
-				( (XinixData)d ).getXinixImage().setOwner( imageNewUser );
-			}
-			
-			if ( d instanceof EvaluationExerciseData )
-			{
-				for ( Evaluation evaluation : ( (EvaluationExerciseData)d ).getEvaluations() )
-				{
-					UserImpl evalOldUser = (UserImpl)evaluation.getOwner();
-					UserImpl evalNewUser = new UserImpl( null, null, null, evalOldUser.getFirstName(), evalOldUser.getLastName(), evalOldUser.getLoginName() );
-					evalNewUser.setID( evalOldUser.getID() );
-					evalNewUser.setClient( evalOldUser.getClient() );
-					evaluation.setOwner( evalNewUser );
-				}
-			}
-		}
+		return (List< ExerciseDataImpl >)cleanseData( exerciseDataDao.findByExerciseID( exerciseID ) );
+	}
 
-		return cleansed;
+	@SuppressWarnings( { "resource" } )
+	private Object cleanseData( List< ExerciseDataImpl > data )
+	{
+		try
+		{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream ooStream = new CleanExerciseDataOutputStream( baos );
+			ooStream.writeObject( data );
+			
+			byte[] bytes = baos.toByteArray();
+			
+			ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
+			ObjectInputStream oiStream = new ObjectInputStream( bais );
+			return oiStream.readObject();
+		}
+		catch ( Exception e )
+		{
+			throw new RuntimeException( e );
+		}
 	}
 }

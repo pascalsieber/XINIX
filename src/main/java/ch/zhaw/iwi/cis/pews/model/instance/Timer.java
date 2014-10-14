@@ -2,7 +2,6 @@ package ch.zhaw.iwi.cis.pews.model.instance;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
