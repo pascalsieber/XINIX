@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.P2POneKeywordDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneDataDao;
-import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneKeywordDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneKeywordDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -31,13 +32,13 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 {
 
 	private ExerciseDataDao p2pOneDataDao;
-	private ExerciseDataDao p2pOneKeywordDao;
+	private P2POneKeywordDao p2pOneKeywordDao;
 	
 	public P2PTwoExerciseService()
 	{
 		super();
 		this.p2pOneDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneDataDao.class.getSimpleName() );
-		this.p2pOneKeywordDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneKeywordDao.class.getSimpleName() );
+		this.p2pOneKeywordDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneKeywordDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
@@ -68,9 +69,9 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 
 			Set< P2POneKeyword > chosenP2POneKeywords = new HashSet<>();
 
-			for ( String keywordID : finalOutput.getChosenKeywords() )
+			for ( String keyword : finalOutput.getChosenKeywords() )
 			{
-				chosenP2POneKeywords.add( (P2POneKeyword)p2pOneKeywordDao.findById( keywordID ) );
+				chosenP2POneKeywords.add( (P2POneKeyword)p2pOneKeywordDao.findByKeywordString( keyword ) );
 			}
 
 			getExerciseDataDao()

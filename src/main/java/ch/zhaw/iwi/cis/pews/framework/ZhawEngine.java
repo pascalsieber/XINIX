@@ -375,11 +375,57 @@ public class ZhawEngine implements LifecycleObject
 			"how do you combine the two selected pieces of information" ) );
 
 		// xinix image -> used for xinix definition (as part of XinixImageMatrix)
-		String xinixImageID = exerciseDataService.persist( new XinixImage( rootUser, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) );
-		XinixImage xinixImage = exerciseDataService.findByID( xinixImageID );
+		List< String > imageUrls = Arrays.asList( "https://farm6.staticflickr.com/5603/15512067512_4f98a3d3b0_m.jpg", // 1
+			"https://farm4.staticflickr.com/3941/15491660072_e8d94624a6_m.jpg", // 2
+			"https://farm6.staticflickr.com/5602/15326407608_7b6ce39ca3_m.jpg", // 3
+			"https://farm4.staticflickr.com/3938/15490686672_28cd5b556c_m.jpg", // 4
+			"https://farm4.staticflickr.com/3948/15313543560_137c44606a_m.jpg", // 5
+			"https://farm6.staticflickr.com/5604/15530131385_c4b495ef1c_m.jpg", // 6
+
+			"https://farm6.staticflickr.com/5603/15512067512_4f98a3d3b0_m.jpg", // 7
+			"https://farm4.staticflickr.com/3941/15491660072_e8d94624a6_m.jpg", // 8
+			"https://farm6.staticflickr.com/5602/15326407608_7b6ce39ca3_m.jpg", // 9
+			"https://farm4.staticflickr.com/3938/15490686672_28cd5b556c_m.jpg", // 10
+			"https://farm4.staticflickr.com/3948/15313543560_137c44606a_m.jpg", // 11
+			"https://farm6.staticflickr.com/5604/15530131385_c4b495ef1c_m.jpg", // 12
+
+			"https://farm6.staticflickr.com/5603/15512067512_4f98a3d3b0_m.jpg", // 13
+			"https://farm4.staticflickr.com/3941/15491660072_e8d94624a6_m.jpg", // 14
+			"https://farm6.staticflickr.com/5602/15326407608_7b6ce39ca3_m.jpg", // 15
+			"https://farm4.staticflickr.com/3938/15490686672_28cd5b556c_m.jpg", // 16
+			"https://farm4.staticflickr.com/3948/15313543560_137c44606a_m.jpg", // 17
+			"https://farm6.staticflickr.com/5604/15530131385_c4b495ef1c_m.jpg", // 18
+
+			"https://farm6.staticflickr.com/5603/15512067512_4f98a3d3b0_m.jpg", // 19
+			"https://farm4.staticflickr.com/3941/15491660072_e8d94624a6_m.jpg", // 20
+			"https://farm6.staticflickr.com/5602/15326407608_7b6ce39ca3_m.jpg", // 21
+			"https://farm4.staticflickr.com/3938/15490686672_28cd5b556c_m.jpg", // 22
+			"https://farm4.staticflickr.com/3948/15313543560_137c44606a_m.jpg", // 23
+			"https://farm6.staticflickr.com/5604/15530131385_c4b495ef1c_m.jpg", // 24
+
+			"https://farm6.staticflickr.com/5603/15512067512_4f98a3d3b0_m.jpg", // 25
+			"https://farm4.staticflickr.com/3941/15491660072_e8d94624a6_m.jpg", // 26
+			"https://farm6.staticflickr.com/5602/15326407608_7b6ce39ca3_m.jpg", // 27
+			"https://farm4.staticflickr.com/3938/15490686672_28cd5b556c_m.jpg", // 28
+			"https://farm4.staticflickr.com/3948/15313543560_137c44606a_m.jpg", // 29
+			"https://farm6.staticflickr.com/5604/15530131385_c4b495ef1c_m.jpg", // 30
+
+			"https://farm6.staticflickr.com/5603/15512067512_4f98a3d3b0_m.jpg", // 31
+			"https://farm4.staticflickr.com/3941/15491660072_e8d94624a6_m.jpg", // 32
+			"https://farm6.staticflickr.com/5602/15326407608_7b6ce39ca3_m.jpg", // 33
+			"https://farm4.staticflickr.com/3938/15490686672_28cd5b556c_m.jpg", // 34
+			"https://farm4.staticflickr.com/3948/15313543560_137c44606a_m.jpg", // 35
+			"https://farm6.staticflickr.com/5604/15530131385_c4b495ef1c_m.jpg" // 36
+		);
 
 		Set< XinixImage > setOfXinixImages = new HashSet<>();
-		setOfXinixImages.add( xinixImage );
+
+		for ( String url : imageUrls )
+		{
+			String xinixImageID = exerciseDataService.persist( new XinixImage( rootUser, null, url ) );
+			XinixImage xinixImage = exerciseDataService.findByID( xinixImageID );
+			setOfXinixImages.add( xinixImage );
+		}
 
 		// xinix image matrix (subclass of ExerciseDefinitionImpl)
 		String xinixImageMatrixID = exerciseDefinitionService
@@ -494,7 +540,7 @@ public class ZhawEngine implements LifecycleObject
 		// xinix data
 		Set< String > associations = new HashSet<>();
 		associations.addAll( Arrays.asList( "school", "stress", "party" ) );
-		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, xinixImage ) );
+		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, setOfXinixImages.iterator().next() ) );
 
 		// simpleprototyping data
 		exerciseDataService.persist( new SimplePrototypingData( rootUser, (WorkflowElementImpl)exerciseService.findByID( simplePrototypingExID ), "my blob".getBytes() ) );

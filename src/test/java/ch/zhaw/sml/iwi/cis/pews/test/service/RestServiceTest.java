@@ -695,7 +695,7 @@ public class RestServiceTest
 	public void getInputSetOutput() throws IOException
 	{
 		Output output = null;
-		List< String > p2pOneKeywordIDs = new ArrayList<>();
+		List< String > p2pOneKeywordStrings = new ArrayList<>();
 		boolean success = false;
 
 		// pinklabs
@@ -742,7 +742,7 @@ public class RestServiceTest
 
 			for ( P2POneKeyword keyword : ( (P2POneData)d ).getKeywords() )
 			{
-				p2pOneKeywordIDs.add( keyword.getID() );
+				p2pOneKeywordStrings.add( keyword.getKeyword() );
 
 				if ( keyword.getKeyword().equalsIgnoreCase( "p1" ) || keyword.getKeyword().equalsIgnoreCase( "p2" ) || keyword.getKeyword().equalsIgnoreCase( "p3" ) )
 				{
@@ -822,11 +822,11 @@ public class RestServiceTest
 			}
 		}
 
-		Set< String > keywordIDs = new HashSet<>();
-		keywordIDs.add( p2pOneKeywordIDs.get( 0 ) );
-		keywordIDs.add( p2pOneKeywordIDs.get( 1 ) );
+		Set< String > cascade1Keywords = new HashSet<>();
+		cascade1Keywords.add( p2pOneKeywordStrings.get( 0 ) );
+		cascade1Keywords.add( p2pOneKeywordStrings.get( 1 ) );
 
-		output = new P2PTwoOutput( keywordIDs, Arrays.asList( "p21", "p22", "p23" ) );
+		output = new P2PTwoOutput( cascade1Keywords, Arrays.asList( "p21", "p22", "p23" ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
 
 		success = false;
@@ -840,7 +840,7 @@ public class RestServiceTest
 			{
 				for ( P2POneKeyword keyword : d.getSelectedKeywords() )
 				{
-					assertTrue( keywordIDs.contains( keyword.getID() ) );
+					assertTrue( cascade1Keywords.contains( keyword.getKeyword() ) );
 				}
 
 				success = true;
