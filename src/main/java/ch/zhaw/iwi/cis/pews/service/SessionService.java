@@ -13,7 +13,7 @@ public interface SessionService extends WorkflowElementService
 
 	public ExerciseImpl getPreviousExercise( String sessionID );
 
-	public void setNextExercise( String sessionID );
+	public String setNextExercise( String sessionID );
 
 	public void join( Invitation invitation );
 

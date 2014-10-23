@@ -141,7 +141,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	}
 
 	@Override
-	public void setNextExercise( String sessionID )
+	public String setNextExercise( String sessionID )
 	{
 		SessionImpl session = findByID( sessionID );
 		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
@@ -151,6 +151,11 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		{
 			session.setCurrentExercise( exercises.get( current + 1 ) );
 			persist( session );
+			return "CHANGED";
+		}
+		else
+		{
+			return "FINAL_EXERCISE";
 		}
 	}
 

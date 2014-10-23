@@ -107,9 +107,9 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( SET_NEXT_EXERCISE )
-	public void setNextExercise( String sessionID )
+	public String setNextExercise( String sessionID )
 	{
-		sessionService.setNextExercise( sessionID );
+		return sessionService.setNextExercise( sessionID );
 	}
 
 	@POST

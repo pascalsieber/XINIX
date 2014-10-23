@@ -48,9 +48,9 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	}
 
 	@Override
-	public void setNextExercise( String sessionID )
+	public String setNextExercise( String sessionID )
 	{
-		getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) );
+		return getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( String.class );
 	}
 
 	@Override
