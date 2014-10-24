@@ -147,7 +147,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
-		if ( current < exercises.size() )
+		if ( current + 1 < exercises.size() )
 		{
 			session.setCurrentExercise( exercises.get( current + 1 ) );
 			persist( session );
