@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
@@ -19,7 +20,7 @@ public class P2PTwoData extends CompressableExerciseData
 	@Transient
 	private static final long serialVersionUID = 1L;
 
-	@ElementCollection
+	@ElementCollection( fetch = FetchType.EAGER )
 	private List< String > answers;
 
 	@ManyToMany
