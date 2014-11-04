@@ -47,6 +47,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
@@ -320,6 +321,7 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void configureSampleWorkshop()
 	{
+		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
 		WorkshopDefinitionService workshopDefinitionService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
@@ -333,7 +335,7 @@ public class ZhawEngine implements LifecycleObject
 		roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
 		System.out.println( "organizer role created initially" );
 
-		roleService.persist( new RoleImpl( "executer", "session executer" ) );
+		String executerRoleID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
 		System.out.println( "executer role created initially" );
 
 		roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
@@ -560,6 +562,17 @@ public class ZhawEngine implements LifecycleObject
 
 		// user joins session (and by that all exercises in workshop)
 		sessionService.join( new Invitation( null, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
+
+		// configure second session with separate new user as executer
+		String executerID = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "root" ),
+			(RoleImpl)roleService.findByID( executerRoleID ),
+			null,
+			"root first name",
+			"root last name",
+			"pews_root_client/executer@pews" ) );
+		String secondSessionID = sessionService.persist( new SessionImpl( "second sample session", "second sample workshop session", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( executerID ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
 		System.out.println( "sample workshop configured" );
 
