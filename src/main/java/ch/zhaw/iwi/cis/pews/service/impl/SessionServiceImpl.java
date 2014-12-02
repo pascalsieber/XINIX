@@ -1,6 +1,10 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ParticipantDao;
@@ -22,6 +26,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.Timer;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OffsetRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -156,6 +161,51 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		else
 		{
 			return "FINAL_EXERCISE";
+		}
+	}
+
+	public String setNextExerciseWithOffset( final OffsetRequest offsetRequest )
+	{
+		try
+		{
+			SessionImpl session = findByID( offsetRequest.getWorkflowElementID() );
+			List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
+			int current = exercises.indexOf( session.getCurrentExercise() );
+
+			if ( current + 1 < exercises.size() )
+			{
+				FutureTask< Void > future = new FutureTask<>( new Callable< Void >() {
+					public Void call()
+					{
+						try
+						{
+							System.out.println("offsetting now");
+							Thread.sleep( offsetRequest.getOffsetInMilliSeconds() );
+							setNextExercise( offsetRequest.getWorkflowElementID() );
+							System.out.println("action performed");
+						}
+						catch ( InterruptedException e )
+						{
+							throw new RuntimeException( "problem with executing setNextExerciseWithOffset" );
+						}
+						return null;
+					}
+				} );
+				
+				ExecutorService executor = Executors.newFixedThreadPool( 2 );
+				executor.execute( future );
+				
+				return "CHANGE_IN_REQUESTED_OFFSET";
+			}
+			else
+			{
+				return "FINAL_EXERCISE";
+			}
+
+		}
+		catch ( Exception e )
+		{
+			throw new RuntimeException( "problem with executing setNextExerciseWithOffset" );
 		}
 	}
 

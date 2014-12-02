@@ -1,10 +1,8 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
@@ -22,6 +20,7 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -41,6 +40,9 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
@@ -118,7 +120,14 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
 			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).getInput();
 	}
-	
+
+	@Override
+	public Input getInputByExerciseID( String exerciseID )
+	{
+		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
+			getExerciseSpecificService( ( (ExerciseImpl)findByID( exerciseID ) ).getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).getInputByExerciseID( exerciseID );
+	}
+
 	@Override
 	public String getInputAsString()
 	{
@@ -134,10 +143,46 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	}
 
 	@Override
+	public String getInputByExerciseIDAsString( String exerciseID )
+	{
+		try
+		{
+			Input input = getInputByExerciseID( exerciseID );
+			return objectMapper.writeValueAsString( input );
+		}
+		catch ( JsonProcessingException e )
+		{
+			throw new RuntimeException( "error in converting getInputByExerciseID() to String" );
+		}
+	}
+
+	@Override
 	public void setOutput( String output )
 	{
 		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
 			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).setOutput( output );
+	}
+
+	@Override
+	public void setOuputStringByExerciseID( String outputRequest )
+	{
+		try
+		{
+			OutputRequest request = getObjectMapper().readValue( outputRequest, OutputRequest.class );
+			setOuputByExerciseID( request );
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "problem reading request argument for setOutputByExerciseID" );
+		}
+	}
+
+	@Override
+	public void setOuputByExerciseID( OutputRequest outputRequest )
+	{
+		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
+			getExerciseSpecificService( ( (ExerciseImpl)findByID( outputRequest.getExerciseID() ) ).getDefinition().getClass().getSimpleName() ).getSimpleName() ) )
+			.setOuputByExerciseID( outputRequest );
 	}
 
 	@Override
@@ -203,7 +248,5 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		return participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
 	}
-
-	
 
 }

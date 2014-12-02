@@ -40,10 +40,13 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public final static String GET_USER_PARTICIPANT = "/user/getParticipant";
 
 	public final static String GETINPUT = "/getInput";
+	public final static String GETINPUT_BY_EXERCISEID = "/getInputByExerciseID";
 	public final static String SETOUTPUT = "/setOutput";
-	
+	public final static String SETOUTPUT_BY_EXERCISEID = "/setOutputByExerciseID";
+
 	// only for testing
 	public final static String GETINPUT_AS_STRING = "/getInputAsString";
+	public final static String GETINPUT_BY_EXERCISEID_AS_STRING = "/getInputByExerciseIDAsString";
 
 	private ExerciseService exerciseService;
 
@@ -117,7 +120,14 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	{
 		return exerciseService.getInput();
 	}
-	
+
+	@POST
+	@Path( GETINPUT_BY_EXERCISEID )
+	public Input getExerciseInputByExerciseID( String exerciseID )
+	{
+		return exerciseService.getInputByExerciseID( exerciseID );
+	}
+
 	@POST
 	@Path( GETINPUT_AS_STRING )
 	public String getExerciseInputAsString()
@@ -126,10 +136,24 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	}
 
 	@POST
+	@Path( GETINPUT_BY_EXERCISEID_AS_STRING )
+	public String getExerciseInputByExerciseIDAsString( String exerciseID )
+	{
+		return exerciseService.getInputByExerciseIDAsString( exerciseID );
+	}
+
+	@POST
 	@Path( SETOUTPUT )
 	public void setOutput( String output )
 	{
 		exerciseService.setOutput( output );
+	}
+
+	@POST
+	@Path( SETOUTPUT_BY_EXERCISEID )
+	public void setOutputByExerciseID( String outputRequest )
+	{
+		exerciseService.setOuputStringByExerciseID( outputRequest );
 	}
 
 	@POST

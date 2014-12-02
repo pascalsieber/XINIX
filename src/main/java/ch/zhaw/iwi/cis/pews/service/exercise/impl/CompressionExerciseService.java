@@ -16,7 +16,9 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -64,6 +66,31 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
+	public Input getInputByExerciseID( String exerciseID )
+	{
+		CompressionDefinition definition = compressionDefinitionDao.findById( ( (WorkflowElementImpl)super.findByID( exerciseID ) ).getDefinition().getID() );
+		List< CompressableExerciseData > compressableData = new ArrayList<>();
+
+		List< ExerciseDataImpl > dataOfAllExercises = new ArrayList<>();
+
+		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
+		{
+			dataOfAllExercises.addAll( exerciseDataService.findByExerciseID( ex.getID() ) );
+		}
+
+		for ( ExerciseDataImpl data : dataOfAllExercises )
+		{
+			if ( CompressableExerciseData.class.isAssignableFrom( data.getClass() ) )
+			{
+				compressableData.add( (CompressableExerciseData)data );
+			}
+		}
+
+		CompressionInput input = new CompressionInput( definition.getQuestion(), new ArrayList<>( definition.getSolutionCriteria() ), compressableData );
+		return input;
+	}
+
+	@Override
 	public void setOutput( String output )
 	{
 		try
@@ -71,6 +98,21 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 			CompressionOutput finalOutput = getObjectMapper().readValue( output, CompressionOutput.class );
 			getExerciseDataDao().persist(
 				new CompressionExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), (List< String >)finalOutput.getSolutions() ) );
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + CompressionOutput.class.getSimpleName() );
+		}
+	}
+
+	@Override
+	public void setOuputByExerciseID( OutputRequest outputRequest )
+	{
+		try
+		{
+			CompressionOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), CompressionOutput.class );
+			getExerciseDataDao().persist(
+				new CompressionExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), (List< String >)finalOutput.getSolutions() ) );
 		}
 		catch ( IOException e )
 		{

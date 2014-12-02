@@ -563,16 +563,18 @@ public class ZhawEngine implements LifecycleObject
 		// user joins session (and by that all exercises in workshop)
 		sessionService.join( new Invitation( null, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
 
-		// configure second session with separate new user as executer
-		String executerID = userService.persist( new UserImpl(
-			new PasswordCredentialImpl( "root" ),
-			(RoleImpl)roleService.findByID( executerRoleID ),
-			null,
-			"root first name",
-			"root last name",
-			"pews_root_client/executer@pews" ) );
+		// configure second session with root user as executer
+		
+		// code for new user - not used
+//		String executerID = userService.persist( new UserImpl(
+//			new PasswordCredentialImpl( "root" ),
+//			(RoleImpl)roleService.findByID( executerRoleID ),
+//			null,
+//			"root first name",
+//			"root last name",
+//			"pews_root_client/executer@pews" ) );
 		String secondSessionID = sessionService.persist( new SessionImpl( "second sample session", "second sample workshop session", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
-		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( executerID ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
+		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
 		System.out.println( "sample workshop configured" );
 

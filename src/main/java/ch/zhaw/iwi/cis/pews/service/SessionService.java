@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.service;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OffsetRequest;
 
 public interface SessionService extends WorkflowElementService
 {
@@ -24,5 +25,7 @@ public interface SessionService extends WorkflowElementService
 	public void removeExecuter( Invitation invitation );
 
 	public void setCurrentExercise( SessionImpl request );
+
+	public String setNextExerciseWithOffset( OffsetRequest offsetRequest );
 
 }

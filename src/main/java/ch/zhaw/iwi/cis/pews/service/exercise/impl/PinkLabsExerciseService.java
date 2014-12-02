@@ -9,7 +9,9 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
@@ -32,6 +34,13 @@ public class PinkLabsExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
+	public Input getInputByExerciseID( String exerciseID )
+	{
+		PinkLabsDefinition definition = (PinkLabsDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		return new PinkLabsInput( definition.getQuestion() );
+	}
+
+	@Override
 	public void setOutput( String output )
 	{
 		try
@@ -46,4 +55,18 @@ public class PinkLabsExerciseService extends ExerciseServiceImpl
 		}
 	}
 
+	@Override
+	public void setOuputByExerciseID( OutputRequest outputRequest )
+	{
+		try
+		{
+			PinkLabsOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), PinkLabsOutput.class );
+			getExerciseDataDao().persist( new PinkLabsExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getAnswers() ) );
+
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + PinkLabsOutput.class.getSimpleName() );
+		}
+	}
 }

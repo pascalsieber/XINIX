@@ -46,6 +46,7 @@ import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
@@ -1013,6 +1014,39 @@ public class RestServiceTest
 
 		assertTrue( success );
 
+	}
+
+	@Test
+	public void getInputSetOutputByExerciseID() throws IOException
+	{
+		// only testing for one example exercise
+		// getInputByExerciseID and setOutputByExerciseID reuse getInput and setOutput methods
+		// hence, this test is to ensure that input and output parameters which are used in addition are properly used
+
+		Output output = null;
+		boolean success = false;
+
+		// testing for pinklabs, setting currentExercise to different exercise on purpose
+		setExerciseOnDefaultSession( compressionExerciseStub );
+		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputByExerciseIDAsString( pinklabsExerciseStub.getID() ), PinkLabsInput.class );
+		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
+
+		output = new PinkLabsOutput( Arrays.asList( "answer4", "answer5", "answer6" ) );
+		exerciseService.setOuputByExerciseID( new OutputRequest( pinklabsExerciseStub.getID(), mapper.writeValueAsString( output ) ) );
+		
+		List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() );
+		List< PinkLabsExerciseData > prepedData = mapper.readValue( mapper.writeValueAsString( data ), makeCollectionType( PinkLabsExerciseData.class ) );
+		
+		for ( PinkLabsExerciseData d : prepedData )
+		{
+			if ( d.getAnswers().containsAll( Arrays.asList( "answer4", "answer5", "answer6" ) ) )
+			{
+				success = true;
+				break;
+			}
+		}
+
+		assertTrue( success );
 	}
 
 	private CollectionType makeCollectionType( Class< ? > elementClass )

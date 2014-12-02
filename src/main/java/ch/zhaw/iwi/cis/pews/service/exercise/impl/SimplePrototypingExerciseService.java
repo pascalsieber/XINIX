@@ -9,7 +9,9 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.SimplePrototypingInput;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
@@ -30,6 +32,15 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 		SimplePrototypingDefinition definition = (SimplePrototypingDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		return new SimplePrototypingInput( definition.getQuestion(), definition.getMimeType() );
 	}
+	
+	
+
+	@Override
+	public Input getInputByExerciseID( String exerciseID )
+	{
+		SimplePrototypingDefinition definition = (SimplePrototypingDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		return new SimplePrototypingInput( definition.getQuestion(), definition.getMimeType() );
+	}
 
 	@Override
 	public void setOutput( String output )
@@ -38,6 +49,20 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 		{
 			SimplePrototypingOutput finalOutput = getObjectMapper().readValue( output, SimplePrototypingOutput.class );
 			getExerciseDataDao().persist( new SimplePrototypingData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), finalOutput.getBlob() ) );
+		}
+		catch ( IOException e )
+		{
+			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + SimplePrototypingOutput.class.getSimpleName() );
+		}
+	}
+
+	@Override
+	public void setOuputByExerciseID( OutputRequest outputRequest )
+	{
+		try
+		{
+			SimplePrototypingOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), SimplePrototypingOutput.class );
+			getExerciseDataDao().persist( new SimplePrototypingData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getBlob() ) );
 		}
 		catch ( IOException e )
 		{

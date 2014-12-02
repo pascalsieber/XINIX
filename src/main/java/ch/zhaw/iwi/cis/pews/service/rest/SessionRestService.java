@@ -12,6 +12,7 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OffsetRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
@@ -28,7 +29,9 @@ public class SessionRestService extends WorkshopObjectRestService
 	public final static String SET_CURRENT_EXERCISE = "/setCurrentExercise";
 	public final static String GET_NEXT_EXERCISE = "/getNextExercise";
 	public final static String GET_PREVIOUS_EXERCISE = "/getPreviousExercise";
+
 	public final static String SET_NEXT_EXERCISE = "/setNextExercise";
+	public final static String SET_NEXT_EXERCISE_WITH_OFFSET = "/setNextExerciseWithOffset";
 
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
@@ -110,6 +113,13 @@ public class SessionRestService extends WorkshopObjectRestService
 	public String setNextExercise( String sessionID )
 	{
 		return sessionService.setNextExercise( sessionID );
+	}
+
+	@POST
+	@Path( SET_NEXT_EXERCISE_WITH_OFFSET )
+	public String setNextExerciseWithOffset( OffsetRequest offsetRequest )
+	{
+		return sessionService.setNextExerciseWithOffset( offsetRequest );
 	}
 
 	@POST

@@ -5,6 +5,7 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -49,15 +50,41 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	}
 
 	@Override
+	public Input getInputByExerciseID( String exerciseID )
+	{
+		return getServiceTarget().path( ExerciseRestService.GETINPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( Input.class );
+	}
+
+	@Override
 	public String getInputAsString()
 	{
 		return getServiceTarget().path( ExerciseRestService.GETINPUT_AS_STRING ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( String.class );
 	}
-	
+
+	@Override
+	public String getInputByExerciseIDAsString( String exerciseID )
+	{
+		return getServiceTarget().path( ExerciseRestService.GETINPUT_BY_EXERCISEID_AS_STRING ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( String.class );
+	}
+
 	@Override
 	public void setOutput( String output )
 	{
 		getServiceTarget().path( ExerciseRestService.SETOUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( output ) );
+	}
+
+	@Override
+	public void setOuputByExerciseID( OutputRequest outputRequest )
+	{
+		getServiceTarget().path( ExerciseRestService.SETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( outputRequest ) );
+	}
+
+	
+	
+	@Override
+	public void setOuputStringByExerciseID( String outputRequest )
+	{
+		getServiceTarget().path( ExerciseRestService.SETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( outputRequest ) );
 	}
 
 	@Override
@@ -101,7 +128,5 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	{
 		return getServiceTarget().path( ExerciseRestService.GET_USER_PARTICIPANT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( Participant.class );
 	}
-
-	
 
 }

@@ -6,6 +6,7 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
+import ch.zhaw.iwi.cis.pews.model.wrappers.OffsetRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.rest.SessionRestService;
 
@@ -51,6 +52,14 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public String setNextExercise( String sessionID )
 	{
 		return getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( String.class );
+	}
+	
+	
+
+	@Override
+	public String setNextExerciseWithOffset( OffsetRequest offsetRequest )
+	{
+		return getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE_WITH_OFFSET ).request( MediaType.APPLICATION_JSON ).post( Entity.json( offsetRequest ) ).readEntity( String.class );
 	}
 
 	@Override
