@@ -2,7 +2,6 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
@@ -21,8 +20,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
-import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -44,6 +41,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -168,18 +166,23 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public void setOuputByExerciseID( String outputRequestString )
 	{
-
 		try
 		{
-			PinkLabsOutput test = objectMapper.readValue( outputRequestString, PinkLabsOutput.class );
-			String iDD = test.getExerciseID();
-			List< String > answers = test.getAnswers();
-			
-			OutputRequest request = objectMapper.readValue( outputRequestString, OutputRequest.class );
-			String id = request.getExerciseID();
-			String output = request.getOutput();
-			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-				getExerciseSpecificService( ( (ExerciseImpl)findByID( request.getExerciseID() ) ).getDefinition().getClass().getSimpleName() ).getSimpleName() ) )
+			JsonNode rootNode = objectMapper.readTree( outputRequestString );
+			String exerciseID = rootNode.path( "exerciseID" ).asText();
+
+			if ( exerciseID.equalsIgnoreCase( "" ) )
+			{
+				throw new RuntimeException( "error performing setOutputByExerciseID: please provide a valid argument for exerciseID" );
+			}
+
+			ExerciseImpl exercise = findByID( exerciseID );
+			if ( exercise == null )
+			{
+				throw new RuntimeException( "error performing setOutputByExerciseID: exercise with ID " + exerciseID + " could not be found" );
+			}
+
+			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( exercise.getDefinition().getClass().getSimpleName() ).getSimpleName() ) )
 				.setOuputByExerciseID( outputRequestString );
 		}
 		catch ( IOException e )

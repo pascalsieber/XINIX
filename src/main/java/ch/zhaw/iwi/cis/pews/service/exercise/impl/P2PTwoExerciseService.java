@@ -21,7 +21,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
@@ -112,8 +111,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	{
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			P2PTwoOutput finalOutput = getObjectMapper().readValue( request.getOutput(), P2PTwoOutput.class );
+			P2PTwoOutput finalOutput = getObjectMapper().readValue( outputRequestString, P2PTwoOutput.class );
 
 			Set< P2POneKeyword > chosenP2POneKeywords = new HashSet<>();
 
@@ -123,7 +121,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 			}
 
 			getExerciseDataDao()
-				.persist( new P2PTwoData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getAnswers(), chosenP2POneKeywords ) );
+				.persist( new P2PTwoData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getAnswers(), chosenP2POneKeywords ) );
 
 		}
 		catch ( IOException e )

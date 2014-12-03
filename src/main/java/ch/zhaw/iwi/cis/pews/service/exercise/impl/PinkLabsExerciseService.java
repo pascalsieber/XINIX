@@ -11,7 +11,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
@@ -60,9 +59,8 @@ public class PinkLabsExerciseService extends ExerciseServiceImpl
 	{
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			PinkLabsOutput finalOutput = getObjectMapper().readValue( request.getOutput(), PinkLabsOutput.class );
-			getExerciseDataDao().persist( new PinkLabsExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getAnswers() ) );
+			PinkLabsOutput finalOutput = getObjectMapper().readValue( outputRequestString, PinkLabsOutput.class );
+			getExerciseDataDao().persist( new PinkLabsExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getAnswers() ) );
 
 		}
 		catch ( IOException e )

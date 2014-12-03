@@ -14,7 +14,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
@@ -68,10 +67,9 @@ public class XinixExerciseService extends ExerciseServiceImpl
 		// TODO chosen xinix image should probably be in form of ID, not whole object
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			XinixOutput finalOutput = getObjectMapper().readValue( request.getOutput(), XinixOutput.class );
+			XinixOutput finalOutput = getObjectMapper().readValue( outputRequestString, XinixOutput.class );
 			getExerciseDataDao().persist(
-				new XinixData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getAnswers(), finalOutput.getChosenImage() ) );
+				new XinixData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getAnswers(), finalOutput.getChosenImage() ) );
 		}
 		catch ( IOException e )
 		{

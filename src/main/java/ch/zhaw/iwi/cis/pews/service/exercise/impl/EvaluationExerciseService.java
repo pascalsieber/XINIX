@@ -17,7 +17,6 @@ import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
@@ -85,9 +84,8 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	{
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			EvaluationOutput finalOutput = getObjectMapper().readValue( request.getOutput(), EvaluationOutput.class );
-			getExerciseDataDao().persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getEvaluations() ) );
+			EvaluationOutput finalOutput = getObjectMapper().readValue( outputRequestString, EvaluationOutput.class );
+			getExerciseDataDao().persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getEvaluations() ) );
 		}
 		catch ( IOException e )
 		{

@@ -12,7 +12,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
@@ -60,9 +59,8 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 	{
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			You2MeOutput finalOutput = getObjectMapper().readValue( request.getOutput(), You2MeOutput.class );
-			getExerciseDataDao().persist( new You2MeExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getDialog() ) );
+			You2MeOutput finalOutput = getObjectMapper().readValue( outputRequestString, You2MeOutput.class );
+			getExerciseDataDao().persist( new You2MeExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getDialog() ) );
 		}
 		catch ( IOException e )
 		{

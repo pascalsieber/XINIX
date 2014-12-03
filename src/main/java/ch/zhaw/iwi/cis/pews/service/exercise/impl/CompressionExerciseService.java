@@ -18,7 +18,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -110,10 +109,9 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	{
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			CompressionOutput finalOutput = getObjectMapper().readValue( request.getOutput(), CompressionOutput.class );
+			CompressionOutput finalOutput = getObjectMapper().readValue( outputRequestString, CompressionOutput.class );
 			getExerciseDataDao().persist(
-				new CompressionExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), (List< String >)finalOutput.getSolutions() ) );
+				new CompressionExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), (List< String >)finalOutput.getSolutions() ) );
 		}
 		catch ( IOException e )
 		{

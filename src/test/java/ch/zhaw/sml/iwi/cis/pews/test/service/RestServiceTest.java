@@ -46,7 +46,6 @@ import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
@@ -1032,7 +1031,8 @@ public class RestServiceTest
 		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
 		output = new PinkLabsOutput("", Arrays.asList( "answer4", "answer5", "answer6" ) );
-		exerciseService.setOuputByExerciseID( mapper.writeValueAsString( new OutputRequest( pinklabsExerciseStub.getID(), mapper.writeValueAsString( output ) ) ) );
+		output.setExerciseID( pinklabsExerciseStub.getID() );
+		exerciseService.setOuputByExerciseID( mapper.writeValueAsString( output ) );
 
 		List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() );
 		List< PinkLabsExerciseData > prepedData = mapper.readValue( mapper.writeValueAsString( data ), makeCollectionType( PinkLabsExerciseData.class ) );

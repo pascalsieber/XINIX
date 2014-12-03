@@ -11,7 +11,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
@@ -61,9 +60,8 @@ public class P2POneExerciseService extends ExerciseServiceImpl
 	{
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			P2POneOutput finalOutput = getObjectMapper().readValue( request.getOutput(), P2POneOutput.class );
-			getExerciseDataDao().persist( new P2POneData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getAnswers() ) );
+			P2POneOutput finalOutput = getObjectMapper().readValue( outputRequestString, P2POneOutput.class );
+			getExerciseDataDao().persist( new P2POneData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getAnswers() ) );
 		}
 		catch ( IOException e )
 		{

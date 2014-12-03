@@ -11,7 +11,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.SimplePrototypingInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
@@ -61,9 +60,8 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 	{
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
-			SimplePrototypingOutput finalOutput = getObjectMapper().readValue( request.getOutput(), SimplePrototypingOutput.class );
-			getExerciseDataDao().persist( new SimplePrototypingData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getBlob() ) );
+			SimplePrototypingOutput finalOutput = getObjectMapper().readValue( outputRequestString, SimplePrototypingOutput.class );
+			getExerciseDataDao().persist( new SimplePrototypingData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getBlob() ) );
 		}
 		catch ( IOException e )
 		{
