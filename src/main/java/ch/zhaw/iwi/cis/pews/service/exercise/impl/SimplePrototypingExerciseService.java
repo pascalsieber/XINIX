@@ -57,17 +57,18 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
 		try
 		{
-			SimplePrototypingOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), SimplePrototypingOutput.class );
-			getExerciseDataDao().persist( new SimplePrototypingData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getBlob() ) );
+			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
+			SimplePrototypingOutput finalOutput = getObjectMapper().readValue( request.getOutput(), SimplePrototypingOutput.class );
+			getExerciseDataDao().persist( new SimplePrototypingData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getBlob() ) );
 		}
 		catch ( IOException e )
 		{
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + SimplePrototypingOutput.class.getSimpleName() );
 		}
 	}
-
+	
 }

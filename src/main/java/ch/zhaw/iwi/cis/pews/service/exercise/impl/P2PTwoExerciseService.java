@@ -108,11 +108,12 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
 		try
 		{
-			P2PTwoOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), P2PTwoOutput.class );
+			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
+			P2PTwoOutput finalOutput = getObjectMapper().readValue( request.getOutput(), P2PTwoOutput.class );
 
 			Set< P2POneKeyword > chosenP2POneKeywords = new HashSet<>();
 
@@ -122,7 +123,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 			}
 
 			getExerciseDataDao()
-				.persist( new P2PTwoData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getAnswers(), chosenP2POneKeywords ) );
+				.persist( new P2PTwoData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getAnswers(), chosenP2POneKeywords ) );
 
 		}
 		catch ( IOException e )
@@ -130,4 +131,5 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + P2PTwoOutput.class.getSimpleName() );
 		}
 	}
+	
 }

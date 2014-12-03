@@ -5,6 +5,7 @@ import java.util.List;
 
 public class PinkLabsOutput extends Output
 {
+	private String exerciseID;
 	private List< String > answers;
 
 	public PinkLabsOutput()
@@ -13,10 +14,21 @@ public class PinkLabsOutput extends Output
 		this.answers = new ArrayList<>();
 	}
 
-	public PinkLabsOutput( List< String > answers )
+	public PinkLabsOutput( String exerciseID, List< String > answers )
 	{
 		super();
+		this.exerciseID = exerciseID;
 		this.answers = answers;
+	}
+
+	public String getExerciseID()
+	{
+		return exerciseID;
+	}
+
+	public void setExerciseID( String exerciseID )
+	{
+		this.exerciseID = exerciseID;
 	}
 
 	public List< String > getAnswers()
@@ -28,5 +40,4 @@ public class PinkLabsOutput extends Output
 	{
 		this.answers = answers;
 	}
-
 }

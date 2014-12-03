@@ -63,14 +63,15 @@ public class XinixExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
 		// TODO chosen xinix image should probably be in form of ID, not whole object
 		try
 		{
-			XinixOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), XinixOutput.class );
+			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
+			XinixOutput finalOutput = getObjectMapper().readValue( request.getOutput(), XinixOutput.class );
 			getExerciseDataDao().persist(
-				new XinixData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getAnswers(), finalOutput.getChosenImage() ) );
+				new XinixData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getAnswers(), finalOutput.getChosenImage() ) );
 		}
 		catch ( IOException e )
 		{

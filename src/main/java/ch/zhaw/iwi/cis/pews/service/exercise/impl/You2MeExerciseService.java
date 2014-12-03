@@ -56,18 +56,19 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
 		try
 		{
-			You2MeOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), You2MeOutput.class );
-			getExerciseDataDao().persist( new You2MeExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getDialog() ) );
+			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
+			You2MeOutput finalOutput = getObjectMapper().readValue( request.getOutput(), You2MeOutput.class );
+			getExerciseDataDao().persist( new You2MeExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getDialog() ) );
 		}
 		catch ( IOException e )
 		{
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + You2MeOutput.class.getSimpleName() );
 		}
 	}
-
+	
 	
 }

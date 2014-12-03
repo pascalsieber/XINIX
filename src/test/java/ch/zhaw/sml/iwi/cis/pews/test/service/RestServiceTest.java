@@ -704,7 +704,7 @@ public class RestServiceTest
 		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputAsString(), PinkLabsInput.class );
 		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
-		output = new PinkLabsOutput( Arrays.asList( "answer1", "answer2", "answer3" ) );
+		output = new PinkLabsOutput( "",Arrays.asList( "answer1", "answer2", "answer3" ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
 
 		success = false;
@@ -1031,12 +1031,12 @@ public class RestServiceTest
 		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputByExerciseIDAsString( pinklabsExerciseStub.getID() ), PinkLabsInput.class );
 		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
-		output = new PinkLabsOutput( Arrays.asList( "answer4", "answer5", "answer6" ) );
-		exerciseService.setOuputByExerciseID( new OutputRequest( pinklabsExerciseStub.getID(), mapper.writeValueAsString( output ) ) );
-		
+		output = new PinkLabsOutput("", Arrays.asList( "answer4", "answer5", "answer6" ) );
+		exerciseService.setOuputByExerciseID( mapper.writeValueAsString( new OutputRequest( pinklabsExerciseStub.getID(), mapper.writeValueAsString( output ) ) ) );
+
 		List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() );
 		List< PinkLabsExerciseData > prepedData = mapper.readValue( mapper.writeValueAsString( data ), makeCollectionType( PinkLabsExerciseData.class ) );
-		
+
 		for ( PinkLabsExerciseData d : prepedData )
 		{
 			if ( d.getAnswers().containsAll( Arrays.asList( "answer4", "answer5", "answer6" ) ) )

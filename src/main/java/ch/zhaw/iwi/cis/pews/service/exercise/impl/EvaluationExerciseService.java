@@ -81,16 +81,18 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
 		try
 		{
-			EvaluationOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), EvaluationOutput.class );
-			getExerciseDataDao().persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getEvaluations() ) );
+			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
+			EvaluationOutput finalOutput = getObjectMapper().readValue( request.getOutput(), EvaluationOutput.class );
+			getExerciseDataDao().persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getEvaluations() ) );
 		}
 		catch ( IOException e )
 		{
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + EvaluationOutput.class.getSimpleName() );
 		}
 	}
+
 }

@@ -151,9 +151,9 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( SETOUTPUT_BY_EXERCISEID )
-	public void setOutputByExerciseID( String outputRequest )
+	public void setOutputByExerciseID( String outputRequestString )
 	{
-		exerciseService.setOuputStringByExerciseID( outputRequest );
+		exerciseService.setOuputByExerciseID( outputRequestString );
 	}
 
 	@POST

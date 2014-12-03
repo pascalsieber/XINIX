@@ -56,12 +56,13 @@ public class PinkLabsExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
 		try
 		{
-			PinkLabsOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), PinkLabsOutput.class );
-			getExerciseDataDao().persist( new PinkLabsExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), finalOutput.getAnswers() ) );
+			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
+			PinkLabsOutput finalOutput = getObjectMapper().readValue( request.getOutput(), PinkLabsOutput.class );
+			getExerciseDataDao().persist( new PinkLabsExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), finalOutput.getAnswers() ) );
 
 		}
 		catch ( IOException e )

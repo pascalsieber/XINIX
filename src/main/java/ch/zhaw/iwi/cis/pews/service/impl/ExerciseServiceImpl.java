@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
@@ -20,6 +21,7 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
+import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
 import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
@@ -164,25 +166,26 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	}
 
 	@Override
-	public void setOuputStringByExerciseID( String outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
+
 		try
 		{
-			OutputRequest request = getObjectMapper().readValue( outputRequest, OutputRequest.class );
-			setOuputByExerciseID( request );
+			PinkLabsOutput test = objectMapper.readValue( outputRequestString, PinkLabsOutput.class );
+			String iDD = test.getExerciseID();
+			List< String > answers = test.getAnswers();
+			
+			OutputRequest request = objectMapper.readValue( outputRequestString, OutputRequest.class );
+			String id = request.getExerciseID();
+			String output = request.getOutput();
+			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
+				getExerciseSpecificService( ( (ExerciseImpl)findByID( request.getExerciseID() ) ).getDefinition().getClass().getSimpleName() ).getSimpleName() ) )
+				.setOuputByExerciseID( outputRequestString );
 		}
 		catch ( IOException e )
 		{
-			throw new RuntimeException( "problem reading request argument for setOutputByExerciseID" );
+			throw new RuntimeException( "problem processing output request with String: " + outputRequestString );
 		}
-	}
-
-	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
-	{
-		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( ( (ExerciseImpl)findByID( outputRequest.getExerciseID() ) ).getDefinition().getClass().getSimpleName() ).getSimpleName() ) )
-			.setOuputByExerciseID( outputRequest );
 	}
 
 	@Override

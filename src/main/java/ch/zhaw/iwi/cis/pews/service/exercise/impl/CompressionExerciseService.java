@@ -106,18 +106,18 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
 		try
 		{
-			CompressionOutput finalOutput = getObjectMapper().readValue( outputRequest.getOutput(), CompressionOutput.class );
+			OutputRequest request = getObjectMapper().readValue( outputRequestString, OutputRequest.class );
+			CompressionOutput finalOutput = getObjectMapper().readValue( request.getOutput(), CompressionOutput.class );
 			getExerciseDataDao().persist(
-				new CompressionExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( outputRequest.getExerciseID() ), (List< String >)finalOutput.getSolutions() ) );
+				new CompressionExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( request.getExerciseID() ), (List< String >)finalOutput.getSolutions() ) );
 		}
 		catch ( IOException e )
 		{
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + CompressionOutput.class.getSimpleName() );
 		}
 	}
-
 }

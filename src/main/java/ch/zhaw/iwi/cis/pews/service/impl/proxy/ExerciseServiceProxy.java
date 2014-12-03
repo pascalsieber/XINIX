@@ -5,7 +5,6 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -74,17 +73,9 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	}
 
 	@Override
-	public void setOuputByExerciseID( OutputRequest outputRequest )
+	public void setOuputByExerciseID( String outputRequestString )
 	{
-		getServiceTarget().path( ExerciseRestService.SETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( outputRequest ) );
-	}
-
-	
-	
-	@Override
-	public void setOuputStringByExerciseID( String outputRequest )
-	{
-		getServiceTarget().path( ExerciseRestService.SETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( outputRequest ) );
+		getServiceTarget().path( ExerciseRestService.SETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( outputRequestString ) );
 	}
 
 	@Override

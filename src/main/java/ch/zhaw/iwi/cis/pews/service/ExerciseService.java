@@ -2,7 +2,6 @@ package ch.zhaw.iwi.cis.pews.service;
 
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OutputRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 
@@ -38,7 +37,5 @@ public interface ExerciseService extends WorkflowElementService
 	// only used for testing
 	public String getInputByExerciseIDAsString( String exerciseID );
 
-	public void setOuputByExerciseID( OutputRequest outputRequest );
-
-	public void setOuputStringByExerciseID( String outputRequest );
+	public void setOuputByExerciseID( String outputRequestString );
 }
