@@ -1,15 +1,12 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
-import static org.quartz.JobBuilder.newJob;
-
+import java.util.Date;
 import java.util.List;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
@@ -26,6 +23,7 @@ import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
@@ -34,7 +32,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.Timer;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
-import ch.zhaw.iwi.cis.pews.model.wrappers.OffsetRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetNextExerciseJob;
 
@@ -173,7 +171,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		}
 	}
 
-	public String setNextExerciseWithOffset( OffsetRequest offsetRequest )
+	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest )
 	{
 		try
 		{
@@ -184,14 +182,17 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 			if ( current + 1 < exercises.size() )
 			{
 				JobDetail job = JobBuilder.newJob( SetNextExerciseJob.class ).build();
-				Trigger trigger = TriggerBuilder.newTrigger().withSchedule( SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds( offsetRequest.getOffsetInMilliSeconds() ) ).build();
+				Trigger trigger = TriggerBuilder.newTrigger().startAt( new Date( System.currentTimeMillis() + offsetRequest.getOffsetInMilliSeconds() ) ).build();
 
 				Scheduler scheduler = new StdSchedulerFactory().getScheduler();
 				scheduler.start();
+
 				scheduler.getContext().put( "sessionID", offsetRequest.getWorkflowElementID() );
+				scheduler.getContext().put( "currentUser", UserContext.getCurrentUser() );
+
 				scheduler.scheduleJob( job, trigger );
 
-				return "WILL BE CHANGED IN " + offsetRequest + "ms";
+				return "WILL BE CHANGED IN " + offsetRequest.getOffsetInMilliSeconds() + "ms";
 			}
 			else
 			{

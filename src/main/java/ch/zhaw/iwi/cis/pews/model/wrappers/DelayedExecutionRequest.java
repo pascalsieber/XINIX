@@ -1,16 +1,16 @@
 package ch.zhaw.iwi.cis.pews.model.wrappers;
 
-public class OffsetRequest
+public class DelayedExecutionRequest
 {
 	private long offsetInMilliSeconds;
 	private String workflowElementID;
 
-	public OffsetRequest()
+	public DelayedExecutionRequest()
 	{
 		super();
 	}
 
-	public OffsetRequest( long offsetInMilliSeconds, String workflowElementID )
+	public DelayedExecutionRequest( long offsetInMilliSeconds, String workflowElementID )
 	{
 		super();
 		this.offsetInMilliSeconds = offsetInMilliSeconds;

@@ -21,4 +21,13 @@ public class ServiceProxyManager
 
 		return serviceProxy;
 	}
+
+	public static < T extends ServiceProxy > T createServiceProxyWithUser( Class< T > proxyClass, String userName, String password )
+	{
+		Constructor< ? > constructor = ClassWrapper.getDeclaredConstructor( proxyClass, String.class, int.class, String.class, String.class );
+		constructor.setAccessible( true );
+		T serviceProxy = ConstructorWrapper.newInstance( constructor, HOST_NAME, PORT, userName, password );
+		
+		return serviceProxy;
+	}
 }

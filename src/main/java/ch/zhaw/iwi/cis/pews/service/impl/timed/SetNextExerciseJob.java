@@ -6,9 +6,10 @@ import org.quartz.JobExecutionException;
 import org.quartz.SchedulerContext;
 import org.quartz.SchedulerException;
 
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
-import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 
 public class SetNextExerciseJob implements Job
 {
@@ -18,8 +19,11 @@ public class SetNextExerciseJob implements Job
 		try
 		{
 			SchedulerContext schedulerContext = context.getScheduler().getContext();
-			SessionService sessionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
+			UserImpl currentUser = (UserImpl)schedulerContext.get( "currentUser" );
+
+			SessionService sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class, currentUser.getLoginName(), currentUser.getCredential().getPassword() );
 			sessionService.setNextExercise( (String)schedulerContext.get( "sessionID" ) );
+			System.out.println( "executed setNextExercise with delay for session " + (String)schedulerContext.get( "sessionID" ) );
 		}
 		catch ( SchedulerException e )
 		{
