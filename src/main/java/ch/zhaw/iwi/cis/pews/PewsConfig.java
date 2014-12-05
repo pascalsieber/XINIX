@@ -33,8 +33,10 @@ public class PewsConfig
 	public static String getWebDir()
 	{
 		// TODO Make webBase configuration dependent: alternative is ""
-		String webBase = "/../../../src";
-		return getPewsHome() + webBase + WEB;
+//		String webBase = "/../../../src";
+//		return getPewsHome() + webBase + WEB;
+		
+		return getPewsHome() + WEB;
 	}
 
 	public static String getLibDir()

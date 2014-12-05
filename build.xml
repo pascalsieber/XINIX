@@ -155,6 +155,12 @@
 		</exec>
 		<mkdir dir="${target}/test-install/pews/db"/>
 		<mkdir dir="${target}/test-install/pews/log"/>
+		
+		<!-- copy existing web folder with xinix images into target -->
+		<copy todir="${target}/test-install/pews/web">
+			<fileset dir="${src.main.resources}/web"/>
+		</copy>
+		
 	</target>
 	
 	<target name="run-tests" depends="package">
