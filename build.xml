@@ -156,7 +156,7 @@
 		<mkdir dir="${target}/test-install/pews/db"/>
 		<mkdir dir="${target}/test-install/pews/log"/>
 		
-		<!-- copy existing web folder with xinix images into target -->
+		<!-- copy existing web folder with xinix images and webclient into target -->
 		<copy todir="${target}/test-install/pews/web">
 			<fileset dir="${src.main.resources}/web"/>
 		</copy>
