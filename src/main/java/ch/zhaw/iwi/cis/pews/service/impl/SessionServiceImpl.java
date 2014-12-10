@@ -33,7 +33,9 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
+import ch.zhaw.iwi.cis.pews.service.impl.timed.SetCurrentExerciseJob;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetNextExerciseJob;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -114,7 +116,39 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		}
 		else
 		{
-			throw new UnsupportedOperationException( "the requested session and exercise are not part of the same workshop!" );
+			throw new RuntimeException( "the requested session and exercise are not part of the same workshop!" );
+		}
+	}
+
+	@Override
+	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
+	{
+		try
+		{
+			SessionImpl session = sessionDao.findById( request.getSession().getID() );
+			ExerciseImpl exercise = exerciseDao.findById( request.getSession().getCurrentExercise().getID() );
+
+			if ( session.getWorkshop().getID().equalsIgnoreCase( exercise.getWorkshop().getID() ) )
+			{
+				JobDetail job = JobBuilder.newJob( SetCurrentExerciseJob.class ).build();
+				Trigger trigger = TriggerBuilder.newTrigger().startAt( new Date( System.currentTimeMillis() + request.getDelayInMilliSeconds() ) ).build();
+
+				Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+				scheduler.start();
+
+				scheduler.getContext().put( "request", request );
+				scheduler.getContext().put( "currentUser", UserContext.getCurrentUser() );
+
+				scheduler.scheduleJob( job, trigger );
+			}
+			else
+			{
+				throw new RuntimeException( "the requested session and exercise are not part of the same workshop!" );
+			}
+		}
+		catch ( SchedulerException e )
+		{
+			throw new RuntimeException( "problem executing job for setCurrentExerciseWithDelay" );
 		}
 	}
 
@@ -201,7 +235,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		}
 		catch ( SchedulerException e )
 		{
-			throw new RuntimeException( "problem executing job for setNextExerciseWithOffset" );
+			throw new RuntimeException( "problem executing job for setNextExerciseWithDelay" );
 		}
 	}
 

@@ -7,6 +7,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.rest.SessionRestService;
 
@@ -53,8 +54,6 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	{
 		return getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( String.class );
 	}
-	
-	
 
 	@Override
 	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest )
@@ -90,6 +89,12 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public void setCurrentExercise( SessionImpl request )
 	{
 		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
+	}
+
+	@Override
+	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
+	{
+		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE_WITH_DELAY ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
 	}
 
 }

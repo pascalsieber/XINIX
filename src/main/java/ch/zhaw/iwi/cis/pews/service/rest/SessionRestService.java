@@ -13,6 +13,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
@@ -27,6 +28,8 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	public final static String GET_CURRENT_EXERCISE = "/getCurrentExercise";
 	public final static String SET_CURRENT_EXERCISE = "/setCurrentExercise";
+	public final static String SET_CURRENT_EXERCISE_WITH_DELAY = "/setCurrentExerciseWithDelay";
+
 	public final static String GET_NEXT_EXERCISE = "/getNextExercise";
 	public final static String GET_PREVIOUS_EXERCISE = "/getPreviousExercise";
 
@@ -92,6 +95,13 @@ public class SessionRestService extends WorkshopObjectRestService
 	public void setCurrentExercise( SessionImpl request )
 	{
 		sessionService.setCurrentExercise( request );
+	}
+
+	@POST
+	@Path( SET_CURRENT_EXERCISE_WITH_DELAY )
+	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
+	{
+		sessionService.setCurrentExerciseWithDelay( request );
 	}
 
 	@POST

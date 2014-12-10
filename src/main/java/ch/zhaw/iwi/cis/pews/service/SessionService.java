@@ -4,6 +4,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
 
 public interface SessionService extends WorkflowElementService
 {
@@ -27,5 +28,7 @@ public interface SessionService extends WorkflowElementService
 	public void setCurrentExercise( SessionImpl request );
 
 	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest );
+
+	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request );
 
 }
