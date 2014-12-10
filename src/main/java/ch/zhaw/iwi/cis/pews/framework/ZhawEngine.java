@@ -344,8 +344,8 @@ public class ZhawEngine implements LifecycleObject
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			rootUser,
 			"PinkElefant Definition",
-			"Definition für Pinkelefant Workshop",
-			"Produkteinführung Teekocher" ) );
+			"Definition fuer Pinkelefant Workshop",
+			"Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "PinkElefant Workshop", "Beispiel eines PinkElefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
@@ -365,7 +365,7 @@ public class ZhawEngine implements LifecycleObject
 			120,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"http://oncampusadvertising.com/blog/wp-content/uploads/2014/11/college-students-using-smartphones-and-tablets.jpg",
-			"Benenne EIGENSCHAFTEN oder BEDÜRFNISSE der Anspruchsgruppe auf dem Bild" ) );
+			"Benenne EIGENSCHAFTEN oder BEDUERFNISSE der Anspruchsgruppe auf dem Bild" ) );
 
 		// p2ptwo definition
 		String p2ptwoDefID = exerciseDefinitionService.persist( new P2PTwoDefinition(
@@ -373,7 +373,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgewählte Eigenschaften hat?" ) );
+			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgewaeshlte Eigenschaften hat?" ) );
 
 		// xinix image -> used for xinix definition (as part of XinixImageMatrix)
 		List< String > imageUrls = new ArrayList<>();
@@ -401,16 +401,16 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was fällt Dir ein zum Thema „Engagement“?",
+			"Was faellt Dir ein zum Thema ENGAGEMENT?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
 
 		// you2me definition
 		String you2meDefID = exerciseDefinitionService.persist( new You2MeDefinition( rootUser, TimeUnit.MINUTES, 2, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), Arrays
-			.asList( "Was möchtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) );
+			.asList( "Was moechtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenueber beibringen?" ) ) );
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( rootUser, TimeUnit.SECONDS, 240, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "Mit welcher Aktion wird das Unternehmen weltberühmt?", "mein mimetype" ) );
+			.findByID( wsDefID ), "Mit welcher Aktion wird das Unternehmen weltberuehmt?", "mein mimetype" ) );
 
 		// compression definition
 		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition(
@@ -418,8 +418,8 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.MINUTES,
 			20,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs",
-			Arrays.asList( "Produkteigenschaften", "Werbung", "Vertriebskanäle" ) ) );
+			"Erarbeite Massnahmenvorschlaege aufgrund des bisherigen Inputs",
+			Arrays.asList( "Produkteigenschaften", "Werbung", "Vertriebskanaele" ) ) );
 
 		// evaluation definition
 		String evaluationDefID = exerciseDefinitionService.persist( new EvaluationDefinition(
@@ -427,7 +427,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.MINUTES,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Wie bewertest Du diese Lösung?" ) );
+			"Wie bewertest Du diese Loesung?" ) );
 
 		// pinklabs exercise
 		String pinklabsExID = exerciseService.persist( new ExerciseImpl(
@@ -517,7 +517,7 @@ public class ZhawEngine implements LifecycleObject
 			.persist( new EvaluationExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( evaluationExID ), Arrays.asList( new Evaluation( rootUser, "Werbekampagne auf Youtube", 4 ) ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session fuer PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// invitation (so that at leaste on is there) :)
 		invitationService.persist( new Invitation( rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -535,7 +535,7 @@ public class ZhawEngine implements LifecycleObject
 //			"root first name",
 //			"root last name",
 //			"pews_root_client/executer@pews" ) );
-		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session fuer PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
 		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
 		System.out.println( "sample workshop configured" );
