@@ -337,18 +337,15 @@ public class ZhawEngine implements LifecycleObject
 		String executerRoleID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
 		System.out.println( "executer role created initially" );
 
-		roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
+		String participantRoleID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
 		System.out.println( "participant role created initially" );
 
 		// sample workshop definition (pinkelefant)
-		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
-			rootUser,
-			"PinkElefant Definition",
-			"Definition fuer Pinkelefant Workshop",
-			"Produkteinfuehrung Teekocher" ) );
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition( rootUser, "PinkElefant Definition", "Definition fuer Pinkelefant Workshop", "Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "PinkElefant Workshop", "Beispiel eines PinkElefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
+		String wsID = workshopService.persist( new WorkshopImpl( "PinkElefant Workshop", "Beispiel eines PinkElefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
+			.findByID( wsDefID ) ) );
 
 		// pinklabs definition
 		String pinklabsDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
@@ -489,9 +486,9 @@ public class ZhawEngine implements LifecycleObject
 		String p2pOneDataID = exerciseDataService.persist( new P2POneData( rootUser, (WorkflowElementImpl)exerciseService.findByID( p2poneExID ), Arrays.asList( "Spass", "Spontan" ) ) );
 
 		// you2me data
-		exerciseDataService.persist( new You2MeExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), Arrays.asList( new DialogEntry(
-			DialogRole.RoleA,
-			"Englisch" ), new DialogEntry( DialogRole.RoleB, "Nach Kalifornien in die Ferien gehen" ) ) ) );
+		exerciseDataService.persist( new You2MeExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( you2meExID ), Arrays.asList(
+			new DialogEntry( DialogRole.RoleA, "Englisch" ),
+			new DialogEntry( DialogRole.RoleB, "Nach Kalifornien in die Ferien gehen" ) ) ) );
 
 		// p2ptwo data
 		Set< P2POneKeyword > keywords = new HashSet<>();
@@ -499,7 +496,11 @@ public class ZhawEngine implements LifecycleObject
 		keywords.add( p2pOneData.getKeywords().get( 0 ) );
 		keywords.add( p2pOneData.getKeywords().get( 1 ) );
 
-		exerciseDataService.persist( new P2PTwoData( rootUser, (WorkflowElementImpl)exerciseService.findByID( p2ptwoExID ), Arrays.asList( "Online Werbung", "Wettbewerb mit Kinogutscheinen" ), keywords ) );
+		exerciseDataService.persist( new P2PTwoData(
+			rootUser,
+			(WorkflowElementImpl)exerciseService.findByID( p2ptwoExID ),
+			Arrays.asList( "Online Werbung", "Wettbewerb mit Kinogutscheinen" ),
+			keywords ) );
 
 		// xinix data
 		Set< String > associations = new HashSet<>();
@@ -510,32 +511,48 @@ public class ZhawEngine implements LifecycleObject
 		exerciseDataService.persist( new SimplePrototypingData( rootUser, (WorkflowElementImpl)exerciseService.findByID( simplePrototypingExID ), "Mein Blob".getBytes() ) );
 
 		// compression data
-		exerciseDataService.persist( new CompressionExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( compressionExID ), Arrays.asList( "Werbekampagne auf Youtube", "Wertbekampagne auf Facebook" ) ) );
+		exerciseDataService.persist( new CompressionExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( compressionExID ), Arrays.asList(
+			"Werbekampagne auf Youtube",
+			"Wertbekampagne auf Facebook" ) ) );
 
 		// evaluation data
-		exerciseDataService
-			.persist( new EvaluationExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( evaluationExID ), Arrays.asList( new Evaluation( rootUser, "Werbekampagne auf Youtube", 4 ) ) ) );
+		exerciseDataService.persist( new EvaluationExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( evaluationExID ), Arrays.asList( new Evaluation(
+			rootUser,
+			"Werbekampagne auf Youtube",
+			4 ) ) ) );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session fuer PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
-		// invitation (so that at leaste on is there) :)
+		// invitation (so that at least on is there) :)
 		invitationService.persist( new Invitation( rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
 
 		// user joins session (and by that all exercises in workshop)
 		sessionService.join( new Invitation( null, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
 
+		// configure second user to join session
+		String participantID = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc123" ),
+			(RoleImpl)roleService.findByID( participantRoleID ),
+			null,
+			"participating",
+			"participant",
+			"pews_root_client/participant@pews" ) );
+
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+
 		// configure second session with root user as executer
-		
+
 		// code for new user - not used
-//		String executerID = userService.persist( new UserImpl(
-//			new PasswordCredentialImpl( "root" ),
-//			(RoleImpl)roleService.findByID( executerRoleID ),
-//			null,
-//			"root first name",
-//			"root last name",
-//			"pews_root_client/executer@pews" ) );
-		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session fuer PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		// String executerID = userService.persist( new UserImpl(
+		// new PasswordCredentialImpl( "root" ),
+		// (RoleImpl)roleService.findByID( executerRoleID ),
+		// null,
+		// "root first name",
+		// "root last name",
+		// "pews_root_client/executer@pews" ) );
+		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session fuer PinkElefant Workshop", null, (WorkshopImpl)workshopService
+			.findByID( wsID ) ) );
 		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
 		System.out.println( "sample workshop configured" );
