@@ -379,7 +379,7 @@ public class ZhawEngine implements LifecycleObject
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( "http://skylla.zhaw.ch/xinix_imagesa/xinix_img_" + i + ".jpg" );
+			imageUrls.add( "http://skylla.zhaw.ch/xinix_images/xinix_img_" + i + ".jpg" );
 		}
 
 		Set< XinixImage > setOfXinixImages = new HashSet<>();
