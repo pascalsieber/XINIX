@@ -1,7 +1,11 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -26,6 +30,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImplComparator;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Timer;
@@ -152,11 +157,20 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		}
 	}
 
+	private List< ExerciseImpl > getExercisesOfSession( SessionImpl session )
+	{
+		Set< ExerciseImpl > exercisesRaw = new HashSet<>( session.getWorkshop().getExercises() );
+		List< ExerciseImpl > orderedExercises = new ArrayList<>( exercisesRaw );
+		Collections.sort( orderedExercises, new ExerciseImplComparator() );
+		
+		return orderedExercises;
+	}
+
 	@Override
 	public ExerciseImpl getNextExercise( String sessionID )
 	{
-		SessionImpl session = findByID( sessionID );
-		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
+		SessionImpl session = sessionDao.findById( sessionID );
+		List< ExerciseImpl > exercises = getExercisesOfSession( session );
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
 		if ( current < exercises.size() )
@@ -172,8 +186,8 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	@Override
 	public ExerciseImpl getPreviousExercise( String sessionID )
 	{
-		SessionImpl session = findByID( sessionID );
-		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
+		SessionImpl session = sessionDao.findById( sessionID );
+		List< ExerciseImpl > exercises = getExercisesOfSession(session);
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
 		if ( current > 0 )
@@ -189,8 +203,8 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	@Override
 	public String setNextExercise( String sessionID )
 	{
-		SessionImpl session = findByID( sessionID );
-		List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
+		SessionImpl session = sessionDao.findById( sessionID );
+		List< ExerciseImpl > exercises = getExercisesOfSession(session);
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
 		if ( current + 1 < exercises.size() )
@@ -209,8 +223,8 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	{
 		try
 		{
-			SessionImpl session = findByID( offsetRequest.getWorkflowElementID() );
-			List< ExerciseImpl > exercises = session.getWorkshop().getExercises();
+			SessionImpl session = sessionDao.findById( offsetRequest.getWorkflowElementID() );
+			List< ExerciseImpl > exercises = getExercisesOfSession(session);
 			int current = exercises.indexOf( session.getCurrentExercise() );
 
 			if ( current + 1 < exercises.size() )
