@@ -212,7 +212,7 @@
 	</target>
 
 	<target name="clean-ivy">
-		<delete dir="${ivy.cache}"/>
+		<ivy:cleancache />
 	</target>
 
 </project>
