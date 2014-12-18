@@ -17,7 +17,7 @@ public class ExerciseImpl extends WorkflowElementImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private int orderInWorkshop;
+	private Integer orderInWorkshop = null;
 
 	@ManyToOne
 	private WorkshopImpl workshop;
@@ -59,12 +59,12 @@ public class ExerciseImpl extends WorkflowElementImpl
 		this.participants = participants;
 	}
 
-	public int getOrderInWorkshop()
+	public Integer getOrderInWorkshop()
 	{
 		return orderInWorkshop;
 	}
 
-	public void setOrderInWorkshop( int orderInWorkshop )
+	public void setOrderInWorkshop( Integer orderInWorkshop )
 	{
 		this.orderInWorkshop = orderInWorkshop;
 	}

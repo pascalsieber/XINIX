@@ -212,14 +212,28 @@ public class RestServiceTest
 			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
 
 		// exercises
-		pinklabsExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "pinklabs", "pinklabs exercise", pinklabsDefinitionStub, defaultWorkshopStub ) ) );
-		p2pOneExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "p2pone", "p2pone exercise", p2poneDefinitionStub, defaultWorkshopStub ) ) );
-		you2meExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "you2me", "you2me exercise", you2meDefinitionStub, defaultWorkshopStub ) ) );
-		p2pTwoExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "p2ptwo", "p2ptwo exercise", p2ptwoDefinitionStub, defaultWorkshopStub ) ) );
-		simpleprototypingExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "simple proto", "simple proto exercise", simpleprototypingDefinitionStub, defaultWorkshopStub ) ) );
-		xinixExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "xinix", "xinix exercise", xinixDefinitionStub, defaultWorkshopStub ) ) );
-		compressionExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "compression", "compression exercise", compressionDefinitionStub, defaultWorkshopStub ) ) );
-		evaluationExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", evaluationDefinitionStub, defaultWorkshopStub ) ) );
+		pinklabsExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "pinklabs", "pinklabs exercise", pinklabsDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub
+			.getID() ) ) ) );
+
+		p2pOneExerciseStub
+			.setID( exerciseService.persist( new ExerciseImpl( "p2pone", "p2pone exercise", p2poneDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+
+		you2meExerciseStub
+			.setID( exerciseService.persist( new ExerciseImpl( "you2me", "you2me exercise", you2meDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+
+		p2pTwoExerciseStub
+			.setID( exerciseService.persist( new ExerciseImpl( "p2ptwo", "p2ptwo exercise", p2ptwoDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+
+		simpleprototypingExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "simple proto", "simple proto exercise", simpleprototypingDefinitionStub, (WorkshopImpl)workshopService
+			.findByID( defaultWorkshopStub.getID() ) ) ) );
+
+		xinixExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "xinix", "xinix exercise", xinixDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+
+		compressionExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "compression", "compression exercise", compressionDefinitionStub, (WorkshopImpl)workshopService
+			.findByID( defaultWorkshopStub.getID() ) ) ) );
+
+		evaluationExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", evaluationDefinitionStub, (WorkshopImpl)workshopService
+			.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
@@ -416,6 +430,7 @@ public class RestServiceTest
 		assertTrue( ex.getName().equalsIgnoreCase( "exercise" ) );
 		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
 		assertTrue( ex.getWorkshop().getID().equals( defaultWorkshopStub.getID() ) );
+		assertTrue( ex.getOrderInWorkshop() == 8 );
 
 		// update exercise instance
 		ex.setName( "updated exercise" );
@@ -703,7 +718,7 @@ public class RestServiceTest
 		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputAsString(), PinkLabsInput.class );
 		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
-		output = new PinkLabsOutput( "",Arrays.asList( "answer1", "answer2", "answer3" ) );
+		output = new PinkLabsOutput( "", Arrays.asList( "answer1", "answer2", "answer3" ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
 
 		success = false;
@@ -1030,7 +1045,7 @@ public class RestServiceTest
 		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputByExerciseIDAsString( pinklabsExerciseStub.getID() ), PinkLabsInput.class );
 		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
-		output = new PinkLabsOutput("", Arrays.asList( "answer4", "answer5", "answer6" ) );
+		output = new PinkLabsOutput( "", Arrays.asList( "answer4", "answer5", "answer6" ) );
 		output.setExerciseID( pinklabsExerciseStub.getID() );
 		exerciseService.setOuputByExerciseID( mapper.writeValueAsString( output ) );
 
@@ -1078,6 +1093,8 @@ public class RestServiceTest
 		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
 
 		// getNextExercise
+		@SuppressWarnings( "unused" )
+		String nexExID = sessionService.getNextExercise( defaultSessionStub.getID() ).getID();
 		assertTrue( sessionService.getNextExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
 
 		// setNextExercise

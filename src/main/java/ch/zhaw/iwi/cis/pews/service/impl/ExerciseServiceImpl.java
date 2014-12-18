@@ -7,19 +7,23 @@ import java.util.Map;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.ParticipantDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ParticipantDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -52,6 +56,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	private ExerciseDao exerciseDao;
 	private ExerciseDataDao exerciseDataDao;
 	private ParticipantDao participantDao;
+	private WorkshopDao workshopDao;
 	private static final Map< String, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseServiceImpl >>();
 
 	static
@@ -76,12 +81,42 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
 		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
+		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 		objectMapper = new ObjectMapper();
 	}
 
 	public ObjectMapper getObjectMapper()
 	{
 		return objectMapper;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.iwi.cis.pews.service.impl.WorkshopObjectServiceImpl#persist(ch.zhaw.iwi.cis.pews.model.WorkshopObject)
+	 * 
+	 * overriding this method to handle orderInWorkshop correctly.
+	 */
+	@Override
+	public < T extends WorkshopObject > String persist( T object )
+	{
+		// assign orderInWorkshop field (back of the row, last exercise)
+		// but only on insert (i.e. persist of new exercise)
+
+		// check if object with ID is available (has been persisted)
+		if ( null == exerciseDao.findById( object.getID() ) )
+		{
+			WorkshopImpl workshop = workshopDao.findById( ( (ExerciseImpl)object ).getWorkshop().getID() );
+			( (ExerciseImpl)object ).setOrderInWorkshop( workshop.getExercises().size() );
+		}
+		else
+		{
+			// if not null, it means that persist operation is for update
+			// keep existing orderInWorkshop
+			( (ExerciseImpl)object ).setOrderInWorkshop( ( (ExerciseImpl)exerciseDao.findById( object.getID() ) ).getOrderInWorkshop() );
+		}
+
+		return super.persist( object );
 	}
 
 	@Override
