@@ -6,6 +6,7 @@ import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -27,11 +28,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataDao compressionDataDao;
+	private ExerciseDataDao evaluationDataDao;
 
 	public EvaluationExerciseService()
 	{
 		super();
 		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDao.class.getSimpleName() );
+		this.evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
 	}
 
 	@Override

@@ -22,19 +22,23 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.CompressionExerciseDataService;
+import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EndWorkshopExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.P2POneExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.P2PTwoExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PinkLabsExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.SimplePrototypingExerciseDataService;
+import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.StartWorkshopExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EndWorkshopDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.StartWorkshopDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
 
@@ -48,6 +52,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 
 	static
 	{
+		EXERCISESPECIFICDATASERVICES.put( StartWorkshopDefinition.class.getSimpleName(), StartWorkshopExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( PinkLabsDefinition.class.getSimpleName(), PinkLabsExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( You2MeDefinition.class.getSimpleName(), You2MeExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( P2POneDefinition.class.getSimpleName(), P2POneExerciseDataService.class );
@@ -56,6 +61,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		EXERCISESPECIFICDATASERVICES.put( XinixDefinition.class.getSimpleName(), XinixExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( CompressionDefinition.class.getSimpleName(), CompressionExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( EvaluationDefinition.class.getSimpleName(), EvaluationExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( EndWorkshopDefinition.class.getSimpleName(), EndWorkshopExerciseDataService.class );
 	}
 
 	private Class< ? > getExerciseDataSpecificService( String exerciseDefinitionClassName )

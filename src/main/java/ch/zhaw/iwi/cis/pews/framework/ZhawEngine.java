@@ -78,16 +78,19 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EndWorkshopDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.StartWorkshopDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
@@ -334,7 +337,7 @@ public class ZhawEngine implements LifecycleObject
 		roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
 		System.out.println( "organizer role created initially" );
 
-		String executerRoleID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
+		roleService.persist( new RoleImpl( "executer", "session executer" ) );
 		System.out.println( "executer role created initially" );
 
 		String participantRoleID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
@@ -346,6 +349,24 @@ public class ZhawEngine implements LifecycleObject
 		// sample workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "PinkElefant Workshop", "Beispiel eines PinkElefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
 			.findByID( wsDefID ) ) );
+
+		// workshop start definition
+		String startDefID = exerciseDefinitionService.persist( new StartWorkshopDefinition(
+			rootUser,
+			TimeUnit.SECONDS,
+			180,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Willkommen zum Pinkelefant Workshop",
+			"Der Workshop beginnt in Kuerze." ) );
+
+		// workshop end definition
+		String endDefID = exerciseDefinitionService.persist( new EndWorkshopDefinition(
+			rootUser,
+			TimeUnit.SECONDS,
+			180,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Ende des Pinkelefant Workshops",
+			"Vielen Dank fuer Ihre Teilnahme." ) );
 
 		// pinklabs definition
 		String pinklabsDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
@@ -379,18 +400,22 @@ public class ZhawEngine implements LifecycleObject
 			imageUrls.add( "http://skylla.zhaw.ch/xinix_images/xinix_img_" + i + ".jpg" );
 		}
 
-		Set< XinixImage > setOfXinixImages = new HashSet<>();
+		List< XinixImage > listOfXinixImages = new ArrayList<>();
 
 		for ( String url : imageUrls )
 		{
 			String xinixImageID = exerciseDataService.persist( new XinixImage( rootUser, null, url ) );
 			XinixImage xinixImage = exerciseDataService.findByID( xinixImageID );
-			setOfXinixImages.add( xinixImage );
+			listOfXinixImages.add( xinixImage );
 		}
 
 		// xinix image matrix (subclass of ExerciseDefinitionImpl)
-		String xinixImageMatrixID = exerciseDefinitionService
-			.persist( new XinixImageMatrix( rootUser, null, 0, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), setOfXinixImages ) );
+		String xinixImageMatrixID = exerciseDefinitionService.persist( new XinixImageMatrix(
+			rootUser,
+			null,
+			0,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			listOfXinixImages ) );
 
 		// xinix definition
 		String xinixDefID = exerciseDefinitionService.persist( new XinixDefinition(
@@ -425,6 +450,13 @@ public class ZhawEngine implements LifecycleObject
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Wie bewertest Du diese Loesung?" ) );
+
+		// workshop start exercise
+		exerciseService.persist( new ExerciseImpl(
+			"start",
+			"Pinkelefant Start",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise
 		String pinklabsExID = exerciseService.persist( new ExerciseImpl(
@@ -479,6 +511,13 @@ public class ZhawEngine implements LifecycleObject
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
+		// workshop start exercise
+		exerciseService.persist( new ExerciseImpl(
+			"Ende",
+			"Pinkelefant Workshop Ende",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
 		// pinklabs data
 		exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), Arrays.asList( "Internet", "Zeitungen" ) ) );
 
@@ -505,7 +544,7 @@ public class ZhawEngine implements LifecycleObject
 		// xinix data
 		Set< String > associations = new HashSet<>();
 		associations.addAll( Arrays.asList( "Sicherheit", "Verbindung", "Zahlen" ) );
-		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, setOfXinixImages.iterator().next() ) );
+		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, listOfXinixImages.iterator().next() ) );
 
 		// simpleprototyping data
 		exerciseDataService.persist( new SimplePrototypingData( rootUser, (WorkflowElementImpl)exerciseService.findByID( simplePrototypingExID ), "Mein Blob".getBytes() ) );
@@ -519,7 +558,7 @@ public class ZhawEngine implements LifecycleObject
 		exerciseDataService.persist( new EvaluationExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( evaluationExID ), Arrays.asList( new Evaluation(
 			rootUser,
 			"Werbekampagne auf Youtube",
-			4 ) ) ) );
+			new Score( rootUser, 4 ) ) ) ) );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session fuer PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );

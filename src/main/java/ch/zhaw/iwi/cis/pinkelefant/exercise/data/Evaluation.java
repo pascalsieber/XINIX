@@ -1,5 +1,6 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -12,14 +13,16 @@ public class Evaluation extends OwnableObject
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String solution;
-	private int score;
+
+	@Embedded
+	private Score score;
 
 	public Evaluation()
 	{
 		super();
 	}
 
-	public Evaluation( PrincipalImpl owner, String solution, int score )
+	public Evaluation( PrincipalImpl owner, String solution, Score score )
 	{
 		super( owner );
 		this.solution = solution;
@@ -36,14 +39,13 @@ public class Evaluation extends OwnableObject
 		this.solution = solution;
 	}
 
-	public int getScore()
+	public Score getScore()
 	{
 		return score;
 	}
 
-	public void setScore( int score )
+	public void setScore( Score score )
 	{
 		this.score = score;
 	}
-
 }

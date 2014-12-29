@@ -49,7 +49,12 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			dataOfAllExercises.addAll( exerciseDataService.findByExerciseID( ex.getID() ) );
+			List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( ex.getID() );
+			
+			if ( !data.isEmpty() )
+			{
+				dataOfAllExercises.addAll( data );
+			}
 		}
 
 		for ( ExerciseDataImpl data : dataOfAllExercises )
