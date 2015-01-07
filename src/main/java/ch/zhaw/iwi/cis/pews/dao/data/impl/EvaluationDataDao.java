@@ -8,8 +8,11 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
+import ch.zhaw.iwi.cis.pews.model.OwnableObject;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 
@@ -22,7 +25,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< EvaluationExerciseData > data = getEntityManager().createQuery(
-			"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluations where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
+			"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
@@ -32,17 +35,47 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	{
 		List< EvaluationExerciseData > data = new ArrayList<>();
 
+		// check for null pointer on UserContext.getCurrentUser().getSession()
+		// this is the case at startup of ZhawEngine -> we simply return an empty list since no evaluationExerciseData present at startup of ZhawEngine
+		// TODO: might want to find better way to catch this error
+		
+		if ( null == UserContext.getCurrentUser().getSession() )
+		{
+			return new ArrayList<ExerciseDataImpl>();
+		}
+		
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationDefinition.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager()
-					.createQuery( "select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluations where d.workflowElement.id = '" + ex.getID() + "'" )
-					.getResultList() );
+				data.addAll( getEntityManager().createQuery(
+					"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + ex.getID() + "'" ).getResultList() );
 			}
 		}
-		
+
 		return (List< ExerciseDataImpl >)cloneResult( data );
+	}
+
+	@Override
+	public < T extends WorkshopObject > String persist( T object )
+	{
+		// evaluations by a specific user for an existing solution need to be updated (overwritten) rather than added
+		List< ExerciseDataImpl > existing = findByWorkshopAndExerciseDataClass( Evaluation.class );
+
+		for ( ExerciseDataImpl data : existing )
+		{
+			if ( data.getOwner().getID().equals( ( (OwnableObject)object ).getOwner().getID() )
+					&& ( (EvaluationExerciseData)data ).getEvaluation().getSolution().equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution() ) )
+			{
+
+				( (EvaluationExerciseData)data ).getEvaluation().getScore().setScore( ( (EvaluationExerciseData)object ).getEvaluation().getScore().getScore() );
+				return super.persist( data );
+			}
+
+		}
+
+		return super.persist( object );
+
 	}
 
 }

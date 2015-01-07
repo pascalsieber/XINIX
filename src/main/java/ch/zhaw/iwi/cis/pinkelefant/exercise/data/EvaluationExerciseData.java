@@ -1,11 +1,9 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
@@ -18,29 +16,29 @@ public class EvaluationExerciseData extends ExerciseDataImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List< Evaluation > evaluations;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinTable(name="EVALUATIONEXERCISEDATA_EVALUATION")
+	private Evaluation evaluation;
 
 	public EvaluationExerciseData()
 	{
 		super();
-		this.evaluations = new ArrayList<>();
 	}
 
-	public EvaluationExerciseData( PrincipalImpl owner, WorkflowElementImpl workflowElement, List< Evaluation > evaluations )
+	public EvaluationExerciseData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Evaluation evaluation )
 	{
 		super( owner, workflowElement );
-		this.evaluations = evaluations;
+		this.evaluation = evaluation;
 	}
 
-	public List< Evaluation > getEvaluations()
+	public Evaluation getEvaluation()
 	{
-		return evaluations;
+		return evaluation;
 	}
 
-	public void setEvaluations( List< Evaluation > evaluations )
+	public void setEvaluation( Evaluation evaluation )
 	{
-		this.evaluations = evaluations;
+		this.evaluation = evaluation;
 	}
 
 }

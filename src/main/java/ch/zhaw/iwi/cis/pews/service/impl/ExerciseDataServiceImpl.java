@@ -11,6 +11,7 @@ import java.util.Map;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.CleanExerciseDataOutputStream;
@@ -18,6 +19,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
@@ -31,6 +33,7 @@ import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.SimplePrototypingExercise
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.StartWorkshopExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EndWorkshopDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
@@ -47,9 +50,11 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 {
 	private ExerciseDataDao exerciseDataDao;
 	private ExerciseDao exerciseDao;
+	private ExerciseDataDao evaluationDataDao;
 
 	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISESPECIFICDATASERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl > >();
 
+	// TODO move this from manual entries to an automatic solution (e.g. with an annotation)
 	static
 	{
 		EXERCISESPECIFICDATASERVICES.put( StartWorkshopDefinition.class.getSimpleName(), StartWorkshopExerciseDataService.class );
@@ -73,6 +78,24 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	{
 		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
+		evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
+	}
+
+	// overriding persist in order to handle special behavior for EvaluationExerciseData
+	// this needs to be delegated to evaluationDataDao
+	// TODO: this is a quick fix! check if there is a more elegant way to do this
+	@Override
+	public < T extends WorkshopObject > String persist( T object )
+	{
+		if ( object instanceof EvaluationExerciseData )
+		{
+			return evaluationDataDao.persist( object );
+		}
+		else
+		{
+			return super.persist( object );
+
+		}
 	}
 
 	@Override
@@ -106,9 +129,9 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream ooStream = new CleanExerciseDataOutputStream( baos );
 			ooStream.writeObject( data );
-			
+
 			byte[] bytes = baos.toByteArray();
-			
+
 			ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
 			ObjectInputStream oiStream = new ObjectInputStream( bais );
 			return oiStream.readObject();

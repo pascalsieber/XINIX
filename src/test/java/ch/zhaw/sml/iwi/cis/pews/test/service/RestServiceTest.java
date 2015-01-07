@@ -212,7 +212,8 @@ public class RestServiceTest
 			"compression question",
 			Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
 
-		evaluationDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub, "evaluation question" ) ) );
+		evaluationDefinitionStub
+			.setID( exerciseDefinitionService.persist( new EvaluationDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub, "evaluation question", 3 ) ) );
 
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		List< XinixImage > images = new ArrayList<>();
@@ -658,31 +659,15 @@ public class RestServiceTest
 	public void crudOperationsEvaluationExerciseData()
 	{
 		// create
-		evaluationDataStub.setID( exerciseDataService.persist( new EvaluationExerciseData( defaultUserStub, evaluationExerciseStub, Arrays.asList( new Evaluation(
+		evaluationDataStub.setID( exerciseDataService.persist( new EvaluationExerciseData( defaultUserStub, evaluationExerciseStub, new Evaluation( defaultUserStub, "solution1", new Score(
 			defaultUserStub,
-			"solution1",
-			new Score( defaultUserStub, 3 ) ), new Evaluation( defaultUserStub, "solution2", new Score( defaultUserStub, 4 ) ) ) ) ) );
+			3 ) ) ) ) );
 
 		// read
 		EvaluationExerciseData data = exerciseDataService.findByID( evaluationDataStub.getID() );
 		checkExerciseData( evaluationExerciseStub, data, evaluationDataStub );
 
-		int count = 0;
-
-		for ( Evaluation evaluation : data.getEvaluations() )
-		{
-			if ( evaluation.getScore().getScore() == 3 && evaluation.getSolution().equalsIgnoreCase( "solution1" ) )
-			{
-				count += 1;
-			}
-
-			if ( evaluation.getScore().getScore() == 4 && evaluation.getSolution().equalsIgnoreCase( "solution2" ) )
-			{
-				count += 1;
-			}
-		}
-
-		assertTrue( count == 2 );
+		assertTrue( data.getEvaluation().getScore().getScore() == 3 && data.getEvaluation().getSolution().equals( "solution1" ) );
 
 		// update
 
@@ -1016,6 +1001,7 @@ public class RestServiceTest
 		setExerciseOnDefaultSession( evaluationExerciseStub );
 		EvaluationInput evaluationInput = mapper.readValue( exerciseService.getInputAsString(), EvaluationInput.class );
 		assertTrue( evaluationInput.getQuestion().equalsIgnoreCase( ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( evaluationInput.getNumberOfVotes() == ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getNumberOfVotes() );
 
 		List< CompressionExerciseData > dataFromCompression = mapper.readValue(
 			mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
@@ -1029,9 +1015,7 @@ public class RestServiceTest
 			}
 		}
 
-		output = new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, "solution1", new Score( defaultUserStub, 5 ) ), new Evaluation( defaultUserStub, "solution2", new Score(
-			defaultUserStub,
-			2 ) ) ) );
+		output = new EvaluationOutput( new Evaluation( defaultUserStub, "solution1", new Score( defaultUserStub, 5 ) ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
 
 		success = false;
@@ -1043,20 +1027,12 @@ public class RestServiceTest
 		{
 			int count = 0;
 
-			for ( Evaluation evaluation : d.getEvaluations() )
+			if ( d.getEvaluation().getSolution().equals( "solution1" ) && d.getEvaluation().getScore().getScore() == 5 )
 			{
-				if ( evaluation.getSolution().equalsIgnoreCase( "solution1" ) && evaluation.getScore().getScore() == 5 )
-				{
-					count += 1;
-				}
-
-				if ( evaluation.getSolution().equalsIgnoreCase( "solution2" ) && evaluation.getScore().getScore() == 2 )
-				{
-					count += 1;
-				}
+				count += 1;
 			}
 
-			if ( count == 2 )
+			if ( count == 1 )
 			{
 				success = true;
 				break;

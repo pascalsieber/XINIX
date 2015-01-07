@@ -7,6 +7,7 @@ public class EvaluationInput extends Input
 {
 	private List< String > solutions;
 	private String question;
+	private int numberOfVotes;
 
 	public EvaluationInput()
 	{
@@ -14,11 +15,12 @@ public class EvaluationInput extends Input
 		this.solutions = new ArrayList<>();
 	}
 
-	public EvaluationInput( List< String > solutions, String question )
+	public EvaluationInput( List< String > solutions, String question, int numberOfVotes )
 	{
 		super();
 		this.solutions = solutions;
 		this.question = question;
+		this.numberOfVotes = numberOfVotes;
 	}
 
 	public List< String > getSolutions()
@@ -39,5 +41,15 @@ public class EvaluationInput extends Input
 	public void setQuestion( String question )
 	{
 		this.question = question;
+	}
+
+	public int getNumberOfVotes()
+	{
+		return numberOfVotes;
+	}
+
+	public void setNumberOfVotes( int numberOfVotes )
+	{
+		this.numberOfVotes = numberOfVotes;
 	}
 }

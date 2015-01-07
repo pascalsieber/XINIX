@@ -63,6 +63,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	private WorkshopDao workshopDao;
 	private static final Map< String, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseServiceImpl >>();
 
+	//TODO move this from manual entries to an automatic solution, preferably using annotation @ExerciseSpecificService (which is already implemented)
 	static
 	{
 		EXERCISESPECIFICSERVICES.put( PinkLabsDefinition.class.getSimpleName(), PinkLabsExerciseService.class );

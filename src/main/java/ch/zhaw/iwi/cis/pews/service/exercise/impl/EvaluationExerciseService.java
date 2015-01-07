@@ -28,13 +28,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataDao compressionDataDao;
-	private ExerciseDataDao evaluationDataDao;
+	private ExerciseDataDao evaluationExerciseDataDao;
 
 	public EvaluationExerciseService()
 	{
 		super();
 		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDao.class.getSimpleName() );
-		this.evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
+		this.evaluationExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		}
 
 		EvaluationDefinition definition = (EvaluationDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new EvaluationInput( solutions, definition.getQuestion() );
+		return new EvaluationInput( solutions, definition.getQuestion(), definition.getNumberOfVotes() );
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		}
 
 		EvaluationDefinition definition = (EvaluationDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		return new EvaluationInput( solutions, definition.getQuestion() );
+		return new EvaluationInput( solutions, definition.getQuestion(), definition.getNumberOfVotes() );
 	}
 
 	@Override
@@ -74,7 +74,8 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		try
 		{
 			EvaluationOutput finalOutput = getObjectMapper().readValue( output, EvaluationOutput.class );
-			getExerciseDataDao().persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), finalOutput.getEvaluations() ) );
+			evaluationExerciseDataDao
+				.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), finalOutput.getEvaluation() ) );
 		}
 		catch ( IOException e )
 		{
@@ -88,12 +89,11 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		try
 		{
 			EvaluationOutput finalOutput = getObjectMapper().readValue( outputRequestString, EvaluationOutput.class );
-			getExerciseDataDao().persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getEvaluations() ) );
+			evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getEvaluation() ) );
 		}
 		catch ( IOException e )
 		{
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + EvaluationOutput.class.getSimpleName() );
 		}
 	}
-
 }

@@ -449,14 +449,11 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.MINUTES,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Wie bewertest Du diese Loesung?" ) );
+			"Wie bewertest Du diese Loesungen?", 5 ) );
 
 		// workshop start exercise
-		exerciseService.persist( new ExerciseImpl(
-			"start",
-			"Pinkelefant Start",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		exerciseService.persist( new ExerciseImpl( "start", "Pinkelefant Start", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ), (WorkshopImpl)workshopService
+			.findByID( wsID ) ) );
 
 		// pinklabs exercise
 		String pinklabsExID = exerciseService.persist( new ExerciseImpl(
@@ -512,11 +509,8 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// workshop start exercise
-		exerciseService.persist( new ExerciseImpl(
-			"Ende",
-			"Pinkelefant Workshop Ende",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		exerciseService.persist( new ExerciseImpl( "Ende", "Pinkelefant Workshop Ende", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ), (WorkshopImpl)workshopService
+			.findByID( wsID ) ) );
 
 		// pinklabs data
 		exerciseDataService.persist( new PinkLabsExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( pinklabsExID ), Arrays.asList( "Internet", "Zeitungen" ) ) );
@@ -555,10 +549,10 @@ public class ZhawEngine implements LifecycleObject
 			"Wertbekampagne auf Facebook" ) ) );
 
 		// evaluation data
-		exerciseDataService.persist( new EvaluationExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( evaluationExID ), Arrays.asList( new Evaluation(
+		exerciseDataService.persist( new EvaluationExerciseData( rootUser, (WorkflowElementImpl)exerciseService.findByID( evaluationExID ), new Evaluation(
 			rootUser,
 			"Werbekampagne auf Youtube",
-			new Score( rootUser, 4 ) ) ) ) );
+			new Score( rootUser, 4 ) ) ) );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session fuer PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
