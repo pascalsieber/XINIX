@@ -588,6 +588,9 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsID ) ) );
 		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
+
+		sessionService.start(sessionID);
+
 		System.out.println( "sample workshop configured" );
 
 	}

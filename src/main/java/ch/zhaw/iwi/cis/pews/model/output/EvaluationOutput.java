@@ -1,30 +1,33 @@
 package ch.zhaw.iwi.cis.pews.model.output;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 
 public class EvaluationOutput extends Output
 {
-	private Evaluation evaluation;
+	private List< Evaluation > evaluations;
 
 	public EvaluationOutput()
 	{
 		super();
+		this.evaluations = new ArrayList<>();
 	}
 
-	public EvaluationOutput( Evaluation evaluation )
+	public EvaluationOutput( List< Evaluation > evaluations )
 	{
 		super();
-		this.evaluation = evaluation;
+		this.evaluations = evaluations;
 	}
 
-	public Evaluation getEvaluation()
+	public List< Evaluation > getEvaluations()
 	{
-		return evaluation;
+		return evaluations;
 	}
 
-	public void setEvaluation( Evaluation evaluation )
+	public void setEvaluations( List< Evaluation > evaluations )
 	{
-		this.evaluation = evaluation;
+		this.evaluations = evaluations;
 	}
-
 }
