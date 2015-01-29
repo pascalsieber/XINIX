@@ -85,14 +85,14 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	@Override
 	public List< ExerciseDataImpl > getOutput()
 	{
-		return getServiceTarget().path( ExerciseRestService.GETOUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json("") ).readEntity( List.class );
+		return getServiceTarget().path( ExerciseRestService.GETOUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
 	{
-		return getServiceTarget().path( ExerciseRestService.GETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json("") ).readEntity( List.class );
+		return getServiceTarget().path( ExerciseRestService.GETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( List.class );
 	}
 
 	@Override

@@ -116,7 +116,6 @@ public class RestServiceTest
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
 
-
 	// using stub objects to mimic the way API will be used
 	private static Client defaultClientStub = new Client();
 	private static RoleImpl defaultRoleStub = new RoleImpl();
@@ -173,48 +172,48 @@ public class RestServiceTest
 
 		// workshop definition (pinkelefantDefinition)
 		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantDefinition(
-				defaultUserStub,
-				"workshop definition",
-				"workshop definition test entry",
-				"problem description" ) ) );
+			defaultUserStub,
+			"workshop definition",
+			"workshop definition test entry",
+			"problem description" ) ) );
 
 		// workshop instance
 		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
 
 		// exercise definitions
 		startWorkshopDefinitionStub.setID( exerciseDefinitionService.persist( new StartWorkshopDefinition(
-				defaultUserStub,
-				TimeUnit.SECONDS,
-				120,
-				defaultWorkshopDefinitionStub,
-				"start",
-				"start description" ) ) );
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			120,
+			defaultWorkshopDefinitionStub,
+			"start",
+			"start description" ) ) );
 		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "pinklabs?" ) ) );
 		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "urltopicture", "theme" ) ) );
 		p2ptwoDefinitionStub.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question?" ) ) );
 
 		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, Arrays.asList(
-				"question?",
-				"counter question?" ) ) ) );
+			"question?",
+			"counter question?" ) ) ) );
 
 		simpleprototypingDefinitionStub.setID( exerciseDefinitionService.persist( new SimplePrototypingDefinition(
-				defaultUserStub,
-				TimeUnit.MINUTES,
-				2,
-				defaultWorkshopDefinitionStub,
-				"prototyping question",
-				"my mimetype" ) ) );
+			defaultUserStub,
+			TimeUnit.MINUTES,
+			2,
+			defaultWorkshopDefinitionStub,
+			"prototyping question",
+			"my mimetype" ) ) );
 
 		compressionDefinitionStub.setID( exerciseDefinitionService.persist( new CompressionDefinition(
-				defaultUserStub,
-				TimeUnit.HOURS,
-				1,
-				defaultWorkshopDefinitionStub,
-				"compression question",
-				Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
+			defaultUserStub,
+			TimeUnit.HOURS,
+			1,
+			defaultWorkshopDefinitionStub,
+			"compression question",
+			Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
 
 		evaluationDefinitionStub
-				.setID( exerciseDefinitionService.persist( new EvaluationDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub, "evaluation question", 3 ) ) );
+			.setID( exerciseDefinitionService.persist( new EvaluationDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub, "evaluation question", 3 ) ) );
 
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		List< XinixImage > images = new ArrayList<>();
@@ -222,48 +221,48 @@ public class RestServiceTest
 		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrix( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, images ) ) );
 
 		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition(
-				defaultUserStub,
-				TimeUnit.SECONDS,
-				60,
-				defaultWorkshopDefinitionStub,
-				"xinix question",
-				(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			60,
+			defaultWorkshopDefinitionStub,
+			"xinix question",
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
 
 		endWorkshopDefinitionStub.setID( exerciseDefinitionService
-				.persist( new EndWorkshopDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "end", "end description" ) ) );
+			.persist( new EndWorkshopDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "end", "end description" ) ) );
 
 		// exercises
 		startWorkshopExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "start", "start workshop", startWorkshopDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub
-				.getID() ) ) ) );
+			.getID() ) ) ) );
 
 		pinklabsExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "pinklabs", "pinklabs exercise", pinklabsDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub
-				.getID() ) ) ) );
+			.getID() ) ) ) );
 
 		p2pOneExerciseStub
-				.setID( exerciseService.persist( new ExerciseImpl( "p2pone", "p2pone exercise", p2poneDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+			.setID( exerciseService.persist( new ExerciseImpl( "p2pone", "p2pone exercise", p2poneDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		you2meExerciseStub
-				.setID( exerciseService.persist( new ExerciseImpl( "you2me", "you2me exercise", you2meDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+			.setID( exerciseService.persist( new ExerciseImpl( "you2me", "you2me exercise", you2meDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		p2pTwoExerciseStub
-				.setID( exerciseService.persist( new ExerciseImpl( "p2ptwo", "p2ptwo exercise", p2ptwoDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+			.setID( exerciseService.persist( new ExerciseImpl( "p2ptwo", "p2ptwo exercise", p2ptwoDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		simpleprototypingExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "simple proto", "simple proto exercise", simpleprototypingDefinitionStub, (WorkshopImpl)workshopService
-				.findByID( defaultWorkshopStub.getID() ) ) ) );
+			.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		xinixExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "xinix", "xinix exercise", xinixDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		compressionExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "compression", "compression exercise", compressionDefinitionStub, (WorkshopImpl)workshopService
-				.findByID( defaultWorkshopStub.getID() ) ) ) );
+			.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		evaluationExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", evaluationDefinitionStub, (WorkshopImpl)workshopService
-				.findByID( defaultWorkshopStub.getID() ) ) ) );
+			.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		endWorkshopExerciseStub.setID( exerciseService.persist( new ExerciseImpl(
-				"end",
-				"end workshop",
-				endWorkshopDefinitionStub,
-				(WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
+			"end",
+			"end workshop",
+			endWorkshopDefinitionStub,
+			(WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
@@ -661,8 +660,8 @@ public class RestServiceTest
 	{
 		// create
 		evaluationDataStub.setID( exerciseDataService.persist( new EvaluationExerciseData( defaultUserStub, evaluationExerciseStub, new Evaluation( defaultUserStub, "solution1", new Score(
-				defaultUserStub,
-				3 ) ) ) ) );
+			defaultUserStub,
+			3 ) ) ) ) );
 
 		// read
 		EvaluationExerciseData data = exerciseDataService.findByID( evaluationDataStub.getID() );
@@ -721,8 +720,10 @@ public class RestServiceTest
 		// assertTrue( userService.requestNewPassword( defaultUserStub.getID() ) );
 	}
 
+
+	@SuppressWarnings( "unchecked" )
 	@Test
-	public void getInputSetOutput() throws IOException
+	public void getInputSetOutputgetOutputgetOutputByExerciseID() throws IOException
 	{
 		Output output = null;
 		List< String > p2pOneKeywordStrings = new ArrayList<>();
@@ -757,6 +758,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( data ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( data ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( pinklabsExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// p2pone
 		setExerciseOnDefaultSession( p2pOneExerciseStub );
@@ -794,6 +801,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( p2pOneData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( p2pOneData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( p2pOneExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// you2me
 		setExerciseOnDefaultSession( you2meExerciseStub );
@@ -839,6 +852,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( you2meData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( you2meData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( you2meExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// p2ptwo
 		setExerciseOnDefaultSession( p2pTwoExerciseStub );
@@ -884,6 +903,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( p2ptwoData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( p2ptwoData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( p2pTwoExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// simple prototyping
 		setExerciseOnDefaultSession( simpleprototypingExerciseStub );
@@ -909,6 +934,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( simpleprototypingExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// xinix
 		setExerciseOnDefaultSession( xinixExerciseStub );
@@ -958,6 +989,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( xinixData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( xinixData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( xinixExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// compression
 		setExerciseOnDefaultSession( compressionExerciseStub );
@@ -997,6 +1034,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( compressionData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( compressionData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( compressionExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// evaluation
 		setExerciseOnDefaultSession( evaluationExerciseStub );
@@ -1005,8 +1048,8 @@ public class RestServiceTest
 		assertTrue( evaluationInput.getNumberOfVotes() == ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getNumberOfVotes() );
 
 		List< CompressionExerciseData > dataFromCompression = mapper.readValue(
-				mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
-				makeCollectionType( CompressionExerciseData.class ) );
+			mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
+			makeCollectionType( CompressionExerciseData.class ) );
 
 		for ( CompressionExerciseData d : dataFromCompression )
 		{
@@ -1045,6 +1088,12 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( evaluationData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		assertTrue( checkOutput(
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( evaluationData ), makeCollectionType( ExerciseDataImpl.class ) ),
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( evaluationExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// end workshop
 		setExerciseOnDefaultSession( endWorkshopExerciseStub );
@@ -1219,6 +1268,42 @@ public class RestServiceTest
 		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 0 );
 	}
 
+	/**
+	 * helper method for checking result of getOutput and getOutputByExerciseID
+	 * @param data
+	 * @param output
+	 * @return
+	 */
+	private boolean checkOutput( List< ExerciseDataImpl > data, List< ExerciseDataImpl > output )
+	{
+
+		// only checking IDs, since getOutput and getExerciseDataByExerciseID
+		// might produce different output at some point, if we ever change the methods
+
+		List< String > outputIDs = new ArrayList< String >();
+		List< String > dataIDs = new ArrayList< String >();
+
+		for ( ExerciseDataImpl e : output )
+		{
+			outputIDs.add( e.getID() );
+		}
+
+		for ( ExerciseDataImpl e : data )
+		{
+			dataIDs.add( e.getID() );
+		}
+
+		if ( outputIDs.containsAll( dataIDs ) && dataIDs.containsAll( outputIDs ) )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+	
 	/**
 	 * helper method, extensively used in getInputSetOutput could use sessionService.setCurrentExercise, but this is faster
 	 */
