@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
@@ -44,6 +45,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public final static String SETOUTPUT = "/setOutput";
 	public final static String SETOUTPUT_BY_EXERCISEID = "/setOutputByExerciseID";
 	public final static String GETOUTPUT = "/getOutput";
+	public final static String GETOUTPUT_BY_EXERCISEID = "/getOutputByExerciseID";
 
 	// only for testing
 	public final static String GETINPUT_AS_STRING = "/getInputAsString";
@@ -156,7 +158,21 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	{
 		exerciseService.setOuputByExerciseID( outputRequestString );
 	}
+	
+	@POST
+	@Path( GETOUTPUT )
+	public List< ExerciseDataImpl > getOutput()
+	{
+		return exerciseService.getOutput();
+	}
 
+	@POST
+	@Path( GETOUTPUT_BY_EXERCISEID )
+	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
+	{
+		return exerciseService.getOutputByExerciseID( exerciseID );
+	}
+	
 	@POST
 	@Path( START_USER )
 	public void startUser()

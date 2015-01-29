@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
@@ -19,6 +20,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
+import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
@@ -231,6 +233,18 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		{
 			throw new RuntimeException( "problem processing output request with String: " + outputRequestString );
 		}
+	}
+
+	@Override
+	public List< ExerciseDataImpl > getOutput()
+	{
+		return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+	}
+
+	@Override
+	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
+	{
+		return exerciseDataDao.findByExerciseID( exerciseID );
 	}
 
 	@Override

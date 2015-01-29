@@ -1,8 +1,11 @@
 package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
+import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
@@ -76,6 +79,20 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	public void setOuputByExerciseID( String outputRequestString )
 	{
 		getServiceTarget().path( ExerciseRestService.SETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( outputRequestString ) );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseDataImpl > getOutput()
+	{
+		return getServiceTarget().path( ExerciseRestService.GETOUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json("") ).readEntity( List.class );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
+	{
+		return getServiceTarget().path( ExerciseRestService.GETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json("") ).readEntity( List.class );
 	}
 
 	@Override
