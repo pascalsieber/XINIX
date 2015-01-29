@@ -43,6 +43,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public final static String GETINPUT_BY_EXERCISEID = "/getInputByExerciseID";
 	public final static String SETOUTPUT = "/setOutput";
 	public final static String SETOUTPUT_BY_EXERCISEID = "/setOutputByExerciseID";
+	public final static String GETOUTPUT = "/getOutput";
 
 	// only for testing
 	public final static String GETINPUT_AS_STRING = "/getInputAsString";
