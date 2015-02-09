@@ -70,6 +70,15 @@ import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ClientServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -620,17 +629,21 @@ public class ZhawEngine implements LifecycleObject
 	@SuppressWarnings( "unused" )
 	private static void configurePostWorkshop()
 	{
-		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
-		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-		WorkshopDefinitionService workshopDefinitionService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
+		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
+		WorkshopDefinitionService workshopDefinitionService =getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
 		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
 		ExerciseDefinitionService exerciseDefinitionService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
-		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
-
+		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
+		
 		// Post client
 		Client postClient = clientService.findByID( clientService.persist( new Client( POST_ROOT_CLIENT_NAME ) ) );
+		
+		UserImpl bootstrapUser = new UserImpl( null, null, null, null, null, null );
+		bootstrapUser.setClient( postClient );
+		UserContext.setCurrentUser( bootstrapUser );
 
 		// Post root role
 		RoleImpl postRootRole = new RoleImpl( "post_root", "post_root" );
@@ -646,8 +659,6 @@ public class ZhawEngine implements LifecycleObject
 			"post root last name",
 			POST_ROOT_USER_LOGIN_NAME );
 		UserImpl postRootUser = userService.findByID( userService.persist( user ) );
-
-		UserContext.setCurrentUser( postRootUser );
 
 		// workshop definition (pinkelefant)
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
