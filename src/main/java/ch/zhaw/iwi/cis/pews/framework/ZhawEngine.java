@@ -70,15 +70,6 @@ import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ClientServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDefinitionServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -118,8 +109,9 @@ public class ZhawEngine implements LifecycleObject
 	private static Client rootClient;
 	private static UserImpl rootUser;
 	
-	// defining this globally, since multiple pre-configured workshops might make use of the same role
+	// defining these globally, since multiple pre-configured workshops might make use of the same role
 	private static String participantRoleID;
+	private static String executerRoleID;
 
 	// defining this globally, since multiple pre-configured workshops might make use of the same xinix-image-matrix
 	private static String xinixImageMatrixID;
@@ -354,7 +346,7 @@ public class ZhawEngine implements LifecycleObject
 		roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
 		System.out.println( "organizer role created initially" );
 
-		roleService.persist( new RoleImpl( "executer", "session executer" ) );
+		executerRoleID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
 		System.out.println( "executer role created initially" );
 
 		participantRoleID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
@@ -623,7 +615,7 @@ public class ZhawEngine implements LifecycleObject
 
 	}
 
-	public static final String POST_ROOT_CLIENT_NAME = "pinkelefant_post_client";
+	public static final String POST_ROOT_CLIENT_NAME = "post";
 	public static final String POST_ROOT_USER_LOGIN_NAME = POST_ROOT_CLIENT_NAME + "/root@post";
 
 	@SuppressWarnings( "unused" )
@@ -953,7 +945,7 @@ public class ZhawEngine implements LifecycleObject
 			null,
 			"participating",
 			"participant 1",
-			POST_ROOT_CLIENT_NAME + "/participant1@post" ) );
+			POST_ROOT_CLIENT_NAME + "/p1@post" ) );
 		
 		String participantID2 = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
@@ -961,7 +953,7 @@ public class ZhawEngine implements LifecycleObject
 			null,
 			"participating",
 			"participant 2",
-			POST_ROOT_CLIENT_NAME + "/participant2@post" ) );
+			POST_ROOT_CLIENT_NAME + "/p2@post" ) );
 		
 		String participantID3 = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
@@ -969,11 +961,42 @@ public class ZhawEngine implements LifecycleObject
 			null,
 			"participating",
 			"participant 3",
-			POST_ROOT_CLIENT_NAME + "/participant3@post" ) );
+			POST_ROOT_CLIENT_NAME + "/p3@post" ) );
+		
+		String participantID4 = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc123" ),
+			(RoleImpl)roleService.findByID( participantRoleID ),
+			null,
+			"participating",
+			"participant 4",
+			POST_ROOT_CLIENT_NAME + "/p4@post" ) );
+		
+		String participantID5 = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc123" ),
+			(RoleImpl)roleService.findByID( participantRoleID ),
+			null,
+			"participating",
+			"participant 5",
+			POST_ROOT_CLIENT_NAME + "/p5@post" ) );
+		
+		String executerID = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc123" ),
+			(RoleImpl)roleService.findByID( executerRoleID ),
+			null,
+			"executing",
+			"executer",
+			POST_ROOT_CLIENT_NAME + "/e@post" ) );
+		
 
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID1 ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID2 ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID3 ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID4 ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID5 ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( executerID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		
+		// start session
+		sessionService.start( sessionID );
 		
 		System.out.println("workshop for Post configured");
 
