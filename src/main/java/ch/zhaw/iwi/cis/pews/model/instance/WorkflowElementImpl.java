@@ -12,6 +12,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
@@ -38,6 +39,7 @@ public class WorkflowElementImpl extends WorkshopObject
 	private WorkflowElementDefinitionImpl definition;
 
 	@OneToMany( cascade = CascadeType.ALL )
+	@OrderColumn( name = "INDEX" )
 	private Set< WorkflowElementDataImpl > data;
 
 	public WorkflowElementImpl()
