@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -10,20 +11,21 @@ import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class StartWorkshopDefinition extends ExerciseDefinitionImpl
+public class PosterDefinition extends ExerciseDefinitionImpl
 {
-
 	@Transient
 	private static final long serialVersionUID = 1L;
+	@Column( length = 2000 )
 	private String title;
+	@Column( length = 20000 )
 	private String description;
 
-	public StartWorkshopDefinition()
+	public PosterDefinition()
 	{
 		super();
 	}
 
-	public StartWorkshopDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String title, String description )
+	public PosterDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String title, String description )
 	{
 		super( owner, timeUnit, duration, workshopDefinition );
 		this.title = title;
@@ -49,4 +51,5 @@ public class StartWorkshopDefinition extends ExerciseDefinitionImpl
 	{
 		this.description = description;
 	}
+
 }

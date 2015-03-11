@@ -1,16 +1,16 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
-public class StartWorkshopInput extends Input
+public class PosterInput extends Input
 {
 	private String title;
 	private String description;
 
-	public StartWorkshopInput()
+	public PosterInput()
 	{
 		super();
 	}
 
-	public StartWorkshopInput( String title, String description )
+	public PosterInput( String title, String description )
 	{
 		super();
 		this.title = title;

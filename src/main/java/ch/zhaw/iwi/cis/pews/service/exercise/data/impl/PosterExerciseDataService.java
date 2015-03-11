@@ -9,10 +9,10 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class EndWorkshopExerciseDataService extends ExerciseDataServiceImpl
+public class PosterExerciseDataService extends ExerciseDataServiceImpl
 {
 
-	public EndWorkshopExerciseDataService()
+	public PosterExerciseDataService()
 	{
 		super();
 	}
@@ -22,4 +22,5 @@ public class EndWorkshopExerciseDataService extends ExerciseDataServiceImpl
 	{
 		return super.genericFindByExerciseID( exerciseID );
 	}
+	
 }

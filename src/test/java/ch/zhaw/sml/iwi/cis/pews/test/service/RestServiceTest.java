@@ -21,13 +21,12 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
-import ch.zhaw.iwi.cis.pews.model.input.EndWorkshopInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
+import ch.zhaw.iwi.cis.pews.model.input.PosterInput;
 import ch.zhaw.iwi.cis.pews.model.input.SimplePrototypingInput;
-import ch.zhaw.iwi.cis.pews.model.input.StartWorkshopInput;
 import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
 import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
@@ -85,13 +84,12 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EndWorkshopDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PosterDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.StartWorkshopDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
@@ -125,7 +123,7 @@ public class RestServiceTest
 	private static SessionImpl defaultSessionStub = new SessionImpl();
 	private static Invitation defaultInvitationStub = new Invitation();
 
-	private static StartWorkshopDefinition startWorkshopDefinitionStub = new StartWorkshopDefinition();
+	private static PosterDefinition posterDefinitionStub = new PosterDefinition();
 	private static PinkLabsDefinition pinklabsDefinitionStub = new PinkLabsDefinition();
 	private static P2POneDefinition p2poneDefinitionStub = new P2POneDefinition();
 	private static P2PTwoDefinition p2ptwoDefinitionStub = new P2PTwoDefinition();
@@ -135,9 +133,8 @@ public class RestServiceTest
 	private static SimplePrototypingDefinition simpleprototypingDefinitionStub = new SimplePrototypingDefinition();
 	private static CompressionDefinition compressionDefinitionStub = new CompressionDefinition();
 	private static EvaluationDefinition evaluationDefinitionStub = new EvaluationDefinition();
-	private static EndWorkshopDefinition endWorkshopDefinitionStub = new EndWorkshopDefinition();
 
-	private static ExerciseImpl startWorkshopExerciseStub = new ExerciseImpl();
+	private static ExerciseImpl posterExerciseStub = new ExerciseImpl();
 	private static ExerciseImpl pinklabsExerciseStub = new ExerciseImpl();
 	private static ExerciseImpl you2meExerciseStub = new ExerciseImpl();
 	private static ExerciseImpl p2pOneExerciseStub = new ExerciseImpl();
@@ -181,7 +178,7 @@ public class RestServiceTest
 		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
 
 		// exercise definitions
-		startWorkshopDefinitionStub.setID( exerciseDefinitionService.persist( new StartWorkshopDefinition(
+		posterDefinitionStub.setID( exerciseDefinitionService.persist( new PosterDefinition(
 			defaultUserStub,
 			TimeUnit.SECONDS,
 			120,
@@ -228,11 +225,8 @@ public class RestServiceTest
 			"xinix question",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
 
-		endWorkshopDefinitionStub.setID( exerciseDefinitionService
-			.persist( new EndWorkshopDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "end", "end description" ) ) );
-
 		// exercises
-		startWorkshopExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "start", "start workshop", startWorkshopDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub
+		posterExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "start", "start workshop", posterDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub
 			.getID() ) ) ) );
 
 		pinklabsExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "pinklabs", "pinklabs exercise", pinklabsDefinitionStub, (WorkshopImpl)workshopService.findByID( defaultWorkshopStub
@@ -257,12 +251,6 @@ public class RestServiceTest
 
 		evaluationExerciseStub.setID( exerciseService.persist( new ExerciseImpl( "evaluation", "evaluation exercise", evaluationDefinitionStub, (WorkshopImpl)workshopService
 			.findByID( defaultWorkshopStub.getID() ) ) ) );
-
-		endWorkshopExerciseStub.setID( exerciseService.persist( new ExerciseImpl(
-			"end",
-			"end workshop",
-			endWorkshopDefinitionStub,
-			(WorkshopImpl)workshopService.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
@@ -459,7 +447,7 @@ public class RestServiceTest
 		assertTrue( ex.getName().equalsIgnoreCase( "exercise" ) );
 		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
 		assertTrue( ex.getWorkshop().getID().equals( defaultWorkshopStub.getID() ) );
-		assertTrue( ex.getOrderInWorkshop() == 10 );
+		assertTrue( ex.getOrderInWorkshop() == 9 );
 
 		// update exercise instance
 		ex.setName( "updated exercise" );
@@ -730,10 +718,10 @@ public class RestServiceTest
 		boolean success = false;
 
 		// start workshop
-		setExerciseOnDefaultSession( startWorkshopExerciseStub );
-		StartWorkshopInput startWorkshopInput = mapper.readValue( exerciseService.getInputAsString(), StartWorkshopInput.class );
-		assertTrue( startWorkshopInput.getTitle().equalsIgnoreCase( ( (StartWorkshopDefinition)exerciseDefinitionService.findByID( startWorkshopDefinitionStub.getID() ) ).getTitle() ) );
-		assertTrue( startWorkshopInput.getDescription().equalsIgnoreCase( ( (StartWorkshopDefinition)exerciseDefinitionService.findByID( startWorkshopDefinitionStub.getID() ) ).getDescription() ) );
+		setExerciseOnDefaultSession( posterExerciseStub );
+		PosterInput posterInput = mapper.readValue( exerciseService.getInputAsString(), PosterInput.class );
+		assertTrue( posterInput.getTitle().equalsIgnoreCase( ( (PosterDefinition)exerciseDefinitionService.findByID( posterDefinitionStub.getID() ) ).getTitle() ) );
+		assertTrue( posterInput.getDescription().equalsIgnoreCase( ( (PosterDefinition)exerciseDefinitionService.findByID( posterDefinitionStub.getID() ) ).getDescription() ) );
 
 		// pinklabs
 		setExerciseOnDefaultSession( pinklabsExerciseStub );
@@ -1094,13 +1082,6 @@ public class RestServiceTest
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( evaluationData ), makeCollectionType( ExerciseDataImpl.class ) ),
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( evaluationExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
-
-		// end workshop
-		setExerciseOnDefaultSession( endWorkshopExerciseStub );
-		EndWorkshopInput endWorkshopInput = mapper.readValue( exerciseService.getInputAsString(), EndWorkshopInput.class );
-		assertTrue( endWorkshopInput.getTitle().equalsIgnoreCase( ( (EndWorkshopDefinition)exerciseDefinitionService.findByID( endWorkshopDefinitionStub.getID() ) ).getTitle() ) );
-		assertTrue( endWorkshopInput.getDescription().equalsIgnoreCase( ( (EndWorkshopDefinition)exerciseDefinitionService.findByID( endWorkshopDefinitionStub.getID() ) ).getDescription() ) );
-
 	}
 
 	@Test
