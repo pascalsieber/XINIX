@@ -86,6 +86,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
@@ -455,7 +456,11 @@ public class ZhawEngine implements LifecycleObject
 			"Wie bewertest Du diese Loesungen?",
 			5 ) );
 
-		// workshop start exercise
+		// evaluation result definition
+		String evaluationResultDefID = exerciseDefinitionService.persist( new EvaluationResultDefinition( rootUser, TimeUnit.MINUTES, 10, (WorkshopDefinitionImpl)workshopDefinitionService
+			.findByID( wsDefID ) ) );
+
+		// workshop start exercise (poster)
 		exerciseService.persist( new ExerciseImpl( "start", "Pinkelefant Start", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ), (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 
@@ -512,7 +517,14 @@ public class ZhawEngine implements LifecycleObject
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
-		// workshop start exercise
+		// evaluation result exercise
+		exerciseService.persist( new ExerciseImpl(
+			"Auswertung der Evaluation",
+			"Tool zur Auswertung der Evaluation",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationResultDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// workshop end exercise (poster)
 		exerciseService.persist( new ExerciseImpl( "Ende", "Pinkelefant Workshop Ende", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ), (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 
@@ -799,6 +811,10 @@ public class ZhawEngine implements LifecycleObject
 			"Die einzelnen Ideen werden nun bewertet",
 			5 ) );
 
+		// evaluation result definition
+		String evaluationResultDefID = exerciseDefinitionService.persist( new EvaluationResultDefinition( postRootUser, TimeUnit.SECONDS, 600, (WorkshopDefinitionImpl)workshopDefinitionService
+			.findByID( wsDefID ) ) );
+
 		// end definition
 		String endDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
@@ -830,14 +846,29 @@ public class ZhawEngine implements LifecycleObject
 				"Inspirationsphase",
 				"Du befindest dich jetzt in der Inspirationsphase. Hier erwarten dich 5 unterschiedliche Kreativitaetstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu ueberlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
 
-		String pinklabsIntroDefID = exerciseDefinitionService.persist( new PosterDefinition( postRootUser, TimeUnit.SECONDS, 120, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "p.i.n.k.labs", "Beantworte die folgenden 4 unterschiedlichen Fragen." ) );
+		String pinklabsIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			postRootUser,
+			TimeUnit.SECONDS,
+			120,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"p.i.n.k.labs",
+			"Beantworte die folgenden 4 unterschiedlichen Fragen." ) );
 
-		String p2pOneIntroDefID = exerciseDefinitionService.persist( new PosterDefinition( postRootUser, TimeUnit.SECONDS, 120, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "Post to Paper 1", "Du siehst nun nacheinander 4 unterschiedliche Zielgruppen. Beantworte zu jeder dieser Zielgruppen die folgende Frage." ) );
+		String p2pOneIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			postRootUser,
+			TimeUnit.SECONDS,
+			120,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Post to Paper 1",
+			"Du siehst nun nacheinander 4 unterschiedliche Zielgruppen. Beantworte zu jeder dieser Zielgruppen die folgende Frage." ) );
 
-		String p2pTwoIntroDefID = exerciseDefinitionService.persist( new PosterDefinition( postRootUser, TimeUnit.SECONDS, 120, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "Post to Paper 2", "Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleitung mit 1-2 Saetzen." ) );
+		String p2pTwoIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			postRootUser,
+			TimeUnit.SECONDS,
+			120,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Post to Paper 2",
+			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleitung mit 1-2 Saetzen." ) );
 
 		String xinixIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
@@ -894,11 +925,8 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// intro 2
-		exerciseService.persist( new ExerciseImpl(
-			"Intro",
-			"Intro Tool",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( introDefID2 ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		exerciseService.persist( new ExerciseImpl( "Intro", "Intro Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( introDefID2 ), (WorkshopImpl)workshopService
+			.findByID( wsID ) ) );
 
 		// pinklabs intro
 		exerciseService.persist( new ExerciseImpl(
@@ -1052,6 +1080,13 @@ public class ZhawEngine implements LifecycleObject
 		String evaluationExID = exerciseService.persist( new ExerciseImpl(
 			"Bewertungsrunde",
 			"Tool zur Evaluation der erarbeiteten Loesungen",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// evaluation result exercise
+		String evaluationResultExID = exerciseService.persist( new ExerciseImpl(
+			"Resultate der Bewertungsrunde",
+			"Tool zur Auswertung der Resultate aus der Bewertungsrunde",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 

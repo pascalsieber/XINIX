@@ -1,13 +1,14 @@
 package ch.zhaw.iwi.cis.pews.dao.data.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
@@ -38,12 +39,12 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 		// check for null pointer on UserContext.getCurrentUser().getSession()
 		// this is the case at startup of ZhawEngine -> we simply return an empty list since no evaluationExerciseData present at startup of ZhawEngine
 		// TODO: might want to find better way to catch this error
-		
+
 		if ( null == UserContext.getCurrentUser().getSession() )
 		{
-			return new ArrayList<ExerciseDataImpl>();
+			return new ArrayList< ExerciseDataImpl >();
 		}
-		
+
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationDefinition.class.getSimpleName() ) )
@@ -53,7 +54,11 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 			}
 		}
 
-		return (List< ExerciseDataImpl >)cloneResult( data );
+		// TODO: using somewhat of a hack / not so nice solution. using this because query returns all results twice (due to relation product)
+		HashSet< ExerciseDataImpl > dataSet = new HashSet< ExerciseDataImpl >( (List< ExerciseDataImpl >)cloneResult( data ) );
+		List< ExerciseDataImpl > result = new ArrayList< ExerciseDataImpl >();
+		result.addAll( dataSet );
+		return result;
 	}
 
 	@Override

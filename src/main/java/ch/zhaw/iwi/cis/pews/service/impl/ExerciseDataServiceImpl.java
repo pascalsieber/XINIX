@@ -25,6 +25,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.CompressionExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationExerciseDataService;
+import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationResultExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.P2POneExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.P2PTwoExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PinkLabsExerciseDataService;
@@ -35,6 +36,7 @@ import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
@@ -63,6 +65,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		EXERCISESPECIFICDATASERVICES.put( XinixDefinition.class.getSimpleName(), XinixExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( CompressionDefinition.class.getSimpleName(), CompressionExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( EvaluationDefinition.class.getSimpleName(), EvaluationExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( EvaluationResultDefinition.class.getSimpleName(), EvaluationResultExerciseDataService.class );
 		EXERCISESPECIFICDATASERVICES.put( PosterDefinition.class.getSimpleName(), PosterExerciseDataService.class );
 	}
 

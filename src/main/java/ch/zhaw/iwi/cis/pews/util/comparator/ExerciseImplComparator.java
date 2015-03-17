@@ -1,6 +1,8 @@
-package ch.zhaw.iwi.cis.pews.model.instance;
+package ch.zhaw.iwi.cis.pews.util.comparator;
 
 import java.util.Comparator;
+
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 
 public class ExerciseImplComparator implements Comparator< ExerciseImpl >
 {

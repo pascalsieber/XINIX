@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.util.comparator.ExerciseImplComparator;
 
 @Entity
 public class WorkshopImpl extends WorkflowElementImpl

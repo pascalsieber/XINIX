@@ -30,7 +30,6 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImplComparator;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Timer;
@@ -42,6 +41,7 @@ import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetCurrentExerciseJob;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetNextExerciseJob;
+import ch.zhaw.iwi.cis.pews.util.comparator.ExerciseImplComparator;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class SessionServiceImpl extends WorkflowElementServiceImpl implements SessionService

@@ -31,6 +31,7 @@ import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.CompressionExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationExerciseService;
+import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationResultExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.P2POneExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.P2PTwoExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.PinkLabsExerciseService;
@@ -40,6 +41,7 @@ import ch.zhaw.iwi.cis.pews.service.exercise.impl.XinixExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.You2MeExerciseService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
@@ -75,6 +77,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		EXERCISESPECIFICSERVICES.put( CompressionDefinition.class.getSimpleName(), CompressionExerciseService.class );
 		EXERCISESPECIFICSERVICES.put( EvaluationDefinition.class.getSimpleName(), EvaluationExerciseService.class );
 		EXERCISESPECIFICSERVICES.put( PosterDefinition.class.getSimpleName(), PosterExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( EvaluationResultDefinition.class.getSimpleName(), EvaluationResultExerciseService.class );
 	}
 
 	private Class< ? > getExerciseSpecificService( String exerciseDefinitionClassName )
