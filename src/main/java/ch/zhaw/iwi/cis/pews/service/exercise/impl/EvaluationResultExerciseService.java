@@ -1,7 +1,6 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
@@ -21,6 +21,7 @@ import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultObject;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pews.util.comparator.EvaluationResultComparator;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
@@ -30,11 +31,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinitio
 public class EvaluationResultExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataDao evaluationDataDao;
+	private ExerciseDataDao compressionDataDao;
 
 	public EvaluationResultExerciseService()
 	{
 		super();
 		this.evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
+		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDao.class.getSimpleName() );
 	}
 
 	@Override
@@ -67,8 +70,22 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 			input.getResults().add( new EvaluationResultObject( entry.getKey(), sumOfScores / entry.getValue().size(), entry.getValue().size() ) );
 		}
 
-		Collections.sort( input.getResults(), new EvaluationResultComparator() );
+		
+		// add solutions which have not been evaluated
+		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
+		for ( ExerciseDataImpl compressionDataPoint : compressionData )
+		{
+			for ( String solution : ( (CompressionExerciseData)compressionDataPoint ).getSolutions() )
+			{
+				if ( !evaluationsMap.containsKey( solution ) )
+				{
+					input.getNotEvaluated().add( solution );
+				}
+			}
+		}
 
+		Collections.sort( input.getResults(), new EvaluationResultComparator() );
+		
 		return input;
 	}
 

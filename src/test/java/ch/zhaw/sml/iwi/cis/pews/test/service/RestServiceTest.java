@@ -1093,11 +1093,10 @@ public class RestServiceTest
 
 		// evaluation result -> only testing getInput, as setOutput and getOutput operations are not supported for this kind of exercise
 		// use two newly persisted EvaluationExerciseData objects
-		exerciseService.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList(
-			new Evaluation( defaultUserStub, "testingSolution", new Score( defaultUserStub, 6 ) ) ) ) ) );
-		
-		exerciseServiceForSecondUser.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList(
-			new Evaluation( secondUserStub, "testingSolution", new Score( defaultUserStub, 2 ) ) ) ) ) );
+		exerciseService.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, "testingSolution", new Score( defaultUserStub, 6 ) ) ) ) ) );
+
+		exerciseServiceForSecondUser
+			.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( secondUserStub, "testingSolution", new Score( defaultUserStub, 2 ) ) ) ) ) );
 
 		setExerciseOnDefaultSession( evaluationResultExerciseStub );
 		EvaluationResultInput evaluationResultInput = mapper.readValue( exerciseService.getInputAsString(), EvaluationResultInput.class );
@@ -1116,6 +1115,10 @@ public class RestServiceTest
 		}
 
 		assertTrue( success );
+
+		// make sure that evaluationResultInput has list of solutions which have not been evaluated
+		// in our case we check for solutions "c1", "c2" and "c3" which have been persisted further above
+		assertTrue( evaluationResultInput.getNotEvaluated().containsAll( Arrays.asList( "c1", "c2", "c3" ) ) );
 	}
 
 	@Test
