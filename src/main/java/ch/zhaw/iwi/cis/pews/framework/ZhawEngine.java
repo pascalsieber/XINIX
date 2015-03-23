@@ -673,15 +673,6 @@ public class ZhawEngine implements LifecycleObject
 		// workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "Post Workshop", "PinkElefant Workshop mit der Post", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
 
-		// workshop start definition
-		String startDefID = exerciseDefinitionService.persist( new PosterDefinition(
-			postRootUser,
-			TimeUnit.SECONDS,
-			180,
-			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Willkommen zum Pinkelefant Workshop",
-			"Der Workshop beginnt in Kürze." ) );
-
 		// pinklabs definition 1
 		String pinklabsDefID1 = exerciseDefinitionService.persist( new PinkLabsDefinition(
 			postRootUser,
@@ -756,7 +747,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Nimm 1 oder 2 Antworten aus der letzten Aufgabe und formuliere je eine mögliche NEUE Dienstleistung, welche die Post dafür anbieten könnte." ) );
+			"Formuliere je eine mögliche neue Dienstleistung, welche die Post anbieten könnte." ) );
 
 		// xinix definition iteration 1
 		String xinixDefID1 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -1002,7 +993,7 @@ public class ZhawEngine implements LifecycleObject
 		exerciseService.persist( new ExerciseImpl(
 			"Post2Paper Zwei Intro",
 			"Post2Paper Zwei Intro Tool",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pTwoDefID ),
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pTwoIntroDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pTwo exercise
@@ -1084,11 +1075,12 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// evaluation result exercise
-		String evaluationResultExID = exerciseService.persist( new ExerciseImpl(
-			"Resultate der Bewertungsrunde",
-			"Tool zur Auswertung der Resultate aus der Bewertungsrunde",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationDefID ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		// TODO: include this, once we agree on specs with tablet implementers
+//		String evaluationResultExID = exerciseService.persist( new ExerciseImpl(
+//			"Resultate der Bewertungsrunde",
+//			"Tool zur Auswertung der Resultate aus der Bewertungsrunde",
+//			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID(  ),
+//			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// outro
 		exerciseService.persist( new ExerciseImpl( "Outro", "Outro Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( outroDefID ), (WorkshopImpl)workshopService
