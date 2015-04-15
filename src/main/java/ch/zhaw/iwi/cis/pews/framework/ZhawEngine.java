@@ -353,10 +353,10 @@ public class ZhawEngine implements LifecycleObject
 		System.out.println( "participant role created initially" );
 
 		// sample workshop definition (pinkelefant)
-		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition( rootUser, "PinkElefant Definition", "Definition für Pinkelefant Workshop", "Produkteinfuehrung Teekocher" ) );
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition( rootUser, "p.i.n.k.Elefant Definition", "Definition für p.i.n.k.Elefant Workshop", "Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "PinkElefant Workshop", "Beispiel eines PinkElefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
+		String wsID = workshopService.persist( new WorkshopImpl( "p.i.n.k.Elefant Workshop", "Beispiel eines p.i.n.k.Elefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
 			.findByID( wsDefID ) ) );
 
 		// workshop start definition
@@ -365,7 +365,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Willkommen zum Pinkelefant Workshop",
+			"Willkommen zum p.i.n.k.Elefant Workshop",
 			"Der Workshop beginnt in Kürze." ) );
 
 		// workshop end definition
@@ -374,7 +374,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Ende des Pinkelefant Workshops",
+			"Ende des p.i.n.k.Elefant Workshops",
 			"Vielen Dank für Ihre Teilnahme." ) );
 
 		// pinklabs definition
@@ -461,13 +461,13 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsDefID ) ) );
 
 		// workshop start exercise (poster)
-		exerciseService.persist( new ExerciseImpl( "start", "Pinkelefant Start", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ), (WorkshopImpl)workshopService
+		exerciseService.persist( new ExerciseImpl( "start", "p.i.n.k.Elefant Start", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ), (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 
 		// pinklabs exercise
 		String pinklabsExID = exerciseService.persist( new ExerciseImpl(
-			"pinkLabs",
-			"pinklabs Tool",
+			"p.i.n.k.labs",
+			"p.i.n.k.labs Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
@@ -494,13 +494,13 @@ public class ZhawEngine implements LifecycleObject
 
 		// xinix exercise
 		String xinixExID = exerciseService.persist( new ExerciseImpl(
-			"Xinix",
-			"Xinix Tool",
+			"XINIX",
+			"XINIX-Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// simple prototyping exercise
-		String simplePrototypingExID = exerciseService.persist( new ExerciseImpl( "Simple Prototyping", "Simple Prototyping Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+		String simplePrototypingExID = exerciseService.persist( new ExerciseImpl( "Simply Prototyping", "Simply Prototyping Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService
 			.findByID( simplePrototypingDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// compression exercise
@@ -525,7 +525,7 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// workshop end exercise (poster)
-		exerciseService.persist( new ExerciseImpl( "Ende", "Pinkelefant Workshop Ende", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ), (WorkshopImpl)workshopService
+		exerciseService.persist( new ExerciseImpl( "Ende", "p.i.n.k.Elefant Workshop Ende", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ), (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 
 		// pinklabs data
@@ -576,7 +576,7 @@ public class ZhawEngine implements LifecycleObject
 			new Score( rootUser, 4 ) ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für PinkElefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.Elefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// invitation (so that at least on is there) :)
 		invitationService.persist( new Invitation( rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -616,7 +616,7 @@ public class ZhawEngine implements LifecycleObject
 		// "root first name",
 		// "root last name",
 		// "pews_root_client/executer@pews" ) );
-		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für PinkElefant Workshop", null, (WorkshopImpl)workshopService
+		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für p.i.n.k.Elefant Workshop", null, (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
@@ -667,11 +667,11 @@ public class ZhawEngine implements LifecycleObject
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			postRootUser,
 			"Post Workshop Definition",
-			"Definition für Pinkelefant Workshop mit der Post",
+			"Definition für p.i.n.k.Elefant Workshop mit der Post",
 			"Massnahmen Begleit-Service Paketdienst im Jahr 2020" ) );
 
 		// workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "Post Workshop", "PinkElefant Workshop mit der Post", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
+		String wsID = workshopService.persist( new WorkshopImpl( "Post Workshop", "p.i.n.k.Elefant Workshop mit der Post", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
 
 		// pinklabs definition 1
 		String pinklabsDefID1 = exerciseDefinitionService.persist( new PinkLabsDefinition(
@@ -791,7 +791,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// compression definition
 		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition( postRootUser, TimeUnit.MINUTES, 45, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "alle Inputs aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen formuliert.", new ArrayList< String >() ) );
+			.findByID( wsDefID ), "ALLE INPUTS aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen formuliert.", new ArrayList< String >() ) );
 
 		// evaluation definition
 		String evaluationDefID = exerciseDefinitionService.persist( new EvaluationDefinition(
@@ -825,7 +825,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Willkommen",
-				"Herzlich Willkommen beim XINIX-Workshop zum Thema Massnahmen Begleit-Service Paketdienst im Jahr 2020. Bei diesem Wokshop kommen folgende Phasen auf dich zu: Inspirationsphase: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren. Kompressionsphase: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert. Bewertung: Die Ideen werden entsprechend gewissen Kriterien bewertet." ) );
+				"<p>Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.</p><p>Bei diesem Wokshop kommen folgende Phasen auf dich zu:</p><p><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.</p><p><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.</p><p><b>Bewertung<b/>: Die Ideen werden entsprechend gewissen Kriterien bewertet.</p>" ) );
 
 		// intro 2
 		String introDefID2 = exerciseDefinitionService
@@ -835,7 +835,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Inspirationsphase",
-				"Du befindest dich jetzt in der Inspirationsphase. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
+				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
 
 		String pinklabsIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
@@ -866,7 +866,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			120,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"XINIX-Tool",
+			"XINIX",
 			"Nun folgen 4 unterschiedliche Themen. Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln. " ) );
 
 		String simpleprotoIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
@@ -885,7 +885,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Kompressionsphase",
-				"Du befindest dich jetzt in der Kompressionsphase. Nun kommen wir zurück auf unser Workshop-Thema: Massnahmen Begleit-Service Paketdienst im Jahr 2020. In den nächsten 45 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme in mind. 4 Sätzen. Erarbeite so viele Massnahmen wie möglich. Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen." ) );
+				"<p>Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>. In den nächsten 45 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme in mind. 4 Sätzen.</p><p>Erarbeite so viele Massnahmen wie möglich.</p><p>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.</p>" ) );
 
 		// intro 4
 		String introDefID4 = exerciseDefinitionService
@@ -895,7 +895,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Bewertungsphase",
-				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die Bewertungsphase. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums 'Umsetzbarkeit bei der Post'. Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10." ) );
+				"<p>Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums 'Umsetzbarkeit bei der Post'.</p><p>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10.</p>" ) );
 
 		// outro
 		String outroDefID = exerciseDefinitionService.persist( new PosterDefinition(
@@ -904,7 +904,7 @@ public class ZhawEngine implements LifecycleObject
 			120,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"",
-			"Gratulation, der XINIX-Workshop ist beendet. Die besten Ideen werden am kommenden Meeting vom xx.xx.2015 im Plenum besprochen und weiterentwickelt." ) );
+			"<p>Gratulation, der XINIX-Workshop ist beendet. Die besten Ideen werden am kommenden Meeting vom xx.xx.2015 im Plenum besprochen und weiterentwickelt.</p>" ) );
 
 		// exercise instances
 
@@ -1005,8 +1005,8 @@ public class ZhawEngine implements LifecycleObject
 
 		// xinix intro
 		exerciseService.persist( new ExerciseImpl(
-			"Xinix Intro",
-			"Xinix Intro Tool",
+			"XINIX Intro",
+			"XINIX Intro Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixIntroDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
@@ -1043,20 +1043,20 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( simpleprotoIntroDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// simple prototyping exercise
-		String simplePrototypingExID = exerciseService.persist( new ExerciseImpl( "Simple Prototyping", "Simple Prototyping Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+		String simplePrototypingExID = exerciseService.persist( new ExerciseImpl( "Simply Prototyping", "Simply Prototyping Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService
 			.findByID( simplePrototypingDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// intro 3 / compression
 		exerciseService.persist( new ExerciseImpl(
-			"Kompression Intro",
-			"Kompression Intro Tool",
+			"Compression Intro",
+			"Compression Intro Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( introDefID3 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// compression exercise
 		String compressionExID = exerciseService.persist( new ExerciseImpl(
-			"Kompression",
-			"Kompression Tool",
+			"Compression",
+			"Compression Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( compressionDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
@@ -1095,7 +1095,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// session
 		String sessionID = sessionService
-			.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für PinkElefant Workshop mit der Post", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+			.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.Elefant Workshop mit der Post", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// configure participants to join session
 		String participantID1 = userService.persist( new UserImpl(
