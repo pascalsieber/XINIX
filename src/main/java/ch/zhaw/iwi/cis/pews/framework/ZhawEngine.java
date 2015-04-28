@@ -473,8 +473,8 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2p one exercise
 		String p2poneExID = exerciseService.persist( new ExerciseImpl(
-			"P2P Kaskade 1",
-			"Post2Paper Kaskade 1 Tool",
+			"Post2Paper 1",
+			"Post2Paper 1 Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2poneDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
@@ -487,8 +487,8 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2p two exercise
 		String p2ptwoExID = exerciseService.persist( new ExerciseImpl(
-			"P2P Kaskade 2",
-			"Post2Paper Kaskade 2 Tool",
+			"Post2Paper 2",
+			"Post2Paper 2 Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2ptwoDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
@@ -832,7 +832,7 @@ public class ZhawEngine implements LifecycleObject
 			.persist( new PosterDefinition(
 				postRootUser,
 				TimeUnit.SECONDS,
-				120,
+				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Inspirationsphase",
 				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
@@ -840,7 +840,7 @@ public class ZhawEngine implements LifecycleObject
 		String pinklabsIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
 			TimeUnit.SECONDS,
-			120,
+			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"p.i.n.k.labs",
 			"Beantworte die folgenden 4 unterschiedlichen Fragen." ) );
@@ -848,25 +848,25 @@ public class ZhawEngine implements LifecycleObject
 		String p2pOneIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
 			TimeUnit.SECONDS,
-			120,
+			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Post to Paper 1",
+			"Post2Paper 1",
 			"Du siehst nun nacheinander 4 unterschiedliche Zielgruppen. Beantworte zu jeder dieser Zielgruppen die folgende Frage." ) );
 
 		String p2pTwoIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
 			TimeUnit.SECONDS,
-			120,
+			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Post to Paper 2",
+			"Post2Paper 2",
 			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleitung mit 1-2 Sätzen." ) );
 
 		String xinixIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
 			TimeUnit.SECONDS,
-			120,
+			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"XINIX",
+			"XINIX-Tool",
 			"Nun folgen 4 unterschiedliche Themen. Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln. " ) );
 
 		String simpleprotoIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
@@ -882,7 +882,7 @@ public class ZhawEngine implements LifecycleObject
 			.persist( new PosterDefinition(
 				postRootUser,
 				TimeUnit.SECONDS,
-				120,
+				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Kompressionsphase",
 				"<p>Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>. In den nächsten 45 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme in mind. 4 Sätzen.</p><p>Erarbeite so viele Massnahmen wie möglich.</p><p>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.</p>" ) );
@@ -892,7 +892,7 @@ public class ZhawEngine implements LifecycleObject
 			.persist( new PosterDefinition(
 				postRootUser,
 				TimeUnit.SECONDS,
-				120,
+				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Bewertungsphase",
 				"<p>Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums 'Umsetzbarkeit bei der Post'.</p><p>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10.</p>" ) );
@@ -956,85 +956,85 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2pOne intro
 		exerciseService.persist( new ExerciseImpl(
-			"Post2Paper Eins Intro",
-			"Post2Paper Eins Intro Tool",
+			"Post2Paper 1 Intro",
+			"Post2Paper 1 Intro Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneIntroDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne exercise 1
 		String p2pOneExID1 = exerciseService.persist( new ExerciseImpl(
-			"Post to Paper 1",
-			"Post to Paper 1 Tool 1",
+			"Post2Paper 1",
+			"Post2Paper 1 Tool 1",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID1 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne exercise 2
 		String p2pOneExID2 = exerciseService.persist( new ExerciseImpl(
-			"Post to Paper 1",
-			"Post to Paper 1 Tool 2",
+			"Post2Paper 1",
+			"Post2Paper 1 Tool 2",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID2 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne exercise 3
 		String p2pOneExID3 = exerciseService.persist( new ExerciseImpl(
-			"Post to Paper 1",
-			"Post to Paper 1 Tool 3",
+			"Post2Paper 1",
+			"Post2Paper 1 Tool 3",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID3 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne exercise 4
 		String p2pOneExID4 = exerciseService.persist( new ExerciseImpl(
-			"Post to Paper 1",
-			"Post to Paper 1 Tool 4",
+			"Post2Paper 1",
+			"Post2Paper 1 Tool 4",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID4 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pTwo intro
 		exerciseService.persist( new ExerciseImpl(
-			"Post2Paper Zwei Intro",
-			"Post2Paper Zwei Intro Tool",
+			"Post2Paper 2 Intro",
+			"Post2Paper 2 Intro Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pTwoIntroDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pTwo exercise
 		String p2pTwoExID = exerciseService.persist( new ExerciseImpl(
-			"Post to Paper 2",
-			"Post to Paper 2 Tool",
+			"Post2Paper 2",
+			"Post2Paper 2 Tool",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pTwoDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix intro
 		exerciseService.persist( new ExerciseImpl(
-			"XINIX Intro",
-			"XINIX Intro Tool",
+			"XINIX-Tool Intro",
+			"XINIX-Tool Intro",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixIntroDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix exercise 1
 		String xinixExID1 = exerciseService.persist( new ExerciseImpl(
-			"XINIX",
-			"XINIX Tool 1",
+			"XINIX-Tool",
+			"XINIX-Tool 1",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID1 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix exercise 2
 		String xinixExID2 = exerciseService.persist( new ExerciseImpl(
-			"XINIX",
-			"XINIX Tool 2",
+			"XINIX-Tool",
+			"XINIX-Tool 2",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID2 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix exercise 3
 		String xinixExID3 = exerciseService.persist( new ExerciseImpl(
-			"XINIX",
-			"XINIX Tool 3",
+			"XINIX-Tool",
+			"XINIX-Tool 3",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID3 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix exercise 4
 		String xinixExID4 = exerciseService.persist( new ExerciseImpl(
-			"XINIX",
-			"XINIX Tool 4",
+			"XINIX-Tool",
+			"XINIX-Tool 4",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID4 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
