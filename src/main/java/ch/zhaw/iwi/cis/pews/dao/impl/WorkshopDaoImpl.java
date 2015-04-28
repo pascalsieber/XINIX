@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.dao.impl;
 
+import java.util.List;
+
 import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -15,6 +17,14 @@ public class WorkshopDaoImpl extends WorkshopObjectDaoImpl implements WorkshopDa
 	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
 		return WorkshopImpl.class;
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< WorkshopImpl > findByAllSimple( String clientID )
+	{
+		List< WorkshopImpl > results = getEntityManager().createQuery( "from WorkshopImpl ws LEFT JOIN FETCH ws.sessions sessions where ws.client.id = '" + clientID + "'" ).getResultList();
+		return (List< WorkshopImpl >)cloneResult( results );
 	}
 
 }

@@ -1,15 +1,15 @@
-Mon Mar 23 02:06:02 CET 2015 : Apache Derby Network Server 10.10.1.1 - (1458268) wurde gestartet und ist bereit, Verbindungen auf Port 1527 zu akzeptieren.
+Fri Apr 24 16:18:54 CEST 2015 : Apache Derby Network Server - 10.10.1.1 - (1458268) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Mon Mar 23 02:06:04 CET 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-014c-442a-432c-000006973e68 
-on database directory C:\Users\silas\git\pink-elefant-backend\pewsDB with class loader sun.misc.Launcher$AppClassLoader@3956f14c 
+Fri Apr 24 16:18:59 CEST 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-014c-ebcb-a7ce-00000688dd68 
+on database directory C:\Users\silas\git\pink-elefant-backend\pewsDB with class loader sun.misc.Launcher$AppClassLoader@6e6dcfde 
 Loaded from file:/C:/Users/silas/git/pink-elefant-backend/target/test-install/pews/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.7.0_75-b13
-user.dir=C:\Users\silas\git\pink-elefant-backend
+java.runtime.version=1.7.0_25-b17
+user.dir=c:\Users\silas\git\pink-elefant-backend
 os.name=Windows 7
 os.arch=amd64
 os.version=6.1
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
-Mon Mar 23 02:07:02 CET 2015 : Apache Derby Network Server 10.10.1.1 - (1458268) wurde heruntergefahren.
+Fri Apr 24 16:26:40 CEST 2015 : Apache Derby Network Server - 10.10.1.1 - (1458268) shutdown

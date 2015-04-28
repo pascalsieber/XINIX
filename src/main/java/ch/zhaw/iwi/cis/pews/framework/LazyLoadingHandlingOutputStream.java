@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.hibernate.LazyInitializationException;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnitUtil;
+
 import org.hibernate.collection.internal.PersistentBag;
 import org.hibernate.collection.internal.PersistentIdentifierBag;
 import org.hibernate.collection.internal.PersistentList;
@@ -25,11 +27,14 @@ import ch.zhaw.sml.iwi.cis.exwrapper.java.lang.ClassWrapper;
 
 public class LazyLoadingHandlingOutputStream extends ObjectOutputStream
 {
-
+	private PersistenceUnitUtil puu;
+	
 	public LazyLoadingHandlingOutputStream( OutputStream out ) throws IOException
 	{
 		super( out );
 		enableReplaceObject( true );
+		EntityManagerFactory emf = ZhawEngine.getManagedObjectRegistry().getManagedObject( "pewsFactory" );
+		puu = emf.getPersistenceUnitUtil();
 	}
 
 	@Override
@@ -43,23 +48,32 @@ public class LazyLoadingHandlingOutputStream extends ObjectOutputStream
 	
 	private boolean isTerminalCollection( Object sourceObject )
 	{
-		boolean isTerminalCollection = false;
+		boolean isTerminalCollection;
 		
-		if ( sourceObject instanceof PersistentCollection )
-		{
-			Collection< ? > collection = (Collection< ? >)sourceObject;
-			
-			try
-			{
-				collection.size();
-			}
-			catch ( LazyInitializationException e )
-			{
-				isTerminalCollection = true;
-			}
-		}
+		if ( sourceObject instanceof PersistentCollection && !puu.isLoaded( sourceObject ) )
+			isTerminalCollection = true;
+		else
+			isTerminalCollection = false;
 		
 		return isTerminalCollection;
+		
+//		boolean isTerminalCollection = false;		
+//		
+//		if ( sourceObject instanceof PersistentCollection )
+//		{
+//			Collection< ? > collection = (Collection< ? >)sourceObject;
+//			
+//			try
+//			{
+//				collection.size();
+//			}
+//			catch ( LazyInitializationException e )
+//			{
+//				isTerminalCollection = true;
+//			}
+//		}
+//		
+//		return isTerminalCollection;
 	}
 	
 	private static final Map< Class< ? >, Class< ? > > PERSISTENT_TO_TRANSIENT_COLLECTION_MAP = new HashMap< Class< ? >, Class< ? > >();

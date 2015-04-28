@@ -60,7 +60,7 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< WorkshopImpl > findAll()
 	{
-		return super.findAll();
+		return workshopService.findAllWorkshopsSimple();
 	}
 
 	@POST
