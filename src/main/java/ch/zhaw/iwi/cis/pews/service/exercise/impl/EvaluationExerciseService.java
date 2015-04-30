@@ -17,9 +17,11 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
@@ -42,12 +44,15 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	public Input getInput()
 	{
 
-		List< String > solutions = new ArrayList<>();
+		List< CompressionOutputElement > solutions = new ArrayList< CompressionOutputElement >();
 		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
 
 		for ( ExerciseDataImpl data : compressionData )
 		{
-			solutions.addAll( ( (CompressionExerciseData)data ).getSolutions() );
+			for ( CompressionExerciseDataElement element : ( (CompressionExerciseData)data ).getSolutions() )
+			{
+				solutions.add( new CompressionOutputElement( element.getSolution(), element.getDescription() ) );
+			}
 		}
 
 		EvaluationDefinition definition = (EvaluationDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
@@ -57,12 +62,15 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		List< String > solutions = new ArrayList<>();
+		List< CompressionOutputElement > solutions = new ArrayList<>();
 		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
 
 		for ( ExerciseDataImpl data : compressionData )
 		{
-			solutions.addAll( ( (CompressionExerciseData)data ).getSolutions() );
+			for ( CompressionExerciseDataElement element : ( (CompressionExerciseData)data ).getSolutions() )
+			{
+				solutions.add( new CompressionOutputElement( element.getSolution(), element.getDescription() ) );
+			}
 		}
 
 		EvaluationDefinition definition = (EvaluationDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
@@ -78,8 +86,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 
 			for ( Evaluation evaluation : finalOutput.getEvaluations() )
 			{
-				evaluationExerciseDataDao
-						.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), evaluation ) );
+				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), evaluation ) );
 			}
 
 		}

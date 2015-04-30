@@ -35,6 +35,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
+import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
 import ch.zhaw.iwi.cis.pews.model.output.Output;
@@ -73,6 +74,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopDefinitionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
@@ -638,12 +640,26 @@ public class RestServiceTest
 	public void crudOperationsCompressionExerciseData()
 	{
 		// create
-		compressionDataStub.setID( exerciseDataService.persist( new CompressionExerciseData( defaultUserStub, compressionExerciseStub, Arrays.asList( "sol1", "sol2", "sol3" ) ) ) );
+		compressionDataStub.setID( exerciseDataService.persist( new CompressionExerciseData( defaultUserStub, compressionExerciseStub, Arrays.asList( new CompressionExerciseDataElement(
+			"sol1",
+			"desc1" ), new CompressionExerciseDataElement( "sol2", "desc2" ), new CompressionExerciseDataElement( "sol3", "desc3" ) ) ) ) );
 
 		// read
 		CompressionExerciseData data = exerciseDataService.findByID( compressionDataStub.getID() );
 		checkExerciseData( compressionExerciseStub, data, compressionDataStub );
-		assertTrue( data.getSolutions().containsAll( Arrays.asList( "sol1", "sol2", "sol3" ) ) );
+
+		int count = 0;
+
+		for ( CompressionExerciseDataElement sol : data.getSolutions() )
+		{
+			if ( sol.getSolution().equals( "sol1" ) && sol.getDescription().equals( "desc1" ) || sol.getSolution().equals( "sol2" ) && sol.getDescription().equals( "desc2" )
+					|| sol.getSolution().equals( "sol3" ) && sol.getDescription().equals( "desc3" ) )
+			{
+				count += 1;
+			}
+		}
+
+		assertTrue( count == 3 );
 
 		// update
 
@@ -999,7 +1015,7 @@ public class RestServiceTest
 			( (CompressionDefinition)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getSolutionCriteria().contains( criterion );
 		}
 
-		output = new CompressionOutput( Arrays.asList( "c1", "c2", "c3" ) );
+		output = new CompressionOutput( Arrays.asList( new CompressionOutputElement( "s1", "d1" ), new CompressionOutputElement( "s2", "d2" ), new CompressionOutputElement( "s3", "d3" ) ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
 
 		success = false;
@@ -1011,9 +1027,10 @@ public class RestServiceTest
 		{
 			int count = 0;
 
-			for ( String string : d.getSolutions() )
+			for ( CompressionExerciseDataElement el : d.getSolutions() )
 			{
-				if ( string.equalsIgnoreCase( "c1" ) || string.equalsIgnoreCase( "c2" ) || string.equalsIgnoreCase( "c3" ) )
+				if ( el.getSolution().equalsIgnoreCase( "s1" ) && el.getDescription().equalsIgnoreCase( "d1" ) || el.getSolution().equalsIgnoreCase( "s2" )
+						&& el.getDescription().equalsIgnoreCase( "d2" ) || el.getSolution().equalsIgnoreCase( "s3" ) && el.getDescription().equalsIgnoreCase( "d3" ) )
 				{
 					count += 1;
 				}
@@ -1045,13 +1062,23 @@ public class RestServiceTest
 			mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
 			makeCollectionType( CompressionExerciseData.class ) );
 
+		int c = 0;
+
 		for ( CompressionExerciseData d : dataFromCompression )
 		{
-			for ( String solution : d.getSolutions() )
+
+			for ( CompressionExerciseDataElement sol : d.getSolutions() )
 			{
-				assertTrue( evaluationInput.getSolutions().contains( solution ) );
+				if ( sol.getSolution().equals( "s1" ) && sol.getDescription().equals( "d1" ) || sol.getSolution().equals( "s2" ) && sol.getDescription().equals( "d2" )
+						|| sol.getSolution().equals( "s3" ) && sol.getDescription().equals( "d3" ) )
+				{
+					c += 1;
+				}
 			}
+
 		}
+
+		assertTrue( c >= 3 );
 
 		List< Evaluation > evaluationsForOutput = new ArrayList<>();
 		Evaluation eval = new Evaluation( defaultUserStub, "solution1", new Score( defaultUserStub, 5 ) );
@@ -1118,7 +1145,17 @@ public class RestServiceTest
 
 		// make sure that evaluationResultInput has list of solutions which have not been evaluated
 		// in our case we check for solutions "c1", "c2" and "c3" which have been persisted further above
-		assertTrue( evaluationResultInput.getNotEvaluated().containsAll( Arrays.asList( "c1", "c2", "c3" ) ) );
+		int cNon = 0;
+		for ( CompressionExerciseDataElement element : evaluationResultInput.getNotEvaluated() )
+		{
+			if ( element.getSolution().equals( "s1" ) && element.getDescription().equals( "d1" ) || element.getSolution().equals( "s2" ) && element.getDescription().equals( "d2" )
+					|| element.getSolution().equals( "s3" ) && element.getDescription().equals( "d3" ) )
+			{
+				cNon += 1;
+			}
+		}
+
+		assertTrue( cNon >= 3 );
 	}
 
 	@Test

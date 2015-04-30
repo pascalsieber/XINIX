@@ -18,11 +18,13 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
+import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -50,7 +52,7 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
 			List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( ex.getID() );
-			
+
 			if ( !data.isEmpty() )
 			{
 				dataOfAllExercises.addAll( data );
@@ -100,8 +102,14 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 		try
 		{
 			CompressionOutput finalOutput = getObjectMapper().readValue( output, CompressionOutput.class );
-			getExerciseDataDao().persist(
-				new CompressionExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), (List< String >)finalOutput.getSolutions() ) );
+
+			List< CompressionExerciseDataElement > elements = new ArrayList< CompressionExerciseDataElement >();
+			for ( CompressionOutputElement sol : finalOutput.getSolutions() )
+			{
+				elements.add( new CompressionExerciseDataElement( sol.getSolution(), sol.getDescription() ) );
+			}
+
+			getExerciseDataDao().persist( new CompressionExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), elements ) );
 		}
 		catch ( IOException e )
 		{
@@ -115,8 +123,14 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 		try
 		{
 			CompressionOutput finalOutput = getObjectMapper().readValue( outputRequestString, CompressionOutput.class );
-			getExerciseDataDao().persist(
-				new CompressionExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), (List< String >)finalOutput.getSolutions() ) );
+
+			List< CompressionExerciseDataElement > elements = new ArrayList< CompressionExerciseDataElement >();
+			for ( CompressionOutputElement sol : finalOutput.getSolutions() )
+			{
+				elements.add( new CompressionExerciseDataElement( sol.getSolution(), sol.getDescription() ) );
+			}
+
+			getExerciseDataDao().persist( new CompressionExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), elements ) );
 		}
 		catch ( IOException e )
 		{

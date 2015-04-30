@@ -22,6 +22,7 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pews.util.comparator.EvaluationResultComparator;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
@@ -75,7 +76,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
 		for ( ExerciseDataImpl compressionDataPoint : compressionData )
 		{
-			for ( String solution : ( (CompressionExerciseData)compressionDataPoint ).getSolutions() )
+			for ( CompressionExerciseDataElement solution : ( (CompressionExerciseData)compressionDataPoint ).getSolutions() )
 			{
 				if ( !evaluationsMap.containsKey( solution ) )
 				{
