@@ -1,8 +1,10 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
+
 public class EvaluationResultObject
 {
-	private String solution;
+	private CompressionExerciseDataElement solution;
 	private double averageScore;
 	private int numberOfVotes;
 
@@ -11,7 +13,7 @@ public class EvaluationResultObject
 		super();
 	}
 
-	public EvaluationResultObject( String solution, double averageScore, int numberOfVotes )
+	public EvaluationResultObject( CompressionExerciseDataElement solution, double averageScore, int numberOfVotes )
 	{
 		super();
 		this.solution = solution;
@@ -19,12 +21,12 @@ public class EvaluationResultObject
 		this.numberOfVotes = numberOfVotes;
 	}
 
-	public String getSolution()
+	public CompressionExerciseDataElement getSolution()
 	{
 		return solution;
 	}
 
-	public void setSolution( String solution )
+	public void setSolution( CompressionExerciseDataElement solution )
 	{
 		this.solution = solution;
 	}

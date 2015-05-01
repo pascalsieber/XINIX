@@ -44,41 +44,40 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		Map< String, List< Integer > > evaluationsMap = new HashMap< String, List< Integer > >();
+		Map< CompressionExerciseDataElement, List< Integer > > evaluationsMap = new HashMap< CompressionExerciseDataElement, List< Integer > >();
 		List< ExerciseDataImpl > evaluations = evaluationDataDao.findByWorkshopAndExerciseDataClass( Evaluation.class );
 
 		for ( ExerciseDataImpl evaluation : evaluations )
 		{
 			if ( !evaluationsMap.containsKey( ( (EvaluationExerciseData)evaluation ).getEvaluation().getSolution() ) )
 			{
-				evaluationsMap
-					.put( ( (EvaluationExerciseData)evaluation ).getEvaluation().getSolution(),  new ArrayList< Integer >());
+				evaluationsMap.put( ( (EvaluationExerciseData)evaluation ).getEvaluation().getSolution(), new ArrayList< Integer >() );
 			}
-			
-			evaluationsMap.get( ( (EvaluationExerciseData)evaluation ).getEvaluation().getSolution() ).add( ( (EvaluationExerciseData)evaluation ).getEvaluation().getScore().getScore() );	
+
+			evaluationsMap.get( ( (EvaluationExerciseData)evaluation ).getEvaluation().getSolution() ).add( ( (EvaluationExerciseData)evaluation ).getEvaluation().getScore().getScore() );
 		}
 
 		EvaluationResultInput input = new EvaluationResultInput();
+		List< String > idsOfEvaluatedCompressionElements = new ArrayList< String >();
 
-		for ( Entry< String, List< Integer >> entry : evaluationsMap.entrySet() )
+		for ( Entry< CompressionExerciseDataElement, List< Integer >> entry : evaluationsMap.entrySet() )
 		{
 			int sumOfScores = 0;
 			for ( Integer score : entry.getValue() )
 			{
 				sumOfScores += score;
 			}
-
+			idsOfEvaluatedCompressionElements.add( entry.getKey().getID() );
 			input.getResults().add( new EvaluationResultObject( entry.getKey(), sumOfScores / entry.getValue().size(), entry.getValue().size() ) );
 		}
 
-		
 		// add solutions which have not been evaluated
 		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
 		for ( ExerciseDataImpl compressionDataPoint : compressionData )
 		{
 			for ( CompressionExerciseDataElement solution : ( (CompressionExerciseData)compressionDataPoint ).getSolutions() )
 			{
-				if ( !evaluationsMap.containsKey( solution ) )
+				if ( !idsOfEvaluatedCompressionElements.contains( solution.getID() ) )
 				{
 					input.getNotEvaluated().add( solution );
 				}
@@ -86,13 +85,14 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 		}
 
 		Collections.sort( input.getResults(), new EvaluationResultComparator() );
-		
+
 		return input;
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
+		// since there will only be one instance of evaluationResultExercise per Workshop
 		return getInput();
 	}
 

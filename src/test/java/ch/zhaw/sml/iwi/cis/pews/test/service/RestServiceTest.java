@@ -670,8 +670,11 @@ public class RestServiceTest
 	@Test
 	public void crudOperationsEvaluationExerciseData()
 	{
+		CompressionExerciseData compressionData = exerciseDataService.findByID( compressionDataStub.getID() );
+		CompressionExerciseDataElement compressionDataElement = compressionData.getSolutions().get( 0 );
+
 		// create
-		evaluationDataStub.setID( exerciseDataService.persist( new EvaluationExerciseData( defaultUserStub, evaluationExerciseStub, new Evaluation( defaultUserStub, "solution1", new Score(
+		evaluationDataStub.setID( exerciseDataService.persist( new EvaluationExerciseData( defaultUserStub, evaluationExerciseStub, new Evaluation( defaultUserStub, compressionDataElement, new Score(
 			defaultUserStub,
 			3 ) ) ) ) );
 
@@ -679,7 +682,7 @@ public class RestServiceTest
 		EvaluationExerciseData data = exerciseDataService.findByID( evaluationDataStub.getID() );
 		checkExerciseData( evaluationExerciseStub, data, evaluationDataStub );
 
-		assertTrue( data.getEvaluation().getScore().getScore() == 3 && data.getEvaluation().getSolution().equals( "solution1" ) );
+		assertTrue( data.getEvaluation().getScore().getScore() == 3 && data.getEvaluation().getSolution().getID().equals( compressionDataElement.getID() ) );
 	}
 
 	@Test
@@ -1080,8 +1083,12 @@ public class RestServiceTest
 
 		assertTrue( c >= 3 );
 
+		// make stub for referencing and checking, use dataFromCompression above
+		CompressionExerciseDataElement solutionStub = new CompressionExerciseDataElement();
+		solutionStub.setID( dataFromCompression.get( 0 ).getSolutions().get( 0 ).getID() );
+
 		List< Evaluation > evaluationsForOutput = new ArrayList<>();
-		Evaluation eval = new Evaluation( defaultUserStub, "solution1", new Score( defaultUserStub, 5 ) );
+		Evaluation eval = new Evaluation( defaultUserStub, solutionStub, new Score( defaultUserStub, 5 ) );
 		evaluationsForOutput.add( eval );
 
 		output = new EvaluationOutput( evaluationsForOutput );
@@ -1096,7 +1103,7 @@ public class RestServiceTest
 		{
 			int count = 0;
 
-			if ( d.getEvaluation().getSolution().equals( "solution1" ) && d.getEvaluation().getScore().getScore() == 5 )
+			if ( d.getEvaluation().getSolution().getID().equals( solutionStub.getID() ) && d.getEvaluation().getScore().getScore() == 5 )
 			{
 				count += 1;
 			}
@@ -1120,10 +1127,9 @@ public class RestServiceTest
 
 		// evaluation result -> only testing getInput, as setOutput and getOutput operations are not supported for this kind of exercise
 		// use two newly persisted EvaluationExerciseData objects
-		exerciseService.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, "testingSolution", new Score( defaultUserStub, 6 ) ) ) ) ) );
+		exerciseService.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, solutionStub, new Score( defaultUserStub, 6 ) ) ) ) ) );
 
-		exerciseServiceForSecondUser
-			.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( secondUserStub, "testingSolution", new Score( defaultUserStub, 2 ) ) ) ) ) );
+		exerciseServiceForSecondUser.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( secondUserStub, solutionStub, new Score( defaultUserStub, 2 ) ) ) ) ) );
 
 		setExerciseOnDefaultSession( evaluationResultExerciseStub );
 		EvaluationResultInput evaluationResultInput = mapper.readValue( exerciseService.getInputAsString(), EvaluationResultInput.class );
@@ -1132,11 +1138,11 @@ public class RestServiceTest
 
 		for ( EvaluationResultObject resultObject : evaluationResultInput.getResults() )
 		{
-			if ( resultObject.getSolution().equalsIgnoreCase( "testingSolution" ) )
+			if ( resultObject.getSolution().getID().equalsIgnoreCase( solutionStub.getID() ) )
 			{
 				success = true;
 				assertTrue( resultObject.getAverageScore() == 4 );
-				assertTrue( resultObject.getNumberOfVotes() == 2 );
+				assertTrue( resultObject.getNumberOfVotes() >= 2 );
 				break;
 			}
 		}
