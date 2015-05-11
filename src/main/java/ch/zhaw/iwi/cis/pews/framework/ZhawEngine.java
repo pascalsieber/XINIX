@@ -865,7 +865,7 @@ public class ZhawEngine implements LifecycleObject
 			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Post2Paper 2",
-			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleitung mit 1-2 Sätzen." ) );
+			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleistung mit 1-2 Sätzen." ) );
 
 		String xinixIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
