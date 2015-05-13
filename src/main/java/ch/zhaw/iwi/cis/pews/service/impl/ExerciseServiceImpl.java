@@ -28,6 +28,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
+import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.CompressionExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationExerciseService;
@@ -58,6 +59,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
 {
 	private ObjectMapper objectMapper;
+	private ExerciseDataService exerciseDataService;
 
 	private ExerciseDao exerciseDao;
 	private ExerciseDataDao exerciseDataDao;
@@ -65,7 +67,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	private WorkshopDao workshopDao;
 	private static final Map< String, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseServiceImpl >>();
 
-	//TODO move this from manual entries to an automatic solution, preferably using annotation @ExerciseSpecificService (which is already implemented)
+	// TODO move this from manual entries to an automatic solution, preferably using annotation @ExerciseSpecificService (which is already implemented)
 	static
 	{
 		EXERCISESPECIFICSERVICES.put( PinkLabsDefinition.class.getSimpleName(), PinkLabsExerciseService.class );
@@ -92,6 +94,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 		objectMapper = new ObjectMapper();
+		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 	}
 
 	public ObjectMapper getObjectMapper()
@@ -238,13 +241,14 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public List< ExerciseDataImpl > getOutput()
 	{
-		return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+		//return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+		return exerciseDataService.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() ); 
 	}
 
 	@Override
 	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
 	{
-		return exerciseDataDao.findByExerciseID( exerciseID );
+		return exerciseDataService.findByExerciseID( exerciseID );
 	}
 
 	@Override
