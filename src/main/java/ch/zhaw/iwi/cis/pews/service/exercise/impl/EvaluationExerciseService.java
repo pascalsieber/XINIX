@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.CompressionDataDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
-import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
@@ -14,29 +15,31 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
-import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
+import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutputElement;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseDefinition = EvaluationDefinition.class )
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
-	private ExerciseDataDao compressionDataDao;
+	private CompressionDataDao compressionDataDao;
 	private ExerciseDataDao evaluationExerciseDataDao;
 
 	public EvaluationExerciseService()
 	{
 		super();
-		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDao.class.getSimpleName() );
+		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDaoImpl.class.getSimpleName() );
 		this.evaluationExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
 	}
 
@@ -44,14 +47,14 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	public Input getInput()
 	{
 
-		List< CompressionOutputElement > solutions = new ArrayList< CompressionOutputElement >();
+		List< CompressionInputElement > solutions = new ArrayList< CompressionInputElement >();
 		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
 
 		for ( ExerciseDataImpl data : compressionData )
 		{
 			for ( CompressionExerciseDataElement element : ( (CompressionExerciseData)data ).getSolutions() )
 			{
-				solutions.add( new CompressionOutputElement( element.getSolution(), element.getDescription() ) );
+				solutions.add( new CompressionInputElement( element.getSolution(), element.getDescription() ) );
 			}
 		}
 
@@ -62,14 +65,14 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		List< CompressionOutputElement > solutions = new ArrayList<>();
+		List< CompressionInputElement > solutions = new ArrayList< CompressionInputElement >();
 		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
 
 		for ( ExerciseDataImpl data : compressionData )
 		{
 			for ( CompressionExerciseDataElement element : ( (CompressionExerciseData)data ).getSolutions() )
 			{
-				solutions.add( new CompressionOutputElement( element.getSolution(), element.getDescription() ) );
+				solutions.add( new CompressionInputElement( element.getSolution(), element.getDescription() ) );
 			}
 		}
 
@@ -84,9 +87,15 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		{
 			EvaluationOutput finalOutput = getObjectMapper().readValue( output, EvaluationOutput.class );
 
-			for ( Evaluation evaluation : finalOutput.getEvaluations() )
+			for ( EvaluationOutputElement evaluation : finalOutput.getEvaluations() )
 			{
-				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), evaluation ) );
+				CompressionExerciseDataElement solution = compressionDataDao.findBySolutionAndDescription( evaluation.getSolution(), evaluation.getDescription() );
+
+				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), new Evaluation(
+					UserContext.getCurrentUser(),
+					solution,
+					new Score( UserContext.getCurrentUser(), evaluation.getScore() ) ) ) );
+
 			}
 
 		}
@@ -103,11 +112,13 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		{
 			EvaluationOutput finalOutput = getObjectMapper().readValue( outputRequestString, EvaluationOutput.class );
 
-			WorkflowElementImpl exercise = (WorkflowElementImpl)findByID( finalOutput.getExerciseID() );
-
-			for ( Evaluation evaluation : finalOutput.getEvaluations() )
+			for ( EvaluationOutputElement evaluation : finalOutput.getEvaluations() )
 			{
-				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), exercise, evaluation ) );
+				CompressionExerciseDataElement solution = compressionDataDao.findBySolutionAndDescription( evaluation.getSolution(), evaluation.getDescription() );
+
+				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), new Evaluation( UserContext
+					.getCurrentUser(), solution, new Score( UserContext.getCurrentUser(), evaluation.getScore() ) ) ) );
+
 			}
 
 		}

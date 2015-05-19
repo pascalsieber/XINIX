@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
-import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDao;
+import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
@@ -16,6 +16,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultObject;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
@@ -38,7 +39,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 	{
 		super();
 		this.evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
-		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDao.class.getSimpleName() );
+		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDaoImpl.class.getSimpleName() );
 	}
 
 	@Override
@@ -68,7 +69,10 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 				sumOfScores += score;
 			}
 			idsOfEvaluatedCompressionElements.add( entry.getKey().getID() );
-			input.getResults().add( new EvaluationResultObject( entry.getKey(), sumOfScores / entry.getValue().size(), entry.getValue().size() ) );
+			input.getResults().add(
+				new EvaluationResultObject( new CompressionInputElement( entry.getKey().getSolution(), entry.getKey().getDescription() ), sumOfScores / entry.getValue().size(), entry
+					.getValue()
+					.size() ) );
 		}
 
 		// add solutions which have not been evaluated
@@ -79,7 +83,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 			{
 				if ( !idsOfEvaluatedCompressionElements.contains( solution.getID() ) )
 				{
-					input.getNotEvaluated().add( solution );
+					input.getNotEvaluated().add( new CompressionInputElement( solution.getSolution(), solution.getDescription() ) );
 				}
 			}
 		}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
+import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultObject;
@@ -38,6 +40,7 @@ import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
+import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutputElement;
 import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
@@ -87,7 +90,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.view.CompressionExerciseDataElementView;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
@@ -1025,25 +1027,30 @@ public class RestServiceTest
 		success = false;
 
 		List< ExerciseDataImpl > compressionData = exerciseDataService.findByExerciseID( compressionExerciseStub.getID() );
-		List< CompressionExerciseDataElementView > compressionDataPrepped = mapper.readValue(
-			mapper.writeValueAsString( compressionData ),
-			makeCollectionType( CompressionExerciseDataElementView.class ) );
+		List< CompressionExerciseData > compressionDataPrepped = mapper.readValue( mapper.writeValueAsString( compressionData ), makeCollectionType( CompressionExerciseData.class ) );
 
-		int compressionCount = 0;
-
-		for ( CompressionExerciseDataElementView d : compressionDataPrepped )
+		for ( CompressionExerciseData d : compressionDataPrepped )
 		{
+			int count = 0;
 
-			if ( d.getSolution().equals( "s1" ) && d.getDescription().equals( "d1" ) || d.getSolution().equals( "s2" ) && d.getDescription().equals( "d2" ) || d.getSolution().equals( "s3" )
-					&& d.getDescription().equals( "d3" ) )
+			for ( CompressionExerciseDataElement el : d.getSolutions() )
 			{
-				compressionCount += 1;
+				if ( el.getSolution().equalsIgnoreCase( "s1" ) && el.getDescription().equalsIgnoreCase( "d1" ) || el.getSolution().equalsIgnoreCase( "s2" )
+						&& el.getDescription().equalsIgnoreCase( "d2" ) || el.getSolution().equalsIgnoreCase( "s3" ) && el.getDescription().equalsIgnoreCase( "d3" ) )
+				{
+					count += 1;
+				}
+
 			}
 
-			
+			if ( count == 3 )
+			{
+				success = true;
+			}
+
 		}
 
-		assertTrue( compressionCount == 3 );
+		assertTrue( success );
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( compressionData ), makeCollectionType( ExerciseDataImpl.class ) ),
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
@@ -1059,29 +1066,29 @@ public class RestServiceTest
 		assertTrue( evaluationInput.getQuestion().equalsIgnoreCase( ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getQuestion() ) );
 		assertTrue( evaluationInput.getNumberOfVotes() == ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getNumberOfVotes() );
 
-		List< CompressionExerciseDataElementView > dataFromCompression = mapper.readValue(
+		List< CompressionExerciseData > dataFromCompression = mapper.readValue(
 			mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
-			makeCollectionType( CompressionExerciseDataElementView.class ) );
+			makeCollectionType( CompressionExerciseData.class ) );
 
 		int c = 0;
 
-		for ( CompressionExerciseDataElementView d : dataFromCompression )
+		for ( CompressionExerciseData d : dataFromCompression )
 		{
-				if ( d.getSolution().equals( "s1" ) && d.getDescription().equals( "d1" ) || d.getSolution().equals( "s2" ) && d.getDescription().equals( "d2" )
-						|| d.getSolution().equals( "s3" ) && d.getDescription().equals( "d3" ) )
+			for ( CompressionExerciseDataElement sol : d.getSolutions() )
+			{
+				if ( sol.getSolution().equals( "s1" ) && sol.getDescription().equals( "d1" ) || sol.getSolution().equals( "s2" ) && sol.getDescription().equals( "d2" )
+						|| sol.getSolution().equals( "s3" ) && sol.getDescription().equals( "d3" ) )
 				{
 					c += 1;
 				}
+
+			}
 		}
 
 		assertTrue( c >= 3 );
 
-		// make stub for referencing and checking, use dataFromCompression above
-		CompressionExerciseDataElement solutionStub = new CompressionExerciseDataElement();
-		solutionStub.setID( dataFromCompression.get( 0 ).getID() );
-
-		List< Evaluation > evaluationsForOutput = new ArrayList<>();
-		Evaluation eval = new Evaluation( defaultUserStub, solutionStub, new Score( defaultUserStub, 5 ) );
+		List< EvaluationOutputElement > evaluationsForOutput = new ArrayList<>();
+		EvaluationOutputElement eval = new EvaluationOutputElement( "s1", "d1", 5 );
 		evaluationsForOutput.add( eval );
 
 		output = new EvaluationOutput( evaluationsForOutput );
@@ -1096,7 +1103,7 @@ public class RestServiceTest
 		{
 			int count = 0;
 
-			if ( d.getEvaluation().getSolution().getID().equals( solutionStub.getID() ) && d.getEvaluation().getScore().getScore() == 5 )
+			if ( d.getEvaluation().getSolution().getSolution().equals( "s1" ) && d.getEvaluation().getSolution().getDescription().equals( "d1" ) && d.getEvaluation().getScore().getScore() == 5 )
 			{
 				count += 1;
 			}
@@ -1120,9 +1127,9 @@ public class RestServiceTest
 
 		// evaluation result -> only testing getInput, as setOutput and getOutput operations are not supported for this kind of exercise
 		// use two newly persisted EvaluationExerciseData objects
-		exerciseService.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( defaultUserStub, solutionStub, new Score( defaultUserStub, 6 ) ) ) ) ) );
+		exerciseService.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new EvaluationOutputElement( "s2", "d2", 6 ) ) ) ) );
 
-		exerciseServiceForSecondUser.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new Evaluation( secondUserStub, solutionStub, new Score( defaultUserStub, 2 ) ) ) ) ) );
+		exerciseServiceForSecondUser.setOutput( mapper.writeValueAsString( new EvaluationOutput( Arrays.asList( new EvaluationOutputElement( "s2", "d2", 2 ) ) ) ) );
 
 		setExerciseOnDefaultSession( evaluationResultExerciseStub );
 		EvaluationResultInput evaluationResultInput = mapper.readValue( exerciseService.getInputAsString(), EvaluationResultInput.class );
@@ -1131,7 +1138,7 @@ public class RestServiceTest
 
 		for ( EvaluationResultObject resultObject : evaluationResultInput.getResults() )
 		{
-			if ( resultObject.getSolution().getID().equalsIgnoreCase( solutionStub.getID() ) )
+			if ( resultObject.getSolution().getSolution().equalsIgnoreCase( "s2" ) )
 			{
 				success = true;
 				assertTrue( resultObject.getAverageScore() == 4 );
@@ -1143,18 +1150,17 @@ public class RestServiceTest
 		assertTrue( success );
 
 		// make sure that evaluationResultInput has list of solutions which have not been evaluated
-		// in our case we check for solutions "c1", "c2" and "c3" which have been persisted further above
-		int cNon = 0;
-		for ( CompressionExerciseDataElement element : evaluationResultInput.getNotEvaluated() )
+		// in our case we check for solutions s3 which has been evaluated
+		boolean cNon = false;
+		for ( CompressionInputElement element : evaluationResultInput.getNotEvaluated() )
 		{
-			if ( element.getSolution().equals( "s1" ) && element.getDescription().equals( "d1" ) || element.getSolution().equals( "s2" ) && element.getDescription().equals( "d2" )
-					|| element.getSolution().equals( "s3" ) && element.getDescription().equals( "d3" ) )
+			if ( element.getSolution().equals( "s3" ) && element.getDescription().equals( "d3" ) )
 			{
-				cNon += 1;
+				cNon = true;
 			}
 		}
 
-		assertTrue( cNon >= 3 );
+		assertTrue( cNon );
 	}
 
 	@Test

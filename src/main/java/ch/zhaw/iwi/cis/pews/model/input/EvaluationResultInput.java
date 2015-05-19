@@ -3,12 +3,10 @@ package ch.zhaw.iwi.cis.pews.model.input;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
-
 public class EvaluationResultInput extends Input
 {
 	private List< EvaluationResultObject > results;
-	private List< CompressionExerciseDataElement > notEvaluated;
+	private List< CompressionInputElement > notEvaluated;
 
 	public EvaluationResultInput()
 	{
@@ -17,7 +15,7 @@ public class EvaluationResultInput extends Input
 		this.notEvaluated = new ArrayList<>();
 	}
 
-	public EvaluationResultInput( List< EvaluationResultObject > results, List< CompressionExerciseDataElement > notEvaluated )
+	public EvaluationResultInput( List< EvaluationResultObject > results, List< CompressionInputElement > notEvaluated )
 	{
 		super();
 		this.results = results;
@@ -34,12 +32,12 @@ public class EvaluationResultInput extends Input
 		this.results = results;
 	}
 
-	public List< CompressionExerciseDataElement > getNotEvaluated()
+	public List< CompressionInputElement > getNotEvaluated()
 	{
 		return notEvaluated;
 	}
 
-	public void setNotEvaluated( List< CompressionExerciseDataElement > notEvaluated )
+	public void setNotEvaluated( List< CompressionInputElement > notEvaluated )
 	{
 		this.notEvaluated = notEvaluated;
 	}
