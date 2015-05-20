@@ -363,12 +363,12 @@ public class ZhawEngine implements LifecycleObject
 		// sample workshop definition (pinkelefant)
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			rootUser,
-			"p.i.n.k.Elefant Definition",
-			"Definition für p.i.n.k.Elefant Workshop",
+			"p.i.n.k.elefant Definition",
+			"Definition für p.i.n.k.elefant Workshop",
 			"Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "p.i.n.k.Elefant Workshop", "Beispiel eines p.i.n.k.Elefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
+		String wsID = workshopService.persist( new WorkshopImpl( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
 			.findByID( wsDefID ) ) );
 
 		// workshop start definition
@@ -377,7 +377,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Willkommen zum p.i.n.k.Elefant Workshop",
+			"Willkommen zum p.i.n.k.elefant Workshop",
 			"Der Workshop beginnt in Kürze." ) );
 
 		// workshop end definition
@@ -386,7 +386,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Ende des p.i.n.k.Elefant Workshops",
+			"Ende des p.i.n.k.elefant Workshops",
 			"Vielen Dank für Ihre Teilnahme." ) );
 
 		// pinklabs definition
@@ -473,7 +473,7 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsDefID ) ) );
 
 		// workshop start exercise (poster)
-		exerciseService.persist( new ExerciseImpl( "start", "p.i.n.k.Elefant Start", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ), (WorkshopImpl)workshopService
+		exerciseService.persist( new ExerciseImpl( "start", "p.i.n.k.elefant Start", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( startDefID ), (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 
 		// pinklabs exercise
@@ -536,7 +536,7 @@ public class ZhawEngine implements LifecycleObject
 		// workshop end exercise (poster)
 		exerciseService.persist( new ExerciseImpl(
 			"Ende",
-			"p.i.n.k.Elefant Workshop Ende",
+			"p.i.n.k.elefant Workshop Ende",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
@@ -588,7 +588,7 @@ public class ZhawEngine implements LifecycleObject
 			.get( 0 ), new Score( rootUser, 4 ) ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.Elefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// invitation (so that at least on is there) :)
 		invitationService.persist( new Invitation( rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -628,7 +628,7 @@ public class ZhawEngine implements LifecycleObject
 		// "root first name",
 		// "root last name",
 		// "pews_root_client/executer@pews" ) );
-		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für p.i.n.k.Elefant Workshop", null, (WorkshopImpl)workshopService
+		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für p.i.n.k.elefant Workshop", null, (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
@@ -679,12 +679,12 @@ public class ZhawEngine implements LifecycleObject
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			postRootUser,
 			"Post Workshop Definition",
-			"Definition für p.i.n.k.Elefant Workshop mit der Post",
+			"Definition für p.i.n.k.elefant Workshop mit der Post",
 			"Massnahmen Begleit-Service Paketdienst im Jahr 2020" ) );
 
 		// workshop instance
 		String wsID = workshopService
-			.persist( new WorkshopImpl( "Post Workshop", "p.i.n.k.Elefant Workshop mit der Post", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
+			.persist( new WorkshopImpl( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
 
 		// pinklabs definition 1
 		String pinklabsDefID1 = exerciseDefinitionService.persist( new PinkLabsDefinition(
@@ -1107,7 +1107,7 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.Elefant Workshop mit der Post", null, (WorkshopImpl)workshopService
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop mit der Post", null, (WorkshopImpl)workshopService
 			.findByID( wsID ) ) );
 
 		// configure participants to join session
