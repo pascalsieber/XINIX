@@ -18,6 +18,7 @@ import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
+import ch.zhaw.iwi.cis.pews.model.input.P2PKeywordInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
@@ -34,7 +35,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 
 	private ExerciseDataDao p2pOneDataDao;
 	private P2POneKeywordDao p2pOneKeywordDao;
-	
+
 	public P2PTwoExerciseService()
 	{
 		super();
@@ -46,7 +47,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	public Input getInput()
 	{
 		P2PTwoDefinition definition = (P2PTwoDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		List< String > keywords = new ArrayList<>();
+		List< P2PKeywordInput > keywords = new ArrayList<>();
 
 		List< ExerciseDataImpl > cascadeOneData = p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
 
@@ -54,20 +55,18 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 		{
 			for ( P2POneKeyword keywordObject : ( (P2POneData)data ).getKeywords() )
 			{
-				keywords.add( keywordObject.getKeyword() );
+				keywords.add( new P2PKeywordInput( keywordObject.getKeyword(), keywordObject.getID() ) );
 			}
 		}
 
 		return new P2PTwoInput( definition.getQuestion(), keywords );
 	}
-	
-	
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
 		P2PTwoDefinition definition = (P2PTwoDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		List< String > keywords = new ArrayList<>();
+		List< P2PKeywordInput > keywords = new ArrayList<>();
 
 		List< ExerciseDataImpl > cascadeOneData = p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
 
@@ -75,7 +74,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 		{
 			for ( P2POneKeyword keywordObject : ( (P2POneData)data ).getKeywords() )
 			{
-				keywords.add( keywordObject.getKeyword() );
+				keywords.add( new P2PKeywordInput( keywordObject.getKeyword(), keywordObject.getID() ) );
 			}
 		}
 
@@ -120,8 +119,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 				chosenP2POneKeywords.add( (P2POneKeyword)p2pOneKeywordDao.findByKeywordString( keyword ) );
 			}
 
-			getExerciseDataDao()
-				.persist( new P2PTwoData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getAnswers(), chosenP2POneKeywords ) );
+			getExerciseDataDao().persist( new P2PTwoData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), finalOutput.getAnswers(), chosenP2POneKeywords ) );
 
 		}
 		catch ( IOException e )
@@ -129,5 +127,5 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + P2PTwoOutput.class.getSimpleName() );
 		}
 	}
-	
+
 }

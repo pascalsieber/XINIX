@@ -26,6 +26,7 @@ import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultObject;
+import ch.zhaw.iwi.cis.pews.model.input.P2PKeywordInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
@@ -881,11 +882,20 @@ public class RestServiceTest
 		List< ExerciseDataImpl > p2pOneDataForP2PTwoTest = exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() );
 		List< P2POneData > p2pOneDataForP2PTwoTestPrepped = mapper.readValue( mapper.writeValueAsString( p2pOneDataForP2PTwoTest ), makeCollectionType( P2POneData.class ) );
 
+		List< String > p2p2InputKeywordStrings = new ArrayList< String >();
+		List< String > p2p2InputKeywordIDs = new ArrayList< String >();
+
+		for ( P2PKeywordInput keywordInput : p2ptwoInput.getCascade1Keywords() )
+		{
+			p2p2InputKeywordIDs.add( keywordInput.getId() );
+			p2p2InputKeywordStrings.add( keywordInput.getKeyword() );
+		}
+
 		for ( P2POneData d : p2pOneDataForP2PTwoTestPrepped )
 		{
 			for ( P2POneKeyword keyword : d.getKeywords() )
 			{
-				assertTrue( p2ptwoInput.getCascade1Keywords().contains( keyword.getKeyword() ) );
+				assertTrue( p2p2InputKeywordIDs.contains( keyword.getID() ) && p2p2InputKeywordStrings.contains( keyword.getKeyword() ) );
 			}
 		}
 
