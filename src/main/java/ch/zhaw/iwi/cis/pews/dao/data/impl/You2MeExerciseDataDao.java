@@ -17,7 +17,7 @@ public class You2MeExerciseDataDao extends ExerciseDataDaoImpl
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< You2MeExerciseData > data = getEntityManager().createQuery(
-			"select distinct d from You2MeExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.dialog where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
+			"select distinct d from You2MeExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.dialog where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
 		
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}

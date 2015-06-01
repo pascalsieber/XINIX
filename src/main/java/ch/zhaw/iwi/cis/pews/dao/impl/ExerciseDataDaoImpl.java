@@ -27,7 +27,7 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< ExerciseDataImpl > data = getEntityManager().createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
+		List< ExerciseDataImpl > data = getEntityManager().createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 

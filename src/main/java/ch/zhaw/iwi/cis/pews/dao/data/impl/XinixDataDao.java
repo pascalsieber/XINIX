@@ -22,7 +22,7 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< XinixData > data = getEntityManager()
-			.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id = :_exercise_id" )
+			.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id = :_exercise_id ORDER BY d.timestamp ASC" )
 			.setParameter( "_exercise_id", exerciseID )
 			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
@@ -39,7 +39,7 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( XinixDefinition.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
-					.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id = :_exercise_id" )
+					.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id = :_exercise_id ORDER BY d.timestamp ASC" )
 					.setParameter( "_exercise_id", ex.getID() )
 					.getResultList() );
 			}

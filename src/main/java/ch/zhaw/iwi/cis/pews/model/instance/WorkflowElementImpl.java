@@ -2,9 +2,7 @@ package ch.zhaw.iwi.cis.pews.model.instance;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -30,6 +28,7 @@ public class WorkflowElementImpl extends WorkshopObject
 	private String description;
 	private double elapsedSeconds;
 
+	@OrderColumn( name = "idx_status" )
 	@OneToMany( cascade = CascadeType.ALL )
 	private List< WorkflowElementStatusHistoryElementImpl > statusHistory;
 
@@ -38,15 +37,15 @@ public class WorkflowElementImpl extends WorkshopObject
 	@ManyToOne
 	private WorkflowElementDefinitionImpl definition;
 
-	@OneToMany( cascade = CascadeType.ALL )
-	@OrderColumn( name = "INDEX" )
-	private Set< WorkflowElementDataImpl > data;
+	
+	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workflowElement" )
+	private List< WorkflowElementDataImpl > data;
 
 	public WorkflowElementImpl()
 	{
 		super();
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
-		this.data = new HashSet< WorkflowElementDataImpl >();
+		this.data = new ArrayList< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 		this.elapsedSeconds = 0;
 	}
@@ -57,7 +56,7 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.description = description;
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
 		this.definition = definition;
-		this.data = new HashSet< WorkflowElementDataImpl >();
+		this.data = new ArrayList< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 		this.elapsedSeconds = 0;
 	}
@@ -113,12 +112,12 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.definition = definition;
 	}
 
-	public Set< WorkflowElementDataImpl > getData()
+	public List< WorkflowElementDataImpl > getData()
 	{
 		return data;
 	}
 
-	public void setData( Set< WorkflowElementDataImpl > data )
+	public void setData( List< WorkflowElementDataImpl > data )
 	{
 		this.data = data;
 	}

@@ -26,7 +26,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< EvaluationExerciseData > data = getEntityManager().createQuery(
-			"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
+			"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
@@ -50,7 +50,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationDefinition.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager().createQuery(
-					"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + ex.getID() + "'" ).getResultList() );
+					"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + ex.getID() + "' ORDER BY d.timestamp ASC" ).getResultList() );
 			}
 		}
 
