@@ -271,7 +271,7 @@ public class ZhawEngine implements LifecycleObject
 		constraint.setAuthenticate( true );
 
 		ConstraintMapping mapping = new ConstraintMapping();
-		mapping.setPathSpec( "/*" );
+		mapping.setPathSpec( "/pews/*" );
 		mapping.setConstraint( constraint );
 
 		// ping method and request new password go to whitelist
