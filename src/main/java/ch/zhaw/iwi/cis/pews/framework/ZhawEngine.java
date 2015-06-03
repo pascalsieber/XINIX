@@ -804,7 +804,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// compression definition
 		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition( postRootUser, TimeUnit.MINUTES, 45, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "ALLE INPUTS aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen formuliert.", new ArrayList< String >() ) );
+			.findByID( wsDefID ), "ALLE INPUTS aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen zum Thema \"Massnahmen Begleit-Service Paketdiesnst im Jahr 2020\" formuliert.", new ArrayList< String >() ) );
 
 		// evaluation definition
 		String evaluationDefID = exerciseDefinitionService.persist( new EvaluationDefinition(
@@ -838,7 +838,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Willkommen",
-				"<p>Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.</p><p>Bei diesem Wokshop kommen folgende Phasen auf dich zu:</p><p><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.</p><p><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.</p><p><b>Bewertung<b/>: Die Ideen werden entsprechend gewissen Kriterien bewertet.</p>" ) );
+				"<p>Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.</p><p>Bei diesem Wokshop kommen folgende Phasen auf dich zu:</p><p><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.</p><p><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.</p><p><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.</p>" ) );
 
 		// intro 2
 		String introDefID2 = exerciseDefinitionService
@@ -941,28 +941,28 @@ public class ZhawEngine implements LifecycleObject
 
 		// pinklabs exercise 1
 		String pinklabsExID1 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs",
+			"p.i.n.k.labs (1/4)",
 			"p.i.n.k.labs Tool 1",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID1 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise 2
 		String pinklabsExID2 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs",
+			"p.i.n.k.labs (2/4)",
 			"p.i.n.k.labs Tool 2",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID2 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise 3
 		String pinklabsExID3 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs",
+			"p.i.n.k.labs (3/4)",
 			"p.i.n.k.labs Tool 3",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID3 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise 4
 		String pinklabsExID4 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs",
+			"p.i.n.k.labs (4/4)",
 			"p.i.n.k.labs Tool 4",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID4 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
@@ -976,28 +976,28 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2pOne exercise 1
 		String p2pOneExID1 = exerciseService.persist( new ExerciseImpl(
-			"Post2Paper 1",
+			"Post2Paper 1 (1/4)",
 			"Post2Paper 1 Tool 1",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID1 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne exercise 2
 		String p2pOneExID2 = exerciseService.persist( new ExerciseImpl(
-			"Post2Paper 1",
+			"Post2Paper 1 (2/4)",
 			"Post2Paper 1 Tool 2",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID2 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne exercise 3
 		String p2pOneExID3 = exerciseService.persist( new ExerciseImpl(
-			"Post2Paper 1",
+			"Post2Paper 1 (3/4)",
 			"Post2Paper 1 Tool 3",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID3 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne exercise 4
 		String p2pOneExID4 = exerciseService.persist( new ExerciseImpl(
-			"Post2Paper 1",
+			"Post2Paper 1 (4/4)",
 			"Post2Paper 1 Tool 4",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID4 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
@@ -1025,28 +1025,28 @@ public class ZhawEngine implements LifecycleObject
 
 		// xinix exercise 1
 		String xinixExID1 = exerciseService.persist( new ExerciseImpl(
-			"XINIX-Tool",
+			"XINIX-Tool (1/4)",
 			"XINIX-Tool 1",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID1 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix exercise 2
 		String xinixExID2 = exerciseService.persist( new ExerciseImpl(
-			"XINIX-Tool",
+			"XINIX-Tool (2/4)",
 			"XINIX-Tool 2",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID2 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix exercise 3
 		String xinixExID3 = exerciseService.persist( new ExerciseImpl(
-			"XINIX-Tool",
+			"XINIX-Tool (3/4)",
 			"XINIX-Tool 3",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID3 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// xinix exercise 4
 		String xinixExID4 = exerciseService.persist( new ExerciseImpl(
-			"XINIX-Tool",
+			"XINIX-Tool (4/4)",
 			"XINIX-Tool 4",
 			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID4 ),
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
