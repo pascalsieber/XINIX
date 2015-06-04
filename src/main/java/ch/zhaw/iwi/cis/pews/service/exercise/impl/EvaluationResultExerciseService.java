@@ -70,9 +70,10 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 			}
 			idsOfEvaluatedCompressionElements.add( entry.getKey().getID() );
 			input.getResults().add(
-				new EvaluationResultObject( new CompressionInputElement( entry.getKey().getSolution(), entry.getKey().getDescription() ), sumOfScores / entry.getValue().size(), entry
-					.getValue()
-					.size() ) );
+				new EvaluationResultObject(
+					new CompressionInputElement( entry.getKey().getID(), entry.getKey().getSolution(), entry.getKey().getDescription() ),
+					sumOfScores / entry.getValue().size(),
+					entry.getValue().size() ) );
 		}
 
 		// add solutions which have not been evaluated
@@ -83,7 +84,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 			{
 				if ( !idsOfEvaluatedCompressionElements.contains( solution.getID() ) )
 				{
-					input.getNotEvaluated().add( new CompressionInputElement( solution.getSolution(), solution.getDescription() ) );
+					input.getNotEvaluated().add( new CompressionInputElement( solution.getID(), solution.getSolution(), solution.getDescription() ) );
 				}
 			}
 		}

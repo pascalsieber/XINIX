@@ -54,7 +54,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		{
 			for ( CompressionExerciseDataElement element : ( (CompressionExerciseData)data ).getSolutions() )
 			{
-				solutions.add( new CompressionInputElement( element.getSolution(), element.getDescription() ) );
+				solutions.add( new CompressionInputElement( element.getID(), element.getSolution(), element.getDescription() ) );
 			}
 		}
 
@@ -72,7 +72,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 		{
 			for ( CompressionExerciseDataElement element : ( (CompressionExerciseData)data ).getSolutions() )
 			{
-				solutions.add( new CompressionInputElement( element.getSolution(), element.getDescription() ) );
+				solutions.add( new CompressionInputElement( element.getID(), element.getSolution(), element.getDescription() ) );
 			}
 		}
 
