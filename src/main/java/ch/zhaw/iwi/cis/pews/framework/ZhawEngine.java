@@ -151,8 +151,9 @@ public class ZhawEngine implements LifecycleObject
 		configureRootUser();
 		configureSampleWorkshop();
 		configurePostWorkshop();
+		configureSBBWorkshop();
 
-		//generateLoad( 1, 200, 1, 1 );
+		// generateLoad( 1, 200, 1, 1 );
 
 		System.out.println( "PEWS running and ready to go!" );
 	}
@@ -803,8 +804,13 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsDefID ), "Zeichne oder Bastle den Postboten 2030!", "tbd" ) );
 
 		// compression definition
-		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition( postRootUser, TimeUnit.MINUTES, 45, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "ALLE INPUTS aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen zum Thema \"Massnahmen Begleit-Service Paketdiesnst im Jahr 2020\" formuliert.", new ArrayList< String >() ) );
+		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition(
+			postRootUser,
+			TimeUnit.MINUTES,
+			45,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"ALLE INPUTS aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen zum Thema \"Massnahmen Begleit-Service Paketdiesnst im Jahr 2020\" formuliert.",
+			new ArrayList< String >() ) );
 
 		// evaluation definition
 		String evaluationDefID = exerciseDefinitionService.persist( new EvaluationDefinition(
@@ -940,32 +946,20 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise 1
-		String pinklabsExID1 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs (1/4)",
-			"p.i.n.k.labs Tool 1",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID1 ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String pinklabsExID1 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (1/4)", "p.i.n.k.labs Tool 1", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID1 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise 2
-		String pinklabsExID2 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs (2/4)",
-			"p.i.n.k.labs Tool 2",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID2 ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String pinklabsExID2 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (2/4)", "p.i.n.k.labs Tool 2", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID2 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise 3
-		String pinklabsExID3 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs (3/4)",
-			"p.i.n.k.labs Tool 3",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID3 ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String pinklabsExID3 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (3/4)", "p.i.n.k.labs Tool 3", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID3 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// pinklabs exercise 4
-		String pinklabsExID4 = exerciseService.persist( new ExerciseImpl(
-			"p.i.n.k.labs (4/4)",
-			"p.i.n.k.labs Tool 4",
-			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsDefID4 ),
-			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String pinklabsExID4 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID4 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// p2pOne intro
 		exerciseService.persist( new ExerciseImpl(
@@ -1171,6 +1165,481 @@ public class ZhawEngine implements LifecycleObject
 
 		System.out.println( "workshop for Post configured" );
 
+	}
+
+	public static final String SBB_ROOT_CLIENT_NAME = "sbb";
+	public static final String SBB_ROOT_USER_LOGIN_NAME = POST_ROOT_CLIENT_NAME + "/root@sbb";
+
+	@SuppressWarnings( "unused" )
+	private static void configureSBBWorkshop()
+	{
+		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
+		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
+		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
+		WorkshopDefinitionService workshopDefinitionService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
+		ExerciseDefinitionService exerciseDefinitionService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
+		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
+		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
+
+		// SBB client
+		Client sbb = clientService.findByID( clientService.persist( new Client( SBB_ROOT_CLIENT_NAME ) ) );
+
+		UserImpl bootstrapUser = new UserImpl( null, null, null, null, null, null );
+		bootstrapUser.setClient( sbb );
+		UserContext.setCurrentUser( bootstrapUser );
+
+		// sbb root role
+		RoleImpl sbbRootRole = new RoleImpl( "sbb_root", "sbb_root" );
+		sbbRootRole.setClient( sbb );
+		String sbbRootRoleID = roleService.persist( sbbRootRole );
+
+		// sbb root user
+		UserImpl user = new UserImpl(
+			new PasswordCredentialImpl( "root" ),
+			(RoleImpl)roleService.findByID( sbbRootRoleID ),
+			null,
+			"sbb root first name",
+			"sbb root last name",
+			SBB_ROOT_USER_LOGIN_NAME );
+		UserImpl sbbRootUser = userService.findByID( userService.persist( user ) );
+
+		// workshop definition (pinkelefant)
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
+			sbbRootUser,
+			"SBB Workshop Definition",
+			"Definition für p.i.n.k.elefant Workshop mit der SBB",
+			"Was wünsche ich mir am Bahnhof" ) );
+
+		// workshop instance
+		String wsID = workshopService
+			.persist( new WorkshopImpl( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (WorkflowElementDefinitionImpl)workshopDefinitionService.findByID( wsDefID ) ) );
+
+		// pinklabs definition 1
+		String pinklabsDefID1 = exerciseDefinitionService.persist( new PinkLabsDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Was mache ich alles online?" ) );
+
+		// pinklabs definition 2
+		String pinklabsDefID2 = exerciseDefinitionService.persist( new PinkLabsDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Das macht mir Spass?" ) );
+
+		// pinklabs definition 3
+		String pinklabsDefID3 = exerciseDefinitionService.persist( new PinkLabsDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Das spart mir Zeit?" ) );
+
+		// pinklabs definition 4
+		String pinklabsDefID4 = exerciseDefinitionService.persist( new PinkLabsDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Was würde ich nie online kaufen?" ) );
+
+		// p2p one iteration 1
+		String p2pOneDefID1 = exerciseDefinitionService.persist( new P2POneDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"http://skylla.zhaw.ch/p2p_one_images/familie.jpg",
+			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
+
+		// p2p one iteration 2
+		String p2pOneDefID2 = exerciseDefinitionService.persist( new P2POneDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"http://skylla.zhaw.ch/p2p_one_images/senioren.png",
+			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
+
+		// p2p one iteration 3
+		String p2pOneDefID3 = exerciseDefinitionService.persist( new P2POneDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"http://skylla.zhaw.ch/p2p_one_images/business.jpg",
+			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
+
+		// p2p one iteration 4
+		String p2pOneDefID4 = exerciseDefinitionService.persist( new P2POneDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			60,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"http://skylla.zhaw.ch/p2p_one_images/senioren.jpg",
+			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
+
+		// p2p two
+		String p2pTwoDefID = exerciseDefinitionService.persist( new P2PTwoDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			240,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Formuliere eine mögliche neue Dienstleistung, welche dafür am Bahnhof angeboten werden könnte. Umschreibe die Dienstleistung mit 1-2 Sätzen." ) );
+
+		// xinix definition iteration 1
+		String xinixDefID1 = exerciseDefinitionService.persist( new XinixDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			90,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Was bedeutet für mich \"Service\"",
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+
+		// xinix definition iteration 2
+		String xinixDefID2 = exerciseDefinitionService.persist( new XinixDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			90,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Neue Dienstleistung am Bahnhof",
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+
+		// xinix definition iteration 3
+		String xinixDefID3 = exerciseDefinitionService.persist( new XinixDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			90,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Was erwartest du vom Bahnhof 2050?",
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+
+		// xinix definition iteration 4
+		String xinixDefID4 = exerciseDefinitionService.persist( new XinixDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			90,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Was erwartest du vom ÖV?",
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+
+		// simple prototyping definition
+		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( sbbRootUser, TimeUnit.SECONDS, 480, (WorkshopDefinitionImpl)workshopDefinitionService
+			.findByID( wsDefID ), "So sieht mein optimaler Bahnhof aus", "tbd" ) );
+
+		// compression definition
+		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition(
+			sbbRootUser,
+			TimeUnit.MINUTES,
+			12,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Was wünsche ich mir am Bahnhof?",
+			new ArrayList< String >() ) );
+
+		// evaluation definition
+		String evaluationDefID = exerciseDefinitionService.persist( new EvaluationDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			480,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Die einzelnen Ideen werden nun bewertet",
+			5 ) );
+
+		// intro definitions
+
+		// intro 1
+		String introDefID1 = exerciseDefinitionService
+			.persist( new PosterDefinition(
+				sbbRootUser,
+				TimeUnit.SECONDS,
+				120,
+				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+				"Willkommen",
+				"<p>Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Was wünsche ich mir am Bahnhof?</b>.</p><p>Bei diesem Wokshop kommen folgende Phasen auf dich zu:</p><p><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.</p><p><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.</p><p><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.</p><p>Bitte nimm dir ca. 45 Minuten Zeit, um diesen Workshop durchzuspielen.</p>" ) );
+
+		// intro 2
+		String introDefID2 = exerciseDefinitionService
+			.persist( new PosterDefinition(
+				sbbRootUser,
+				TimeUnit.SECONDS,
+				30,
+				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+				"Inspirationsphase",
+				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
+
+		String pinklabsIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			15,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"p.i.n.k.labs",
+			"Beantworte die folgenden 4 unterschiedlichen Fragen." ) );
+
+		String p2pOneIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			15,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Post2Paper 1",
+			"Du siehst nun nacheinander 4 unterschiedliche Zielgruppen. Beantworte zu jeder dieser Zielgruppen die folgende Frage." ) );
+
+		String p2pTwoIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			15,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Post2Paper 2",
+			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage." ) );
+
+		String xinixIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			15,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"XINIX-Tool",
+			"Nun folgen 4 unterschiedliche Themen.<br/>Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln." ) );
+
+		String simpleprotoIntroDefID = exerciseDefinitionService
+			.persist( new PosterDefinition(
+				sbbRootUser,
+				TimeUnit.SECONDS,
+				120,
+				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+				"Simply Prototyping",
+				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
+
+		// intro 3
+		String introDefID3 = exerciseDefinitionService
+			.persist( new PosterDefinition(
+				sbbRootUser,
+				TimeUnit.SECONDS,
+				30,
+				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+				"Kompressionsphase",
+				"<p>Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Was wünsche ich mir am Bahnhof?</b>.<br/>In den nächsten 12 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme<br/>Erarbeite so viele Massnahmen wie möglich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.</p><p>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgeführt. Drücke Random um den Zufallsgenerator auszulösen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet.</p>" ) );
+
+		// intro 4
+		String introDefID4 = exerciseDefinitionService
+			.persist( new PosterDefinition(
+				sbbRootUser,
+				TimeUnit.SECONDS,
+				30,
+				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+				"Bewertungsphase",
+				"<p>Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums \"Umsetzbarkeit realistisch\".</p><p>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10.</p>" ) );
+
+		// outro
+		String outroDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			120,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"",
+			"<p>Gratulation, der XINIX-Workshop ist beendet. Die besten Ideen werden am 01.07.2015 im Rahmen eines kreativ.workshops besprochen und weiterentwickelt.</p>" ) );
+
+		// end
+		String endDefID = exerciseDefinitionService.persist( new PosterDefinition(
+			sbbRootUser,
+			TimeUnit.SECONDS,
+			180,
+			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
+			"Abschluss",
+			"Vielen Dank, dass du an diesem XINIX-Workshop teilgenommen hast!" ) );
+
+		// exercise instances
+
+		// start exercise / intro 1
+		String startExID = exerciseService.persist( new ExerciseImpl(
+			"Begruessung",
+			"Workshop Start Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( introDefID1 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// intro 2
+		exerciseService.persist( new ExerciseImpl( "Intro", "Intro Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( introDefID2 ), (WorkshopImpl)workshopService
+			.findByID( wsID ) ) );
+
+		// pinklabs intro
+		exerciseService.persist( new ExerciseImpl(
+			"p.i.n.k.labs Intro",
+			"p.i.n.k.labs Intro Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( pinklabsIntroDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// pinklabs exercise 1
+		String pinklabsExID1 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (1/4)", "p.i.n.k.labs Tool 1", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID1 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// pinklabs exercise 2
+		String pinklabsExID2 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (2/4)", "p.i.n.k.labs Tool 2", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID2 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// pinklabs exercise 3
+		String pinklabsExID3 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (3/4)", "p.i.n.k.labs Tool 3", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID3 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// pinklabs exercise 4
+		String pinklabsExID4 = exerciseService.persist( new ExerciseImpl( "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( pinklabsDefID4 ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2pOne intro
+		exerciseService.persist( new ExerciseImpl(
+			"Post2Paper 1 Intro",
+			"Post2Paper 1 Intro Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneIntroDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2pOne exercise 1
+		String p2pOneExID1 = exerciseService.persist( new ExerciseImpl(
+			"Post2Paper 1 (1/4)",
+			"Post2Paper 1 Tool 1",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID1 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2pOne exercise 2
+		String p2pOneExID2 = exerciseService.persist( new ExerciseImpl(
+			"Post2Paper 1 (2/4)",
+			"Post2Paper 1 Tool 2",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID2 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2pOne exercise 3
+		String p2pOneExID3 = exerciseService.persist( new ExerciseImpl(
+			"Post2Paper 1 (3/4)",
+			"Post2Paper 1 Tool 3",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID3 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2pOne exercise 4
+		String p2pOneExID4 = exerciseService.persist( new ExerciseImpl(
+			"Post2Paper 1 (4/4)",
+			"Post2Paper 1 Tool 4",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pOneDefID4 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2pTwo intro
+		exerciseService.persist( new ExerciseImpl(
+			"Post2Paper 2 Intro",
+			"Post2Paper 2 Intro Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pTwoIntroDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// p2pTwo exercise
+		String p2pTwoExID = exerciseService.persist( new ExerciseImpl(
+			"Post2Paper 2",
+			"Post2Paper 2 Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( p2pTwoDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// xinix intro
+		exerciseService.persist( new ExerciseImpl(
+			"XINIX-Tool Intro",
+			"XINIX-Tool Intro",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixIntroDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// xinix exercise 1
+		String xinixExID1 = exerciseService.persist( new ExerciseImpl(
+			"XINIX-Tool (1/4)",
+			"XINIX-Tool 1",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID1 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// xinix exercise 2
+		String xinixExID2 = exerciseService.persist( new ExerciseImpl(
+			"XINIX-Tool (2/4)",
+			"XINIX-Tool 2",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID2 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// xinix exercise 3
+		String xinixExID3 = exerciseService.persist( new ExerciseImpl(
+			"XINIX-Tool (3/4)",
+			"XINIX-Tool 3",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID3 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// xinix exercise 4
+		String xinixExID4 = exerciseService.persist( new ExerciseImpl(
+			"XINIX-Tool (4/4)",
+			"XINIX-Tool 4",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( xinixDefID4 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// simplyproto intro
+		exerciseService.persist( new ExerciseImpl( "Simply Prototyping Intro", "Simply Prototyping Intro Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( simpleprotoIntroDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// simple prototyping exercise
+		String simplePrototypingExID = exerciseService.persist( new ExerciseImpl( "Simply Prototyping", "Simply Prototyping Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService
+			.findByID( simplePrototypingDefID ), (WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// intro 3 / compression
+		exerciseService.persist( new ExerciseImpl(
+			"Compression Intro",
+			"Compression Intro Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( introDefID3 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// compression exercise
+		String compressionExID = exerciseService.persist( new ExerciseImpl(
+			"Compression",
+			"Compression Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( compressionDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// intro 4 / compression
+		exerciseService.persist( new ExerciseImpl(
+			"Bewertung Intro",
+			"Bewertung Intro Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( introDefID4 ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// evaluation exercise
+		String evaluationExID = exerciseService.persist( new ExerciseImpl(
+			"Bewertungsrunde",
+			"Tool zur Evaluation der erarbeiteten Loesungen",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( evaluationDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// outro
+		exerciseService.persist( new ExerciseImpl( "Outro", "Outro Tool", (WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( outroDefID ), (WorkshopImpl)workshopService
+			.findByID( wsID ) ) );
+
+		// end exercise
+		String endExID = exerciseService.persist( new ExerciseImpl(
+			"Abschluss",
+			"Workshop Abschluss Tool",
+			(WorkflowElementDefinitionImpl)exerciseDefinitionService.findByID( endDefID ),
+			(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+		// sessions and participants
+		for ( int i = 0; i < 10; i++ )
+		{
+			String sessionID = sessionService.persist( new SessionImpl(
+				"Session für Teilnehmer " + i,
+				"Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
+				null,
+				(WorkshopImpl)workshopService.findByID( wsID ) ) );
+
+			String participantID = userService.persist( new UserImpl(
+				new PasswordCredentialImpl( "abc123" ),
+				(RoleImpl)roleService.findByID( executerRoleID ),
+				null,
+				"teilnehmer",
+				"teilnehmer " + i,
+				SBB_ROOT_CLIENT_NAME + "/e" + i + "@sbb" ) );
+
+			sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+			sessionService.start( sessionID );
+		}
+
+		System.out.println("workshop for SBB configured");
+		
 	}
 
 	private static void generateLoad( int clients, int workshops, int users, int artifacts )
