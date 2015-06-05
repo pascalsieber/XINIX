@@ -1262,7 +1262,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://skylla.zhaw.ch/p2p_one_images/senioren.png",
+			"http://skylla.zhaw.ch/p2p_one_images/senioren.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 3
@@ -1280,7 +1280,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://skylla.zhaw.ch/p2p_one_images/senioren.jpg",
+			"http://skylla.zhaw.ch/p2p_one_images/schueler.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p two
