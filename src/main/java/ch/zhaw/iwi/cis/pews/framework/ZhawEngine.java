@@ -7,9 +7,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -112,14 +110,16 @@ public class ZhawEngine implements LifecycleObject
 	private static Client rootClient;
 	private static UserImpl rootUser;
 
+	public static String ROOT_CLIENT_ID;
+
 	// defining these globally, since multiple pre-configured workshops might make use of the same role
-	private static String rootRoleID;
-	private static String participantRoleID;
-	private static String executerRoleID;
+	public static String ROOT_ROLE_ID;
+	public static String PARTICIPANT_ROLE_ID;
+	public static String EXECUTER_ROLE_ID;
 
 	// defining this globally, since multiple pre-configured workshops might make use of the same xinix-image-matrix
-	private static String xinixImageMatrixID;
-	private static List< XinixImage > xinixImages;
+	public static String XINIX_IMAGE_MATRIX_ID;
+	public static List< XinixImage > XINIX_IMAGES;
 
 	static
 	{
@@ -152,8 +152,6 @@ public class ZhawEngine implements LifecycleObject
 		configureSampleWorkshop();
 		configurePostWorkshop();
 		configureSBBWorkshop();
-
-		// generateLoad( 1, 200, 1, 1 );
 
 		System.out.println( "PEWS running and ready to go!" );
 	}
@@ -316,6 +314,7 @@ public class ZhawEngine implements LifecycleObject
 		if ( rootClient == null )
 		{
 			rootClient = clientService.findByID( clientService.persist( new Client( ROOT_CLIENT_NAME ) ) );
+			ROOT_CLIENT_ID = rootClient.getID();
 
 			// Since the database is initialized by invoking the services directly
 			// (rather than via HTTP/JSON) we have to setup a bootstrap user/client
@@ -329,9 +328,9 @@ public class ZhawEngine implements LifecycleObject
 			System.out.println( "root client registered initially" );
 		}
 
-		rootRoleID = roleService.persist( new RoleImpl( "root", "root" ) );
+		ROOT_ROLE_ID = roleService.persist( new RoleImpl( "root", "root" ) );
 
-		UserImpl user = new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( rootRoleID ), null, "root first name", "root last name", ROOT_USER_LOGIN_NAME );
+		UserImpl user = new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( ROOT_ROLE_ID ), null, "root first name", "root last name", ROOT_USER_LOGIN_NAME );
 		String rootUserID = userService.persist( user );
 
 		rootUser = userService.findByID( rootUserID );
@@ -355,10 +354,10 @@ public class ZhawEngine implements LifecycleObject
 		roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
 		System.out.println( "organizer role created initially" );
 
-		executerRoleID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
+		EXECUTER_ROLE_ID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
 		System.out.println( "executer role created initially" );
 
-		participantRoleID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
+		PARTICIPANT_ROLE_ID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
 		System.out.println( "participant role created initially" );
 
 		// sample workshop definition (pinkelefant)
@@ -422,17 +421,17 @@ public class ZhawEngine implements LifecycleObject
 			imageUrls.add( "http://skylla.zhaw.ch/xinix_images/xinix_img_" + i + ".jpg" );
 		}
 
-		xinixImages = new ArrayList<>();
+		XINIX_IMAGES = new ArrayList<>();
 
 		for ( String url : imageUrls )
 		{
 			String xinixImageID = exerciseDataService.persist( new XinixImage( rootUser, null, url ) );
 			XinixImage xinixImage = exerciseDataService.findByID( xinixImageID );
-			xinixImages.add( xinixImage );
+			XINIX_IMAGES.add( xinixImage );
 		}
 
 		// xinix image matrix (subclass of ExerciseDefinitionImpl)
-		xinixImageMatrixID = exerciseDefinitionService.persist( new XinixImageMatrix( rootUser, null, 0, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), xinixImages ) );
+		XINIX_IMAGE_MATRIX_ID = exerciseDefinitionService.persist( new XinixImageMatrix( rootUser, null, 0, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), XINIX_IMAGES ) );
 
 		// xinix definition
 		String xinixDefID = exerciseDefinitionService.persist( new XinixDefinition(
@@ -441,7 +440,7 @@ public class ZhawEngine implements LifecycleObject
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was fällt Dir ein zum Thema ENGAGEMENT?",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me definition
 		String you2meDefID = exerciseDefinitionService.persist( new You2MeDefinition( rootUser, TimeUnit.MINUTES, 2, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), Arrays
@@ -567,7 +566,7 @@ public class ZhawEngine implements LifecycleObject
 		// xinix data
 		Set< String > associations = new HashSet<>();
 		associations.addAll( Arrays.asList( "Sicherheit", "Verbindung", "Zahlen" ) );
-		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, xinixImages.iterator().next() ) );
+		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, XINIX_IMAGES.iterator().next() ) );
 
 		// simpleprototyping data
 		exerciseDataService
@@ -600,7 +599,7 @@ public class ZhawEngine implements LifecycleObject
 		// configure second user to join session (as participant)
 		String participantID = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( participantRoleID ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 			null,
 			"participating",
 			"participant",
@@ -611,7 +610,7 @@ public class ZhawEngine implements LifecycleObject
 		// configure third user to join session (as participant)
 		String participant2ID = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( participantRoleID ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 			null,
 			"participating 2",
 			"participant 2",
@@ -770,7 +769,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was fällt dir ein zum Thema Kundenservice?",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 2
 		String xinixDefID2 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -779,7 +778,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was fällt dir ein zum Thema Paket?",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 3
 		String xinixDefID3 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -788,7 +787,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was fällt dir ein zum Thema Postbote?",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 4
 		String xinixDefID4 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -797,7 +796,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was fällt dir ein zum Thema Jahr 2020?",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( postRootUser, TimeUnit.SECONDS, 600, (WorkshopDefinitionImpl)workshopDefinitionService
@@ -1107,7 +1106,7 @@ public class ZhawEngine implements LifecycleObject
 		// configure participants to join session
 		String participantID1 = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( participantRoleID ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 			null,
 			"participating",
 			"participant 1",
@@ -1115,7 +1114,7 @@ public class ZhawEngine implements LifecycleObject
 
 		String participantID2 = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( participantRoleID ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 			null,
 			"participating",
 			"participant 2",
@@ -1123,7 +1122,7 @@ public class ZhawEngine implements LifecycleObject
 
 		String participantID3 = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( participantRoleID ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 			null,
 			"participating",
 			"participant 3",
@@ -1131,7 +1130,7 @@ public class ZhawEngine implements LifecycleObject
 
 		String participantID4 = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( participantRoleID ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 			null,
 			"participating",
 			"participant 4",
@@ -1139,7 +1138,7 @@ public class ZhawEngine implements LifecycleObject
 
 		String participantID5 = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( participantRoleID ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 			null,
 			"participating",
 			"participant 5",
@@ -1147,7 +1146,7 @@ public class ZhawEngine implements LifecycleObject
 
 		String executerID = userService.persist( new UserImpl(
 			new PasswordCredentialImpl( "abc123" ),
-			(RoleImpl)roleService.findByID( executerRoleID ),
+			(RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
 			null,
 			"executing",
 			"executer",
@@ -1298,7 +1297,7 @@ public class ZhawEngine implements LifecycleObject
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was bedeutet für mich \"Service\"",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 2
 		String xinixDefID2 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -1307,7 +1306,7 @@ public class ZhawEngine implements LifecycleObject
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Neue Dienstleistung am Bahnhof",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 3
 		String xinixDefID3 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -1316,7 +1315,7 @@ public class ZhawEngine implements LifecycleObject
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was erwartest du vom Bahnhof 2050?",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 4
 		String xinixDefID4 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -1325,7 +1324,7 @@ public class ZhawEngine implements LifecycleObject
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Was erwartest du vom ÖV?",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( sbbRootUser, TimeUnit.SECONDS, 480, (WorkshopDefinitionImpl)workshopDefinitionService
@@ -1628,7 +1627,7 @@ public class ZhawEngine implements LifecycleObject
 
 			String participantID = userService.persist( new UserImpl(
 				new PasswordCredentialImpl( "abc123" ),
-				(RoleImpl)roleService.findByID( executerRoleID ),
+				(RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
 				null,
 				"teilnehmer",
 				"teilnehmer " + i,
@@ -1638,178 +1637,7 @@ public class ZhawEngine implements LifecycleObject
 			sessionService.start( sessionID );
 		}
 
-		System.out.println("workshop for SBB configured");
-		
-	}
-
-	private static void generateLoad( int clients, int workshops, int users, int artifacts )
-	{
-		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
-		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
-		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
-		WorkshopDefinitionService workshopDefinitionService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
-		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
-		ExerciseDefinitionService exerciseDefinitionService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
-		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
-		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-		ExerciseDataService exDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-
-		Random rn = new Random();
-
-		System.out.println( "generating load for testing...." );
-
-		for ( int i = 0; i < clients; i++ )
-		{
-			String prefix = UUID.randomUUID().toString();
-
-			// client
-			Client client = clientService.findByID( clientService.persist( new Client( "client" + prefix ) ) );
-			UserImpl bootstrapUser = new UserImpl( null, null, null, null, null, null );
-			bootstrapUser.setClient( client );
-			UserContext.setCurrentUser( bootstrapUser );
-
-			// root user
-			UserImpl user = userService.findByID( userService.persist( new UserImpl(
-				new PasswordCredentialImpl( "root" ),
-				(RoleImpl)roleService.findByID( rootRoleID ),
-				null,
-				"root_" + prefix,
-				"root_" + prefix,
-				prefix + "/root" ) ) );
-
-			for ( int j = 0; j < workshops; j++ )
-			{
-				// Workshop definition and instance
-				WorkshopDefinitionImpl wsDef = workshopDefinitionService.findByID( workshopDefinitionService.persist( new PinkElefantDefinition( user, "ws_def_name_" + prefix, "ws_def_descr_"
-						+ prefix, "ws_def_problem_" + prefix ) ) );
-				String wsID = workshopService.persist( new WorkshopImpl( j + "_ws_name_" + prefix, j + "_ws_descr_" + prefix, wsDef ) );
-
-				// exercise definitions and instance
-				WorkflowElementDefinitionImpl startDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_start_def_name_" + prefix, j + "_start_def_descr_" + prefix ) ) );
-				exerciseService.persist( new ExerciseImpl( j + "_start_ex_name_" + prefix, j + "_start_ex_descr_" + prefix, startDef, (WorkshopImpl)workshopService.findByID( wsID ) ) );
-
-				WorkflowElementDefinitionImpl plabsDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PinkLabsDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_plabs_question_" + prefix ) ) );
-				ExerciseImpl plabs = exerciseService.findByID( exerciseService.persist( new ExerciseImpl(
-					j + "_plabs_ex_name_" + prefix,
-					j + "_plabs_ex_descr_" + prefix,
-					plabsDef,
-					(WorkshopImpl)workshopService.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl p1Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2POneDefinition(
-					user,
-					TimeUnit.SECONDS,
-					10,
-					wsDef,
-					"http://oncampusadvertising.com/blog/wp-content/uploads/2014/11/college-students-using-smartphones-and-tablets.jpg",
-					j + "_p2p1_question_" + prefix ) ) );
-				ExerciseImpl p1 = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_p1_ex_name_" + prefix, j + "_p1_ex_descr_" + prefix, p1Def, (WorkshopImpl)workshopService
-					.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl p2Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2PTwoDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_p2_def_question_" + prefix ) ) );
-				ExerciseImpl p2 = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_p2_ex_name_" + prefix, j + "_p2_ex_descr_" + prefix, p2Def, (WorkshopImpl)workshopService
-					.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl xinixDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new XinixDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_xinix_def_question_" + prefix, (XinixImageMatrix)workshopDefinitionService.findByID( xinixImageMatrixID ) ) ) );
-				ExerciseImpl xinix = exerciseService.findByID( exerciseService.persist( new ExerciseImpl(
-					j + "_xinix_ex_name_" + prefix,
-					j + "_xinix_ex_descr_" + prefix,
-					xinixDef,
-					(WorkshopImpl)workshopService.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl u2mDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new You2MeDefinition( user, TimeUnit.SECONDS, 10, wsDef, Arrays.asList( j
-						+ "_u2me_question1_" + prefix, j + "_u2me_question2_" + prefix ) ) ) );
-				ExerciseImpl u2m = exerciseService.findByID( exerciseService.persist( new ExerciseImpl(
-					j + "_u2m_ex_name_" + prefix,
-					j + "_u2m_ex_descr_" + prefix,
-					u2mDef,
-					(WorkshopImpl)workshopService.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl spDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new SimplePrototypingDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_sproto_question_" + prefix, "mime" ) ) );
-				ExerciseImpl proto = exerciseService.findByID( exerciseService.persist( new ExerciseImpl(
-					j + "_sp_ex_name_" + prefix,
-					j + "_sp_ex_descr_" + prefix,
-					spDef,
-					(WorkshopImpl)workshopService.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl cDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new CompressionDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_compression_question_" + prefix, Arrays.asList( j + "_crit1_" + prefix, j + "_crit2_" + prefix ) ) ) );
-				ExerciseImpl compression = exerciseService.findByID( exerciseService.persist( new ExerciseImpl(
-					j + "_compression_ex_name_" + prefix,
-					j + "_compression_ex_descr_" + prefix,
-					cDef,
-					(WorkshopImpl)workshopService.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl evalDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_eval_question_" + prefix, 10 ) ) );
-				ExerciseImpl eval = exerciseService.findByID( exerciseService.persist( new ExerciseImpl(
-					j + "_eval_ex_name_" + prefix,
-					j + "_eval_ex_descr_" + prefix,
-					evalDef,
-					(WorkshopImpl)workshopService.findByID( wsID ) ) ) );
-
-				WorkflowElementDefinitionImpl resDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationResultDefinition( user, TimeUnit.SECONDS, 10, wsDef ) ) );
-				exerciseService.persist( new ExerciseImpl( j + "_res_ex_name_" + prefix, j + "_res_ex_descr_" + prefix, resDef, (WorkshopImpl)workshopService.findByID( wsID ) ) );
-
-				WorkflowElementDefinitionImpl endDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterDefinition( user, TimeUnit.SECONDS, 10, wsDef, j
-						+ "_end_def_name_" + prefix, j + "_end_def_descr_" + prefix ) ) );
-				exerciseService.persist( new ExerciseImpl( j + "_end_ex_name_" + prefix, j + "_end_ex_descr_" + prefix, endDef, (WorkshopImpl)workshopService.findByID( wsID ) ) );
-
-				// session
-				SessionImpl session = sessionService.findByID( sessionService.persist( new SessionImpl( j + "_session_" + prefix, j + "_session_" + prefix, null, (WorkshopImpl)workshopService
-					.findByID( wsID ) ) ) );
-
-				// executer
-				UserImpl executer = userService.findByID( userService.persist( new UserImpl(
-					new PasswordCredentialImpl( "abc123" ),
-					(RoleImpl)roleService.findByID( executerRoleID ),
-					null,
-					"executer",
-					"executer",
-					prefix + "/" + j + "/executer" ) ) );
-
-				sessionService.join( new Invitation( null, executer, session ) );
-
-				// users
-				for ( int k = 0; k < users; k++ )
-				{
-					UserImpl u = userService.findByID( userService.persist( new UserImpl(
-						new PasswordCredentialImpl( "abc123" ),
-						(RoleImpl)roleService.findByID( participantRoleID ),
-						null,
-						"participant",
-						"participant",
-						prefix + "/" + j + "/" + k + "/participant" ) ) );
-
-					sessionService.join( new Invitation( null, u, session ) );
-
-					// exercise data
-					for ( int l = 0; l < artifacts; l++ )
-					{
-						exDataService.persist( new PinkLabsExerciseData( u, plabs, Arrays.asList( "random plabs answer" ) ) );
-						P2POneData p1Data = exDataService.findByID( exDataService.persist( new P2POneData( u, p1, Arrays.asList( "random keyword 1", "random keyword 2" ) ) ) );
-						exDataService.persist( new P2PTwoData( u, p2, Arrays.asList( "random p2 answer" ), new HashSet< P2POneKeyword >( Arrays.asList( p1Data.getKeywords().get( 0 ), p1Data
-							.getKeywords()
-							.get( 1 ) ) ) ) );
-						exDataService.persist( new XinixData( u, xinix, new HashSet< String >( Arrays.asList( "random xinix answer" ) ), xinixImages.get( 0 ) ) );
-						exDataService.persist( new SimplePrototypingData( u, proto, DatatypeConverter.parseBase64Binary( "cmFuZG9t" ) ) );
-						exDataService.persist( new You2MeExerciseData( u, u2m, Arrays.asList( new DialogEntry( DialogRole.RoleA, "random dialog A" ), new DialogEntry(
-							DialogRole.RoleB,
-							"random dialog B" ) ) ) );
-						CompressionExerciseData compressionData = exDataService.findByID( exDataService.persist( new CompressionExerciseData( u, compression, Arrays
-							.asList( new CompressionExerciseDataElement( "random solution", "random description" ) ) ) ) );
-						exDataService.persist( new EvaluationExerciseData( u, eval, new Evaluation( u, compressionData.getSolutions().get( 0 ), new Score( u, rn.nextInt( 10 ) + 1 ) ) ) );
-					}
-
-				}
-
-			}
-
-		}
+		System.out.println( "workshop for SBB configured" );
 
 	}
 
