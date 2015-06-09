@@ -1649,7 +1649,7 @@ public class ZhawEngine implements LifecycleObject
 
 			String participantID = userService.persist( new UserImpl(
 				new PasswordCredentialImpl( "abc123" ),
-				(RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
+				(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
 				null,
 				"teilnehmer",
 				"teilnehmer " + i,
