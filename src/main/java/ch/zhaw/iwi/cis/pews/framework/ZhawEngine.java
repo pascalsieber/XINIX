@@ -1618,11 +1618,32 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// sessions and participants
+		// TODO: change theses to participants
 		for ( int i = 0; i < 10; i++ )
 		{
 			String sessionID = sessionService.persist( new SessionImpl(
 				"Session für Teilnehmer " + i,
 				"Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
+				null,
+				SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
+
+			String participantID = userService.persist( new UserImpl(
+				new PasswordCredentialImpl( "abc123" ),
+				(RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
+				null,
+				"teilnehmer",
+				"teilnehmer " + i,
+				SBB_ROOT_CLIENT_NAME + "/e" + i + "@sbb" ) );
+
+			sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+			sessionService.start( sessionID );
+		}
+		
+		for ( int i = 0; i < 2; i++ )
+		{
+			String sessionID = sessionService.persist( new SessionImpl(
+				"Asynchrone Session für Teilnehmer " + i,
+				"Asynchrone Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
 				null,
 				SessionSynchronizationImpl.ASYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
 
@@ -1632,7 +1653,7 @@ public class ZhawEngine implements LifecycleObject
 				null,
 				"teilnehmer",
 				"teilnehmer " + i,
-				SBB_ROOT_CLIENT_NAME + "/e" + i + "@sbb" ) );
+				SBB_ROOT_CLIENT_NAME + "/p" + i + "@sbb" ) );
 
 			sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 			sessionService.start( sessionID );
