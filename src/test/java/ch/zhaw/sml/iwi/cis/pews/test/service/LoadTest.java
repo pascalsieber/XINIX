@@ -17,6 +17,7 @@ import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
@@ -196,7 +197,7 @@ public class LoadTest
 			exerciseService.persist( new ExerciseImpl( j + "_end_ex_name_", j + "_end_ex_descr_", endDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
 			// session
-			SessionImpl session = sessionService.findByID( sessionService.persist( new SessionImpl( j + "_session_", j + "_session_", null, (WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
+			SessionImpl session = sessionService.findByID( sessionService.persist( new SessionImpl( j + "_session_", j + "_session_", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService.findByID( workshopID ), eval, null, null, null, null ) ) );
 			sessionID = session.getID();
 
 			// executer

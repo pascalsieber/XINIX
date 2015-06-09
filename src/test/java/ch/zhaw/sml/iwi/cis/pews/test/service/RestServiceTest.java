@@ -35,6 +35,7 @@ import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
 import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
@@ -264,7 +265,7 @@ public class RestServiceTest
 			.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		// session
-		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, defaultWorkshopStub ) ) );
+		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, SessionSynchronizationImpl.SYNCHRONOUS, defaultWorkshopStub, compressionExerciseStub, null, null, null, null ) ) );
 
 		// set default user's session to newly configured session for testing
 		// also have secondDefaultUser join this session
@@ -390,7 +391,7 @@ public class RestServiceTest
 		assertTrue( wsBefore - workshops.size() == 1 );
 
 		// create session
-		String sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, defaultWorkshopStub ) );
+		String sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, SessionSynchronizationImpl.SYNCHRONOUS, defaultWorkshopStub, null, null, null, null, null ) );
 
 		// read session
 		SessionImpl session = sessionService.findByID( sessionID );

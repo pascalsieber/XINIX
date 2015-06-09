@@ -43,6 +43,7 @@ import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
@@ -588,7 +589,7 @@ public class ZhawEngine implements LifecycleObject
 			.get( 0 ), new Score( rootUser, 4 ) ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop", null, (WorkshopImpl)workshopService.findByID( wsID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
 
 		// invitation (so that at least on is there) :)
 		invitationService.persist( new Invitation( rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -628,8 +629,8 @@ public class ZhawEngine implements LifecycleObject
 		// "root first name",
 		// "root last name",
 		// "pews_root_client/executer@pews" ) );
-		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für p.i.n.k.elefant Workshop", null, (WorkshopImpl)workshopService
-			.findByID( wsID ) ) );
+		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für p.i.n.k.elefant Workshop", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService
+			.findByID( wsID ), null, null, null, null, null ) );
 		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
 		sessionService.start( sessionID );
@@ -1100,8 +1101,8 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop mit der Post", null, (WorkshopImpl)workshopService
-			.findByID( wsID ) ) );
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop mit der Post", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService
+			.findByID( wsID ), null, null, null, null, null ) );
 
 		// configure participants to join session
 		String participantID1 = userService.persist( new UserImpl(
@@ -1623,7 +1624,7 @@ public class ZhawEngine implements LifecycleObject
 				"Session für Teilnehmer " + i,
 				"Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
 				null,
-				(WorkshopImpl)workshopService.findByID( wsID ) ) );
+				SessionSynchronizationImpl.ASYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
 
 			String participantID = userService.persist( new UserImpl(
 				new PasswordCredentialImpl( "abc123" ),
