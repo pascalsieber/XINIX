@@ -395,7 +395,7 @@ public class LoadTest
 		invokeMethod( userService, userService.getClass().getMethod( "findByID", new Class[] { String.class } ), new Object[] { user.getID() } );
 
 		// findByLoginName
-		invokeMethod( userService, userService.getClass().getMethod( "findByLogin", new Class[] { String.class } ), new Object[] { user.getLoginName() } );
+		invokeMethod( userService, userService.getClass().getMethod( "findByLoginName", new Class[] { String.class } ), new Object[] { user.getLoginName() } );
 
 	}
 
