@@ -844,7 +844,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Willkommen",
-				"<p>Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.</p><p>Bei diesem Wokshop kommen folgende Phasen auf dich zu:</p><p><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.</p><p><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.</p><p><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.</p>" ) );
+				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet." ) );
 
 		// intro 2
 		String introDefID2 = exerciseDefinitionService
@@ -1359,7 +1359,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Willkommen",
-				"<p>Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Was wünsche ich mir am Bahnhof?</b>.</p><p>Bei diesem Wokshop kommen folgende Phasen auf dich zu:</p><p><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.</p><p><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.</p><p><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.</p><p>Bitte nimm dir ca. 45 Minuten Zeit, um diesen Workshop durchzuspielen.</p>" ) );
+				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Was wünsche ich mir am Bahnhof?</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.<br/>Bitte nimm dir ca. 45 Minuten Zeit, um diesen Workshop durchzuspielen." ) );
 
 		// intro 2
 		String introDefID2 = exerciseDefinitionService
