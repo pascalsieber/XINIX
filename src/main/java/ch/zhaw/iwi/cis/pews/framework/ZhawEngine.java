@@ -1410,7 +1410,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Simply Prototyping",
-				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
+				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen.<br/><br/>Achte darauf, dass du nur 8 Minuten Zeit hast, um das Bild zu malen und hochzuladen. Nach diesen 8 Minuten kannst du das Bild nicht mehr hochladen." ) );
 
 		// intro 3
 		String introDefID3 = exerciseDefinitionService
