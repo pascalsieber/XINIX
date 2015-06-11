@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
+import java.util.List;
+
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDefinitionDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDefinitionDaoImpl;
@@ -7,6 +9,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -23,5 +26,18 @@ public class ExerciseDefinitionServiceImpl extends WorkshopObjectServiceImpl imp
 	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return exerciseDefinitionDao;
+	}
+
+	@Override
+	public ExerciseDefinitionImpl findExerciseDefinitionByID( String id )
+	{
+		return (ExerciseDefinitionImpl)simplifyOwnerInObjectGraph( findByID( id ) );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseDefinitionImpl > findAllExerciseDefinitions()
+	{
+		return (List< ExerciseDefinitionImpl >)simplifyOwnerInObjectGraph( findAll() );
 	}
 }

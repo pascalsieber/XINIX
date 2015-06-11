@@ -42,7 +42,7 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public ExerciseDefinitionImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return exerciseDefinitionService.findExerciseDefinitionByID( id );
 	}
 
 	@POST
@@ -57,7 +57,7 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< ExerciseDefinitionImpl > findAll()
 	{
-		return super.findAll();
+		return exerciseDefinitionService.findAllExerciseDefinitions();
 	}
 	
 	@Override

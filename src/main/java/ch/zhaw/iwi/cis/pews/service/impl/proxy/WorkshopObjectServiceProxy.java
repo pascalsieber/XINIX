@@ -43,4 +43,11 @@ public class WorkshopObjectServiceProxy extends ServiceProxy implements Workshop
 		return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( null ) ).readEntity( List.class );
 	}
 
+	@Override
+	public Object simplifyOwnerInObjectGraph( Object object )
+	{
+		// only to be used internally and not by proxy
+		throw new UnsupportedOperationException();
+	}
+
 }

@@ -60,6 +60,41 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	}
 
 	@Override
+	public SessionImpl findSessionByID( String id )
+	{
+		// simplify object for JSON mapper
+		SessionImpl session = (SessionImpl)simplifyOwnerInObjectGraph( findByID( id ) );
+		session.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+
+		for ( Participant part : session.getParticipants() )
+		{
+			part.getPrincipal().setCredential( null );
+			part.getPrincipal().setParticipation( null );
+			part.getPrincipal().setSessionAcceptances( null );
+			part.getPrincipal().setSessionExecutions( null );
+			part.getPrincipal().setSessionInvitations( null );
+		}
+
+		for ( PrincipalImpl principal : session.getAcceptees() )
+		{
+			principal.setCredential( null );
+			principal.setParticipation( null );
+			principal.setSessionAcceptances( null );
+			principal.setSessionExecutions( null );
+			principal.setSessionInvitations( null );
+		}
+
+		return session;
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< SessionImpl > findAllSessions()
+	{
+		return (List< SessionImpl >)simplifyOwnerInObjectGraph( findAll() );
+	}
+
+	@Override
 	public void join( Invitation invitation )
 	{
 		if ( ( (PrincipalImpl)userDao.findById( invitation.getInvitee().getID() ) ).getParticipation() != null )
@@ -105,7 +140,10 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	@Override
 	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
-		return ( (SessionImpl)findByID( sessionID ) ).getCurrentExercise();
+		// simplify exercise object
+		ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( ( (SessionImpl)findByID( sessionID ) ).getCurrentExercise() );
+		ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+		return ex;
 	}
 
 	@Override
@@ -162,7 +200,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		Set< ExerciseImpl > exercisesRaw = new HashSet<>( session.getWorkshop().getExercises() );
 		List< ExerciseImpl > orderedExercises = new ArrayList<>( exercisesRaw );
 		Collections.sort( orderedExercises, new ExerciseImplComparator() );
-		
+
 		return orderedExercises;
 	}
 
@@ -175,11 +213,15 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 
 		if ( current < exercises.size() )
 		{
-			return exercises.get( current + 1 );
+			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current + 1 ) );
+			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+			return ex;
 		}
 		else
 		{
-			return exercises.get( current );
+			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current ) );
+			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+			return ex;
 		}
 	}
 
@@ -187,16 +229,20 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	public ExerciseImpl getPreviousExercise( String sessionID )
 	{
 		SessionImpl session = sessionDao.findById( sessionID );
-		List< ExerciseImpl > exercises = getExercisesOfSession(session);
+		List< ExerciseImpl > exercises = getExercisesOfSession( session );
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
 		if ( current > 0 )
 		{
-			return exercises.get( current - 1 );
+			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current - 1 ) );
+			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+			return ex;
 		}
 		else
 		{
-			return exercises.get( current );
+			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current ) );
+			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+			return ex;
 		}
 	}
 
@@ -204,7 +250,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	public String setNextExercise( String sessionID )
 	{
 		SessionImpl session = sessionDao.findById( sessionID );
-		List< ExerciseImpl > exercises = getExercisesOfSession(session);
+		List< ExerciseImpl > exercises = getExercisesOfSession( session );
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
 		if ( current + 1 < exercises.size() )
@@ -224,7 +270,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		try
 		{
 			SessionImpl session = sessionDao.findById( offsetRequest.getWorkflowElementID() );
-			List< ExerciseImpl > exercises = getExercisesOfSession(session);
+			List< ExerciseImpl > exercises = getExercisesOfSession( session );
 			int current = exercises.indexOf( session.getCurrentExercise() );
 
 			if ( current + 1 < exercises.size() )

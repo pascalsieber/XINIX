@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
+import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
@@ -95,6 +97,19 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
 	{
 		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE_WITH_DELAY ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
+	}
+
+	@Override
+	public SessionImpl findSessionByID( String id )
+	{
+		return getServiceTarget().path( SessionRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( SessionImpl.class );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< SessionImpl > findAllSessions()
+	{
+		return getServiceTarget().path( SessionRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
 
 }

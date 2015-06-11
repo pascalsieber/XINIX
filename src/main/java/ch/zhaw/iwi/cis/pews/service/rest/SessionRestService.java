@@ -65,7 +65,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public SessionImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return sessionService.findSessionByID( id );
 	}
 
 	@POST
@@ -80,7 +80,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< SessionImpl > findAll()
 	{
-		return super.findAll();
+		return sessionService.findAllSessions();
 	}
 
 	@POST

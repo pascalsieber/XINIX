@@ -42,7 +42,7 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public WorkshopDefinitionImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return workshopDefinitionService.findWorkshopDefinitionByID( id );
 	}
 
 	@POST
@@ -57,7 +57,7 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< WorkshopDefinitionImpl > findAll()
 	{
-		return super.findAll();
+		return workshopDefinitionService.findAllWorkshopDefinitions();
 	}
 
 	@Override
