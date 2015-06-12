@@ -189,13 +189,13 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startDatabase()
 	{
-		serverControl = NetworkServerControlWrapper.__new( InetAddressWrapper.getByName( "0.0.0.0" ), 1527 );
+		serverControl = NetworkServerControlWrapper.__new( InetAddressWrapper.getByName( "0.0.0.0" ), 1526 );
 		NetworkServerControlWrapper.start( serverControl, new PrintWriter( System.out ) );
 	}
 
 	private static void startWebServer()
 	{
-		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8082 ) );
+		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8085 ) );
 
 		// Setup session ID manager.
 		webServer.setSessionIdManager( new HashSessionIdManager() );
