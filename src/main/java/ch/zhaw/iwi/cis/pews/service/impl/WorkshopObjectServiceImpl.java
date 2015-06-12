@@ -34,7 +34,9 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.CloseableWrapper;
@@ -197,9 +199,15 @@ public abstract class WorkshopObjectServiceImpl extends ServiceImpl implements W
 			puu = emf.getPersistenceUnitUtil();
 		}
 
+		// TODO re-factor method to optimize code usage
 		@Override
 		protected Object resolveObject( Object obj ) throws IOException
 		{
+			if ( obj instanceof ExerciseImpl )
+			{
+				( (ExerciseImpl)obj ).setData( new ArrayList< WorkflowElementDataImpl >() );
+			}
+
 			if ( obj instanceof OwnableObject )
 			{
 				if ( null != ( (OwnableObject)obj ).getOwner() )
@@ -214,6 +222,39 @@ public abstract class WorkshopObjectServiceImpl extends ServiceImpl implements W
 					if ( ( (OwnableObject)obj ).getOwner() instanceof UserImpl )
 					{
 						( (UserImpl)( (OwnableObject)obj ).getOwner() ).setGroups( null );
+					}
+				}
+			}
+
+			if ( obj instanceof Invitation )
+			{
+				if ( null != ( (Invitation)obj ).getInviter() )
+				{
+					( (Invitation)obj ).getInviter().setCredential( null );
+					( (Invitation)obj ).getInviter().setParticipation( null );
+					( (Invitation)obj ).getInviter().setRole( null );
+					( (Invitation)obj ).getInviter().setSessionAcceptances( null );
+					( (Invitation)obj ).getInviter().setSessionExecutions( null );
+					( (Invitation)obj ).getInviter().setSessionInvitations( null );
+
+					if ( ( (Invitation)obj ).getInviter() instanceof UserImpl )
+					{
+						( (UserImpl)( (Invitation)obj ).getInviter() ).setGroups( null );
+					}
+				}
+
+				if ( null != ( (Invitation)obj ).getInvitee() )
+				{
+					( (Invitation)obj ).getInvitee().setCredential( null );
+					( (Invitation)obj ).getInvitee().setParticipation( null );
+					( (Invitation)obj ).getInvitee().setRole( null );
+					( (Invitation)obj ).getInvitee().setSessionAcceptances( null );
+					( (Invitation)obj ).getInvitee().setSessionExecutions( null );
+					( (Invitation)obj ).getInvitee().setSessionInvitations( null );
+
+					if ( ( (Invitation)obj ).getInvitee() instanceof UserImpl )
+					{
+						( (UserImpl)( (Invitation)obj ).getInvitee() ).setGroups( null );
 					}
 				}
 			}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
@@ -45,4 +46,8 @@ public interface ExerciseService extends WorkflowElementService
 	public List< ExerciseDataImpl > getOutput();
 
 	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID );
+
+	public List< ExerciseImpl > findAllExercises();
+
+	public ExerciseImpl findExerciseByID( String id );
 }

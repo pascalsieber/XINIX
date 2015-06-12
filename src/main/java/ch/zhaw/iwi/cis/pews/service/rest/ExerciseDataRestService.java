@@ -42,7 +42,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public ExerciseDataImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return exerciseDataService.findExerciseDataByID( id );
 	}
 
 	@POST
@@ -57,7 +57,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< ExerciseDataImpl > findAll()
 	{
-		return super.findAll();
+		return exerciseDataService.findAllExerciseData();
 	}
 
 	@POST

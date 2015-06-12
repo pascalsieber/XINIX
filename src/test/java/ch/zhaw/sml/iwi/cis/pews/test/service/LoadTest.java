@@ -106,7 +106,7 @@ public class LoadTest
 	@BeforeClass
 	public static void generateLoad()
 	{
-		loadGenerator( 1, 10, 10 );
+		loadGenerator( 0, 10, 10 );
 	}
 
 	private static void loadGenerator( int workshops, int users, int artifacts )

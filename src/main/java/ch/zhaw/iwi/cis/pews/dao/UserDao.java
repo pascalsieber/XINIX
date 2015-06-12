@@ -11,4 +11,6 @@ public interface UserDao extends WorkshopObjectDao
 
 	public List< PrincipalImpl > finAllUsersForLoginService();
 
+	public PrincipalImpl findUserByID( String id );
+
 }

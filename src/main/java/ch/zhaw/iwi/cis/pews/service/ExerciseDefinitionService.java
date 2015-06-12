@@ -11,4 +11,6 @@ public interface ExerciseDefinitionService extends WorkshopObjectService
 	ExerciseDefinitionImpl findExerciseDefinitionByID( String id );
 
 	List< ExerciseDefinitionImpl > findAllExerciseDefinitions();
+
+	void removeExerciseDefinition( ExerciseDefinitionImpl obj );
 }

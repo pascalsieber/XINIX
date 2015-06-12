@@ -131,6 +131,19 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		return super.persist( object );
 	}
 
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseImpl > findAllExercises()
+	{
+		return (List< ExerciseImpl >)simplifyOwnerInObjectGraph( findAll() );
+	}
+	
+	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return (ExerciseImpl)simplifyOwnerInObjectGraph( findByID( id ) );
+	}
+
 	@Override
 	public void suspend( SuspensionRequest suspensionRequest )
 	{
@@ -312,7 +325,9 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public Participant findUserParticipant()
 	{
-		return participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		return (Participant)simplifyOwnerInObjectGraph( participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() ) );
 	}
+
+	
 
 }

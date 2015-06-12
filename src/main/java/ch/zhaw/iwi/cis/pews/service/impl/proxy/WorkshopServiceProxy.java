@@ -36,4 +36,10 @@ public class WorkshopServiceProxy extends WorkshopObjectServiceProxy implements 
 		return getServiceTarget().path( WorkshopRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
 
+	@Override
+	public WorkshopImpl findWorkshopByID( String id )
+	{
+		return getServiceTarget().path( WorkshopRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( WorkshopImpl.class );
+	}
+
 }

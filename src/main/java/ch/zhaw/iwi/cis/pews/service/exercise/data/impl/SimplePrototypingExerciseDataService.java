@@ -21,4 +21,11 @@ public class SimplePrototypingExerciseDataService extends ExerciseDataServiceImp
 	{
 		return super.genericFindByExerciseID( exerciseID );
 	}
+
+	@Override
+	public ExerciseDataImpl findExerciseDataByID( String id )
+	{
+		return super.genericFindDataByID( id );
+	}
+
 }

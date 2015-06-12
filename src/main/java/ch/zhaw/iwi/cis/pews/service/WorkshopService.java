@@ -9,4 +9,6 @@ public interface WorkshopService extends WorkflowElementService
 
 	public List< WorkshopImpl > findAllWorkshopsSimple();
 
+	public WorkshopImpl findWorkshopByID( String id );
+
 }

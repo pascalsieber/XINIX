@@ -30,4 +30,10 @@ public class ExerciseDefinitionServiceProxy extends WorkshopObjectServiceProxy i
 		return getServiceTarget().path( ExerciseDefinitionRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
 
+	@Override
+	public void removeExerciseDefinition( ExerciseDefinitionImpl obj )
+	{
+		getServiceTarget().path( ExerciseDefinitionRestService.REMOVE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) );
+	}
+
 }

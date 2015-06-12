@@ -45,7 +45,7 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public WorkshopImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return workshopService.findWorkshopByID( id );
 	}
 
 	@POST

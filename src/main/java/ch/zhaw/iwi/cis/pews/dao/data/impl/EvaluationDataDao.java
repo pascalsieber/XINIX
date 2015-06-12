@@ -23,10 +23,31 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public ExerciseDataImpl findDataByID( String id )
+	{
+		List< EvaluationExerciseData > results = getEntityManager()
+			.createQuery( "select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.id = :_id" )
+			.setParameter( "_id", id )
+			.getResultList();
+
+		if ( results.size() > 0 )
+		{
+			return results.get( 0 );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< EvaluationExerciseData > data = getEntityManager().createQuery(
-			"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
+		List< EvaluationExerciseData > data = getEntityManager()
+			.createQuery(
+				"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
+			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
@@ -49,8 +70,11 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 		{
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationDefinition.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager().createQuery(
-					"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + ex.getID() + "' ORDER BY d.timestamp ASC" ).getResultList() );
+				data.addAll( getEntityManager()
+					.createQuery(
+						"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + ex.getID()
+								+ "' ORDER BY d.timestamp ASC" )
+					.getResultList() );
 			}
 		}
 

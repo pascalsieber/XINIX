@@ -9,10 +9,10 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class PosterExerciseDataService extends ExerciseDataServiceImpl
+public class XinixImageDataService extends ExerciseDataServiceImpl
 {
 
-	public PosterExerciseDataService()
+	public XinixImageDataService()
 	{
 		super();
 	}

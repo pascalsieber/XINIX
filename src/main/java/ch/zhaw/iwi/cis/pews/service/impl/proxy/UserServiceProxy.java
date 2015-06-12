@@ -35,4 +35,10 @@ public class UserServiceProxy extends WorkshopObjectServiceProxy implements User
 		// method not to be exposed. used internally to find all users to be able to authenticate
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public PrincipalImpl findUserByID( String id )
+	{
+		return getServiceTarget().path( UserRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( PrincipalImpl.class );
+	}
 }

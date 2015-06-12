@@ -12,4 +12,6 @@ public interface UserService extends WorkshopObjectService
 	public boolean requestNewPassword( String userID );
 
 	public List< PrincipalImpl > findAllUsersForLoginService();
+
+	public PrincipalImpl findUserByID( String id );
 }

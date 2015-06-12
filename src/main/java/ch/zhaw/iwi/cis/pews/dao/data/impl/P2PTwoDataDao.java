@@ -18,10 +18,30 @@ public class P2PTwoDataDao extends ExerciseDataDaoImpl
 {
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public ExerciseDataImpl findDataByID( String id )
+	{
+		List< P2PTwoData > results = getEntityManager()
+			.createQuery( "select distinct d from P2PTwoData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.selectedKeywords where d.id = :_id" )
+			.setParameter( "_id", id )
+			.getResultList();
+
+		if ( results.size() > 0 )
+		{
+			return results.get( 0 );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< P2PTwoData > data = getEntityManager().createQuery(
-			"select distinct d from P2PTwoData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.selectedKeywords where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
+		List< P2PTwoData > data = getEntityManager()
+			.createQuery( "select distinct d from P2PTwoData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.selectedKeywords where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
+			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
@@ -36,7 +56,8 @@ public class P2PTwoDataDao extends ExerciseDataDaoImpl
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( P2PTwoDefinition.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager().createQuery(
-					"select distinct d from P2PTwoData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.answers LEFT JOIN FETCH d.selectedKeywords where d.workflowElement.id = '" + ex.getID() + "' ORDER BY d.timestamp ASC" ).getResultList() );
+					"select distinct d from P2PTwoData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.answers LEFT JOIN FETCH d.selectedKeywords where d.workflowElement.id = '" + ex.getID()
+							+ "' ORDER BY d.timestamp ASC" ).getResultList() );
 			}
 		}
 

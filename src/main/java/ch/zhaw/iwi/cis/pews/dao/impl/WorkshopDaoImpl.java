@@ -30,4 +30,21 @@ public class WorkshopDaoImpl extends WorkshopObjectDaoImpl implements WorkshopDa
 		return new ArrayList< WorkshopImpl >( new HashSet< WorkshopImpl >( (List< WorkshopImpl >)cloneResult( results ) ) );
 	}
 
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public WorkshopImpl findWorkshopByID( String id )
+	{
+		List< WorkshopImpl > results = getEntityManager()
+			.createQuery( "from WorkshopImpl ws LEFT JOIN FETCH ws.sessions sessions LEFT JOIN FETCH ws.exercises ex where ws.id = '" + id + "'" )
+			.getResultList();
+		if ( results.size() > 0 )
+		{
+			return results.get( 0 );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
 }

@@ -19,6 +19,25 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public ExerciseDataImpl findDataByID( String id )
+	{
+		List< XinixData > results = getEntityManager()
+			.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.id = :_id" )
+			.setParameter( "_id", id )
+			.getResultList();
+
+		if ( results.size() > 0 )
+		{
+			return results.get( 0 );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		List< XinixData > data = getEntityManager()

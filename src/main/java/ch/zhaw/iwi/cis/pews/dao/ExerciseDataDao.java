@@ -10,4 +10,6 @@ public interface ExerciseDataDao extends WorkshopObjectDao
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID );
 
 	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( Class< ? > dataClass );
+
+	public ExerciseDataImpl findDataByID( String id );
 }

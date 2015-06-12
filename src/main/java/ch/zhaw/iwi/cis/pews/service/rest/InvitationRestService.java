@@ -43,7 +43,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public Invitation findByID( String id )
 	{
-		return super.findByID( id );
+		return invitationService.findInvitationByID( id );
 	}
 
 	@POST
@@ -58,7 +58,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< Invitation > findAll()
 	{
-		return super.findAll();
+		return invitationService.findAllInvitations();
 	}
 
 	@POST

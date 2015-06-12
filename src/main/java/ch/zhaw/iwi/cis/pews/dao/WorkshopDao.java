@@ -9,4 +9,6 @@ public interface WorkshopDao extends WorkshopObjectDao
 
 	public List< WorkshopImpl > findByAllSimple( String clientID );
 
+	public WorkshopImpl findWorkshopByID( String id );
+
 }

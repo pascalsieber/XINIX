@@ -21,4 +21,10 @@ public class PinkLabsExerciseDataService extends ExerciseDataServiceImpl
 	{
 		return super.genericFindByExerciseID( exerciseID );
 	}
+
+	@Override
+	public ExerciseDataImpl findExerciseDataByID( String id )
+	{
+		return super.genericFindDataByID(id);
+	}
 }

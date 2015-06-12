@@ -24,4 +24,18 @@ public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy impleme
 		return getServiceTarget().path( ExerciseDataRestService.FIND_BY_EXERCISE_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( List.class );
 	}
 
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseDataImpl > findAllExerciseData()
+	{
+		return getServiceTarget().path( ExerciseDataRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
+	}
+
+	@Override
+	public ExerciseDataImpl findExerciseDataByID( String id )
+	{
+		return getServiceTarget().path( ExerciseDataRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( ExerciseDataImpl.class );
+
+	}
+
 }

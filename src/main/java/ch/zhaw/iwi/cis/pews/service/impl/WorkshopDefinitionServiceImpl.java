@@ -31,7 +31,7 @@ public class WorkshopDefinitionServiceImpl extends WorkshopObjectServiceImpl imp
 	@Override
 	public WorkshopDefinitionImpl findWorkshopDefinitionByID( String id )
 	{
-		return (WorkshopDefinitionImpl)simplifyOwnerInObjectGraph( findByID( id ) );
+		return (WorkshopDefinitionImpl)simplifyOwnerInObjectGraph( workshopDefinitionDao.findByIDWithExerciseDefinitions( id ) );
 	}
 
 	@SuppressWarnings( "unchecked" )

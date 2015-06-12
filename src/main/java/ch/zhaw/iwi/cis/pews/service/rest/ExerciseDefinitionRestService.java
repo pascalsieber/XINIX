@@ -49,7 +49,7 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	@Path( REMOVE )
 	public void remove( ExerciseDefinitionImpl obj )
 	{
-		super.remove( obj );
+		exerciseDefinitionService.removeExerciseDefinition( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )

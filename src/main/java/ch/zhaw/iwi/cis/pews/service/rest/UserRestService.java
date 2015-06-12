@@ -39,7 +39,7 @@ public class UserRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public PrincipalImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return getUserService().findUserByID( id );
 	}
 
 	@POST

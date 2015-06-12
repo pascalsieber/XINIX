@@ -26,4 +26,12 @@ public class CompressionExerciseDataService extends ExerciseDataServiceImpl
 	{
 		return specificDataDao.findByExerciseID( exerciseID );
 	}
+
+	@Override
+	public ExerciseDataImpl findExerciseDataByID( String id )
+	{
+		return specificDataDao.findDataByID(id);
+	}
+	
+	
 }

@@ -7,4 +7,8 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 public interface ExerciseDataService extends WorkshopObjectService
 {
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID );
+
+	public List< ExerciseDataImpl > findAllExerciseData();
+
+	public ExerciseDataImpl findExerciseDataByID( String id );
 }

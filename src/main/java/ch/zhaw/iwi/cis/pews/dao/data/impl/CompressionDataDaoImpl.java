@@ -18,12 +18,34 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements CompressionDataDao
 {
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public ExerciseDataImpl findDataByID( String id )
+	{
+		List< CompressionExerciseData > results = getEntityManager()
+			.createQuery( "select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.id = :_id" )
+			.setParameter( "_id", id )
+			.getResultList();
+		
+		if ( results.size() > 0 )
+		{
+			return results.get( 0 );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< CompressionExerciseData > data = getEntityManager().createQuery(
-			"select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
+		List< CompressionExerciseData > data = getEntityManager()
+			.createQuery(
+				"select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
+			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
@@ -37,8 +59,11 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 		{
 			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( CompressionDefinition.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager().createQuery(
-					"select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + ex.getID() + "' ORDER BY d.timestamp ASC" ).getResultList() );
+				data.addAll( getEntityManager()
+					.createQuery(
+						"select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + ex.getID()
+								+ "' ORDER BY d.timestamp ASC" )
+					.getResultList() );
 			}
 		}
 

@@ -26,4 +26,10 @@ public class You2MeExerciseDataService extends ExerciseDataServiceImpl
 	{
 		return specificDataDao.findByExerciseID( exerciseID );
 	}
+
+	@Override
+	public ExerciseDataImpl findExerciseDataByID( String id )
+	{
+		return specificDataDao.findDataByID( id );
+	}
 }

@@ -43,9 +43,15 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 	}
 
 	@Override
+	public PrincipalImpl findUserByID( String id )
+	{
+		return (PrincipalImpl)simplifyOwnerInObjectGraph( userdao.findUserByID( id ) );
+	}
+
+	@Override
 	public PrincipalImpl findByLoginName( String loginName )
 	{
-		return userdao.findByLoginName( loginName );
+		return (PrincipalImpl)simplifyOwnerInObjectGraph( userdao.findByLoginName( loginName ) );
 	}
 
 	@Override

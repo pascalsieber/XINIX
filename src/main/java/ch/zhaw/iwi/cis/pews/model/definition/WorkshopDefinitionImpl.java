@@ -19,7 +19,7 @@ public class WorkshopDefinitionImpl extends WorkflowElementDefinitionImpl
 	private String name;
 	private String description;
 
-	@OneToMany( cascade = CascadeType.ALL )
+	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workshopDefinition" )
 	private Set< ExerciseDefinitionImpl > exerciseDefinitions;
 
 	public WorkshopDefinitionImpl()
