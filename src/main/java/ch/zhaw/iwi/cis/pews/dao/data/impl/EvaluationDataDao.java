@@ -70,7 +70,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 		for ( ExerciseDataImpl data : existing )
 		{
 			if ( data.getOwner().getID().equals( ( (OwnableObject)object ).getOwner().getID() )
-					&& ( (EvaluationExerciseData)data ).getEvaluation().getSolution().equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution() ) )
+					&& ( (EvaluationExerciseData)data ).getEvaluation().getSolution().getID().equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution().getID() ) )
 			{
 
 				( (EvaluationExerciseData)data ).getEvaluation().getScore().setScore( ( (EvaluationExerciseData)object ).getEvaluation().getScore().getScore() );

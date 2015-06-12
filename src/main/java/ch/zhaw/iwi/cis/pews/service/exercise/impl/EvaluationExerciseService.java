@@ -34,13 +34,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
 	private CompressionDataDao compressionDataDao;
-	private ExerciseDataDao evaluationExerciseDataDao;
+	private ExerciseDataDao evaluationDataDao;
 
 	public EvaluationExerciseService()
 	{
 		super();
 		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDaoImpl.class.getSimpleName() );
-		this.evaluationExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
+		this.evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			{
 				CompressionExerciseDataElement solution = compressionDataDao.findBySolutionAndDescription( evaluation.getSolution(), evaluation.getDescription() );
 
-				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), new Evaluation(
+				evaluationDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), new Evaluation(
 					UserContext.getCurrentUser(),
 					solution,
 					new Score( UserContext.getCurrentUser(), evaluation.getScore() ) ) ) );
@@ -116,7 +116,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			{
 				CompressionExerciseDataElement solution = compressionDataDao.findBySolutionAndDescription( evaluation.getSolution(), evaluation.getDescription() );
 
-				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), new Evaluation( UserContext
+				evaluationDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), new Evaluation( UserContext
 					.getCurrentUser(), solution, new Score( UserContext.getCurrentUser(), evaluation.getScore() ) ) ) );
 
 			}
