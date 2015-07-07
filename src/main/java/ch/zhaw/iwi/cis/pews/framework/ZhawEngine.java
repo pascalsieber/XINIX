@@ -152,7 +152,7 @@ public class ZhawEngine implements LifecycleObject
 		configureRootUser();
 		configureSampleWorkshop();
 		configurePostWorkshop();
-		configureSBBWorkshop();
+		//configureSBBWorkshop();
 
 		System.out.println( "PEWS running and ready to go!" );
 	}
