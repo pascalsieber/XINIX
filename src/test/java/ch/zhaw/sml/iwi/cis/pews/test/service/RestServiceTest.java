@@ -265,7 +265,17 @@ public class RestServiceTest
 			.findByID( defaultWorkshopStub.getID() ) ) ) );
 
 		// session
-		defaultSessionStub.setID( sessionService.persist( new SessionImpl( "session", "test session", null, SessionSynchronizationImpl.SYNCHRONOUS, defaultWorkshopStub, compressionExerciseStub, null, null, null, null ) ) );
+		defaultSessionStub.setID( sessionService.persist( new SessionImpl(
+			"session",
+			"test session",
+			null,
+			SessionSynchronizationImpl.SYNCHRONOUS,
+			defaultWorkshopStub,
+			compressionExerciseStub,
+			null,
+			null,
+			null,
+			null ) ) );
 
 		// set default user's session to newly configured session for testing
 		// also have secondDefaultUser join this session
@@ -391,7 +401,17 @@ public class RestServiceTest
 		assertTrue( wsBefore - workshops.size() == 1 );
 
 		// create session
-		String sessionID = sessionService.persist( new SessionImpl( "session instance", "session description", null, SessionSynchronizationImpl.SYNCHRONOUS, defaultWorkshopStub, null, null, null, null, null ) );
+		String sessionID = sessionService.persist( new SessionImpl(
+			"session instance",
+			"session description",
+			null,
+			SessionSynchronizationImpl.SYNCHRONOUS,
+			defaultWorkshopStub,
+			null,
+			null,
+			null,
+			null,
+			null ) );
 
 		// read session
 		SessionImpl session = sessionService.findByID( sessionID );
@@ -461,7 +481,10 @@ public class RestServiceTest
 		assertTrue( ex.getName().equalsIgnoreCase( "exercise" ) );
 		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
 		assertTrue( ex.getWorkshop().getID().equals( defaultWorkshopStub.getID() ) );
-		assertTrue( ex.getOrderInWorkshop() == 10 );
+		
+		// since exercise is created directly with constructor, as opposed to being created through Jackson Mapper,
+		// orderInWorkshop will be = 0
+		assertTrue( ex.getOrderInWorkshop() == 0 );
 
 		// update exercise instance
 		ex.setName( "updated exercise" );

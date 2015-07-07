@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,28 +108,46 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	 * 
 	 * @see ch.zhaw.iwi.cis.pews.service.impl.WorkshopObjectServiceImpl#persist(ch.zhaw.iwi.cis.pews.model.WorkshopObject)
 	 * 
-	 * overriding this method to handle orderInWorkshop correctly.
+	 * specialized persist method for handling orderInWorkshop correctly.
 	 */
 	@Override
-	public < T extends WorkshopObject > String persist( T object )
+	public String persistExercise( ExerciseImpl exercise )
 	{
-		// assign orderInWorkshop field (back of the row, last exercise)
-		// but only on insert (i.e. persist of new exercise)
-
-		// check if object with ID is available (has been persisted)
-		if ( null == exerciseDao.findById( object.getID() ) )
+		WorkshopImpl workshop = workshopDao.findById( exercise.getWorkshop().getID() );
+		List< String > workshopExerciseIDs = new ArrayList< String >();
+		for ( ExerciseImpl e : workshop.getExercises() )
 		{
-			WorkshopImpl workshop = workshopDao.findById( ( (ExerciseImpl)object ).getWorkshop().getID() );
-			( (ExerciseImpl)object ).setOrderInWorkshop( workshop.getExercises().size() );
+			workshopExerciseIDs.add( e.getID() );
+		}
+
+		// if no argument for orderInWorkshop provided (i.e. null),
+		// place at the end of workshop's exercise queue
+		// else handle order of other exercises
+		if ( exercise.getOrderInWorkshop() == null )
+		{
+			// place at end of queue
+			exercise.setOrderInWorkshop( workshop.getExercises().size() );
+			
+			// special case: if persisting / updating existing exercise and no
+			// argument for orderInWorkshop provided, exercise keeps existing orderInWorkshop
+			ExerciseImpl check = exerciseDao.findById( exercise.getID() );
+			if ( null != check )
+			{
+				exercise.setOrderInWorkshop( check.getOrderInWorkshop() );
+			}
 		}
 		else
 		{
-			// if not null, it means that persist operation is for update
-			// keep existing orderInWorkshop
-			( (ExerciseImpl)object ).setOrderInWorkshop( ( (ExerciseImpl)exerciseDao.findById( object.getID() ) ).getOrderInWorkshop() );
+			// handle order of exercises
+			for ( int i = exercise.getOrderInWorkshop(); i < workshopExerciseIDs.size(); i++ )
+			{
+				ExerciseImpl ex = exerciseDao.findById( workshopExerciseIDs.get( i ) );
+				ex.setOrderInWorkshop( i + 1 );
+				super.persist( ex );
+			}
 		}
 
-		return super.persist( object );
+		return super.persist( exercise );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -137,7 +156,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		return (List< ExerciseImpl >)simplifyOwnerInObjectGraph( findAll() );
 	}
-	
+
 	@Override
 	public ExerciseImpl findExerciseByID( String id )
 	{
@@ -254,8 +273,8 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public List< ExerciseDataImpl > getOutput()
 	{
-		//return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
-		return exerciseDataService.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() ); 
+		// return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+		return exerciseDataService.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
 	@Override
@@ -327,7 +346,5 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	{
 		return (Participant)simplifyOwnerInObjectGraph( participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() ) );
 	}
-
-	
 
 }

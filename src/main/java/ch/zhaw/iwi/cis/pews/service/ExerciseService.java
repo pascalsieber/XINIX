@@ -50,4 +50,6 @@ public interface ExerciseService extends WorkflowElementService
 	public List< ExerciseImpl > findAllExercises();
 
 	public ExerciseImpl findExerciseByID( String id );
+
+	public String persistExercise( ExerciseImpl exercise );
 }

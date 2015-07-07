@@ -151,4 +151,10 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 		return getServiceTarget().path( ExerciseRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( ExerciseImpl.class );
 	}
 
+	@Override
+	public String persistExercise( ExerciseImpl exercise )
+	{
+		return getServiceTarget().path( ExerciseRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exercise ) ).readEntity( String.class );
+	}
+
 }

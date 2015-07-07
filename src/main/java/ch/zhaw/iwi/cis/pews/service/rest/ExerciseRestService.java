@@ -63,7 +63,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	@Path( PERSIST )
 	public String persist( ExerciseImpl obj )
 	{
-		return super.persist( obj );
+		return exerciseService.persistExercise( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )

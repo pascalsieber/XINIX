@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.bind.DatatypeConverter;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -76,6 +77,7 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Ignore("enable in order to run load tests")
 public class LoadTest
 {
 
