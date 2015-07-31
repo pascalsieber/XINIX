@@ -195,7 +195,7 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startWebServer()
 	{
-		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8085 ) );
+		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8888 ) );
 
 		// Setup session ID manager.
 		webServer.setSessionIdManager( new HashSessionIdManager() );
