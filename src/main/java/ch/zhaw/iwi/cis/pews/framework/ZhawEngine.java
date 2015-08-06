@@ -365,7 +365,7 @@ public class ZhawEngine implements LifecycleObject
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			rootUser,
 			"p.i.n.k.elefant Definition",
-			"Definition fÃ¼r p.i.n.k.elefant Workshop",
+			"Definition für p.i.n.k.elefant Workshop",
 			"Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
@@ -379,7 +379,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Willkommen zum p.i.n.k.elefant Workshop",
-			"Der Workshop beginnt in KÃ¼rze." ) );
+			"Der Workshop beginnt in Kürze." ) );
 
 		// workshop end definition
 		String endDefID = exerciseDefinitionService.persist( new PosterDefinition(
@@ -388,7 +388,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Ende des p.i.n.k.elefant Workshops",
-			"Vielen Dank fÃ¼r Ihre Teilnahme." ) );
+			"Vielen Dank für Ihre Teilnahme." ) );
 
 		// pinklabs definition
 		String pinklabsDefID = exerciseDefinitionService.persist( new PinkLabsDefinition(
@@ -413,7 +413,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgewÃ¤hlte Eigenschaften hat?" ) );
+			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgewählte Eigenschaften hat?" ) );
 
 		// xinix image -> used for xinix definition (as part of XinixImageMatrix)
 		List< String > imageUrls = new ArrayList<>();
@@ -440,16 +440,16 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was fÃ¤llt Dir ein zum Thema ENGAGEMENT?",
+			"Was fällt Dir ein zum Thema ENGAGEMENT?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me definition
 		String you2meDefID = exerciseDefinitionService.persist( new You2MeDefinition( rootUser, TimeUnit.MINUTES, 2, (WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ), Arrays
-			.asList( "Was mÃ¶chtests Du gerne lernen?", "Wie kannst DU dies Deinem GegenÃ¼ber beibringen?" ) ) );
+			.asList( "Was möchtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) );
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( rootUser, TimeUnit.SECONDS, 240, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), "Mit welcher Aktion wird das Unternehmen weltberÃ¼hmt?", "mein mimetype" ) );
+			.findByID( wsDefID ), "Mit welcher Aktion wird das Unternehmen weltberühmt?", "mein mimetype" ) );
 
 		// kompression definition
 		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition(
@@ -457,7 +457,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.MINUTES,
 			20,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Erarbeite MassnahmenvorschlÃ¤ge aufgrund des bisherigen Inputs",
+			"Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs",
 			Arrays.asList( "Produkteigenschaften", "Werbung", "Vertriebskanaele" ) ) );
 
 		// evaluation definition
@@ -466,7 +466,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.MINUTES,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Wie bewertest Du diese LÃ¶sungen?",
+			"Wie bewertest Du diese Lösungen?",
 			5 ) );
 
 		// evaluation result definition
@@ -589,7 +589,7 @@ public class ZhawEngine implements LifecycleObject
 			.get( 0 ), new Score( rootUser, 4 ) ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session fÃ¼r p.i.n.k.elefant Workshop", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
 
 		// invitation (so that at least on is there) :)
 		invitationService.persist( new Invitation( rootUser, rootUser, (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -629,7 +629,7 @@ public class ZhawEngine implements LifecycleObject
 		// "root first name",
 		// "root last name",
 		// "pews_root_client/executer@pews" ) );
-		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session fÃ¼r p.i.n.k.elefant Workshop", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService
+		String secondSessionID = sessionService.persist( new SessionImpl( "Zweite Beispiel Session", "Zweite Beispiel Session für p.i.n.k.elefant Workshop", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService
 			.findByID( wsID ), null, null, null, null, null ) );
 		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
@@ -680,7 +680,7 @@ public class ZhawEngine implements LifecycleObject
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			postRootUser,
 			"Post Workshop Definition",
-			"Definition fÃ¼r p.i.n.k.elefant Workshop mit der Post",
+			"Definition für p.i.n.k.elefant Workshop mit der Post",
 			"Massnahmen Begleit-Service Paketdienst im Jahr 2020" ) );
 
 		// workshop instance
@@ -701,7 +701,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Wie kann man dich Ã¼berraschen?" ) );
+			"Wie kann man dich überraschen?" ) );
 
 		// pinklabs definition 3
 		String pinklabsDefID3 = exerciseDefinitionService.persist( new PinkLabsDefinition(
@@ -709,7 +709,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"WofÃ¼r gibst du gerne Geld aus?" ) );
+			"Wofür gibst du gerne Geld aus?" ) );
 
 		// pinklabs definition 4
 		String pinklabsDefID4 = exerciseDefinitionService.persist( new PinkLabsDefinition(
@@ -726,7 +726,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"http://skylla.zhaw.ch/p2p_one_images/single.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmÃ¤ssig zu erledigen?" ) );
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p one iteration 2
 		String p2pOneDefID2 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -735,7 +735,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"http://skylla.zhaw.ch/p2p_one_images/empfangsdame.png",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmÃ¤ssig zu erledigen?" ) );
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p one iteration 3
 		String p2pOneDefID3 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -744,7 +744,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"http://skylla.zhaw.ch/p2p_one_images/hausfrau.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmÃ¤ssig zu erledigen?" ) );
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p one iteration 4
 		String p2pOneDefID4 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -753,7 +753,7 @@ public class ZhawEngine implements LifecycleObject
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"http://skylla.zhaw.ch/p2p_one_images/senioren.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmÃ¤ssig zu erledigen?" ) );
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p two
 		String p2pTwoDefID = exerciseDefinitionService.persist( new P2PTwoDefinition(
@@ -761,7 +761,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Formuliere je eine mÃ¶gliche neue Dienstleistung, welche die Post anbieten kÃ¶nnte." ) );
+			"Formuliere je eine mögliche neue Dienstleistung, welche die Post anbieten könnte." ) );
 
 		// xinix definition iteration 1
 		String xinixDefID1 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -769,7 +769,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was fÃ¤llt dir ein zum Thema Kundenservice in Verbindung mit dem gewÃ¼rfelten Bild?",
+			"Was fällt dir ein zum Thema Kundenservice in Verbindung mit dem gewürfelten Bild?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 2
@@ -778,7 +778,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was fÃ¤llt dir ein zum Thema Paket in Verbindung mit dem gewÃ¼rfelten Bild?",
+			"Was fällt dir ein zum Thema Paket in Verbindung mit dem gewürfelten Bild?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 3
@@ -787,7 +787,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was fÃ¤llt dir ein zum Thema Postbote in Verbindung mit dem gewÃ¼rfelten Bild?",
+			"Was fällt dir ein zum Thema Postbote in Verbindung mit dem gewürfelten Bild?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 4
@@ -796,7 +796,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was fÃ¤llt dir ein zum Thema Jahr 2020 in Verbindung mit dem gewÃ¼rfelten Bild?",
+			"Was fällt dir ein zum Thema Jahr 2020 in Verbindung mit dem gewürfelten Bild?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simple prototyping definition
@@ -844,7 +844,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Willkommen",
-				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden mÃ¶glichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet." ) );
+				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet." ) );
 
 		// intro 2
 		String introDefID2 = exerciseDefinitionService
@@ -854,7 +854,7 @@ public class ZhawEngine implements LifecycleObject
 				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Inspirationsphase",
-				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche KreativitÃ¤tstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu Ã¼berlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
+				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
 
 		String pinklabsIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
@@ -878,7 +878,7 @@ public class ZhawEngine implements LifecycleObject
 			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Post2Paper 2",
-			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleistung mit 1-2 SÃ¤tzen." ) );
+			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleistung mit 1-2 Sätzen." ) );
 
 		String xinixIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
@@ -886,7 +886,7 @@ public class ZhawEngine implements LifecycleObject
 			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"XINIX-Tool",
-			"Nun folgen 4 unterschiedliche Themen. Bitte wÃ¼rfeln und das angezeigte Bild mit dem Thema verknÃ¼pfen. Pro Bild sind mehrere Antworten mÃ¶glich. Du darfst beliebig oft wÃ¼rfeln. " ) );
+			"Nun folgen 4 unterschiedliche Themen. Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln. " ) );
 
 		String simpleprotoIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			postRootUser,
@@ -894,7 +894,7 @@ public class ZhawEngine implements LifecycleObject
 			120,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"Simply Prototyping",
-			"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafÃ¼r ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
+			"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
 
 		// intro 3
 		String introDefID3 = exerciseDefinitionService
@@ -904,7 +904,7 @@ public class ZhawEngine implements LifecycleObject
 				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Kompressionsphase",
-				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurÃ¼ck auf unser Workshop-Thema: <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>. In den nÃ¤chsten 45 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme in mind. 4 SÃ¤tzen.<br/>Erarbeite so viele Massnahmen wie mÃ¶glich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgefÃ¼hrt. DrÃ¼cke Random um den Zufallsgenerator auszulÃ¶sen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet." ) );
+				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>. In den nächsten 45 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme in mind. 4 Sätzen.<br/>Erarbeite so viele Massnahmen wie möglich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgeführt. Drücke Random um den Zufallsgenerator auszulösen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet." ) );
 
 		// intro 4
 		String introDefID4 = exerciseDefinitionService
@@ -914,7 +914,7 @@ public class ZhawEngine implements LifecycleObject
 				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Bewertungsphase",
-				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums 'Umsetzbarkeit bei der Post'.<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemÃ¤ss einer Skala von 1-10." ) );
+				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums 'Umsetzbarkeit bei der Post'.<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10." ) );
 
 		// outro
 		String outroDefID = exerciseDefinitionService.persist( new PosterDefinition(
@@ -1101,7 +1101,7 @@ public class ZhawEngine implements LifecycleObject
 			(WorkshopImpl)workshopService.findByID( wsID ) ) );
 
 		// session
-		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session fÃ¼r p.i.n.k.elefant Workshop mit der Post", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService
+		String sessionID = sessionService.persist( new SessionImpl( "Beispiel Session", "Beispiel Session für p.i.n.k.elefant Workshop mit der Post", null, SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService
 			.findByID( wsID ), null, null, null, null, null ) );
 
 		// configure participants to join session
@@ -1208,8 +1208,8 @@ public class ZhawEngine implements LifecycleObject
 		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
 			sbbRootUser,
 			"SBB Workshop Definition",
-			"Definition fÃ¼r p.i.n.k.elefant Workshop mit der SBB",
-			"Was wÃ¼nsche ich mir am Bahnhof" ) );
+			"Definition für p.i.n.k.elefant Workshop mit der SBB",
+			"Was wünsche ich mir am Bahnhof" ) );
 
 		// workshop instance
 		String wsID = workshopService
@@ -1245,7 +1245,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was wÃ¼rde ich nie online kaufen?" ) );
+			"Was würde ich nie online kaufen?" ) );
 
 		// p2p one iteration 1
 		String p2pOneDefID1 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -1289,7 +1289,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			240,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Formuliere eine mÃ¶gliche neue Dienstleistung, welche dafÃ¼r am Bahnhof angeboten werden kÃ¶nnte. Umschreibe die Dienstleistung mit 1-2 SÃ¤tzen." ) );
+			"Formuliere eine mögliche neue Dienstleistung, welche dafür am Bahnhof angeboten werden könnte. Umschreibe die Dienstleistung mit 1-2 Sätzen." ) );
 
 		// xinix definition iteration 1
 		String xinixDefID1 = exerciseDefinitionService.persist( new XinixDefinition(
@@ -1297,7 +1297,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was bedeutet fÃ¼r mich \"Service\" in Verbindung mit dem gewÃ¼rfelten Bild",
+			"Was bedeutet für mich \"Service\" in Verbindung mit dem gewürfelten Bild",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 2
@@ -1306,7 +1306,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Neue Dienstleistung am Bahnhof in Verbindung mit dem gewÃ¼rfelten Bild",
+			"Neue Dienstleistung am Bahnhof in Verbindung mit dem gewürfelten Bild",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 3
@@ -1315,7 +1315,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was erwartest du vom Bahnhof 2050 in Verbindung mit dem gewÃ¼rfelten Bild?",
+			"Was erwartest du vom Bahnhof 2050 in Verbindung mit dem gewürfelten Bild?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 4
@@ -1324,7 +1324,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			90,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was erwartest du vom Ã–V in Verbindung mit dem gewÃ¼rfelten Bild?",
+			"Was erwartest du vom ÖV in Verbindung mit dem gewürfelten Bild?",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simple prototyping definition
@@ -1337,7 +1337,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.MINUTES,
 			12,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"Was wÃ¼nsche ich mir am Bahnhof?",
+			"Was wünsche ich mir am Bahnhof?",
 			new ArrayList< String >() ) );
 
 		// evaluation definition
@@ -1359,7 +1359,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Willkommen",
-				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Was wÃ¼nsche ich mir am Bahnhof?</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden mÃ¶glichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.<br/>Bitte nimm dir ca. 45 Minuten Zeit, um diesen Workshop durchzuspielen." ) );
+				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Was wünsche ich mir am Bahnhof?</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.<br/>Bitte nimm dir ca. 45 Minuten Zeit, um diesen Workshop durchzuspielen." ) );
 
 		// intro 2
 		String introDefID2 = exerciseDefinitionService
@@ -1369,7 +1369,7 @@ public class ZhawEngine implements LifecycleObject
 				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Inspirationsphase",
-				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche KreativitÃ¤tstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu Ã¼berlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
+				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
 
 		String pinklabsIntroDefID = exerciseDefinitionService.persist( new PosterDefinition(
 			sbbRootUser,
@@ -1401,7 +1401,7 @@ public class ZhawEngine implements LifecycleObject
 			15,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 			"XINIX-Tool",
-			"Nun folgen 4 unterschiedliche Themen.<br/>Bitte wÃ¼rfeln und das angezeigte Bild mit dem Thema verknÃ¼pfen. Pro Bild sind mehrere Antworten mÃ¶glich. Du darfst beliebig oft wÃ¼rfeln." ) );
+			"Nun folgen 4 unterschiedliche Themen.<br/>Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln." ) );
 
 		String simpleprotoIntroDefID = exerciseDefinitionService
 			.persist( new PosterDefinition(
@@ -1410,7 +1410,7 @@ public class ZhawEngine implements LifecycleObject
 				120,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Simply Prototyping",
-				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafÃ¼r ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
+				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
 
 		// intro 3
 		String introDefID3 = exerciseDefinitionService
@@ -1420,7 +1420,7 @@ public class ZhawEngine implements LifecycleObject
 				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Kompressionsphase",
-				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurÃ¼ck auf unser Workshop-Thema: <b>Was wÃ¼nsche ich mir am Bahnhof?</b>.<br/>In den nÃ¤chsten 12 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme<br/>Erarbeite so viele Massnahmen wie mÃ¶glich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgefÃ¼hrt. DrÃ¼cke Random um den Zufallsgenerator auszulÃ¶sen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet." ) );
+				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Was wünsche ich mir am Bahnhof?</b>.<br/>In den nächsten 12 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme<br/>Erarbeite so viele Massnahmen wie möglich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgeführt. Drücke Random um den Zufallsgenerator auszulösen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet." ) );
 
 		// intro 4
 		String introDefID4 = exerciseDefinitionService
@@ -1430,7 +1430,7 @@ public class ZhawEngine implements LifecycleObject
 				30,
 				(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
 				"Bewertungsphase",
-				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums \"Umsetzbarkeit realistisch\".<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemÃ¤ss einer Skala von 1-10." ) );
+				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums \"Umsetzbarkeit realistisch\".<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10." ) );
 
 		// outro
 		String outroDefID = exerciseDefinitionService.persist( new PosterDefinition(
@@ -1622,8 +1622,8 @@ public class ZhawEngine implements LifecycleObject
 		for ( int i = 0; i < 10; i++ )
 		{
 			String sessionID = sessionService.persist( new SessionImpl(
-				"Session fÃ¼r Teilnehmer " + i,
-				"Session fÃ¼r Teilnehmer " + i + " fÃ¼r p.i.n.k.elefant Workshop mit SBB",
+				"Session für Teilnehmer " + i,
+				"Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
 				null,
 				SessionSynchronizationImpl.SYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
 
@@ -1642,8 +1642,8 @@ public class ZhawEngine implements LifecycleObject
 		for ( int i = 0; i < 2; i++ )
 		{
 			String sessionID = sessionService.persist( new SessionImpl(
-				"Asynchrone Session fÃ¼r Teilnehmer " + i,
-				"Asynchrone Session fÃ¼r Teilnehmer " + i + " fÃ¼r p.i.n.k.elefant Workshop mit SBB",
+				"Asynchrone Session für Teilnehmer " + i,
+				"Asynchrone Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
 				null,
 				SessionSynchronizationImpl.ASYNCHRONOUS, (WorkshopImpl)workshopService.findByID( wsID ), null, null, null, null, null ) );
 
