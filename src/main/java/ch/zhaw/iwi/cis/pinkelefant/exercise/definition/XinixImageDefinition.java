@@ -18,13 +18,11 @@ public class XinixImageDefinition extends ExerciseDefinitionImpl
 	public XinixImageDefinition()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public XinixImageDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
+	public XinixImageDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, boolean timed, boolean sharing, boolean skippable )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
-		// TODO Auto-generated constructor stub
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 	}
 
 }

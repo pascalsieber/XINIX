@@ -191,12 +191,39 @@ public class RestServiceTest
 		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
 
 		// exercise definitions
-		posterDefinitionStub.setID( exerciseDefinitionService.persist( new PosterDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "start", "start description" ) ) );
-		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "pinklabs?" ) ) );
-		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "urltopicture", "theme" ) ) );
-		p2ptwoDefinitionStub.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, "question?" ) ) );
+		posterDefinitionStub.setID( exerciseDefinitionService.persist( new PosterDefinition(
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			120,
+			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false,
+			"start",
+			"start description" ) ) );
+		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsDefinition(
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			120,
+			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false,
+			"pinklabs?" ) ) );
+		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition(
+			defaultUserStub,
+			TimeUnit.SECONDS,
+			120,
+			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false,
+			"urltopicture",
+			"theme" ) ) );
+		p2ptwoDefinitionStub
+			.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, false, false, false, "question?" ) ) );
 
-		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, Arrays.asList(
+		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, false, false, false, Arrays.asList(
 			"question?",
 			"counter question?" ) ) ) );
 
@@ -205,6 +232,9 @@ public class RestServiceTest
 			TimeUnit.MINUTES,
 			2,
 			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false,
 			"prototyping question",
 			"my mimetype" ) ) );
 
@@ -213,24 +243,45 @@ public class RestServiceTest
 			TimeUnit.HOURS,
 			1,
 			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false,
 			"compression question",
 			Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
 
-		evaluationDefinitionStub
-			.setID( exerciseDefinitionService.persist( new EvaluationDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub, "evaluation question", 3 ) ) );
+		evaluationDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationDefinition(
+			defaultUserStub,
+			TimeUnit.MINUTES,
+			10,
+			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false,
+			"evaluation question",
+			3 ) ) );
 
-		evaluationResultDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationResultDefinition( defaultUserStub, TimeUnit.MINUTES, 10, defaultWorkshopDefinitionStub ) ) );
+		evaluationResultDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationResultDefinition(
+			defaultUserStub,
+			TimeUnit.MINUTES,
+			10,
+			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false ) ) );
 
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		List< XinixImage > images = new ArrayList<>();
 		images.add( (XinixImage)exerciseDataService.findByID( xinixImageStub.getID() ) );
-		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrix( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, images ) ) );
+		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrix( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, false, false, false, images ) ) );
 
 		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition(
 			defaultUserStub,
 			TimeUnit.SECONDS,
 			60,
 			defaultWorkshopDefinitionStub,
+			false,
+			false,
+			false,
 			"xinix question",
 			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
 
@@ -442,7 +493,7 @@ public class RestServiceTest
 	public void crudOperationsExerciseService()
 	{
 		// create exercise definition
-		String exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.MINUTES, 2, defaultWorkshopDefinitionStub, "question" ) );
+		String exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.MINUTES, 2, defaultWorkshopDefinitionStub, false, false, false, "question" ) );
 
 		// read exercise definition
 		ExerciseDefinitionImpl exDef = exerciseDefinitionService.findByID( exDefID );
@@ -481,7 +532,7 @@ public class RestServiceTest
 		assertTrue( ex.getName().equalsIgnoreCase( "exercise" ) );
 		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
 		assertTrue( ex.getWorkshop().getID().equals( defaultWorkshopStub.getID() ) );
-		
+
 		// since exercise is created directly with constructor, as opposed to being created through Jackson Mapper,
 		// orderInWorkshop will be = 0
 		assertTrue( ex.getOrderInWorkshop() == 0 );

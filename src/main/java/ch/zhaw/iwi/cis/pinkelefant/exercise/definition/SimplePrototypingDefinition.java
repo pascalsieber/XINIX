@@ -22,9 +22,18 @@ public class SimplePrototypingDefinition extends ExerciseDefinitionImpl
 		super();
 	}
 
-	public SimplePrototypingDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, String mimeType )
+	public SimplePrototypingDefinition(
+			PrincipalImpl owner,
+			TimeUnit timeUnit,
+			int duration,
+			WorkshopDefinitionImpl workshopDefinition,
+			boolean timed,
+			boolean sharing,
+			boolean skippable,
+			String question,
+			String mimeType )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
 		this.mimeType = mimeType;
 	}

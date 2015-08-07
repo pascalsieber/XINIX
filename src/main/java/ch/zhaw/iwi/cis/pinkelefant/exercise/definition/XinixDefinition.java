@@ -25,9 +25,18 @@ public class XinixDefinition extends ExerciseDefinitionImpl
 		super();
 	}
 
-	public XinixDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, XinixImageMatrix images )
+	public XinixDefinition(
+			PrincipalImpl owner,
+			TimeUnit timeUnit,
+			int duration,
+			WorkshopDefinitionImpl workshopDefinition,
+			boolean timed,
+			boolean sharing,
+			boolean skippable,
+			String question,
+			XinixImageMatrix images )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
 		this.images = images;
 	}

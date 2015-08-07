@@ -28,9 +28,17 @@ public class XinixImageMatrix extends ExerciseDefinitionImpl
 		this.xinixImages = new ArrayList<>();
 	}
 
-	public XinixImageMatrix( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, List< XinixImage > xinixImages )
+	public XinixImageMatrix(
+			PrincipalImpl owner,
+			TimeUnit timeUnit,
+			int duration,
+			WorkshopDefinitionImpl workshopDefinition,
+			boolean timed,
+			boolean sharing,
+			boolean skippable,
+			List< XinixImage > xinixImages )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.xinixImages = xinixImages;
 	}
 

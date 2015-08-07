@@ -12,8 +12,8 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 @Entity
 public class EvaluationResultDefinition extends ExerciseDefinitionImpl
 {
-	
-	@Transient	
+
+	@Transient
 	private static final long serialVersionUID = 1L;
 
 	public EvaluationResultDefinition()
@@ -21,9 +21,9 @@ public class EvaluationResultDefinition extends ExerciseDefinitionImpl
 		super();
 	}
 
-	public EvaluationResultDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
+	public EvaluationResultDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, boolean timed, boolean sharing, boolean skippable )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 	}
 
 }
