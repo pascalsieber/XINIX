@@ -19,12 +19,11 @@ public class PinkLabsDefinition extends ExerciseDefinitionImpl
 	public PinkLabsDefinition()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public PinkLabsDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question )
+	public PinkLabsDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, boolean timed, boolean sharing, boolean skippable, String question )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
 	}
 

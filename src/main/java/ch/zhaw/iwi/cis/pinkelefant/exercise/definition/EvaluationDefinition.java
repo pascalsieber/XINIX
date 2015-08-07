@@ -22,9 +22,18 @@ public class EvaluationDefinition extends ExerciseDefinitionImpl
 		super();
 	}
 
-	public EvaluationDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, int numberOfVotes )
+	public EvaluationDefinition(
+			PrincipalImpl owner,
+			TimeUnit timeUnit,
+			int duration,
+			WorkshopDefinitionImpl workshopDefinition,
+			boolean timed,
+			boolean sharing,
+			boolean skippable,
+			String question,
+			int numberOfVotes )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
 		this.numberOfVotes = numberOfVotes;
 	}

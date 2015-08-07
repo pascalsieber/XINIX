@@ -18,7 +18,7 @@ public class CompressionDefinition extends ExerciseDefinitionImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String question;
-	
+
 	@ElementCollection
 	private List< String > solutionCriteria;
 
@@ -28,9 +28,18 @@ public class CompressionDefinition extends ExerciseDefinitionImpl
 		this.solutionCriteria = new ArrayList<>();
 	}
 
-	public CompressionDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String question, List< String > solutionCriteria )
+	public CompressionDefinition(
+			PrincipalImpl owner,
+			TimeUnit timeUnit,
+			int duration,
+			WorkshopDefinitionImpl workshopDefinition,
+			boolean timed,
+			boolean sharing,
+			boolean skippable,
+			String question,
+			List< String > solutionCriteria )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
 		this.solutionCriteria = solutionCriteria;
 	}

@@ -28,9 +28,17 @@ public class You2MeDefinition extends ExerciseDefinitionImpl
 		this.questions = new ArrayList<>();
 	}
 
-	public You2MeDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, List< String > questions )
+	public You2MeDefinition(
+			PrincipalImpl owner,
+			TimeUnit timeUnit,
+			int duration,
+			WorkshopDefinitionImpl workshopDefinition,
+			boolean timed,
+			boolean sharing,
+			boolean skippable,
+			List< String > questions )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.questions = questions;
 	}
 

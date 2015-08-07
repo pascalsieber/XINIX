@@ -15,6 +15,9 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 	private static final long serialVersionUID = 1L;
 	private TimeUnit timeUnit;
 	private int duration;
+	private boolean timed;
+	private boolean sharing;
+	private boolean skippable;
 
 	@ManyToOne
 	private WorkshopDefinitionImpl workshopDefinition;
@@ -24,12 +27,15 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 		super();
 	}
 
-	public ExerciseDefinitionImpl( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition )
+	public ExerciseDefinitionImpl( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, boolean timed, boolean sharing, boolean skippable )
 	{
 		super( owner );
 		this.timeUnit = timeUnit;
 		this.duration = duration;
 		this.workshopDefinition = workshopDefinition;
+		this.timed = timed;
+		this.sharing = sharing;
+		this.skippable = skippable;
 	}
 
 	public TimeUnit getTimeUnit()
@@ -60,6 +66,36 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 	public void setWorkshopDefinition( WorkshopDefinitionImpl workshopDefinition )
 	{
 		this.workshopDefinition = workshopDefinition;
+	}
+
+	public boolean isTimed()
+	{
+		return timed;
+	}
+
+	public void setTimed( boolean timed )
+	{
+		this.timed = timed;
+	}
+
+	public boolean isSharing()
+	{
+		return sharing;
+	}
+
+	public void setSharing( boolean sharing )
+	{
+		this.sharing = sharing;
+	}
+
+	public boolean isSkippable()
+	{
+		return skippable;
+	}
+
+	public void setSkippable( boolean skippable )
+	{
+		this.skippable = skippable;
 	}
 
 }

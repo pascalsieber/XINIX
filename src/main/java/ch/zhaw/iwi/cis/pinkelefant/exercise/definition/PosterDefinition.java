@@ -25,9 +25,18 @@ public class PosterDefinition extends ExerciseDefinitionImpl
 		super();
 	}
 
-	public PosterDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, String title, String description )
+	public PosterDefinition(
+			PrincipalImpl owner,
+			TimeUnit timeUnit,
+			int duration,
+			WorkshopDefinitionImpl workshopDefinition,
+			boolean timed,
+			boolean sharing,
+			boolean skippable,
+			String title,
+			String description )
 	{
-		super( owner, timeUnit, duration, workshopDefinition );
+		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.title = title;
 		this.description = description;
 	}
