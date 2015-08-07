@@ -416,7 +416,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://oncampusadvertising.com/blog/wp-content/uploads/2014/11/college-students-using-smartphones-and-tablets.jpg",
+			"http://192.168.1.200/p2p_one_images/college-students-using-smartphones-and-tablets.jpg",
 			"Benenne EIGENSCHAFTEN oder BEDUERFNISSE der Anspruchsgruppe auf dem Bild" ) );
 
 		// p2ptwo definition
@@ -434,7 +434,7 @@ public class ZhawEngine implements LifecycleObject
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( "http://skylla.zhaw.ch/xinix_images/xinix_img_" + i + ".jpg" );
+			imageUrls.add( "http://192.168.1.200/xinix_images/xinix_img_" + i + ".jpg" );
 		}
 
 		XINIX_IMAGES = new ArrayList<>();
