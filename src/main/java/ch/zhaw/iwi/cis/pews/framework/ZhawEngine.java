@@ -416,7 +416,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://192.168.1.200/p2p_one_images/college-students-using-smartphones-and-tablets.jpg",
+			"http://192.168.1.200/images/college-students-using-smartphones-and-tablets.jpg",
 			"Benenne EIGENSCHAFTEN oder BEDUERFNISSE der Anspruchsgruppe auf dem Bild" ) );
 
 		// p2ptwo definition
@@ -428,7 +428,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgew√§hlte Eigenschaften hat?" ) );
+			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgew‰hlte Eigenschaften hat?" ) );
 
 		// xinix image -> used for xinix definition (as part of XinixImageMatrix)
 		List< String > imageUrls = new ArrayList<>();
@@ -787,12 +787,11 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/single.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 			true,
 			true,
 			false,
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm√§ssig zu erledigen?" ) );
+			"http://192.168.1.200/images/single.jpg",
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p one iteration 2
 		String p2pOneDefID2 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -800,11 +799,10 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/empfangsdame.png",
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/empfangsdame.png",
+			"http://192.168.1.200/images/empfangsdame.png",
 			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p one iteration 3
@@ -813,11 +811,10 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/hausfrau.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 			true,
 			true,
 			false,
+			"http://192.168.1.200/images/hausfrau.jpg",
 			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p one iteration 4
@@ -826,11 +823,10 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/senioren.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 			true,
 			true,
 			false,
+			"http://192.168.1.200/images/senioren.jpg",
 			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p two
@@ -1407,11 +1403,10 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/familie.jpg",
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/familie.jpg",
+			"http://192.168.1.200/images/familie.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 2
@@ -1420,10 +1415,10 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/senioren.jpg",
 			true,
 			true,
 			false,
+			"http://192.168.1.200/images/senioren.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 3
@@ -1432,10 +1427,10 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/business.jpg",
 			true,
 			true,
 			false,
+			"http://192.168.1.200/images/business.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 4
@@ -1444,10 +1439,10 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/images/schueler.jpg",
 			true,
 			true,
 			false,
+			"http://192.168.1.200/images/schueler.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p two
