@@ -419,7 +419,7 @@ public class ZhawEngine implements LifecycleObject
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( "http://192.168.1.200/xinix_images/xinix_img_" + i + ".jpg" );
+			imageUrls.add( "http://192.168.1.200/images/xinix_img_" + i + ".jpg" );
 		}
 
 		XINIX_IMAGES = new ArrayList<>();
@@ -725,7 +725,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/single.jpg",
+			"http://192.168.1.200/images/single.jpg",
 			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p one iteration 2
@@ -734,7 +734,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/empfangsdame.png",
+			"http://192.168.1.200/images/empfangsdame.png",
 			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p one iteration 3
@@ -743,7 +743,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/hausfrau.jpg",
+			"http://192.168.1.200/images/hausfrau.jpg",
 			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p one iteration 4
@@ -752,7 +752,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/senioren.jpg",
+			"http://192.168.1.200/images/senioren.jpg",
 			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?" ) );
 
 		// p2p two
@@ -1253,7 +1253,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/familie.jpg",
+			"http://192.168.1.200/images/familie.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 2
@@ -1262,7 +1262,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/senioren.jpg",
+			"http://192.168.1.200/images/senioren.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 3
@@ -1271,7 +1271,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/business.jpg",
+			"http://192.168.1.200/images/business.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 4
@@ -1280,7 +1280,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			60,
 			(WorkshopDefinitionImpl)workshopDefinitionService.findByID( wsDefID ),
-			"http://192.168.1.200/p2p_one_images/schueler.jpg",
+			"http://192.168.1.200/images/schueler.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p two
