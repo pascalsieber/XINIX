@@ -69,11 +69,11 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 				sumOfScores += score;
 			}
 			idsOfEvaluatedCompressionElements.add( entry.getKey().getID() );
+
+			double avgScore = (double)sumOfScores / (double)entry.getValue().size();
+
 			input.getResults().add(
-				new EvaluationResultObject(
-					new CompressionInputElement( entry.getKey().getID(), entry.getKey().getSolution(), entry.getKey().getDescription() ),
-					sumOfScores / entry.getValue().size(),
-					entry.getValue().size() ) );
+				new EvaluationResultObject( new CompressionInputElement( entry.getKey().getID(), entry.getKey().getSolution(), entry.getKey().getDescription() ), avgScore, entry.getValue().size() ) );
 		}
 
 		// add solutions which have not been evaluated
