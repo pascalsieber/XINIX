@@ -416,7 +416,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://192.168.1.200/p2p_one_images/college-students-using-smartphones-and-tablets.jpg",
+			"http://192.168.1.200/images/college-students-using-smartphones-and-tablets.jpg",
 			"Benenne EIGENSCHAFTEN oder BEDUERFNISSE der Anspruchsgruppe auf dem Bild" ) );
 
 		// p2ptwo definition
@@ -428,13 +428,13 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgew√§hlte Eigenschaften hat?" ) );
+			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgew‰hlte Eigenschaften hat?" ) );
 
 		// xinix image -> used for xinix definition (as part of XinixImageMatrix)
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( "http://192.168.1.200/xinix_images/xinix_img_" + i + ".jpg" );
+			imageUrls.add( "http://192.168.1.200/images/xinix_img_" + i + ".jpg" );
 		}
 
 		XINIX_IMAGES = new ArrayList<>();
@@ -790,8 +790,8 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/single.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm√§ssig zu erledigen?" ) );
+			"http://192.168.1.200/images/single.jpg",
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p one iteration 2
 		String p2pOneDefID2 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -802,8 +802,8 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/empfangsdame.png",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm√§ssig zu erledigen?" ) );
+			"http://192.168.1.200/images/empfangsdame.png",
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p one iteration 3
 		String p2pOneDefID3 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -814,8 +814,8 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/hausfrau.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm√§ssig zu erledigen?" ) );
+			"http://192.168.1.200/images/hausfrau.jpg",
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p one iteration 4
 		String p2pOneDefID4 = exerciseDefinitionService.persist( new P2POneDefinition(
@@ -826,8 +826,8 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/senioren.jpg",
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelm√§ssig zu erledigen?" ) );
+			"http://192.168.1.200/images/senioren.jpg",
+			"Welche Dinge haben folgende Personen in ihrem Alltag regelm‰ssig zu erledigen?" ) );
 
 		// p2p two
 		String p2pTwoDefID = exerciseDefinitionService.persist( new P2PTwoDefinition(
@@ -1406,7 +1406,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/familie.jpg",
+			"http://192.168.1.200/images/familie.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 2
@@ -1418,7 +1418,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/senioren.jpg",
+			"http://192.168.1.200/images/senioren.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 3
@@ -1430,7 +1430,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/business.jpg",
+			"http://192.168.1.200/images/business.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p one iteration 4
@@ -1442,7 +1442,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			false,
-			"http://skylla.zhaw.ch/p2p_one_images/schueler.jpg",
+			"http://192.168.1.200/images/schueler.jpg",
 			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)" ) );
 
 		// p2p two
