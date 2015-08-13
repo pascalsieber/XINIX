@@ -92,7 +92,7 @@
 			classpathref="libs.main"
 			debug="on"
 			debuglevel="lines,vars,source"
-			encoding="iso-8859-1"/>
+			encoding="UTF-8"/>
 	</target>
 
 	<target name="package.main" depends="compile.main">
@@ -114,7 +114,7 @@
 			classpathref="libs.test"
 			debug="on"
 			debuglevel="lines,vars,source"
-			encoding="iso-8859-1"/>
+			encoding="UTF-8"/>
 	</target>
 
 	<target name="package.test" depends="compile.test, package.main">
