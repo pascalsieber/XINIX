@@ -846,7 +846,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( rootUser, TimeUnit.SECONDS, 240, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), true, true, true, "Mit welcher Aktion wird das Unternehmen weltberühmt?", "mein mimetype" ) );
+			.findByID( wsDefID ), false, true, true, "Mit welcher Aktion wird das Unternehmen weltberühmt?", "mein mimetype" ) );
 
 		// kompression definition
 		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition(
