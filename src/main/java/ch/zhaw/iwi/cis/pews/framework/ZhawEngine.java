@@ -1027,18 +1027,18 @@ public class ZhawEngine implements LifecycleObject
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
 
 		// invitations, in case we show user profile
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo2ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo2ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo3ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo3ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo2ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo2ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo3ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo3ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+//		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
 
 		sessionService.start( sessionID );
 		sessionService.start( asyncSessionID );
