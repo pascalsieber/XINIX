@@ -731,7 +731,7 @@ public class ZhawEngine implements LifecycleObject
 		UserImpl demoRootUser = userService.findByID( userService.persist( user ) );
 
 		// sample workshop definition (pinkelefant)
-		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition( rootUser, "p.i.n.k.elefant Demo", "Demo für p.i.n.k.elefant Workshop", "Produkteinfuehrung Teekocher" ) );
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition( rootUser, "p.i.n.k.elefant Demo", "Demo für p.i.n.k.elefant Workshop", "Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?" ) );
 
 		// sample workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "p.i.n.k.elefant Workshop", "Demo p.i.n.k.elefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
@@ -793,7 +793,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			true,
 			true,
-			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgew�hlte Eigenschaften hat?" ) );
+			"Wie kann einer Person erfolgreich kommuniziert werden, welche zwei ausgewählte Eigenschaften hat?" ) );
 
 		// xinix image -> used for xinix definition (as part of XinixImageMatrix)
 		List< String > imageUrls = new ArrayList<>();
@@ -847,7 +847,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingDefinition( rootUser, TimeUnit.SECONDS, 240, (WorkshopDefinitionImpl)workshopDefinitionService
-			.findByID( wsDefID ), false, true, true, "Mit welcher Aktion wird das Unternehmen weltberühmt?", "mein mimetype" ) );
+			.findByID( wsDefID ), false, true, true, "Mache ein Selfie und lade es hoch.", "mein mimetype" ) );
 
 		// kompression definition
 		String compressionDefID = exerciseDefinitionService.persist( new CompressionDefinition(
