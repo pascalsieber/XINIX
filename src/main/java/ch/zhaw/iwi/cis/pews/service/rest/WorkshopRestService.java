@@ -24,6 +24,7 @@ public class WorkshopRestService extends WorkshopObjectRestService
 
 	public static final String START = "/start";
 	public static final String STOP = "/stop";
+	public static final String RESET = "/resetByID";
 
 	private WorkshopService workshopService;
 
@@ -75,6 +76,13 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public void stopWorkshop( String workshopID )
 	{
 		workshopService.stop( workshopID );
+	}
+
+	@POST
+	@Path( RESET )
+	public void resetWorkshop( String workshopID )
+	{
+		workshopService.reset( workshopID );
 	}
 
 	@Override
