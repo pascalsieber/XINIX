@@ -746,7 +746,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			true,
 			true,
-			"Willkommen zum p.i.n.k.elefant Workshop",
+			"Willkommen zum p.i.n.k.elefant Workshop. Es soll die folgende Frage beantwortet werden: \"Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?\"",
 			"Der Workshop beginnt in Kürze." ) );
 
 		// workshop end definition
@@ -859,7 +859,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			"Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs",
-			Arrays.asList( "Produkteigenschaften", "Werbung", "Vertriebskanaele" ) ) );
+			Arrays.asList( "Messbarkeit", "Effektivität", "Effizienz" ) ) );
 
 		// evaluation definition
 		String evaluationDefID = exerciseDefinitionService.persist( new EvaluationDefinition(
