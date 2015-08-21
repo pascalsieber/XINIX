@@ -26,7 +26,8 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	public ExerciseDataImpl findDataByID( String id )
 	{
 		List< EvaluationExerciseData > results = getEntityManager()
-			.createQuery( "select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.id = :_id" )
+			.createQuery(
+				"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();
 
@@ -46,7 +47,8 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	{
 		List< EvaluationExerciseData > data = getEntityManager()
 			.createQuery(
-				"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
+				"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '"
+						+ exerciseID + "' ORDER BY d.timestamp ASC" )
 			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
@@ -58,7 +60,9 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 		List< EvaluationExerciseData > data = new ArrayList<>();
 
 		// check for null pointer on UserContext.getCurrentUser().getSession()
-		// this is the case at startup of ZhawEngine -> we simply return an empty list since no evaluationExerciseData present at startup of ZhawEngine
+		// this is the case at startup of ZhawEngine -> we simply return an
+		// empty list since no evaluationExerciseData present at startup of
+		// ZhawEngine
 		// TODO: might want to find better way to catch this error
 
 		if ( null == UserContext.getCurrentUser().getSession() )
@@ -68,18 +72,25 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationDefinition.class.getSimpleName() ) )
+			if ( ex
+				.getDefinition()
+				.getClass()
+				.getSimpleName()
+				.equalsIgnoreCase( EvaluationDefinition.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager()
-					.createQuery(
-						"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + ex.getID()
-								+ "' ORDER BY d.timestamp ASC" )
-					.getResultList() );
+				data
+					.addAll( getEntityManager()
+						.createQuery(
+							"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '"
+									+ ex.getID() + "' ORDER BY d.timestamp ASC" )
+						.getResultList() );
 			}
 		}
 
-		// TODO: using somewhat of a hack / not so nice solution. using this because query returns all results twice (due to relation product)
-		HashSet< ExerciseDataImpl > dataSet = new HashSet< ExerciseDataImpl >( (List< ExerciseDataImpl >)cloneResult( data ) );
+		// TODO: using somewhat of a hack / not so nice solution. using this
+		// because query returns all results twice (due to relation product)
+		HashSet< ExerciseDataImpl > dataSet = new HashSet< ExerciseDataImpl >(
+			(List< ExerciseDataImpl >)cloneResult( data ) );
 		List< ExerciseDataImpl > result = new ArrayList< ExerciseDataImpl >();
 		result.addAll( dataSet );
 		return result;
@@ -88,16 +99,29 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	@Override
 	public < T extends WorkshopObject > String persist( T object )
 	{
-		// evaluations by a specific user for an existing solution need to be updated (overwritten) rather than added
+		// evaluations by a specific user for an existing solution need to be
+		// updated (overwritten) rather than added
 		List< ExerciseDataImpl > existing = findByWorkshopAndExerciseDataClass( Evaluation.class );
 
 		for ( ExerciseDataImpl data : existing )
 		{
 			if ( data.getOwner().getID().equals( ( (OwnableObject)object ).getOwner().getID() )
-					&& ( (EvaluationExerciseData)data ).getEvaluation().getSolution().equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution() ) )
+					&& ( (EvaluationExerciseData)data )
+						.getEvaluation()
+						.getSolution()
+						.getSolution()
+						.equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution().getSolution() )
+					&& ( (EvaluationExerciseData)data )
+						.getEvaluation()
+						.getSolution()
+						.getDescription()
+						.equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution().getDescription() ) )
 			{
 
-				( (EvaluationExerciseData)data ).getEvaluation().getScore().setScore( ( (EvaluationExerciseData)object ).getEvaluation().getScore().getScore() );
+				( (EvaluationExerciseData)data )
+					.getEvaluation()
+					.getScore()
+					.setScore( ( (EvaluationExerciseData)object ).getEvaluation().getScore().getScore() );
 				return super.persist( data );
 			}
 
@@ -106,5 +130,4 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 		return super.persist( object );
 
 	}
-
 }
