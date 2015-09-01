@@ -35,9 +35,8 @@ public class WorkflowElementImpl extends WorkshopObject
 	private String currentState;
 
 	@ManyToOne
-	private WorkflowElementDefinitionImpl definition;
+	private WorkflowElementDefinitionImpl derivedFrom;
 
-	
 	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workflowElement" )
 	private List< WorkflowElementDataImpl > data;
 
@@ -50,12 +49,12 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.elapsedSeconds = 0;
 	}
 
-	public WorkflowElementImpl( String name, String description, WorkflowElementDefinitionImpl definition )
+	public WorkflowElementImpl( String name, String description, WorkflowElementDefinitionImpl derivedFrom )
 	{
 		this.name = name;
 		this.description = description;
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
-		this.definition = definition;
+		this.derivedFrom = derivedFrom;
 		this.data = new ArrayList< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 		this.elapsedSeconds = 0;
@@ -102,14 +101,14 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.currentState = currentState.toString();
 	}
 
-	public WorkflowElementDefinitionImpl getDefinition()
+	public WorkflowElementDefinitionImpl getDerivedFrom()
 	{
-		return definition;
+		return derivedFrom;
 	}
 
-	public void setDefinition( WorkflowElementDefinitionImpl definition )
+	public void setDerivedFrom( WorkflowElementDefinitionImpl derivedFrom )
 	{
-		this.definition = definition;
+		this.derivedFrom = derivedFrom;
 	}
 
 	public List< WorkflowElementDataImpl > getData()

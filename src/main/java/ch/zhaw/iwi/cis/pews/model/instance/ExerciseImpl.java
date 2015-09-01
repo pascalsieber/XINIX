@@ -31,9 +31,9 @@ public class ExerciseImpl extends WorkflowElementImpl
 		this.participants = new HashSet< PrincipalImpl >();
 	}
 
-	public ExerciseImpl( String name, String description, WorkflowElementDefinitionImpl definition, WorkshopImpl workshop )
+	public ExerciseImpl( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop )
 	{
-		super( name, description, definition );
+		super( name, description, derivedFrom );
 		this.workshop = workshop;
 		this.participants = new HashSet< PrincipalImpl >();
 		this.orderInWorkshop = workshop.getExercises().size();
