@@ -13,10 +13,10 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = P2POneDefinition.class )
+@ExerciseSpecificService( exerciseDefinition = P2POneTemplate.class )
 public class P2POneExerciseService extends ExerciseServiceImpl
 {
 
@@ -28,7 +28,7 @@ public class P2POneExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		P2POneDefinition definition = (P2POneDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
+		P2POneTemplate definition = (P2POneTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		return new P2POneInput( definition.getPicture(), definition.getQuestion() );
 	}
 
@@ -37,7 +37,7 @@ public class P2POneExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		P2POneDefinition definition = (P2POneDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		P2POneTemplate definition = (P2POneTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
 		return new P2POneInput( definition.getPicture(), definition.getQuestion() );
 	}
 

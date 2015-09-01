@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 public class You2MeExercise extends ExerciseImpl
@@ -25,7 +25,7 @@ public class You2MeExercise extends ExerciseImpl
 		super();
 	}
 
-	public You2MeExercise( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop, List< String > questions )
+	public You2MeExercise( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop, List< String > questions )
 	{
 		super( name, description, derivedFrom, workshop );
 		this.questions = questions;

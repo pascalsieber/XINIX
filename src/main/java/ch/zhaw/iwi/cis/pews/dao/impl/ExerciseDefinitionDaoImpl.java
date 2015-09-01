@@ -5,7 +5,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseDefinitionDaoImpl extends WorkshopObjectDaoImpl implements ExerciseDefinitionDao
@@ -14,7 +14,7 @@ public class ExerciseDefinitionDaoImpl extends WorkshopObjectDaoImpl implements 
 	@Override
 	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
-		return ExerciseDefinitionImpl.class;
+		return ExerciseTemplate.class;
 	}
 
 }

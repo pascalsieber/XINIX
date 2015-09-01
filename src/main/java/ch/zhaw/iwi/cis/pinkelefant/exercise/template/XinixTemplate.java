@@ -1,41 +1,44 @@
-package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
+package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class SimplePrototypingDefinition extends ExerciseDefinitionImpl
+public class XinixTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String question;
-	private String mimeType;
 
-	public SimplePrototypingDefinition()
+	@ManyToOne
+	private XinixImageMatrixTemplate images;
+
+	public XinixTemplate()
 	{
 		super();
 	}
 
-	public SimplePrototypingDefinition(
+	public XinixTemplate(
 			PrincipalImpl owner,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopDefinitionImpl workshopDefinition,
+			WorkshopTemplate workshopDefinition,
 			boolean timed,
 			boolean sharing,
 			boolean skippable,
 			String question,
-			String mimeType )
+			XinixImageMatrixTemplate images )
 	{
 		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
-		this.mimeType = mimeType;
+		this.images = images;
 	}
 
 	public String getQuestion()
@@ -48,19 +51,14 @@ public class SimplePrototypingDefinition extends ExerciseDefinitionImpl
 		this.question = question;
 	}
 
-	public String getMimeType()
+	public XinixImageMatrixTemplate getImages()
 	{
-		return mimeType;
+		return images;
 	}
 
-	public void setMimeType( String mimeType )
+	public void setImages( XinixImageMatrixTemplate images )
 	{
-		this.mimeType = mimeType;
-	}
-
-	public static long getSerialversionuid()
-	{
-		return serialVersionUID;
+		this.images = images;
 	}
 
 }

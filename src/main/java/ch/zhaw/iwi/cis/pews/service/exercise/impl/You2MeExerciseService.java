@@ -14,10 +14,10 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = You2MeDefinition.class )
+@ExerciseSpecificService( exerciseDefinition = You2MeTemplate.class )
 public class You2MeExerciseService extends ExerciseServiceImpl
 {
 
@@ -29,14 +29,14 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		You2MeDefinition definition = (You2MeDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
+		You2MeTemplate definition = (You2MeTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		return new You2MeInput( new ArrayList<>( definition.getQuestions() ) );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		You2MeDefinition definition = (You2MeDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		You2MeTemplate definition = (You2MeTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
 		return new You2MeInput( new ArrayList<>( definition.getQuestions() ) );
 	}
 

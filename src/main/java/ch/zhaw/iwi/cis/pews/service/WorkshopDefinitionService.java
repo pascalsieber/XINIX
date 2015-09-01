@@ -2,13 +2,13 @@ package ch.zhaw.iwi.cis.pews.service;
 
 import java.util.List;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 
 public interface WorkshopDefinitionService extends WorkshopObjectService
 {
 
-	WorkshopDefinitionImpl findWorkshopDefinitionByID( String id );
+	WorkshopTemplate findWorkshopDefinitionByID( String id );
 
-	List< WorkshopDefinitionImpl > findAllWorkshopDefinitions();
+	List< WorkshopTemplate > findAllWorkshopDefinitions();
 
 }

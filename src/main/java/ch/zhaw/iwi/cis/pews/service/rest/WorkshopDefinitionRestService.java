@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
@@ -32,7 +32,7 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persist( WorkshopDefinitionImpl obj )
+	public String persist( WorkshopTemplate obj )
 	{
 		return super.persist( obj );
 	}
@@ -40,14 +40,14 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
-	public WorkshopDefinitionImpl findByID( String id )
+	public WorkshopTemplate findByID( String id )
 	{
 		return workshopDefinitionService.findWorkshopDefinitionByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void remove( WorkshopDefinitionImpl obj )
+	public void remove( WorkshopTemplate obj )
 	{
 		super.remove( obj );
 	}
@@ -55,7 +55,7 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< WorkshopDefinitionImpl > findAll()
+	public List< WorkshopTemplate > findAll()
 	{
 		return workshopDefinitionService.findAllWorkshopDefinitions();
 	}

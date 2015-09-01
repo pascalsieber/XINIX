@@ -1,28 +1,27 @@
-package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
+package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class P2PTwoDefinition extends ExerciseDefinitionImpl
+public class PinkLabsTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String question;
 
-	public P2PTwoDefinition()
+	public PinkLabsTemplate()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public P2PTwoDefinition( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, boolean timed, boolean sharing, boolean skippable, String question )
+	public PinkLabsTemplate( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopTemplate workshopDefinition, boolean timed, boolean sharing, boolean skippable, String question )
 	{
 		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;

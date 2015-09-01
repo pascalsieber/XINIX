@@ -1,4 +1,4 @@
-package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
+package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
 import java.util.concurrent.TimeUnit;
 
@@ -6,12 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class PosterDefinition extends ExerciseDefinitionImpl
+public class PosterTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -20,16 +20,16 @@ public class PosterDefinition extends ExerciseDefinitionImpl
 	@Column( length = 20000 )
 	private String description;
 
-	public PosterDefinition()
+	public PosterTemplate()
 	{
 		super();
 	}
 
-	public PosterDefinition(
+	public PosterTemplate(
 			PrincipalImpl owner,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopDefinitionImpl workshopDefinition,
+			WorkshopTemplate workshopDefinition,
 			boolean timed,
 			boolean sharing,
 			boolean skippable,

@@ -1,4 +1,4 @@
-package ch.zhaw.iwi.cis.pews.model.definition;
+package ch.zhaw.iwi.cis.pews.model.template;
 
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +9,7 @@ import javax.persistence.Transient;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
+public class ExerciseTemplate extends WorkflowElementTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -20,14 +20,14 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 	private boolean skippable;
 
 	@ManyToOne
-	private WorkshopDefinitionImpl workshopDefinition;
+	private WorkshopTemplate workshopDefinition;
 
-	public ExerciseDefinitionImpl()
+	public ExerciseTemplate()
 	{
 		super();
 	}
 
-	public ExerciseDefinitionImpl( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopDefinitionImpl workshopDefinition, boolean timed, boolean sharing, boolean skippable )
+	public ExerciseTemplate( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopTemplate workshopDefinition, boolean timed, boolean sharing, boolean skippable )
 	{
 		super( owner );
 		this.timeUnit = timeUnit;
@@ -58,12 +58,12 @@ public class ExerciseDefinitionImpl extends WorkflowElementDefinitionImpl
 		this.duration = duration;
 	}
 
-	public WorkshopDefinitionImpl getWorkshopDefinition()
+	public WorkshopTemplate getWorkshopDefinition()
 	{
 		return workshopDefinition;
 	}
 
-	public void setWorkshopDefinition( WorkshopDefinitionImpl workshopDefinition )
+	public void setWorkshopDefinition( WorkshopTemplate workshopDefinition )
 	{
 		this.workshopDefinition = workshopDefinition;
 	}

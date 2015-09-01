@@ -4,9 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 public class PosterExercise extends ExerciseImpl
@@ -23,7 +23,7 @@ public class PosterExercise extends ExerciseImpl
 		super();
 	}
 
-	public PosterExercise( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop, String title, String description2 )
+	public PosterExercise( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop, String title, String description2 )
 	{
 		super( name, description, derivedFrom, workshop );
 		this.title = title;

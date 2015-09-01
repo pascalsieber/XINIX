@@ -1,4 +1,4 @@
-package ch.zhaw.iwi.cis.pews.model.definition;
+package ch.zhaw.iwi.cis.pews.model.template;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +11,7 @@ import javax.persistence.Transient;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class WorkshopDefinitionImpl extends WorkflowElementDefinitionImpl
+public class WorkshopTemplate extends WorkflowElementTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -20,20 +20,20 @@ public class WorkshopDefinitionImpl extends WorkflowElementDefinitionImpl
 	private String description;
 
 	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workshopDefinition" )
-	private Set< ExerciseDefinitionImpl > exerciseDefinitions;
+	private Set< ExerciseTemplate > exerciseDefinitions;
 
-	public WorkshopDefinitionImpl()
+	public WorkshopTemplate()
 	{
 		super();
-		this.exerciseDefinitions = new HashSet< ExerciseDefinitionImpl >();
+		this.exerciseDefinitions = new HashSet< ExerciseTemplate >();
 	}
 
-	public WorkshopDefinitionImpl( PrincipalImpl owner, String name, String description )
+	public WorkshopTemplate( PrincipalImpl owner, String name, String description )
 	{
 		super( owner );
 		this.name = name;
 		this.description = description;
-		this.exerciseDefinitions = new HashSet< ExerciseDefinitionImpl >();
+		this.exerciseDefinitions = new HashSet< ExerciseTemplate >();
 	}
 
 	public String getName()
@@ -56,12 +56,12 @@ public class WorkshopDefinitionImpl extends WorkflowElementDefinitionImpl
 		this.description = description;
 	}
 
-	public Set< ExerciseDefinitionImpl > getExerciseDefinitions()
+	public Set< ExerciseTemplate > getExerciseDefinitions()
 	{
 		return exerciseDefinitions;
 	}
 
-	public void setExerciseDefinitions( Set< ExerciseDefinitionImpl > exerciseDefinitions )
+	public void setExerciseDefinitions( Set< ExerciseTemplate > exerciseDefinitions )
 	{
 		this.exerciseDefinitions = exerciseDefinitions;
 	}

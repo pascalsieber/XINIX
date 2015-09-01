@@ -15,7 +15,7 @@ import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
@@ -35,7 +35,7 @@ public class WorkflowElementImpl extends WorkshopObject
 	private String currentState;
 
 	@ManyToOne
-	private WorkflowElementDefinitionImpl derivedFrom;
+	private WorkflowElementTemplate derivedFrom;
 
 	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workflowElement" )
 	private List< WorkflowElementDataImpl > data;
@@ -49,7 +49,7 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.elapsedSeconds = 0;
 	}
 
-	public WorkflowElementImpl( String name, String description, WorkflowElementDefinitionImpl derivedFrom )
+	public WorkflowElementImpl( String name, String description, WorkflowElementTemplate derivedFrom )
 	{
 		this.name = name;
 		this.description = description;
@@ -101,12 +101,12 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.currentState = currentState.toString();
 	}
 
-	public WorkflowElementDefinitionImpl getDerivedFrom()
+	public WorkflowElementTemplate getDerivedFrom()
 	{
 		return derivedFrom;
 	}
 
-	public void setDerivedFrom( WorkflowElementDefinitionImpl derivedFrom )
+	public void setDerivedFrom( WorkflowElementTemplate derivedFrom )
 	{
 		this.derivedFrom = derivedFrom;
 	}

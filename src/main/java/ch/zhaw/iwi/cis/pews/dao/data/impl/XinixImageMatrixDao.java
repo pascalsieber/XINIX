@@ -5,7 +5,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class XinixImageMatrixDao extends ExerciseDataDaoImpl
@@ -14,7 +14,7 @@ public class XinixImageMatrixDao extends ExerciseDataDaoImpl
 	@Override
 	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
-		return XinixImageMatrix.class;
+		return XinixImageMatrixTemplate.class;
 	}
 
 }

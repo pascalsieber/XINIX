@@ -4,9 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 public class SimplyPrototypingExercise extends ExerciseImpl
@@ -21,7 +21,7 @@ public class SimplyPrototypingExercise extends ExerciseImpl
 		super();
 	}
 
-	public SimplyPrototypingExercise( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop, String question, String mimeType )
+	public SimplyPrototypingExercise( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop, String question, String mimeType )
 	{
 		super( name, description, derivedFrom, workshop );
 		this.question = question;

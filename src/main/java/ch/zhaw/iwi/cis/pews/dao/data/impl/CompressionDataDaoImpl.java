@@ -13,7 +13,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements CompressionDataDao
@@ -57,7 +57,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( CompressionDefinition.class.getSimpleName() ) )
+			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( CompressionTemplate.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
 					.createQuery(

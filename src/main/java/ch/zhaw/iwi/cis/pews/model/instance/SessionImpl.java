@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -56,7 +56,7 @@ public class SessionImpl extends WorkflowElementImpl
 	public SessionImpl(
 			String name,
 			String description,
-			WorkflowElementDefinitionImpl definition,
+			WorkflowElementTemplate definition,
 			SessionSynchronizationImpl synchronization,
 			WorkshopImpl workshop,
 			ExerciseImpl currentExercise,

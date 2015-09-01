@@ -13,10 +13,10 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = PinkLabsDefinition.class )
+@ExerciseSpecificService( exerciseDefinition = PinkLabsTemplate.class )
 public class PinkLabsExerciseService extends ExerciseServiceImpl
 {
 
@@ -28,14 +28,14 @@ public class PinkLabsExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		PinkLabsDefinition definition = (PinkLabsDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
+		PinkLabsTemplate definition = (PinkLabsTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		return new PinkLabsInput( definition.getQuestion() );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		PinkLabsDefinition definition = (PinkLabsDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		PinkLabsTemplate definition = (PinkLabsTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
 		return new PinkLabsInput( definition.getQuestion() );
 	}
 

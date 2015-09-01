@@ -27,10 +27,10 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = EvaluationDefinition.class )
+@ExerciseSpecificService( exerciseDefinition = EvaluationTemplate.class )
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
 	private CompressionDataDao compressionDataDao;
@@ -58,7 +58,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		EvaluationDefinition definition = (EvaluationDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
+		EvaluationTemplate definition = (EvaluationTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		return new EvaluationInput( solutions, definition.getQuestion(), definition.getNumberOfVotes() );
 	}
 
@@ -76,7 +76,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		EvaluationDefinition definition = (EvaluationDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		EvaluationTemplate definition = (EvaluationTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
 		return new EvaluationInput( solutions, definition.getQuestion(), definition.getNumberOfVotes() );
 	}
 

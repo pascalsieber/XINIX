@@ -15,7 +15,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class EvaluationDataDao extends ExerciseDataDaoImpl
@@ -68,7 +68,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationDefinition.class.getSimpleName() ) )
+			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationTemplate.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
 					.createQuery(

@@ -1,10 +1,10 @@
 package ch.zhaw.iwi.cis.pews.dao;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 
 public interface WorkshopDefinitionDao extends WorkshopObjectDao
 {
 
-	WorkshopDefinitionImpl findByIDWithExerciseDefinitions( String id );
+	WorkshopTemplate findByIDWithExerciseDefinitions( String id );
 
 }

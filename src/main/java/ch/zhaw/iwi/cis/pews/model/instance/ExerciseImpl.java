@@ -9,7 +9,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -31,7 +31,7 @@ public class ExerciseImpl extends WorkflowElementImpl
 		this.participants = new HashSet< PrincipalImpl >();
 	}
 
-	public ExerciseImpl( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop )
+	public ExerciseImpl( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop )
 	{
 		super( name, description, derivedFrom );
 		this.workshop = workshop;

@@ -7,7 +7,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class WorkshopDefinitionDaoImpl extends WorkshopObjectDaoImpl implements WorkshopDefinitionDao
@@ -16,14 +16,14 @@ public class WorkshopDefinitionDaoImpl extends WorkshopObjectDaoImpl implements 
 	@Override
 	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
-		return WorkshopDefinitionImpl.class;
+		return WorkshopTemplate.class;
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public WorkshopDefinitionImpl findByIDWithExerciseDefinitions( String id )
+	public WorkshopTemplate findByIDWithExerciseDefinitions( String id )
 	{
-		List< WorkshopDefinitionImpl > results = getEntityManager()
+		List< WorkshopTemplate > results = getEntityManager()
 			.createQuery( "from WorkshopDefinitionImpl d LEFT JOIN FETCH d.exerciseDefinitions exDefs where d.id = '" + id + "'" )
 			.getResultList();
 

@@ -16,11 +16,11 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = XinixDefinition.class )
+@ExerciseSpecificService( exerciseDefinition = XinixTemplate.class )
 public class XinixExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataDao xinixImageMatrixDao;
@@ -34,15 +34,15 @@ public class XinixExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		XinixDefinition definition = (XinixDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new XinixInput( definition.getQuestion(), (XinixImageMatrix)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
+		XinixTemplate definition = (XinixTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
+		return new XinixInput( definition.getQuestion(), (XinixImageMatrixTemplate)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		XinixDefinition definition = (XinixDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		return new XinixInput( definition.getQuestion(), (XinixImageMatrix)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
+		XinixTemplate definition = (XinixTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		return new XinixInput( definition.getQuestion(), (XinixImageMatrixTemplate)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
 	}
 
 	@Override

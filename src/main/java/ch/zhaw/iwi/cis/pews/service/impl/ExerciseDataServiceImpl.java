@@ -65,16 +65,16 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PosterDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.CloseableWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.IOExceptionWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.ObjectInputStreamWrapper;
@@ -96,16 +96,16 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	// TODO move this from manual entries to an automatic solution (e.g. with an annotation)
 	static
 	{
-		EXERCISESPECIFICDATASERVICES.put( PinkLabsDefinition.class.getSimpleName(), PinkLabsExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( You2MeDefinition.class.getSimpleName(), You2MeExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( P2POneDefinition.class.getSimpleName(), P2POneExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( P2PTwoDefinition.class.getSimpleName(), P2PTwoExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( SimplePrototypingDefinition.class.getSimpleName(), SimplePrototypingExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( XinixDefinition.class.getSimpleName(), XinixExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( CompressionDefinition.class.getSimpleName(), CompressionExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( EvaluationDefinition.class.getSimpleName(), EvaluationExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( EvaluationResultDefinition.class.getSimpleName(), EvaluationResultExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( PosterDefinition.class.getSimpleName(), PosterExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( PinkLabsTemplate.class.getSimpleName(), PinkLabsExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( You2MeTemplate.class.getSimpleName(), You2MeExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( P2POneTemplate.class.getSimpleName(), P2POneExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( P2PTwoTemplate.class.getSimpleName(), P2PTwoExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( SimplePrototypingTemplate.class.getSimpleName(), SimplePrototypingExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( XinixTemplate.class.getSimpleName(), XinixExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( CompressionTemplate.class.getSimpleName(), CompressionExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( EvaluationTemplate.class.getSimpleName(), EvaluationExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( EvaluationResultTemplate.class.getSimpleName(), EvaluationResultExerciseDataService.class );
+		EXERCISESPECIFICDATASERVICES.put( PosterTemplate.class.getSimpleName(), PosterExerciseDataService.class );
 	}
 
 	private Class< ? > getExerciseDataSpecificService( String exerciseDefinitionClassName )

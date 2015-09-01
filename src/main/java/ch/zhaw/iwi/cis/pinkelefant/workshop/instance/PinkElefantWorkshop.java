@@ -3,8 +3,8 @@ package ch.zhaw.iwi.cis.pinkelefant.workshop.instance;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 public class PinkElefantWorkshop extends WorkshopImpl
@@ -19,7 +19,7 @@ public class PinkElefantWorkshop extends WorkshopImpl
 		super();
 	}
 
-	public PinkElefantWorkshop( String name, String description, WorkflowElementDefinitionImpl derivedFrom, String problem )
+	public PinkElefantWorkshop( String name, String description, WorkflowElementTemplate derivedFrom, String problem )
 	{
 		super( name, description, derivedFrom );
 		this.problem = problem;

@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDefinitionServiceImpl;
@@ -32,7 +32,7 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( PERSIST )
-	public String persist( ExerciseDefinitionImpl obj )
+	public String persist( ExerciseTemplate obj )
 	{
 		return super.persist( obj );
 	}
@@ -40,14 +40,14 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
-	public ExerciseDefinitionImpl findByID( String id )
+	public ExerciseTemplate findByID( String id )
 	{
 		return exerciseDefinitionService.findExerciseDefinitionByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
-	public void remove( ExerciseDefinitionImpl obj )
+	public void remove( ExerciseTemplate obj )
 	{
 		exerciseDefinitionService.removeExerciseDefinition( obj );
 	}
@@ -55,7 +55,7 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_ALL )
-	public List< ExerciseDefinitionImpl > findAll()
+	public List< ExerciseTemplate > findAll()
 	{
 		return exerciseDefinitionService.findAllExerciseDefinitions();
 	}

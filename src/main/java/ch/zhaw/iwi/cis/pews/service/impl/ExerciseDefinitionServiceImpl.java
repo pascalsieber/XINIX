@@ -11,8 +11,8 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -34,23 +34,23 @@ public class ExerciseDefinitionServiceImpl extends WorkshopObjectServiceImpl imp
 	}
 
 	@Override
-	public ExerciseDefinitionImpl findExerciseDefinitionByID( String id )
+	public ExerciseTemplate findExerciseDefinitionByID( String id )
 	{
-		return (ExerciseDefinitionImpl)simplifyOwnerInObjectGraph( findByID( id ) );
+		return (ExerciseTemplate)simplifyOwnerInObjectGraph( findByID( id ) );
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDefinitionImpl > findAllExerciseDefinitions()
+	public List< ExerciseTemplate > findAllExerciseDefinitions()
 	{
-		return (List< ExerciseDefinitionImpl >)simplifyOwnerInObjectGraph( findAll() );
+		return (List< ExerciseTemplate >)simplifyOwnerInObjectGraph( findAll() );
 	}
 
 	@Override
-	public void removeExerciseDefinition( ExerciseDefinitionImpl obj )
+	public void removeExerciseDefinition( ExerciseTemplate obj )
 	{
-		ExerciseDefinitionImpl exDef = exerciseDefinitionDao.findById( obj.getID() );
-		WorkshopDefinitionImpl wsDef = workshopDefinitionDao.findById( exDef.getWorkshopDefinition().getID() );
+		ExerciseTemplate exDef = exerciseDefinitionDao.findById( obj.getID() );
+		WorkshopTemplate wsDef = workshopDefinitionDao.findById( exDef.getWorkshopDefinition().getID() );
 
 		wsDef.getExerciseDefinitions().remove( exDef );
 

@@ -14,13 +14,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
@@ -62,17 +62,17 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PosterDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -124,13 +124,13 @@ public class LoadTest
 		for ( int j = 0; j < workshops; j++ )
 		{
 			// Workshop definition and instance
-			WorkshopDefinitionImpl wsDef = workshopDefinitionService.findByID( workshopDefinitionService
+			WorkshopTemplate wsDef = workshopDefinitionService.findByID( workshopDefinitionService
 				.persist( new PinkElefantTemplate( user, "ws_def_name_", "ws_def_descr_", "ws_def_problem_" ) ) );
 			workshopDefinitionID = wsDef.getID();
 			workshopID = workshopService.persist( new WorkshopImpl( j + "_ws_name_", j + "_ws_descr_", wsDef ) );
 
 			// exercise definitions and instance
-			WorkflowElementDefinitionImpl startDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterDefinition(
+			WorkflowElementTemplate startDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -142,7 +142,7 @@ public class LoadTest
 				j + "_start_def_descr_" ) ) );
 			exerciseService.persist( new ExerciseImpl( j + "_start_ex_name_", j + "_start_ex_descr_", startDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
-			WorkflowElementDefinitionImpl plabsDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PinkLabsDefinition(
+			WorkflowElementTemplate plabsDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PinkLabsTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -154,7 +154,7 @@ public class LoadTest
 			ExerciseImpl plabs = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_plabs_ex_name_", j + "_plabs_ex_descr_", plabsDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			WorkflowElementDefinitionImpl p1Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2POneDefinition(
+			WorkflowElementTemplate p1Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2POneTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -167,7 +167,7 @@ public class LoadTest
 			ExerciseImpl p1 = exerciseService
 				.findByID( exerciseService.persist( new ExerciseImpl( j + "_p1_ex_name_", j + "_p1_ex_descr_", p1Def, (WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
 
-			WorkflowElementDefinitionImpl p2Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2PTwoDefinition(
+			WorkflowElementTemplate p2Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2PTwoTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -179,7 +179,7 @@ public class LoadTest
 			ExerciseImpl p2 = exerciseService
 				.findByID( exerciseService.persist( new ExerciseImpl( j + "_p2_ex_name_", j + "_p2_ex_descr_", p2Def, (WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
 
-			WorkflowElementDefinitionImpl xinixDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new XinixDefinition(
+			WorkflowElementTemplate xinixDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new XinixTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -188,13 +188,13 @@ public class LoadTest
 				false,
 				false,
 				j + "_xinix_def_question_",
-				(XinixImageMatrix)workshopDefinitionService.findByID( ZhawEngine.XINIX_IMAGE_MATRIX_ID ) ) ) );
+				(XinixImageMatrixTemplate)workshopDefinitionService.findByID( ZhawEngine.XINIX_IMAGE_MATRIX_ID ) ) ) );
 			ExerciseImpl xinix = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_xinix_ex_name_", j + "_xinix_ex_descr_", xinixDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
 			exerciseDefinitionID = xinixDef.getID();
 
-			WorkflowElementDefinitionImpl u2mDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new You2MeDefinition(
+			WorkflowElementTemplate u2mDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new You2MeTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -206,7 +206,7 @@ public class LoadTest
 			ExerciseImpl u2m = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_u2m_ex_name_", j + "_u2m_ex_descr_", u2mDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			WorkflowElementDefinitionImpl spDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new SimplePrototypingDefinition(
+			WorkflowElementTemplate spDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new SimplePrototypingTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -221,7 +221,7 @@ public class LoadTest
 
 			exerciseID = proto.getID();
 
-			WorkflowElementDefinitionImpl cDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new CompressionDefinition(
+			WorkflowElementTemplate cDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new CompressionTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -237,7 +237,7 @@ public class LoadTest
 				cDef,
 				(WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
 
-			WorkflowElementDefinitionImpl evalDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationDefinition(
+			WorkflowElementTemplate evalDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -250,7 +250,7 @@ public class LoadTest
 			ExerciseImpl eval = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_eval_ex_name_", j + "_eval_ex_descr_", evalDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			WorkflowElementDefinitionImpl resDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationResultDefinition(
+			WorkflowElementTemplate resDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationResultTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,
@@ -260,7 +260,7 @@ public class LoadTest
 				false ) ) );
 			exerciseService.persist( new ExerciseImpl( j + "_res_ex_name_", j + "_res_ex_descr_", resDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
-			WorkflowElementDefinitionImpl endDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterDefinition(
+			WorkflowElementTemplate endDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,

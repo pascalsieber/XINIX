@@ -18,8 +18,6 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
@@ -49,6 +47,8 @@ import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
 import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -91,17 +91,17 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationResultDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PosterDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -134,17 +134,17 @@ public class RestServiceTest
 	private static SessionImpl defaultSessionStub = new SessionImpl();
 	private static Invitation defaultInvitationStub = new Invitation();
 
-	private static PosterDefinition posterDefinitionStub = new PosterDefinition();
-	private static PinkLabsDefinition pinklabsDefinitionStub = new PinkLabsDefinition();
-	private static P2POneDefinition p2poneDefinitionStub = new P2POneDefinition();
-	private static P2PTwoDefinition p2ptwoDefinitionStub = new P2PTwoDefinition();
-	private static XinixImageMatrix xinixImageMatrixStub = new XinixImageMatrix();
-	private static XinixDefinition xinixDefinitionStub = new XinixDefinition();
-	private static You2MeDefinition you2meDefinitionStub = new You2MeDefinition();
-	private static SimplePrototypingDefinition simpleprototypingDefinitionStub = new SimplePrototypingDefinition();
-	private static CompressionDefinition compressionDefinitionStub = new CompressionDefinition();
-	private static EvaluationDefinition evaluationDefinitionStub = new EvaluationDefinition();
-	private static EvaluationResultDefinition evaluationResultDefinitionStub = new EvaluationResultDefinition();
+	private static PosterTemplate posterDefinitionStub = new PosterTemplate();
+	private static PinkLabsTemplate pinklabsDefinitionStub = new PinkLabsTemplate();
+	private static P2POneTemplate p2poneDefinitionStub = new P2POneTemplate();
+	private static P2PTwoTemplate p2ptwoDefinitionStub = new P2PTwoTemplate();
+	private static XinixImageMatrixTemplate xinixImageMatrixStub = new XinixImageMatrixTemplate();
+	private static XinixTemplate xinixDefinitionStub = new XinixTemplate();
+	private static You2MeTemplate you2meDefinitionStub = new You2MeTemplate();
+	private static SimplePrototypingTemplate simpleprototypingDefinitionStub = new SimplePrototypingTemplate();
+	private static CompressionTemplate compressionDefinitionStub = new CompressionTemplate();
+	private static EvaluationTemplate evaluationDefinitionStub = new EvaluationTemplate();
+	private static EvaluationResultTemplate evaluationResultDefinitionStub = new EvaluationResultTemplate();
 
 	private static ExerciseImpl posterExerciseStub = new ExerciseImpl();
 	private static ExerciseImpl pinklabsExerciseStub = new ExerciseImpl();
@@ -191,7 +191,7 @@ public class RestServiceTest
 		defaultWorkshopStub.setID( workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", defaultWorkshopDefinitionStub ) ) );
 
 		// exercise definitions
-		posterDefinitionStub.setID( exerciseDefinitionService.persist( new PosterDefinition(
+		posterDefinitionStub.setID( exerciseDefinitionService.persist( new PosterTemplate(
 			defaultUserStub,
 			TimeUnit.SECONDS,
 			120,
@@ -201,7 +201,7 @@ public class RestServiceTest
 			false,
 			"start",
 			"start description" ) ) );
-		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsDefinition(
+		pinklabsDefinitionStub.setID( exerciseDefinitionService.persist( new PinkLabsTemplate(
 			defaultUserStub,
 			TimeUnit.SECONDS,
 			120,
@@ -210,7 +210,7 @@ public class RestServiceTest
 			false,
 			false,
 			"pinklabs?" ) ) );
-		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneDefinition(
+		p2poneDefinitionStub.setID( exerciseDefinitionService.persist( new P2POneTemplate(
 			defaultUserStub,
 			TimeUnit.SECONDS,
 			120,
@@ -221,13 +221,13 @@ public class RestServiceTest
 			"urltopicture",
 			"theme" ) ) );
 		p2ptwoDefinitionStub
-			.setID( exerciseDefinitionService.persist( new P2PTwoDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, false, false, false, "question?" ) ) );
+			.setID( exerciseDefinitionService.persist( new P2PTwoTemplate( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, false, false, false, "question?" ) ) );
 
-		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeDefinition( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, false, false, false, Arrays.asList(
+		you2meDefinitionStub.setID( exerciseDefinitionService.persist( new You2MeTemplate( defaultUserStub, TimeUnit.SECONDS, 120, defaultWorkshopDefinitionStub, false, false, false, Arrays.asList(
 			"question?",
 			"counter question?" ) ) ) );
 
-		simpleprototypingDefinitionStub.setID( exerciseDefinitionService.persist( new SimplePrototypingDefinition(
+		simpleprototypingDefinitionStub.setID( exerciseDefinitionService.persist( new SimplePrototypingTemplate(
 			defaultUserStub,
 			TimeUnit.MINUTES,
 			2,
@@ -238,7 +238,7 @@ public class RestServiceTest
 			"prototyping question",
 			"my mimetype" ) ) );
 
-		compressionDefinitionStub.setID( exerciseDefinitionService.persist( new CompressionDefinition(
+		compressionDefinitionStub.setID( exerciseDefinitionService.persist( new CompressionTemplate(
 			defaultUserStub,
 			TimeUnit.HOURS,
 			1,
@@ -249,7 +249,7 @@ public class RestServiceTest
 			"compression question",
 			Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
 
-		evaluationDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationDefinition(
+		evaluationDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationTemplate(
 			defaultUserStub,
 			TimeUnit.MINUTES,
 			10,
@@ -260,7 +260,7 @@ public class RestServiceTest
 			"evaluation question",
 			3 ) ) );
 
-		evaluationResultDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationResultDefinition(
+		evaluationResultDefinitionStub.setID( exerciseDefinitionService.persist( new EvaluationResultTemplate(
 			defaultUserStub,
 			TimeUnit.MINUTES,
 			10,
@@ -272,9 +272,9 @@ public class RestServiceTest
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		List< XinixImage > images = new ArrayList<>();
 		images.add( (XinixImage)exerciseDataService.findByID( xinixImageStub.getID() ) );
-		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrix( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, false, false, false, images ) ) );
+		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrixTemplate( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, false, false, false, images ) ) );
 
-		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixDefinition(
+		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixTemplate(
 			defaultUserStub,
 			TimeUnit.SECONDS,
 			60,
@@ -283,7 +283,7 @@ public class RestServiceTest
 			false,
 			false,
 			"xinix question",
-			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
+			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
 
 		// exercises
 		posterExerciseStub
@@ -402,7 +402,7 @@ public class RestServiceTest
 		String workshopDefinitionID = workshopDefinitionService.persist( new PinkElefantTemplate( defaultUserStub, "workshop definition", "workshop definition description", "problem" ) );
 
 		// read workshop definition
-		WorkshopDefinitionImpl workshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
+		WorkshopTemplate workshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
 		assertTrue( workshopDefinition.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( workshopDefinition.getID().equals( workshopDefinitionID ) );
 		assertTrue( workshopDefinition.getName().equalsIgnoreCase( "workshop definition" ) );
@@ -412,7 +412,7 @@ public class RestServiceTest
 		// update workshop definition
 		workshopDefinition.setName( "updated workshop definition" );
 		workshopDefinitionService.persist( workshopDefinition );
-		WorkshopDefinitionImpl updatedWorkshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
+		WorkshopTemplate updatedWorkshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
 		assertTrue( updatedWorkshopDefinition.getName().equalsIgnoreCase( "updated workshop definition" ) );
 
 		// delete workshop definition
@@ -420,7 +420,7 @@ public class RestServiceTest
 		workshopDefinitionService.remove( workshopDefinitionService.findByID( workshopDefinitionID ) );
 
 		// find all checks delete
-		List< WorkshopDefinitionImpl > wsDefs = workshopDefinitionService.findAll();
+		List< WorkshopTemplate > wsDefs = workshopDefinitionService.findAll();
 		assertTrue( wsDefs.size() > 0 );
 		assertTrue( wsDefBefore - wsDefs.size() == 1 );
 
@@ -493,22 +493,22 @@ public class RestServiceTest
 	public void crudOperationsExerciseService()
 	{
 		// create exercise definition
-		String exDefID = exerciseDefinitionService.persist( new PinkLabsDefinition( defaultUserStub, TimeUnit.MINUTES, 2, defaultWorkshopDefinitionStub, false, false, false, "question" ) );
+		String exDefID = exerciseDefinitionService.persist( new PinkLabsTemplate( defaultUserStub, TimeUnit.MINUTES, 2, defaultWorkshopDefinitionStub, false, false, false, "question" ) );
 
 		// read exercise definition
-		ExerciseDefinitionImpl exDef = exerciseDefinitionService.findByID( exDefID );
+		ExerciseTemplate exDef = exerciseDefinitionService.findByID( exDefID );
 		assertTrue( exDef.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( exDef.getID().equals( exDefID ) );
 		assertTrue( exDef.getDuration() == 2 );
 		assertTrue( exDef.getOwner().getID().equals( defaultUserStub.getID() ) );
 		assertTrue( exDef.getTimeUnit().equals( TimeUnit.MINUTES ) );
 		assertTrue( exDef.getWorkshopDefinition().getID().equals( defaultWorkshopDefinitionStub.getID() ) );
-		assertTrue( ( (PinkLabsDefinition)exDef ).getQuestion().equalsIgnoreCase( "question" ) );
+		assertTrue( ( (PinkLabsTemplate)exDef ).getQuestion().equalsIgnoreCase( "question" ) );
 
 		// update exercise definition
 		exDef.setDuration( 12 );
 		exerciseDefinitionService.persist( exDef );
-		ExerciseDefinitionImpl updatedExDef = exerciseDefinitionService.findByID( exDefID );
+		ExerciseTemplate updatedExDef = exerciseDefinitionService.findByID( exDefID );
 		assertTrue( updatedExDef.getDuration() == 12 );
 
 		// delete exercise definition
@@ -516,7 +516,7 @@ public class RestServiceTest
 		exerciseDefinitionService.remove( updatedExDef );
 
 		// find all checks delete
-		List< ExerciseDefinitionImpl > exDefs = exerciseDefinitionService.findAll();
+		List< ExerciseTemplate > exDefs = exerciseDefinitionService.findAll();
 		assertTrue( exDefs.size() > 0 );
 		assertTrue( exDefBefore - exDefs.size() == 1 );
 
@@ -819,13 +819,13 @@ public class RestServiceTest
 		// start workshop
 		setExerciseOnDefaultSession( posterExerciseStub );
 		PosterInput posterInput = mapper.readValue( exerciseService.getInputAsString(), PosterInput.class );
-		assertTrue( posterInput.getTitle().equalsIgnoreCase( ( (PosterDefinition)exerciseDefinitionService.findByID( posterDefinitionStub.getID() ) ).getTitle() ) );
-		assertTrue( posterInput.getDescription().equalsIgnoreCase( ( (PosterDefinition)exerciseDefinitionService.findByID( posterDefinitionStub.getID() ) ).getDescription() ) );
+		assertTrue( posterInput.getTitle().equalsIgnoreCase( ( (PosterTemplate)exerciseDefinitionService.findByID( posterDefinitionStub.getID() ) ).getTitle() ) );
+		assertTrue( posterInput.getDescription().equalsIgnoreCase( ( (PosterTemplate)exerciseDefinitionService.findByID( posterDefinitionStub.getID() ) ).getDescription() ) );
 
 		// pinklabs
 		setExerciseOnDefaultSession( pinklabsExerciseStub );
 		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputAsString(), PinkLabsInput.class );
-		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsTemplate)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
 		output = new PinkLabsOutput( "", Arrays.asList( "answer1", "answer2", "answer3" ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
@@ -855,8 +855,8 @@ public class RestServiceTest
 		// p2pone
 		setExerciseOnDefaultSession( p2pOneExerciseStub );
 		P2POneInput p2pOneInput = mapper.readValue( exerciseService.getInputAsString(), P2POneInput.class );
-		assertTrue( p2pOneInput.getQuestion().equalsIgnoreCase( ( (P2POneDefinition)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getQuestion() ) );
-		assertTrue( p2pOneInput.getPicture().equalsIgnoreCase( ( (P2POneDefinition)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getPicture() ) );
+		assertTrue( p2pOneInput.getQuestion().equalsIgnoreCase( ( (P2POneTemplate)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( p2pOneInput.getPicture().equalsIgnoreCase( ( (P2POneTemplate)exerciseDefinitionService.findByID( p2poneDefinitionStub.getID() ) ).getPicture() ) );
 
 		output = new P2POneOutput( Arrays.asList( "p1", "p2", "p3" ) );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
@@ -900,7 +900,7 @@ public class RestServiceTest
 		String you2meInputString = exerciseService.getInputAsString();
 		You2MeInput you2meInput = mapper.readValue( you2meInputString, You2MeInput.class );
 
-		for ( String string : ( (You2MeDefinition)exerciseDefinitionService.findByID( you2meDefinitionStub.getID() ) ).getQuestions() )
+		for ( String string : ( (You2MeTemplate)exerciseDefinitionService.findByID( you2meDefinitionStub.getID() ) ).getQuestions() )
 		{
 			assertTrue( you2meInput.getQuestions().contains( string ) );
 		}
@@ -951,7 +951,7 @@ public class RestServiceTest
 		String p2ptwoInputString = exerciseService.getInputAsString();
 		P2PTwoInput p2ptwoInput = mapper.readValue( p2ptwoInputString, P2PTwoInput.class );
 
-		assertTrue( p2ptwoInput.getQuestion().equalsIgnoreCase( ( (P2PTwoDefinition)exerciseDefinitionService.findByID( p2ptwoDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( p2ptwoInput.getQuestion().equalsIgnoreCase( ( (P2PTwoTemplate)exerciseDefinitionService.findByID( p2ptwoDefinitionStub.getID() ) ).getQuestion() ) );
 
 		List< ExerciseDataImpl > p2pOneDataForP2PTwoTest = exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() );
 		List< P2POneData > p2pOneDataForP2PTwoTestPrepped = mapper.readValue( mapper.writeValueAsString( p2pOneDataForP2PTwoTest ), makeCollectionType( P2POneData.class ) );
@@ -1009,8 +1009,8 @@ public class RestServiceTest
 		// simple prototyping
 		setExerciseOnDefaultSession( simpleprototypingExerciseStub );
 		SimplePrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplePrototypingInput.class );
-		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
-		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplePrototypingDefinition)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getMimeType() ) );
+		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplePrototypingTemplate)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplePrototypingTemplate)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getMimeType() ) );
 
 		output = new SimplePrototypingOutput( "simpleprototyping".getBytes() );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );
@@ -1042,7 +1042,7 @@ public class RestServiceTest
 		// xinix
 		setExerciseOnDefaultSession( xinixExerciseStub );
 		XinixInput xinixInput = mapper.readValue( exerciseService.getInputAsString(), XinixInput.class );
-		assertTrue( xinixInput.getQuestion().equalsIgnoreCase( ( (XinixDefinition)exerciseDefinitionService.findByID( xinixDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( xinixInput.getQuestion().equalsIgnoreCase( ( (XinixTemplate)exerciseDefinitionService.findByID( xinixDefinitionStub.getID() ) ).getQuestion() ) );
 		assertTrue( xinixInput.getXinixImages().getID().equalsIgnoreCase( xinixImageMatrixStub.getID() ) );
 
 		List< String > imageIDs = new ArrayList<>();
@@ -1051,7 +1051,7 @@ public class RestServiceTest
 			imageIDs.add( img.getID() );
 		}
 
-		for ( XinixImage img : ( (XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
+		for ( XinixImage img : ( (XinixImageMatrixTemplate)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
 		{
 			assertTrue( imageIDs.contains( img.getID() ) );
 		}
@@ -1097,12 +1097,12 @@ public class RestServiceTest
 		// compression
 		setExerciseOnDefaultSession( compressionExerciseStub );
 		CompressionInput compressionInput = mapper.readValue( exerciseService.getInputAsString(), CompressionInput.class );
-		assertTrue( compressionInput.getQuestion().equalsIgnoreCase( ( (CompressionDefinition)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( compressionInput.getQuestion().equalsIgnoreCase( ( (CompressionTemplate)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getQuestion() ) );
 		assertTrue( compressionInput.getCompressableExerciseData().size() > 0 );
 
 		for ( String criterion : compressionInput.getSolutionCriteria() )
 		{
-			( (CompressionDefinition)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getSolutionCriteria().contains( criterion );
+			( (CompressionTemplate)exerciseDefinitionService.findByID( compressionDefinitionStub.getID() ) ).getSolutionCriteria().contains( criterion );
 		}
 
 		output = new CompressionOutput( Arrays.asList( new CompressionOutputElement( "s1", "d1" ), new CompressionOutputElement( "s2", "d2" ), new CompressionOutputElement( "s3", "d3" ) ) );
@@ -1147,8 +1147,8 @@ public class RestServiceTest
 		// evaluation
 		setExerciseOnDefaultSession( evaluationExerciseStub );
 		EvaluationInput evaluationInput = mapper.readValue( exerciseService.getInputAsString(), EvaluationInput.class );
-		assertTrue( evaluationInput.getQuestion().equalsIgnoreCase( ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getQuestion() ) );
-		assertTrue( evaluationInput.getNumberOfVotes() == ( (EvaluationDefinition)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getNumberOfVotes() );
+		assertTrue( evaluationInput.getQuestion().equalsIgnoreCase( ( (EvaluationTemplate)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( evaluationInput.getNumberOfVotes() == ( (EvaluationTemplate)exerciseDefinitionService.findByID( evaluationDefinitionStub.getID() ) ).getNumberOfVotes() );
 
 		List< CompressionExerciseData > dataFromCompression = mapper.readValue(
 			mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
@@ -1260,7 +1260,7 @@ public class RestServiceTest
 		// testing for pinklabs, setting currentExercise to different exercise on purpose
 		setExerciseOnDefaultSession( compressionExerciseStub );
 		PinkLabsInput pinklabsInput = mapper.readValue( exerciseService.getInputByExerciseIDAsString( pinklabsExerciseStub.getID() ), PinkLabsInput.class );
-		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsDefinition)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( pinklabsInput.getQuestion().equalsIgnoreCase( ( (PinkLabsTemplate)exerciseDefinitionService.findByID( pinklabsDefinitionStub.getID() ) ).getQuestion() ) );
 
 		output = new PinkLabsOutput( "", Arrays.asList( "answer4", "answer5", "answer6" ) );
 		output.setExerciseID( pinklabsExerciseStub.getID() );

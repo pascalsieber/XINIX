@@ -1,4 +1,4 @@
-package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
+package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,12 +8,12 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class CompressionDefinition extends ExerciseDefinitionImpl
+public class CompressionTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
@@ -22,17 +22,17 @@ public class CompressionDefinition extends ExerciseDefinitionImpl
 	@ElementCollection
 	private List< String > solutionCriteria;
 
-	public CompressionDefinition()
+	public CompressionTemplate()
 	{
 		super();
 		this.solutionCriteria = new ArrayList<>();
 	}
 
-	public CompressionDefinition(
+	public CompressionTemplate(
 			PrincipalImpl owner,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopDefinitionImpl workshopDefinition,
+			WorkshopTemplate workshopDefinition,
 			boolean timed,
 			boolean sharing,
 			boolean skippable,

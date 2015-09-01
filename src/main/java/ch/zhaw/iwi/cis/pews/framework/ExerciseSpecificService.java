@@ -5,11 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ExerciseSpecificService
 {
-	public Class< ? extends ExerciseDefinitionImpl> exerciseDefinition();
+	public Class< ? extends ExerciseTemplate> exerciseDefinition();
 }

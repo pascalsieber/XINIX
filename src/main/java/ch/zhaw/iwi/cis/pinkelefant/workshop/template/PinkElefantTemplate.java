@@ -3,11 +3,11 @@ package ch.zhaw.iwi.cis.pinkelefant.workshop.template;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class PinkElefantTemplate extends WorkshopDefinitionImpl
+public class PinkElefantTemplate extends WorkshopTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;

@@ -25,10 +25,10 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = CompressionDefinition.class )
+@ExerciseSpecificService( exerciseDefinition = CompressionTemplate.class )
 public class CompressionExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataService exerciseDataService;
@@ -44,7 +44,7 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		CompressionDefinition definition = compressionDefinitionDao.findById( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getID() );
+		CompressionTemplate definition = compressionDefinitionDao.findById( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getID() );
 		List< CompressableExerciseData > compressableData = new ArrayList<>();
 
 		List< ExerciseDataImpl > dataOfAllExercises = new ArrayList<>();
@@ -74,7 +74,7 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		CompressionDefinition definition = compressionDefinitionDao.findById( ( (WorkflowElementImpl)super.findByID( exerciseID ) ).getDefinition().getID() );
+		CompressionTemplate definition = compressionDefinitionDao.findById( ( (WorkflowElementImpl)super.findByID( exerciseID ) ).getDefinition().getID() );
 		List< CompressableExerciseData > compressableData = new ArrayList<>();
 
 		List< ExerciseDataImpl > dataOfAllExercises = new ArrayList<>();

@@ -4,10 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
 
 @Entity
 public class XinixExercise extends ExerciseImpl
@@ -17,14 +17,14 @@ public class XinixExercise extends ExerciseImpl
 	private String question;
 
 	@ManyToOne
-	private XinixImageMatrix images;
+	private XinixImageMatrixTemplate images;
 
 	public XinixExercise()
 	{
 		super();
 	}
 
-	public XinixExercise( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop, String question, XinixImageMatrix images )
+	public XinixExercise( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop, String question, XinixImageMatrixTemplate images )
 	{
 		super( name, description, derivedFrom, workshop );
 		this.question = question;
@@ -41,12 +41,12 @@ public class XinixExercise extends ExerciseImpl
 		this.question = question;
 	}
 
-	public XinixImageMatrix getImages()
+	public XinixImageMatrixTemplate getImages()
 	{
 		return images;
 	}
 
-	public void setImages( XinixImageMatrix images )
+	public void setImages( XinixImageMatrixTemplate images )
 	{
 		this.images = images;
 	}

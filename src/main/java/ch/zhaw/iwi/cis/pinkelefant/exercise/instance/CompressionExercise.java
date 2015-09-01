@@ -6,9 +6,9 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 public class CompressionExercise extends ExerciseImpl
@@ -25,7 +25,7 @@ public class CompressionExercise extends ExerciseImpl
 		super();
 	}
 
-	public CompressionExercise( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop, String question, List< String > solutionCriteria )
+	public CompressionExercise( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop, String question, List< String > solutionCriteria )
 	{
 		super( name, description, derivedFrom, workshop );
 		this.question = question;

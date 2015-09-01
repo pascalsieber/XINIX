@@ -3,9 +3,9 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 public class EvaluationResultExercise extends ExerciseImpl
@@ -18,7 +18,7 @@ public class EvaluationResultExercise extends ExerciseImpl
 		super();
 	}
 
-	public EvaluationResultExercise( String name, String description, WorkflowElementDefinitionImpl derivedFrom, WorkshopImpl workshop )
+	public EvaluationResultExercise( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop )
 	{
 		super( name, description, derivedFrom, workshop );
 	}

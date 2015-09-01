@@ -1,4 +1,4 @@
-package ch.zhaw.iwi.cis.pews.model.definition;
+package ch.zhaw.iwi.cis.pews.model.template;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -10,17 +10,17 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
-public class WorkflowElementDefinitionImpl extends OwnableObject
+public class WorkflowElementTemplate extends OwnableObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
 
-	public WorkflowElementDefinitionImpl()
+	public WorkflowElementTemplate()
 	{
 		super();
 	}
 
-	public WorkflowElementDefinitionImpl( PrincipalImpl owner )
+	public WorkflowElementTemplate( PrincipalImpl owner )
 	{
 		super( owner );
 	}

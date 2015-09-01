@@ -9,7 +9,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -29,15 +29,15 @@ public class WorkshopDefinitionServiceImpl extends WorkshopObjectServiceImpl imp
 	}
 
 	@Override
-	public WorkshopDefinitionImpl findWorkshopDefinitionByID( String id )
+	public WorkshopTemplate findWorkshopDefinitionByID( String id )
 	{
-		return (WorkshopDefinitionImpl)simplifyOwnerInObjectGraph( workshopDefinitionDao.findByIDWithExerciseDefinitions( id ) );
+		return (WorkshopTemplate)simplifyOwnerInObjectGraph( workshopDefinitionDao.findByIDWithExerciseDefinitions( id ) );
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< WorkshopDefinitionImpl > findAllWorkshopDefinitions()
+	public List< WorkshopTemplate > findAllWorkshopDefinitions()
 	{
-		return (List< WorkshopDefinitionImpl >)simplifyOwnerInObjectGraph( findAll() );
+		return (List< WorkshopTemplate >)simplifyOwnerInObjectGraph( findAll() );
 	}
 }

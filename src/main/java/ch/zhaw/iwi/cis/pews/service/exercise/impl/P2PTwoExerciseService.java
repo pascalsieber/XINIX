@@ -26,10 +26,10 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = P2PTwoDefinition.class )
+@ExerciseSpecificService( exerciseDefinition = P2PTwoTemplate.class )
 public class P2PTwoExerciseService extends ExerciseServiceImpl
 {
 
@@ -46,7 +46,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		P2PTwoDefinition definition = (P2PTwoDefinition)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
+		P2PTwoTemplate definition = (P2PTwoTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		List< P2PKeywordInput > keywords = new ArrayList<>();
 
 		List< ExerciseDataImpl > cascadeOneData = p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
@@ -65,7 +65,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		P2PTwoDefinition definition = (P2PTwoDefinition)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		P2PTwoTemplate definition = (P2PTwoTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
 		List< P2PKeywordInput > keywords = new ArrayList<>();
 
 		List< ExerciseDataImpl > cascadeOneData = p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );

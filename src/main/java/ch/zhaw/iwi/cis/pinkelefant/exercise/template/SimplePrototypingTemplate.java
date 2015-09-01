@@ -1,44 +1,41 @@
-package ch.zhaw.iwi.cis.pinkelefant.exercise.definition;
+package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class XinixDefinition extends ExerciseDefinitionImpl
+public class SimplePrototypingTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String question;
+	private String mimeType;
 
-	@ManyToOne
-	private XinixImageMatrix images;
-
-	public XinixDefinition()
+	public SimplePrototypingTemplate()
 	{
 		super();
 	}
 
-	public XinixDefinition(
+	public SimplePrototypingTemplate(
 			PrincipalImpl owner,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopDefinitionImpl workshopDefinition,
+			WorkshopTemplate workshopDefinition,
 			boolean timed,
 			boolean sharing,
 			boolean skippable,
 			String question,
-			XinixImageMatrix images )
+			String mimeType )
 	{
 		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
-		this.images = images;
+		this.mimeType = mimeType;
 	}
 
 	public String getQuestion()
@@ -51,14 +48,19 @@ public class XinixDefinition extends ExerciseDefinitionImpl
 		this.question = question;
 	}
 
-	public XinixImageMatrix getImages()
+	public String getMimeType()
 	{
-		return images;
+		return mimeType;
 	}
 
-	public void setImages( XinixImageMatrix images )
+	public void setMimeType( String mimeType )
 	{
-		this.images = images;
+		this.mimeType = mimeType;
+	}
+
+	public static long getSerialversionuid()
+	{
+		return serialVersionUID;
 	}
 
 }

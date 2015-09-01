@@ -2,15 +2,15 @@ package ch.zhaw.iwi.cis.pews.service;
 
 import java.util.List;
 
-import ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 
 
 public interface ExerciseDefinitionService extends WorkshopObjectService
 {
 
-	ExerciseDefinitionImpl findExerciseDefinitionByID( String id );
+	ExerciseTemplate findExerciseDefinitionByID( String id );
 
-	List< ExerciseDefinitionImpl > findAllExerciseDefinitions();
+	List< ExerciseTemplate > findAllExerciseDefinitions();
 
-	void removeExerciseDefinition( ExerciseDefinitionImpl obj );
+	void removeExerciseDefinition( ExerciseTemplate obj );
 }

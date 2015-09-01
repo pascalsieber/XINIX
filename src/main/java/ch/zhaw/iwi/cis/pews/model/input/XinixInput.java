@@ -1,19 +1,19 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
 
 
 public class XinixInput extends Input
 {
 	private String question;
-	private XinixImageMatrix xinixImages;
+	private XinixImageMatrixTemplate xinixImages;
 
 	public XinixInput()
 	{
 		super();
 	}
 
-	public XinixInput( String question, XinixImageMatrix xinixImages )
+	public XinixInput( String question, XinixImageMatrixTemplate xinixImages )
 	{
 		super();
 		this.question = question;
@@ -30,12 +30,12 @@ public class XinixInput extends Input
 		this.question = question;
 	}
 
-	public XinixImageMatrix getXinixImages()
+	public XinixImageMatrixTemplate getXinixImages()
 	{
 		return xinixImages;
 	}
 
-	public void setXinixImages( XinixImageMatrix xinixImages )
+	public void setXinixImages( XinixImageMatrixTemplate xinixImages )
 	{
 		this.xinixImages = xinixImages;
 	}
