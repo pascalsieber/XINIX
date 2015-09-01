@@ -33,9 +33,9 @@ public class WorkshopImpl extends WorkflowElementImpl
 		this.exercises = new ArrayList< ExerciseImpl >();
 	}
 
-	public WorkshopImpl( String name, String description, WorkflowElementDefinitionImpl definition )
+	public WorkshopImpl( String name, String description, WorkflowElementDefinitionImpl derivedFrom )
 	{
-		super( name, description, definition );
+		super( name, description, derivedFrom );
 		this.sessions = new HashSet< SessionImpl >();
 		this.exercises = new ArrayList< ExerciseImpl >();
 	}

@@ -1,4 +1,4 @@
-package ch.zhaw.iwi.cis.pinkelefant.workshop.definition;
+package ch.zhaw.iwi.cis.pinkelefant.workshop.template;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -7,19 +7,19 @@ import ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class PinkElefantDefinition extends WorkshopDefinitionImpl
+public class PinkElefantTemplate extends WorkshopDefinitionImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String problem;
 
-	public PinkElefantDefinition()
+	public PinkElefantTemplate()
 	{
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public PinkElefantDefinition( PrincipalImpl owner, String name, String description, String problem )
+	public PinkElefantTemplate( PrincipalImpl owner, String name, String description, String problem )
 	{
 		super( owner, name, description );
 		this.problem = problem;

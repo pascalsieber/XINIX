@@ -97,7 +97,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefiniti
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.apache.derby.drda.NetworkServerControlWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.eclipse.jetty.server.ServerWrapper;
@@ -362,7 +362,7 @@ public class ZhawEngine implements LifecycleObject
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
 
 		// sample workshop definition (pinkelefant)
-		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantTemplate(
 			rootUser,
 			"p.i.n.k.elefant Definition",
 			"Definition für p.i.n.k.elefant Workshop",
@@ -731,7 +731,7 @@ public class ZhawEngine implements LifecycleObject
 		UserImpl demoRootUser = userService.findByID( userService.persist( user ) );
 
 		// sample workshop definition (pinkelefant)
-		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition( rootUser, "p.i.n.k.elefant Demo", "Demo für p.i.n.k.elefant Workshop", "Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?" ) );
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantTemplate( rootUser, "p.i.n.k.elefant Demo", "Demo für p.i.n.k.elefant Workshop", "Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?" ) );
 
 		// sample workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "p.i.n.k.elefant Workshop", "Demo p.i.n.k.elefant Workshops", (WorkflowElementDefinitionImpl)workshopDefinitionService
@@ -1056,7 +1056,7 @@ public class ZhawEngine implements LifecycleObject
 		UserImpl postRootUser = userService.findByID( userService.persist( user ) );
 
 		// workshop definition (pinkelefant)
-		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantTemplate(
 			postRootUser,
 			"Post Workshop Definition",
 			"Definition für p.i.n.k.elefant Workshop mit der Post",
@@ -1672,7 +1672,7 @@ public class ZhawEngine implements LifecycleObject
 		UserImpl sbbRootUser = userService.findByID( userService.persist( user ) );
 
 		// workshop definition (pinkelefant)
-		String wsDefID = workshopDefinitionService.persist( new PinkElefantDefinition(
+		String wsDefID = workshopDefinitionService.persist( new PinkElefantTemplate(
 			sbbRootUser,
 			"SBB Workshop Definition",
 			"Definition für p.i.n.k.elefant Workshop mit der SBB",

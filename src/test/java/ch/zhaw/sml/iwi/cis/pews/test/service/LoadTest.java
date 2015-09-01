@@ -73,7 +73,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefiniti
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -125,7 +125,7 @@ public class LoadTest
 		{
 			// Workshop definition and instance
 			WorkshopDefinitionImpl wsDef = workshopDefinitionService.findByID( workshopDefinitionService
-				.persist( new PinkElefantDefinition( user, "ws_def_name_", "ws_def_descr_", "ws_def_problem_" ) ) );
+				.persist( new PinkElefantTemplate( user, "ws_def_name_", "ws_def_descr_", "ws_def_problem_" ) ) );
 			workshopDefinitionID = wsDef.getID();
 			workshopID = workshopService.persist( new WorkshopImpl( j + "_ws_name_", j + "_ws_descr_", wsDef ) );
 

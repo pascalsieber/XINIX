@@ -102,7 +102,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefiniti
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.workshop.definition.PinkElefantDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -129,7 +129,7 @@ public class RestServiceTest
 	private static RoleImpl defaultRoleStub = new RoleImpl();
 	private static UserImpl defaultUserStub = new UserImpl();
 	private static UserImpl secondUserStub = new UserImpl();
-	private static PinkElefantDefinition defaultWorkshopDefinitionStub = new PinkElefantDefinition();
+	private static PinkElefantTemplate defaultWorkshopDefinitionStub = new PinkElefantTemplate();
 	private static WorkshopImpl defaultWorkshopStub = new WorkshopImpl();
 	private static SessionImpl defaultSessionStub = new SessionImpl();
 	private static Invitation defaultInvitationStub = new Invitation();
@@ -181,7 +181,7 @@ public class RestServiceTest
 		secondUserStub.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "secondUser" ), defaultRoleStub, null, "secondUser", "secondUser", "secondUser" ) ) );
 
 		// workshop definition (pinkelefantDefinition)
-		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantDefinition(
+		defaultWorkshopDefinitionStub.setID( workshopDefinitionService.persist( new PinkElefantTemplate(
 			defaultUserStub,
 			"workshop definition",
 			"workshop definition test entry",
@@ -399,7 +399,7 @@ public class RestServiceTest
 	public void crudOperationsWorkshopService()
 	{
 		// create workshop definition
-		String workshopDefinitionID = workshopDefinitionService.persist( new PinkElefantDefinition( defaultUserStub, "workshop definition", "workshop definition description", "problem" ) );
+		String workshopDefinitionID = workshopDefinitionService.persist( new PinkElefantTemplate( defaultUserStub, "workshop definition", "workshop definition description", "problem" ) );
 
 		// read workshop definition
 		WorkshopDefinitionImpl workshopDefinition = workshopDefinitionService.findByID( workshopDefinitionID );
