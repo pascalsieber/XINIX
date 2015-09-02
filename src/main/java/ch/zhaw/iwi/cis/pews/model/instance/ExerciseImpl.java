@@ -25,18 +25,21 @@ public class ExerciseImpl extends WorkflowElementImpl
 	@ManyToMany( cascade = CascadeType.ALL )
 	private Set< PrincipalImpl > participants;
 
+	private String question;
+
 	public ExerciseImpl()
 	{
 		super();
 		this.participants = new HashSet< PrincipalImpl >();
 	}
 
-	public ExerciseImpl( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop )
+	public ExerciseImpl( String name, String description, WorkflowElementTemplate derivedFrom, Integer orderInWorkshop, WorkshopImpl workshop, Set< PrincipalImpl > participants, String question )
 	{
 		super( name, description, derivedFrom );
+		this.orderInWorkshop = orderInWorkshop;
 		this.workshop = workshop;
-		this.participants = new HashSet< PrincipalImpl >();
-		this.orderInWorkshop = workshop.getExercises().size();
+		this.participants = participants;
+		this.question = question;
 	}
 
 	public WorkshopImpl getWorkshop()
@@ -67,6 +70,16 @@ public class ExerciseImpl extends WorkflowElementImpl
 	public void setOrderInWorkshop( Integer orderInWorkshop )
 	{
 		this.orderInWorkshop = orderInWorkshop;
+	}
+
+	public String getQuestion()
+	{
+		return question;
+	}
+
+	public void setQuestion( String question )
+	{
+		this.question = question;
 	}
 
 }

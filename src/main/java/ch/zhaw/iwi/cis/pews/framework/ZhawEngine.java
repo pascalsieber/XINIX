@@ -44,6 +44,8 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.XinixImage;
+import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
@@ -84,7 +86,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
@@ -95,7 +96,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
@@ -447,7 +447,7 @@ public class ZhawEngine implements LifecycleObject
 		}
 
 		// xinix image matrix (subclass of ExerciseDefinitionImpl)
-		XINIX_IMAGE_MATRIX_ID = exerciseDefinitionService.persist( new XinixImageMatrixTemplate(
+		XINIX_IMAGE_MATRIX_ID = exerciseDefinitionService.persist( new XinixImageMatrix(
 			rootUser,
 			null,
 			0,
@@ -467,7 +467,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was fällt Dir ein zum Thema ENGAGEMENT?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me definition
 		String you2meDefID = exerciseDefinitionService.persist( new You2MeTemplate(
@@ -812,7 +812,7 @@ public class ZhawEngine implements LifecycleObject
 		}
 
 		// xinix image matrix (subclass of ExerciseDefinitionImpl)
-		XINIX_IMAGE_MATRIX_ID = exerciseDefinitionService.persist( new XinixImageMatrixTemplate(
+		XINIX_IMAGE_MATRIX_ID = exerciseDefinitionService.persist( new XinixImageMatrix(
 			rootUser,
 			null,
 			0,
@@ -832,7 +832,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			"Was fällt Dir ein zum Thema ENGAGEMENT?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me definition
 		String you2meDefID = exerciseDefinitionService.persist( new You2MeTemplate(
@@ -1179,7 +1179,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was fällt dir ein zum Thema Kundenservice in Verbindung mit dem gewürfelten Bild?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 2
 		String xinixDefID2 = exerciseDefinitionService.persist( new XinixTemplate(
@@ -1191,7 +1191,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was fällt dir ein zum Thema Paket in Verbindung mit dem gewürfelten Bild?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 3
 		String xinixDefID3 = exerciseDefinitionService.persist( new XinixTemplate(
@@ -1203,7 +1203,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was fällt dir ein zum Thema Postbote in Verbindung mit dem gewürfelten Bild?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 4
 		String xinixDefID4 = exerciseDefinitionService.persist( new XinixTemplate(
@@ -1215,7 +1215,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was fällt dir ein zum Thema Jahr 2020 in Verbindung mit dem gewürfelten Bild?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingTemplate( postRootUser, TimeUnit.SECONDS, 600, (WorkshopTemplate)workshopDefinitionService
@@ -1795,7 +1795,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was bedeutet für mich \"Service\" in Verbindung mit dem gewürfelten Bild",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 2
 		String xinixDefID2 = exerciseDefinitionService.persist( new XinixTemplate(
@@ -1807,7 +1807,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Neue Dienstleistung am Bahnhof in Verbindung mit dem gewürfelten Bild",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 3
 		String xinixDefID3 = exerciseDefinitionService.persist( new XinixTemplate(
@@ -1819,7 +1819,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was erwartest du vom Bahnhof 2050 in Verbindung mit dem gewürfelten Bild?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix definition iteration 4
 		String xinixDefID4 = exerciseDefinitionService.persist( new XinixTemplate(
@@ -1831,7 +1831,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			"Was erwartest du vom ÖV in Verbindung mit dem gewürfelten Bild?",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simple prototyping definition
 		String simplePrototypingDefID = exerciseDefinitionService.persist( new SimplePrototypingTemplate( sbbRootUser, TimeUnit.SECONDS, 480, (WorkshopTemplate)workshopDefinitionService

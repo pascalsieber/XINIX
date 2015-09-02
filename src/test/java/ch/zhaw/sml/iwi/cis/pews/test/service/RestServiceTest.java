@@ -35,6 +35,8 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.XinixImage;
+import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
@@ -89,7 +91,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
@@ -100,7 +101,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 
@@ -138,7 +138,7 @@ public class RestServiceTest
 	private static PinkLabsTemplate pinklabsDefinitionStub = new PinkLabsTemplate();
 	private static P2POneTemplate p2poneDefinitionStub = new P2POneTemplate();
 	private static P2PTwoTemplate p2ptwoDefinitionStub = new P2PTwoTemplate();
-	private static XinixImageMatrixTemplate xinixImageMatrixStub = new XinixImageMatrixTemplate();
+	private static XinixImageMatrix xinixImageMatrixStub = new XinixImageMatrix();
 	private static XinixTemplate xinixDefinitionStub = new XinixTemplate();
 	private static You2MeTemplate you2meDefinitionStub = new You2MeTemplate();
 	private static SimplePrototypingTemplate simpleprototypingDefinitionStub = new SimplePrototypingTemplate();
@@ -272,7 +272,7 @@ public class RestServiceTest
 		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( defaultUserStub, null, "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		List< XinixImage > images = new ArrayList<>();
 		images.add( (XinixImage)exerciseDataService.findByID( xinixImageStub.getID() ) );
-		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrixTemplate( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, false, false, false, images ) ) );
+		xinixImageMatrixStub.setID( exerciseDefinitionService.persist( new XinixImageMatrix( defaultUserStub, null, 0, defaultWorkshopDefinitionStub, false, false, false, images ) ) );
 
 		xinixDefinitionStub.setID( exerciseDefinitionService.persist( new XinixTemplate(
 			defaultUserStub,
@@ -283,7 +283,7 @@ public class RestServiceTest
 			false,
 			false,
 			"xinix question",
-			(XinixImageMatrixTemplate)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
+			(XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ) ) );
 
 		// exercises
 		posterExerciseStub
@@ -1051,7 +1051,7 @@ public class RestServiceTest
 			imageIDs.add( img.getID() );
 		}
 
-		for ( XinixImage img : ( (XinixImageMatrixTemplate)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
+		for ( XinixImage img : ( (XinixImageMatrix)exerciseDefinitionService.findByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
 		{
 			assertTrue( imageIDs.contains( img.getID() ) );
 		}

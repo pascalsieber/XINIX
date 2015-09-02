@@ -1,11 +1,14 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
+import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
 public class EvaluationExercise extends ExerciseImpl
@@ -13,7 +16,6 @@ public class EvaluationExercise extends ExerciseImpl
 
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String question;
 	private int numberOfVotes;
 
 	public EvaluationExercise()
@@ -21,21 +23,18 @@ public class EvaluationExercise extends ExerciseImpl
 		super();
 	}
 
-	public EvaluationExercise( String name, String description, WorkflowElementTemplate derivedFrom, WorkshopImpl workshop, String question, int numberOfVotes )
+	public EvaluationExercise(
+			String name,
+			String description,
+			WorkflowElementTemplate derivedFrom,
+			Integer orderInWorkshop,
+			WorkshopImpl workshop,
+			Set< PrincipalImpl > participants,
+			String question,
+			int numberOfVotes )
 	{
-		super( name, description, derivedFrom, workshop );
-		this.question = question;
+		super( name, description, derivedFrom, orderInWorkshop, workshop, participants, question );
 		this.numberOfVotes = numberOfVotes;
-	}
-
-	public String getQuestion()
-	{
-		return question;
-	}
-
-	public void setQuestion( String question )
-	{
-		this.question = question;
 	}
 
 	public int getNumberOfVotes()

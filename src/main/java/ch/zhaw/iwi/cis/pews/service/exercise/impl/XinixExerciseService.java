@@ -13,11 +13,11 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixImageMatrixTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseDefinition = XinixTemplate.class )
@@ -35,14 +35,14 @@ public class XinixExerciseService extends ExerciseServiceImpl
 	public Input getInput()
 	{
 		XinixTemplate definition = (XinixTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new XinixInput( definition.getQuestion(), (XinixImageMatrixTemplate)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
+		return new XinixInput( definition.getQuestion(), (XinixImageMatrix)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
 		XinixTemplate definition = (XinixTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		return new XinixInput( definition.getQuestion(), (XinixImageMatrixTemplate)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
+		return new XinixInput( definition.getQuestion(), (XinixImageMatrix)xinixImageMatrixDao.findById( definition.getImages().getID() ) );
 	}
 
 	@Override

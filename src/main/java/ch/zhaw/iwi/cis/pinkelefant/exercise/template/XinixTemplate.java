@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -18,7 +19,7 @@ public class XinixTemplate extends ExerciseTemplate
 	private String question;
 
 	@ManyToOne
-	private XinixImageMatrixTemplate images;
+	private XinixImageMatrix images;
 
 	public XinixTemplate()
 	{
@@ -34,7 +35,7 @@ public class XinixTemplate extends ExerciseTemplate
 			boolean sharing,
 			boolean skippable,
 			String question,
-			XinixImageMatrixTemplate images )
+			XinixImageMatrix images )
 	{
 		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
 		this.question = question;
@@ -51,12 +52,12 @@ public class XinixTemplate extends ExerciseTemplate
 		this.question = question;
 	}
 
-	public XinixImageMatrixTemplate getImages()
+	public XinixImageMatrix getImages()
 	{
 		return images;
 	}
 
-	public void setImages( XinixImageMatrixTemplate images )
+	public void setImages( XinixImageMatrix images )
 	{
 		this.images = images;
 	}

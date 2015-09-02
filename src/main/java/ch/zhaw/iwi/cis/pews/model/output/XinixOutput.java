@@ -2,7 +2,7 @@ package ch.zhaw.iwi.cis.pews.model.output;
 
 import java.util.Set;
 
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
+import ch.zhaw.iwi.cis.pews.model.instance.XinixImage;
 
 public class XinixOutput extends Output
 {
