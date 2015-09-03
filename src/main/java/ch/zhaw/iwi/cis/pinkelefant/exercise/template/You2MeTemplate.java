@@ -1,7 +1,7 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.ElementCollection;
@@ -20,12 +20,12 @@ public class You2MeTemplate extends ExerciseTemplate
 	private static final long serialVersionUID = 1L;
 
 	@ElementCollection( fetch = FetchType.EAGER )
-	private List< String > questions;
+	private Set< String > questions;
 
 	public You2MeTemplate()
 	{
 		super();
-		this.questions = new ArrayList<>();
+		this.questions = new HashSet< String >();
 	}
 
 	public You2MeTemplate(
@@ -39,18 +39,18 @@ public class You2MeTemplate extends ExerciseTemplate
 			int cardinality,
 			WorkshopTemplate workshopTemplate,
 			String questionTemplate,
-			List< String > questions )
+			Set< String > questions )
 	{
 		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 		this.questions = questions;
 	}
 
-	public List< String > getQuestions()
+	public Set< String > getQuestions()
 	{
 		return questions;
 	}
 
-	public void setQuestions( List< String > questions )
+	public void setQuestions( Set< String > questions )
 	{
 		this.questions = questions;
 	}

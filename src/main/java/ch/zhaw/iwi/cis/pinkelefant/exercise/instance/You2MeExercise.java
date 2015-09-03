@@ -1,7 +1,7 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -19,12 +19,12 @@ public class You2MeExercise extends ExerciseImpl
 	private static final long serialVersionUID = 1L;
 
 	@ElementCollection( fetch = FetchType.EAGER )
-	private List< String > questions;
+	private Set< String > questions;
 
 	public You2MeExercise()
 	{
 		super();
-		this.questions = new ArrayList< String >();
+		this.questions = new HashSet< String >();
 	}
 
 	public You2MeExercise( String name, String description, You2MeTemplate derivedFrom, WorkshopImpl workshop )
@@ -33,12 +33,12 @@ public class You2MeExercise extends ExerciseImpl
 		this.questions = derivedFrom.getQuestions();
 	}
 
-	public List< String > getQuestions()
+	public Set< String > getQuestions()
 	{
 		return questions;
 	}
 
-	public void setQuestions( List< String > questions )
+	public void setQuestions( Set< String > questions )
 	{
 		this.questions = questions;
 	}

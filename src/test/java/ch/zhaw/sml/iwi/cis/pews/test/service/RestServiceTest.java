@@ -79,6 +79,10 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
+import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageService;
+import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -133,6 +137,8 @@ public class RestServiceTest
 	private static ExerciseService exerciseServiceForSecondUser = ServiceProxyManager.createServiceProxyWithUser( ExerciseServiceProxy.class, "secondUser", "secondUser" );
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
+	private static XinixImageService xinixImageService = ServiceProxyManager.createServiceProxy( XinixImageServiceProxy.class );
+	private static XinixImageMatrixService xinixImageMatrixService = ServiceProxyManager.createServiceProxy( XinixImageMatrixServiceProxy.class );
 
 	// using stub objects to mimic the way API will be used
 	private static Client defaultClientStub = new Client();
@@ -217,9 +223,8 @@ public class RestServiceTest
 
 		p2ptwoTemplateStub.setID( exTemplateService.persist( new P2PTwoTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "question?" ) ) );
 
-		you2meTemplateStub.setID( exTemplateService.persist( new You2MeTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "", Arrays.asList(
-			"question?",
-			"counter quesiton?" ) ) ) );
+		you2meTemplateStub.setID( exTemplateService.persist( new You2MeTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "", new HashSet< String >( Arrays
+			.asList( "question?", "counter quesiton?" ) ) ) ) );
 
 		sprotoTemplateStub
 			.setID( exTemplateService.persist( new SimplyPrototypingTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "proto question", "mime" ) ) );
@@ -241,10 +246,10 @@ public class RestServiceTest
 
 		evalResultTemplateStub.setID( exTemplateService.persist( new EvaluationResultTemplate( defaultUserStub, false, TimeUnit.MINUTES, 10, false, false, false, 0, defaultWSTemplateStub, "" ) ) );
 
-		xinixImageStub.setID( exerciseDataService.persist( new XinixImage( "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
+		xinixImageStub.setID( xinixImageService.persist( new XinixImage( "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		List< XinixImage > images = new ArrayList<>();
-		images.add( (XinixImage)exerciseDataService.findByID( xinixImageStub.getID() ) );
-		xinixImageMatrixStub.setID( exTemplateService.persist( new XinixImageMatrix( images ) ) );
+		images.add( (XinixImage)xinixImageService.findByID( xinixImageStub.getID() ) );
+		xinixImageMatrixStub.setID( xinixImageMatrixService.persist( new XinixImageMatrix( images ) ) );
 		xinixTemplateStub.setID( exTemplateService
 			.persist( new XinixTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "xinix question", xinixImageMatrixStub ) ) );
 
@@ -1002,7 +1007,7 @@ public class RestServiceTest
 			imageIDs.add( img.getID() );
 		}
 
-		for ( XinixImage img : ( (XinixImageMatrix)exTemplateService.findByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
+		for ( XinixImage img : ( (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
 		{
 			assertTrue( imageIDs.contains( img.getID() ) );
 		}

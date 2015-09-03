@@ -73,6 +73,10 @@ import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopTemplateServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
+import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
+import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageService;
+import ch.zhaw.iwi.cis.pews.service.xinix.impl.XinixImageMatrixServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.xinix.impl.XinixImageServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -358,6 +362,7 @@ public class ZhawEngine implements LifecycleObject
 		System.out.println( "participant role created initially" );
 	}
 
+	@SuppressWarnings( "unused" )
 	private static void configureSampleWorkshop()
 	{
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
@@ -369,13 +374,12 @@ public class ZhawEngine implements LifecycleObject
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
+		XinixImageService xinixImageService = getManagedObjectRegistry().getManagedObject( XinixImageService.class.getSimpleName() );
+		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
 
 		// sample workshop template (pinkelefant)
-		String wsTemplateID = workshopTemplateService.persist( new PinkElefantTemplate(
-			rootUser,
-			"p.i.n.k.elefant Template",
-			"Template für p.i.n.k.elefant Workshop",
-			"Produkteinfuehrung Teekocher" ) );
+		String wsTemplateID = workshopTemplateService
+			.persist( new PinkElefantTemplate( rootUser, "p.i.n.k.elefant Template", "Template für p.i.n.k.elefant Workshop", "Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
@@ -412,21 +416,19 @@ public class ZhawEngine implements LifecycleObject
 
 		for ( String url : imageUrls )
 		{
-			String xinixImageID = exerciseDataService.persist( new XinixImage( url ) );
-			XinixImage xinixImage = exerciseDataService.findByID( xinixImageID );
-			XINIX_IMAGES.add( xinixImage );
+			XINIX_IMAGES.add( (XinixImage)xinixImageService.findByID( xinixImageService.persist( new XinixImage( url ) ) ) );
 		}
 
 		// xinix image matrix
-		XINIX_IMAGE_MATRIX_ID = exerciseTemplateService.persist( new XinixImageMatrix( XINIX_IMAGES ) );
+		XINIX_IMAGE_MATRIX_ID = xinixImageMatrixService.persist( new XinixImageMatrix( XINIX_IMAGES ) );
 
 		// xinix template
 		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me template
 		String you2meTemplateID = exerciseTemplateService.persist( new You2MeTemplate( rootUser, true, TimeUnit.MINUTES, 2, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Führe mit jemandem einen Dialog.", Arrays.asList( "Was möchtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) );
+			.findByID( wsTemplateID ), "Führe mit jemandem einen Dialog.", new HashSet<>( Arrays.asList( "Was möchtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) ) );
 
 		// simply prototyping template
 		String simplyprotoTemplateID = exerciseTemplateService.persist( new SimplyPrototypingTemplate(
@@ -623,7 +625,8 @@ public class ZhawEngine implements LifecycleObject
 		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
 		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
-
+		XinixImageService xinixImageService = getManagedObjectRegistry().getManagedObject( XinixImageServiceImpl.class.getSimpleName() );
+		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
 		// Demo client
 		Client demoClient = clientService.findByID( clientService.persist( new Client( DEMO_CLIENT_NAME ) ) );
 
@@ -693,21 +696,30 @@ public class ZhawEngine implements LifecycleObject
 
 		for ( String url : imageUrls )
 		{
-			String xinixImageID = exerciseDataService.persist( new XinixImage( url ) );
-			XinixImage xinixImage = exerciseDataService.findByID( xinixImageID );
-			XINIX_IMAGES.add( xinixImage );
+			XINIX_IMAGES.add( (XinixImage)xinixImageService.findByID( xinixImageService.persist( new XinixImage( url ) ) ) );
 		}
 
 		// xinix image matrix
-		XINIX_IMAGE_MATRIX_ID = exerciseTemplateService.persist( new XinixImageMatrix( XINIX_IMAGES ) );
+		XINIX_IMAGE_MATRIX_ID = xinixImageMatrixService.persist( new XinixImageMatrix( XINIX_IMAGES ) );
 
 		// xinix template
 		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me template
-		String you2meTemplateID = exerciseTemplateService.persist( new You2MeTemplate( rootUser, true, TimeUnit.MINUTES, 2, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Führe mit jemandem einen Dialog.", Arrays.asList( "Was möchtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) );
+		String you2meTemplateID = exerciseTemplateService
+			.persist( new You2MeTemplate(
+				rootUser,
+				true,
+				TimeUnit.MINUTES,
+				2,
+				true,
+				false,
+				false,
+				0,
+				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				"Führe mit jemandem einen Dialog.",
+				new HashSet< String >( Arrays.asList( "Was möchtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) ) );
 
 		// simple prototyping template
 		String simplyprotoTemplateID = exerciseTemplateService.persist( new SimplyPrototypingTemplate(
@@ -856,6 +868,7 @@ public class ZhawEngine implements LifecycleObject
 		ExerciseTemplateService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
+		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
 
 		// Post client
 		Client postClient = clientService.findByID( clientService.persist( new Client( POST_ROOT_CLIENT_NAME ) ) );
@@ -926,31 +939,24 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ), "Formuliere je eine mögliche neue Dienstleistung, welche die Post anbieten könnte." ) );
 
 		// xinix template iteration 1
-		String xinixTemplateID1 = exerciseTemplateService
-			.persist( new XinixTemplate(
-				rootUser,
-				true,
-				TimeUnit.SECONDS,
-				180,
-				false,
-				false,
-				false,
-				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-				"Was fällt dir ein zum Thema Kundenservice in Verbindung mit dem gewürfelten Bild?",
-				(XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+		String xinixTemplateID1 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Kundenservice in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)xinixImageMatrixService
+			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 2
 		String xinixTemplateID2 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Paket in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Paket in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)xinixImageMatrixService
+			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 3
 		String xinixTemplateID3 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Postbote in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Postbote in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)xinixImageMatrixService
+			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 4
 		String xinixTemplateID4 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Jahr 2020 in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Jahr 2020 in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)xinixImageMatrixService
+			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simply prototyping template
 		String simplyprotoTemplateID = exerciseTemplateService.persist( new SimplyPrototypingTemplate(
@@ -1238,7 +1244,7 @@ public class ZhawEngine implements LifecycleObject
 		ExerciseTemplateService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-
+		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
 		// SBB client
 		Client sbb = clientService.findByID( clientService.persist( new Client( SBB_ROOT_CLIENT_NAME ) ) );
 
@@ -1309,19 +1315,33 @@ public class ZhawEngine implements LifecycleObject
 
 		// xinix template iteration 1
 		String xinixTemplateID1 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was bedeutet für mich \"Service\" in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Was bedeutet für mich \"Service\" in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)xinixImageMatrixService
+			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 2
 		String xinixTemplateID2 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Neue Dienstleistung am Bahnhof in Verbindung mit dem gewürfelten Bild.", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Neue Dienstleistung am Bahnhof in Verbindung mit dem gewürfelten Bild.", (XinixImageMatrix)xinixImageMatrixService
+			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 3
 		String xinixTemplateID3 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was erwartest du vom Bahnhof 2050 in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findByID( wsTemplateID ), "Was erwartest du vom Bahnhof 2050 in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)xinixImageMatrixService
+			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 4
-		String xinixTemplateID4 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was erwartest du vom ÖV in Verbindung mit dem gewürfelten Bild?", (XinixImageMatrix)exerciseTemplateService.findByID( XINIX_IMAGE_MATRIX_ID ) ) );
+		String xinixTemplateID4 = exerciseTemplateService
+			.persist( new XinixTemplate(
+				rootUser,
+				true,
+				TimeUnit.SECONDS,
+				90,
+				false,
+				false,
+				false,
+				0,
+				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				"Was erwartest du vom ÖV in Verbindung mit dem gewürfelten Bild?",
+				(XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simple prototyping template
 		String simplyprotoTemplateID = exerciseTemplateService.persist( new SimplyPrototypingTemplate(
