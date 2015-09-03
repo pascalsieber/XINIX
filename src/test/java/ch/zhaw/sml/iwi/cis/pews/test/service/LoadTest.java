@@ -63,6 +63,16 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
@@ -97,9 +107,9 @@ public class LoadTest
 	private static SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
 	private static RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
 	private static UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
-	private static WorkshopDefinitionService workshopDefinitionService = ServiceProxyManager.createServiceProxy( WorkshopDefinitionServiceProxy.class );
+	private static WorkshopDefinitionService workshopTemplateService = ServiceProxyManager.createServiceProxy( WorkshopDefinitionServiceProxy.class );
 	private static WorkshopService workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
-	private static ExerciseDefinitionService exerciseDefinitionService = ServiceProxyManager.createServiceProxy( ExerciseDefinitionServiceProxy.class );
+	private static ExerciseDefinitionService exTemplateService = ServiceProxyManager.createServiceProxy( ExerciseDefinitionServiceProxy.class );
 	private static ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static ClientService clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
@@ -119,158 +129,80 @@ public class LoadTest
 
 		user = (UserImpl)userService.findByLoginName( ZhawEngine.ROOT_USER_LOGIN_NAME );
 
-		String sampleXinixImageID = exerciseDataService.persist( new XinixImage( user, null, "http://skylla.zhaw.ch/xinix_images/xinix_img_13.jpg" ) );
+		String sampleXinixImageID = exerciseDataService.persist( new XinixImage( "http://skylla.zhaw.ch/xinix_images/xinix_img_13.jpg" ) );
 
 		for ( int j = 0; j < workshops; j++ )
 		{
 			// Workshop definition and instance
-			WorkshopTemplate wsDef = workshopDefinitionService.findByID( workshopDefinitionService
-				.persist( new PinkElefantTemplate( user, "ws_def_name_", "ws_def_descr_", "ws_def_problem_" ) ) );
+			WorkshopTemplate wsDef = workshopTemplateService.findByID( workshopTemplateService.persist( new PinkElefantTemplate( user, "ws_def_name_", "ws_def_descr_", "ws_def_problem_" ) ) );
 			workshopDefinitionID = wsDef.getID();
 			workshopID = workshopService.persist( new WorkshopImpl( j + "_ws_name_", j + "_ws_descr_", wsDef ) );
 
 			// exercise definitions and instance
-			WorkflowElementTemplate startDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				j + "_start_def_name_",
-				j + "_start_def_descr_" ) ) );
-			exerciseService.persist( new ExerciseImpl( j + "_start_ex_name_", j + "_start_ex_descr_", startDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
+			PosterTemplate startDef = exTemplateService.findByID( exTemplateService.persist( new PosterTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", j + "_start_title", j
+					+ "_start_descr" ) ) );
+			exerciseService.persist( new PosterExercise( j + "_start_ex_name_", j + "_start_ex_descr_", startDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
-			WorkflowElementTemplate plabsDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PinkLabsTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				j + "_plabs_question_" ) ) );
-			ExerciseImpl plabs = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_plabs_ex_name_", j + "_plabs_ex_descr_", plabsDef, (WorkshopImpl)workshopService
+			PinkLabsTemplate plabsDef = exTemplateService.findByID( exTemplateService.persist( new PinkLabsTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_plabs_question" ) ) );
+			ExerciseImpl plabs = exerciseService.findByID( exerciseService.persist( new PinkLabsExercise( j + "_plabs_ex_name_", j + "_plabs_ex_descr_", plabsDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			WorkflowElementTemplate p1Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2POneTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				"http://oncampusadvertising.com/blog/wp-content/uploads/2014/11/college-students-using-smartphones-and-tablets.jpg",
-				j + "_p2p1_question_" ) ) );
-			ExerciseImpl p1 = exerciseService
-				.findByID( exerciseService.persist( new ExerciseImpl( j + "_p1_ex_name_", j + "_p1_ex_descr_", p1Def, (WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
+			P2POneTemplate p1Def = exTemplateService.findByID( exTemplateService.persist( new P2POneTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_p2p1", "url" ) ) );
+			ExerciseImpl p1 = exerciseService.findByID( exerciseService.persist( new P2POneExercise( j + "_p1_ex_name_", j + "_p1_ex_descr_", p1Def, (WorkshopImpl)workshopService
+				.findByID( workshopID ) ) ) );
 
-			WorkflowElementTemplate p2Def = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new P2PTwoTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				j + "_p2_def_question_" ) ) );
-			ExerciseImpl p2 = exerciseService
-				.findByID( exerciseService.persist( new ExerciseImpl( j + "_p2_ex_name_", j + "_p2_ex_descr_", p2Def, (WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
+			P2PTwoTemplate p2Def = exTemplateService.findByID( exTemplateService.persist( new P2PTwoTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_p2_question" ) ) );
+			ExerciseImpl p2 = exerciseService.findByID( exerciseService.persist( new P2PTwoExercise( j + "_p2_ex_name_", j + "_p2_ex_descr_", p2Def, (WorkshopImpl)workshopService
+				.findByID( workshopID ) ) ) );
 
-			WorkflowElementTemplate xinixDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new XinixTemplate(
+			XinixTemplate xinixDef = exTemplateService.findByID( exTemplateService.persist( new XinixTemplate(
 				user,
-				TimeUnit.SECONDS,
-				10,
+				false,
+				null,
+				0,
+				false,
+				false,
+				false,
+				0,
 				wsDef,
-				false,
-				false,
-				false,
-				j + "_xinix_def_question_",
-				(XinixImageMatrix)workshopDefinitionService.findByID( ZhawEngine.XINIX_IMAGE_MATRIX_ID ) ) ) );
-			ExerciseImpl xinix = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_xinix_ex_name_", j + "_xinix_ex_descr_", xinixDef, (WorkshopImpl)workshopService
+				j + "_xinix_question",
+				(XinixImageMatrix)workshopTemplateService.findByID( ZhawEngine.XINIX_IMAGE_MATRIX_ID ) ) ) );
+			ExerciseImpl xinix = exerciseService.findByID( exerciseService.persist( new XinixExercise( j + "_xinix_ex_name_", j + "_xinix_ex_descr_", xinixDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
 			exerciseDefinitionID = xinixDef.getID();
 
-			WorkflowElementTemplate u2mDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new You2MeTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				Arrays.asList( j + "_u2me_question1_", j + "_u2me_question2_" ) ) ) );
-			ExerciseImpl u2m = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_u2m_ex_name_", j + "_u2m_ex_descr_", u2mDef, (WorkshopImpl)workshopService
+			You2MeTemplate u2mDef = exTemplateService.findByID( exTemplateService.persist( new You2MeTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", Arrays.asList( j + "_u2m1", j
+					+ "_u2m2" ) ) ) );
+			ExerciseImpl u2m = exerciseService.findByID( exerciseService.persist( new You2MeExercise( j + "_u2m_ex_name_", j + "_u2m_ex_descr_", u2mDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			WorkflowElementTemplate spDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new SimplyPrototypingTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				j + "_sproto_question_",
-				"mime" ) ) );
-			ExerciseImpl proto = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_sp_ex_name_", j + "_sp_ex_descr_", spDef, (WorkshopImpl)workshopService
+			SimplyPrototypingTemplate spDef = exTemplateService.findByID( exTemplateService
+				.persist( new SimplyPrototypingTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "sp?", "m" ) ) );
+			ExerciseImpl proto = exerciseService.findByID( exerciseService.persist( new SimplyPrototypingExercise( j + "_sp_ex_name_", j + "_sp_ex_descr_", spDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
 			exerciseID = proto.getID();
 
-			WorkflowElementTemplate cDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new CompressionTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				j + "_compression_question_",
-				Arrays.asList( j + "_crit1_", j + "_crit2_" ) ) ) );
-			ExerciseImpl compression = exerciseService.findByID( exerciseService.persist( new ExerciseImpl(
+			CompressionTemplate cDef = exTemplateService.findByID( exTemplateService.persist( new CompressionTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_compr?", Arrays
+				.asList( j + "_crit1_", j + "_crit2_" ) ) ) );
+			ExerciseImpl compression = exerciseService.findByID( exerciseService.persist( new CompressionExercise(
 				j + "_compression_ex_name_",
 				j + "_compression_ex_descr_",
 				cDef,
 				(WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
 
-			WorkflowElementTemplate evalDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				j + "_eval_question_",
-				10 ) ) );
-			ExerciseImpl eval = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_eval_ex_name_", j + "_eval_ex_descr_", evalDef, (WorkshopImpl)workshopService
+			EvaluationTemplate evalDef = exTemplateService.findByID( exTemplateService.persist( new EvaluationTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_eval?", 3 ) ) );
+			ExerciseImpl eval = exerciseService.findByID( exerciseService.persist( new EvaluationExercise( j + "_eval_ex_name_", j + "_eval_ex_descr_", evalDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			WorkflowElementTemplate resDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new EvaluationResultTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false ) ) );
-			exerciseService.persist( new ExerciseImpl( j + "_res_ex_name_", j + "_res_ex_descr_", resDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
+			EvaluationResultTemplate resDef = exTemplateService
+				.findByID( exTemplateService.persist( new EvaluationResultTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_res?" ) ) );
+			exerciseService.persist( new EvaluationResultExercise( j + "_res_ex_name_", j + "_res_ex_descr_", resDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
-			WorkflowElementTemplate endDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new PosterTemplate(
-				user,
-				TimeUnit.SECONDS,
-				10,
-				wsDef,
-				false,
-				false,
-				false,
-				j + "_end_def_name_",
-				j + "_end_def_descr_" ) ) );
-			exerciseService.persist( new ExerciseImpl( j + "_end_ex_name_", j + "_end_ex_descr_", endDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
+			PosterTemplate endDef = exTemplateService.findByID( exTemplateService.persist( new PosterTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", j + "_end_title", j
+					+ "_end_descr" ) ) );
+			exerciseService.persist( new PosterExercise( j + "_end_ex_name_", j + "_end_ex_descr_", endDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
 			// session
 			SessionImpl session = sessionService.findByID( sessionService.persist( new SessionImpl(
@@ -396,10 +328,10 @@ public class LoadTest
 	public void exerciseDefinitionLoad() throws NoSuchMethodException, SecurityException, Throwable
 	{
 		// findAll
-		invokeMethod( exerciseDefinitionService, exerciseDefinitionService.getClass().getMethod( "findAll" ), null );
+		invokeMethod( exTemplateService, exTemplateService.getClass().getMethod( "findAll" ), null );
 
 		// findByID
-		invokeMethod( exerciseDefinitionService, exerciseDefinitionService.getClass().getMethod( "findByID", new Class[] { String.class } ), new Object[] { exerciseDefinitionID } );
+		invokeMethod( exTemplateService, exTemplateService.getClass().getMethod( "findByID", new Class[] { String.class } ), new Object[] { exerciseDefinitionID } );
 	}
 
 	@Test
@@ -479,10 +411,10 @@ public class LoadTest
 	public void workshopDefinitionLoad() throws NoSuchMethodException, SecurityException, Throwable
 	{
 		// findAll
-		invokeMethod( workshopDefinitionService, workshopDefinitionService.getClass().getMethod( "findAll" ), null );
+		invokeMethod( workshopTemplateService, workshopTemplateService.getClass().getMethod( "findAll" ), null );
 
 		// findByID
-		invokeMethod( workshopDefinitionService, workshopDefinitionService.getClass().getMethod( "findByID", new Class[] { String.class } ), new Object[] { workshopDefinitionID } );
+		invokeMethod( workshopTemplateService, workshopTemplateService.getClass().getMethod( "findByID", new Class[] { String.class } ), new Object[] { workshopDefinitionID } );
 	}
 
 	@Test
