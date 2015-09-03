@@ -2,7 +2,7 @@ package ch.zhaw.iwi.cis.pews.model.output;
 
 import java.util.Set;
 
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImage;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
 
 public class XinixOutput extends Output
 {

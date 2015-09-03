@@ -10,42 +10,32 @@ import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
-public class SimplePrototypingTemplate extends ExerciseTemplate
+public class SimplyPrototypingTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String question;
 	private String mimeType;
 
-	public SimplePrototypingTemplate()
+	public SimplyPrototypingTemplate()
 	{
 		super();
 	}
 
-	public SimplePrototypingTemplate(
+	public SimplyPrototypingTemplate(
 			PrincipalImpl owner,
+			boolean timed,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopTemplate workshopDefinition,
-			boolean timed,
 			boolean sharing,
 			boolean skippable,
-			String question,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate,
 			String mimeType )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
-		this.question = question;
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 		this.mimeType = mimeType;
-	}
-
-	public String getQuestion()
-	{
-		return question;
-	}
-
-	public void setQuestion( String question )
-	{
-		this.question = question;
 	}
 
 	public String getMimeType()

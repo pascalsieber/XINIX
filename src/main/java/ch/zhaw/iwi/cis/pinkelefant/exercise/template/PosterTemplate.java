@@ -27,16 +27,19 @@ public class PosterTemplate extends ExerciseTemplate
 
 	public PosterTemplate(
 			PrincipalImpl owner,
+			boolean timed,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopTemplate workshopDefinition,
-			boolean timed,
 			boolean sharing,
 			boolean skippable,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate,
 			String title,
 			String description )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 		this.title = title;
 		this.description = description;
 	}

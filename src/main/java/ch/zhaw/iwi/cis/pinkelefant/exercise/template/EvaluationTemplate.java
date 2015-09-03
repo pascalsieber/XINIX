@@ -14,7 +14,6 @@ public class EvaluationTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String question;
 	private int numberOfVotes;
 
 	public EvaluationTemplate()
@@ -24,28 +23,19 @@ public class EvaluationTemplate extends ExerciseTemplate
 
 	public EvaluationTemplate(
 			PrincipalImpl owner,
+			boolean timed,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopTemplate workshopDefinition,
-			boolean timed,
 			boolean sharing,
 			boolean skippable,
-			String question,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate,
 			int numberOfVotes )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
-		this.question = question;
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 		this.numberOfVotes = numberOfVotes;
-	}
-
-	public String getQuestion()
-	{
-		return question;
-	}
-
-	public void setQuestion( String question )
-	{
-		this.question = question;
 	}
 
 	public static long getSerialversionuid()

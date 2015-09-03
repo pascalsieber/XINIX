@@ -48,7 +48,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 
@@ -75,7 +75,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		EXERCISESPECIFICSERVICES.put( You2MeTemplate.class.getSimpleName(), You2MeExerciseService.class );
 		EXERCISESPECIFICSERVICES.put( P2POneTemplate.class.getSimpleName(), P2POneExerciseService.class );
 		EXERCISESPECIFICSERVICES.put( P2PTwoTemplate.class.getSimpleName(), P2PTwoExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( SimplePrototypingTemplate.class.getSimpleName(), SimplePrototypingExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( SimplyPrototypingTemplate.class.getSimpleName(), SimplePrototypingExerciseService.class );
 		EXERCISESPECIFICSERVICES.put( XinixTemplate.class.getSimpleName(), XinixExerciseService.class );
 		EXERCISESPECIFICSERVICES.put( CompressionTemplate.class.getSimpleName(), CompressionExerciseService.class );
 		EXERCISESPECIFICSERVICES.put( EvaluationTemplate.class.getSimpleName(), EvaluationExerciseService.class );

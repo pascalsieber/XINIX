@@ -13,29 +13,65 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
+
+	// for timing of exercises
+	private boolean timed;
 	private TimeUnit timeUnit;
 	private int duration;
-	private boolean timed;
+
+	// whether exercise data is shared among participants
 	private boolean sharing;
+
+	// whether exercise is skippable (i.e. before timer runs out)
 	private boolean skippable;
 
+	// whether exercise is finished once required number of answers are input by user
+	private boolean countable;
+	private int cardinality;
+
 	@ManyToOne
-	private WorkshopTemplate workshopDefinition;
+	private WorkshopTemplate workshopTemplate;
+
+	// question template (allows generation by wizard)
+	private String questionTemplate;
 
 	public ExerciseTemplate()
 	{
 		super();
 	}
 
-	public ExerciseTemplate( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopTemplate workshopDefinition, boolean timed, boolean sharing, boolean skippable )
+	public ExerciseTemplate(
+			PrincipalImpl owner,
+			boolean timed,
+			TimeUnit timeUnit,
+			int duration,
+			boolean sharing,
+			boolean skippable,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate )
 	{
 		super( owner );
+		this.timed = timed;
 		this.timeUnit = timeUnit;
 		this.duration = duration;
-		this.workshopDefinition = workshopDefinition;
-		this.timed = timed;
 		this.sharing = sharing;
 		this.skippable = skippable;
+		this.countable = countable;
+		this.cardinality = cardinality;
+		this.workshopTemplate = workshopTemplate;
+		this.questionTemplate = questionTemplate;
+	}
+
+	public boolean isTimed()
+	{
+		return timed;
+	}
+
+	public void setTimed( boolean timed )
+	{
+		this.timed = timed;
 	}
 
 	public TimeUnit getTimeUnit()
@@ -58,26 +94,6 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 		this.duration = duration;
 	}
 
-	public WorkshopTemplate getWorkshopDefinition()
-	{
-		return workshopDefinition;
-	}
-
-	public void setWorkshopDefinition( WorkshopTemplate workshopDefinition )
-	{
-		this.workshopDefinition = workshopDefinition;
-	}
-
-	public boolean isTimed()
-	{
-		return timed;
-	}
-
-	public void setTimed( boolean timed )
-	{
-		this.timed = timed;
-	}
-
 	public boolean isSharing()
 	{
 		return sharing;
@@ -96,6 +112,46 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 	public void setSkippable( boolean skippable )
 	{
 		this.skippable = skippable;
+	}
+
+	public boolean isCountable()
+	{
+		return countable;
+	}
+
+	public void setCountable( boolean countable )
+	{
+		this.countable = countable;
+	}
+
+	public int getCardinality()
+	{
+		return cardinality;
+	}
+
+	public void setCardinality( int cardinality )
+	{
+		this.cardinality = cardinality;
+	}
+
+	public WorkshopTemplate getWorkshopTemplate()
+	{
+		return workshopTemplate;
+	}
+
+	public void setWorkshopTemplate( WorkshopTemplate workshopTemplate )
+	{
+		this.workshopTemplate = workshopTemplate;
+	}
+
+	public String getQuestionTemplate()
+	{
+		return questionTemplate;
+	}
+
+	public void setQuestionTemplate( String questionTemplate )
+	{
+		this.questionTemplate = questionTemplate;
 	}
 
 }

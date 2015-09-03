@@ -1,14 +1,11 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 
 @Entity
 public class SimplyPrototypingExercise extends ExerciseImpl
@@ -22,18 +19,10 @@ public class SimplyPrototypingExercise extends ExerciseImpl
 		super();
 	}
 
-	public SimplyPrototypingExercise(
-			String name,
-			String description,
-			WorkflowElementTemplate derivedFrom,
-			Integer orderInWorkshop,
-			WorkshopImpl workshop,
-			Set< PrincipalImpl > participants,
-			String question,
-			String mimeType )
+	public SimplyPrototypingExercise( String name, String description, SimplyPrototypingTemplate derivedFrom, WorkshopImpl workshop )
 	{
-		super( name, description, derivedFrom, orderInWorkshop, workshop, participants, question );
-		this.mimeType = mimeType;
+		super( name, description, derivedFrom, workshop );
+		this.mimeType = derivedFrom.getMimeType();
 	}
 
 	public String getMimeType()

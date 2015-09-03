@@ -21,9 +21,19 @@ public class EvaluationResultTemplate extends ExerciseTemplate
 		super();
 	}
 
-	public EvaluationResultTemplate( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopTemplate workshopDefinition, boolean timed, boolean sharing, boolean skippable )
+	public EvaluationResultTemplate(
+			PrincipalImpl owner,
+			boolean timed,
+			TimeUnit timeUnit,
+			int duration,
+			boolean sharing,
+			boolean skippable,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 	}
 
 }

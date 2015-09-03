@@ -9,8 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImage;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
 
 @Entity
 public class XinixData extends CompressableExerciseData

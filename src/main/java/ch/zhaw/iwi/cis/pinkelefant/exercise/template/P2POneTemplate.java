@@ -15,7 +15,6 @@ public class P2POneTemplate extends ExerciseTemplate
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String picture;
-	private String question;
 
 	public P2POneTemplate()
 	{
@@ -24,18 +23,19 @@ public class P2POneTemplate extends ExerciseTemplate
 
 	public P2POneTemplate(
 			PrincipalImpl owner,
+			boolean timed,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopTemplate workshopDefinition,
-			boolean timed,
 			boolean sharing,
 			boolean skippable,
-			String picture,
-			String question )
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate,
+			String picture )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 		this.picture = picture;
-		this.question = question;
 	}
 
 	public String getPicture()
@@ -46,16 +46,6 @@ public class P2POneTemplate extends ExerciseTemplate
 	public void setPicture( String picture )
 	{
 		this.picture = picture;
-	}
-
-	public String getQuestion()
-	{
-		return question;
-	}
-
-	public void setQuestion( String question )
-	{
-		this.question = question;
 	}
 
 }

@@ -18,8 +18,6 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImage;
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
@@ -27,6 +25,8 @@ import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
@@ -70,7 +70,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
@@ -206,7 +206,7 @@ public class LoadTest
 			ExerciseImpl u2m = exerciseService.findByID( exerciseService.persist( new ExerciseImpl( j + "_u2m_ex_name_", j + "_u2m_ex_descr_", u2mDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			WorkflowElementTemplate spDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new SimplePrototypingTemplate(
+			WorkflowElementTemplate spDef = exerciseDefinitionService.findByID( exerciseDefinitionService.persist( new SimplyPrototypingTemplate(
 				user,
 				TimeUnit.SECONDS,
 				10,

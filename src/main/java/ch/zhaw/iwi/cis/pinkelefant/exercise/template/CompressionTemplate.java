@@ -17,7 +17,6 @@ public class CompressionTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String question;
 
 	@ElementCollection
 	private List< String > solutionCriteria;
@@ -30,28 +29,19 @@ public class CompressionTemplate extends ExerciseTemplate
 
 	public CompressionTemplate(
 			PrincipalImpl owner,
+			boolean timed,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopTemplate workshopDefinition,
-			boolean timed,
 			boolean sharing,
 			boolean skippable,
-			String question,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate,
 			List< String > solutionCriteria )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
-		this.question = question;
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 		this.solutionCriteria = solutionCriteria;
-	}
-
-	public String getQuestion()
-	{
-		return question;
-	}
-
-	public void setQuestion( String question )
-	{
-		this.question = question;
 	}
 
 	public List< String > getSolutionCriteria()

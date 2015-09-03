@@ -1,4 +1,4 @@
-package ch.zhaw.iwi.cis.pews.model.instance;
+package ch.zhaw.iwi.cis.pews.model.xinix;
 
 import java.util.ArrayList;
 import java.util.List;

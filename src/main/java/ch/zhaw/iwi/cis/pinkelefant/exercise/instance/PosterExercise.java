@@ -1,15 +1,12 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
 
 @Entity
 public class PosterExercise extends ExerciseImpl
@@ -26,20 +23,11 @@ public class PosterExercise extends ExerciseImpl
 		super();
 	}
 
-	public PosterExercise(
-			String name,
-			String description,
-			WorkflowElementTemplate derivedFrom,
-			Integer orderInWorkshop,
-			WorkshopImpl workshop,
-			Set< PrincipalImpl > participants,
-			String question,
-			String title,
-			String description2 )
+	public PosterExercise( String name, String description, PosterTemplate derivedFrom, WorkshopImpl workshop )
 	{
-		super( name, description, derivedFrom, orderInWorkshop, workshop, participants, question );
-		this.title = title;
-		description = description2;
+		super( name, description, derivedFrom, workshop );
+		this.title = derivedFrom.getTitle();
+		this.description = derivedFrom.getDescription();
 	}
 
 	public String getTitle()

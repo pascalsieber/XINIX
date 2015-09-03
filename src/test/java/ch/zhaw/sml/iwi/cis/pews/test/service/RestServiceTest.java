@@ -35,8 +35,6 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImage;
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
 import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
@@ -58,6 +56,8 @@ import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -99,7 +99,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
@@ -141,7 +141,7 @@ public class RestServiceTest
 	private static XinixImageMatrix xinixImageMatrixStub = new XinixImageMatrix();
 	private static XinixTemplate xinixDefinitionStub = new XinixTemplate();
 	private static You2MeTemplate you2meDefinitionStub = new You2MeTemplate();
-	private static SimplePrototypingTemplate simpleprototypingDefinitionStub = new SimplePrototypingTemplate();
+	private static SimplyPrototypingTemplate simpleprototypingDefinitionStub = new SimplyPrototypingTemplate();
 	private static CompressionTemplate compressionDefinitionStub = new CompressionTemplate();
 	private static EvaluationTemplate evaluationDefinitionStub = new EvaluationTemplate();
 	private static EvaluationResultTemplate evaluationResultDefinitionStub = new EvaluationResultTemplate();
@@ -227,7 +227,7 @@ public class RestServiceTest
 			"question?",
 			"counter question?" ) ) ) );
 
-		simpleprototypingDefinitionStub.setID( exerciseDefinitionService.persist( new SimplePrototypingTemplate(
+		simpleprototypingDefinitionStub.setID( exerciseDefinitionService.persist( new SimplyPrototypingTemplate(
 			defaultUserStub,
 			TimeUnit.MINUTES,
 			2,
@@ -1009,8 +1009,8 @@ public class RestServiceTest
 		// simple prototyping
 		setExerciseOnDefaultSession( simpleprototypingExerciseStub );
 		SimplePrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplePrototypingInput.class );
-		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplePrototypingTemplate)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
-		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplePrototypingTemplate)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getMimeType() ) );
+		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getQuestion() ) );
+		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exerciseDefinitionService.findByID( simpleprototypingDefinitionStub.getID() ) ).getMimeType() ) );
 
 		output = new SimplePrototypingOutput( "simpleprototyping".getBytes() );
 		exerciseService.setOutput( mapper.writeValueAsString( output ) );

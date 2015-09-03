@@ -5,7 +5,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class XinixImageMatrixDao extends ExerciseDataDaoImpl

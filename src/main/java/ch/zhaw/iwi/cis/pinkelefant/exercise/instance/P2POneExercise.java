@@ -1,14 +1,11 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 
 @Entity
 public class P2POneExercise extends ExerciseImpl
@@ -22,18 +19,10 @@ public class P2POneExercise extends ExerciseImpl
 		super();
 	}
 
-	public P2POneExercise(
-			String name,
-			String description,
-			WorkflowElementTemplate derivedFrom,
-			Integer orderInWorkshop,
-			WorkshopImpl workshop,
-			Set< PrincipalImpl > participants,
-			String question,
-			String picture )
+	public P2POneExercise( String name, String description, P2POneTemplate derivedFrom, WorkshopImpl workshop )
 	{
-		super( name, description, derivedFrom, orderInWorkshop, workshop, participants, question );
-		this.picture = picture;
+		super( name, description, derivedFrom, workshop );
+		this.picture = derivedFrom.getPicture();
 	}
 
 	public String getPicture()

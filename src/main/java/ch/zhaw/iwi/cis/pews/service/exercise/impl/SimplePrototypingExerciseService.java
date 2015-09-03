@@ -13,10 +13,10 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplePrototypingTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = SimplePrototypingTemplate.class )
+@ExerciseSpecificService( exerciseDefinition = SimplyPrototypingTemplate.class )
 public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 {
 
@@ -28,7 +28,7 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		SimplePrototypingTemplate definition = (SimplePrototypingTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
+		SimplyPrototypingTemplate definition = (SimplyPrototypingTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
 		return new SimplePrototypingInput( definition.getQuestion(), definition.getMimeType() );
 	}
 	
@@ -37,7 +37,7 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		SimplePrototypingTemplate definition = (SimplePrototypingTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
+		SimplyPrototypingTemplate definition = (SimplyPrototypingTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
 		return new SimplePrototypingInput( definition.getQuestion(), definition.getMimeType() );
 	}
 

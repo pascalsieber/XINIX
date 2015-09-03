@@ -14,28 +14,25 @@ public class P2PTwoTemplate extends ExerciseTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private String question;
 
 	public P2PTwoTemplate()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public P2PTwoTemplate( PrincipalImpl owner, TimeUnit timeUnit, int duration, WorkshopTemplate workshopDefinition, boolean timed, boolean sharing, boolean skippable, String question )
+	public P2PTwoTemplate(
+			PrincipalImpl owner,
+			boolean timed,
+			TimeUnit timeUnit,
+			int duration,
+			boolean sharing,
+			boolean skippable,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
-		this.question = question;
-	}
-
-	public String getQuestion()
-	{
-		return question;
-	}
-
-	public void setQuestion( String question )
-	{
-		this.question = question;
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 	}
 
 }

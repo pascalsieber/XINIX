@@ -1,16 +1,13 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.XinixImageMatrix;
-import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 
 @Entity
 public class XinixExercise extends ExerciseImpl
@@ -26,18 +23,10 @@ public class XinixExercise extends ExerciseImpl
 		super();
 	}
 
-	public XinixExercise(
-			String name,
-			String description,
-			WorkflowElementTemplate derivedFrom,
-			Integer orderInWorkshop,
-			WorkshopImpl workshop,
-			Set< PrincipalImpl > participants,
-			String question,
-			XinixImageMatrix images )
+	public XinixExercise( String name, String description, XinixTemplate derivedFrom, WorkshopImpl workshop )
 	{
-		super( name, description, derivedFrom, orderInWorkshop, workshop, participants, question );
-		this.images = images;
+		super( name, description, derivedFrom, workshop );
+		this.images = derivedFrom.getImages();
 	}
 
 	public XinixImageMatrix getImages()

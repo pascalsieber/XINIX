@@ -30,15 +30,18 @@ public class You2MeTemplate extends ExerciseTemplate
 
 	public You2MeTemplate(
 			PrincipalImpl owner,
+			boolean timed,
 			TimeUnit timeUnit,
 			int duration,
-			WorkshopTemplate workshopDefinition,
-			boolean timed,
 			boolean sharing,
 			boolean skippable,
+			boolean countable,
+			int cardinality,
+			WorkshopTemplate workshopTemplate,
+			String questionTemplate,
 			List< String > questions )
 	{
-		super( owner, timeUnit, duration, workshopDefinition, timed, sharing, skippable );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
 		this.questions = questions;
 	}
 
