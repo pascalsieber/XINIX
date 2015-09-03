@@ -68,7 +68,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( EvaluationTemplate.class.getSimpleName() ) )
+			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( EvaluationTemplate.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
 					.createQuery(

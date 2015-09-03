@@ -10,24 +10,24 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
-import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
-import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.WorkshopTemplateServiceImpl;
 
-@Path( WorkshopDefinitionRestService.BASE )
+@Path( WorkshopTemplateRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class WorkshopDefinitionRestService extends WorkshopObjectRestService
+public class WorkshopTemplateRestService extends WorkshopObjectRestService
 {
 
-	public static final String BASE = "/workshopService/definition";
+	public static final String BASE = "/workshopService/template";
 
-	private WorkshopDefinitionService workshopDefinitionService;
+	private WorkshopTemplateService workshopTemplateService;
 
-	public WorkshopDefinitionRestService()
+	public WorkshopTemplateRestService()
 	{
 		super();
-		workshopDefinitionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		workshopTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
 	}
 
 	@POST
@@ -42,7 +42,7 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public WorkshopTemplate findByID( String id )
 	{
-		return workshopDefinitionService.findWorkshopDefinitionByID( id );
+		return workshopTemplateService.findWorkshopTemplateByID( id );
 	}
 
 	@POST
@@ -57,13 +57,13 @@ public class WorkshopDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< WorkshopTemplate > findAll()
 	{
-		return workshopDefinitionService.findAllWorkshopDefinitions();
+		return workshopTemplateService.findAllWorkshopTemplates();
 	}
 
 	@Override
 	protected WorkshopObjectService getWorkshopObjectService()
 	{
-		return workshopDefinitionService;
+		return workshopTemplateService;
 	}
 
 }

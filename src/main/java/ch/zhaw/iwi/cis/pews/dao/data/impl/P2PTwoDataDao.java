@@ -53,7 +53,7 @@ public class P2PTwoDataDao extends ExerciseDataDaoImpl
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( P2PTwoTemplate.class.getSimpleName() ) )
+			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( P2PTwoTemplate.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager().createQuery(
 					"select distinct d from P2PTwoData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.answers LEFT JOIN FETCH d.selectedKeywords where d.workflowElement.id = '" + ex.getID()

@@ -27,10 +27,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = EvaluationTemplate.class )
+@ExerciseSpecificService( exerciseTemplate = EvaluationTemplate.class )
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
 	private CompressionDataDao compressionDataDao;
@@ -46,20 +47,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-
-		List< CompressionInputElement > solutions = new ArrayList< CompressionInputElement >();
-		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
-
-		for ( ExerciseDataImpl data : compressionData )
-		{
-			for ( CompressionExerciseDataElement element : ( (CompressionExerciseData)data ).getSolutions() )
-			{
-				solutions.add( new CompressionInputElement( element.getID(), element.getSolution(), element.getDescription() ) );
-			}
-		}
-
-		EvaluationTemplate definition = (EvaluationTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new EvaluationInput( solutions, definition.getQuestion(), definition.getNumberOfVotes() );
+		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
 	@Override
@@ -76,8 +64,8 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		EvaluationTemplate definition = (EvaluationTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		return new EvaluationInput( solutions, definition.getQuestion(), definition.getNumberOfVotes() );
+		EvaluationExercise ex = (EvaluationExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
+		return new EvaluationInput( solutions, ex.getQuestion(), ex.getNumberOfVotes() );
 	}
 
 	@Override

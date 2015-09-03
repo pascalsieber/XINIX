@@ -12,6 +12,7 @@ import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
@@ -29,7 +30,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = EvaluationResultTemplate.class )
+@ExerciseSpecificService( exerciseTemplate = EvaluationResultTemplate.class )
 public class EvaluationResultExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataDao evaluationDataDao;
@@ -44,6 +45,12 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 
 	@Override
 	public Input getInput()
+	{
+		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+	}
+
+	@Override
+	public Input getInputByExerciseID( String exerciseID )
 	{
 		Map< CompressionExerciseDataElement, List< Integer > > evaluationsMap = new HashMap< CompressionExerciseDataElement, List< Integer > >();
 		List< ExerciseDataImpl > evaluations = evaluationDataDao.findByWorkshopAndExerciseDataClass( Evaluation.class );
@@ -92,13 +99,6 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 		Collections.sort( input.getResults(), new EvaluationResultComparator() );
 
 		return input;
-	}
-
-	@Override
-	public Input getInputByExerciseID( String exerciseID )
-	{
-		// since there will only be one instance of evaluationResultExercise per Workshop
-		return getInput();
 	}
 
 	@Override

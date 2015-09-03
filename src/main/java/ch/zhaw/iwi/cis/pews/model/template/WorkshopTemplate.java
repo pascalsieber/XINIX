@@ -19,13 +19,13 @@ public class WorkshopTemplate extends WorkflowElementTemplate
 	private String name;
 	private String description;
 
-	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workshopDefinition" )
-	private Set< ExerciseTemplate > exerciseDefinitions;
+	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workshopTemplate" )
+	private Set< ExerciseTemplate > exerciseTemplates;
 
 	public WorkshopTemplate()
 	{
 		super();
-		this.exerciseDefinitions = new HashSet< ExerciseTemplate >();
+		this.exerciseTemplates = new HashSet< ExerciseTemplate >();
 	}
 
 	public WorkshopTemplate( PrincipalImpl owner, String name, String description )
@@ -33,7 +33,7 @@ public class WorkshopTemplate extends WorkflowElementTemplate
 		super( owner );
 		this.name = name;
 		this.description = description;
-		this.exerciseDefinitions = new HashSet< ExerciseTemplate >();
+		this.exerciseTemplates = new HashSet< ExerciseTemplate >();
 	}
 
 	public String getName()
@@ -56,14 +56,14 @@ public class WorkshopTemplate extends WorkflowElementTemplate
 		this.description = description;
 	}
 
-	public Set< ExerciseTemplate > getExerciseDefinitions()
+	public Set< ExerciseTemplate > getExerciseTemplates()
 	{
-		return exerciseDefinitions;
+		return exerciseTemplates;
 	}
 
-	public void setExerciseDefinitions( Set< ExerciseTemplate > exerciseDefinitions )
+	public void setExerciseTemplates( Set< ExerciseTemplate > exerciseTemplates )
 	{
-		this.exerciseDefinitions = exerciseDefinitions;
+		this.exerciseTemplates = exerciseTemplates;
 	}
 
 }

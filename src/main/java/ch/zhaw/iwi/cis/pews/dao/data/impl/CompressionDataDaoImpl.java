@@ -57,7 +57,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( CompressionTemplate.class.getSimpleName() ) )
+			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( CompressionTemplate.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
 					.createQuery(

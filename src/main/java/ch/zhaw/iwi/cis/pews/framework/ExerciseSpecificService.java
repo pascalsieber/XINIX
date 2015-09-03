@@ -11,5 +11,5 @@ import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 @Target(ElementType.TYPE)
 public @interface ExerciseSpecificService
 {
-	public Class< ? extends ExerciseTemplate> exerciseDefinition();
+	public Class< ? extends ExerciseTemplate> exerciseTemplate();
 }

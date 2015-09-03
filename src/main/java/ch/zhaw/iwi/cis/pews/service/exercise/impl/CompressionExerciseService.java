@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.zhaw.iwi.cis.pews.dao.ExerciseDefinitionDao;
-import ch.zhaw.iwi.cis.pews.dao.definition.impl.CompressionDefinitionDao;
+import ch.zhaw.iwi.cis.pews.dao.ExerciseTemplateDao;
+import ch.zhaw.iwi.cis.pews.dao.template.impl.CompressionTemplateDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -25,56 +25,33 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = CompressionTemplate.class )
+@ExerciseSpecificService( exerciseTemplate = CompressionTemplate.class )
 public class CompressionExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataService exerciseDataService;
-	private ExerciseDefinitionDao compressionDefinitionDao;
+	private ExerciseTemplateDao compressionTemplateDao;
 
 	public CompressionExerciseService()
 	{
 		super();
 		this.exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-		this.compressionDefinitionDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDefinitionDao.class.getSimpleName() );
+		this.compressionTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionTemplateDao.class.getSimpleName() );
 	}
 
 	@Override
 	public Input getInput()
 	{
-		CompressionTemplate definition = compressionDefinitionDao.findById( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getID() );
-		List< CompressableExerciseData > compressableData = new ArrayList<>();
-
-		List< ExerciseDataImpl > dataOfAllExercises = new ArrayList<>();
-
-		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
-		{
-			List< ExerciseDataImpl > data = exerciseDataService.findByExerciseID( ex.getID() );
-
-			if ( !data.isEmpty() )
-			{
-				dataOfAllExercises.addAll( data );
-			}
-		}
-
-		for ( ExerciseDataImpl data : dataOfAllExercises )
-		{
-			if ( CompressableExerciseData.class.isAssignableFrom( data.getClass() ) )
-			{
-				compressableData.add( (CompressableExerciseData)data );
-			}
-		}
-
-		CompressionInput input = new CompressionInput( definition.getQuestion(), new ArrayList<>( definition.getSolutionCriteria() ), compressableData );
-		return input;
+		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		CompressionTemplate definition = compressionDefinitionDao.findById( ( (WorkflowElementImpl)super.findByID( exerciseID ) ).getDefinition().getID() );
+		CompressionExercise exercise = (CompressionExercise)findExerciseByID( exerciseID );
 		List< CompressableExerciseData > compressableData = new ArrayList<>();
 
 		List< ExerciseDataImpl > dataOfAllExercises = new ArrayList<>();
@@ -92,7 +69,7 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		CompressionInput input = new CompressionInput( definition.getQuestion(), new ArrayList<>( definition.getSolutionCriteria() ), compressableData );
+		CompressionInput input = new CompressionInput( exercise.getQuestion(), new ArrayList<>( exercise.getSolutionCriteria() ), compressableData );
 		return input;
 	}
 

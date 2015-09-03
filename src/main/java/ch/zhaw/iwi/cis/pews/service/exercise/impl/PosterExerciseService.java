@@ -9,10 +9,11 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.PosterInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = PosterTemplate.class )
+@ExerciseSpecificService( exerciseTemplate = PosterTemplate.class )
 public class PosterExerciseService extends ExerciseServiceImpl
 {
 
@@ -24,15 +25,14 @@ public class PosterExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		PosterTemplate definition = (PosterTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new PosterInput( definition.getTitle(), definition.getDescription() );
+		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		PosterTemplate definition = (PosterTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		return new PosterInput( definition.getTitle(), definition.getDescription() );
+		PosterExercise ex = (PosterExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
+		return new PosterInput( ex.getTitle(), ex.getDescription() );
 	}
 
 	@Override
@@ -46,5 +46,5 @@ public class PosterExerciseService extends ExerciseServiceImpl
 	{
 		throw new UnsupportedOperationException( "Poster Exercises does not support the operation setOutputByExerciseID." );
 	}
-	
+
 }

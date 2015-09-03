@@ -56,7 +56,7 @@ public class SessionImpl extends WorkflowElementImpl
 	public SessionImpl(
 			String name,
 			String description,
-			WorkflowElementTemplate definition,
+			WorkflowElementTemplate derivedFrom,
 			SessionSynchronizationImpl synchronization,
 			WorkshopImpl workshop,
 			ExerciseImpl currentExercise,
@@ -65,7 +65,7 @@ public class SessionImpl extends WorkflowElementImpl
 			Set< Invitation > invitations,
 			Set< PrincipalImpl > executers )
 	{
-		super( name, description, definition );
+		super( name, description, derivedFrom );
 		this.synchronization = synchronization;
 		this.workshop = workshop;
 		this.currentExercise = currentExercise;

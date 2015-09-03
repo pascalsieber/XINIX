@@ -52,7 +52,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
 		{
-			if ( ex.getDefinition().getClass().getSimpleName().equalsIgnoreCase( P2POneTemplate.class.getSimpleName() ) )
+			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( P2POneTemplate.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
 					.createQuery( "select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + ex.getID() + "' ORDER BY d.timestamp ASC" )

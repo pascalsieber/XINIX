@@ -2,7 +2,7 @@ package ch.zhaw.iwi.cis.pews.dao.impl;
 
 import java.util.List;
 
-import ch.zhaw.iwi.cis.pews.dao.WorkshopDefinitionDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopTemplateDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -10,7 +10,7 @@ import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-public class WorkshopDefinitionDaoImpl extends WorkshopObjectDaoImpl implements WorkshopDefinitionDao
+public class WorkshopTemplateDaoImpl extends WorkshopObjectDaoImpl implements WorkshopTemplateDao
 {
 
 	@Override
@@ -21,10 +21,10 @@ public class WorkshopDefinitionDaoImpl extends WorkshopObjectDaoImpl implements 
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public WorkshopTemplate findByIDWithExerciseDefinitions( String id )
+	public WorkshopTemplate findByIDWithExerciseTemplates( String id )
 	{
 		List< WorkshopTemplate > results = getEntityManager()
-			.createQuery( "from WorkshopDefinitionImpl d LEFT JOIN FETCH d.exerciseDefinitions exDefs where d.id = '" + id + "'" )
+			.createQuery( "from WorkshopTemplate d LEFT JOIN FETCH d.exerciseTemplates exDefs where d.id = '" + id + "'" )
 			.getResultList();
 
 		if ( results.size() > 0 )

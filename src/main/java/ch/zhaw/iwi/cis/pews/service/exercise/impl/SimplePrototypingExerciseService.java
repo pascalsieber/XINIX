@@ -13,10 +13,11 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = SimplyPrototypingTemplate.class )
+@ExerciseSpecificService( exerciseTemplate = SimplyPrototypingTemplate.class )
 public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 {
 
@@ -28,17 +29,14 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		SimplyPrototypingTemplate definition = (SimplyPrototypingTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new SimplePrototypingInput( definition.getQuestion(), definition.getMimeType() );
+		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
-	
-	
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		SimplyPrototypingTemplate definition = (SimplyPrototypingTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		return new SimplePrototypingInput( definition.getQuestion(), definition.getMimeType() );
+		SimplyPrototypingExercise ex = (SimplyPrototypingExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
+		return new SimplePrototypingInput( ex.getQuestion(), ex.getMimeType() );
 	}
 
 	@Override
@@ -68,5 +66,5 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + SimplePrototypingOutput.class.getSimpleName() );
 		}
 	}
-	
+
 }

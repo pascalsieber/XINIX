@@ -54,24 +54,24 @@ import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
-import ch.zhaw.iwi.cis.pews.service.WorkshopDefinitionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.impl.ClientServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
-import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDefinitionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.ExerciseTemplateServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.InvitationServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.RoleServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
-import ch.zhaw.iwi.cis.pews.service.impl.WorkshopDefinitionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.WorkshopTemplateServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
@@ -363,9 +363,9 @@ public class ZhawEngine implements LifecycleObject
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-		WorkshopDefinitionService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		WorkshopTemplateService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
 		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
-		ExerciseDefinitionService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
+		ExerciseTemplateService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
@@ -373,8 +373,8 @@ public class ZhawEngine implements LifecycleObject
 		// sample workshop template (pinkelefant)
 		String wsTemplateID = workshopTemplateService.persist( new PinkElefantTemplate(
 			rootUser,
-			"p.i.n.k.elefant Definition",
-			"Definition für p.i.n.k.elefant Workshop",
+			"p.i.n.k.elefant Template",
+			"Template für p.i.n.k.elefant Workshop",
 			"Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
@@ -616,9 +616,9 @@ public class ZhawEngine implements LifecycleObject
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-		WorkshopDefinitionService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		WorkshopTemplateService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
 		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
-		ExerciseDefinitionService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
+		ExerciseTemplateService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
@@ -640,7 +640,7 @@ public class ZhawEngine implements LifecycleObject
 		UserImpl user = new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( postRootRoleID ), null, "root", "demo", DEMO_ROOT_USER_LOGIN_NAME );
 		UserImpl demoRootUser = userService.findByID( userService.persist( user ) );
 
-		// sample workshop definition (pinkelefant)
+		// sample workshop template (pinkelefant)
 		String wsTemplateID = workshopTemplateService.persist( new PinkElefantTemplate(
 			rootUser,
 			"p.i.n.k.elefant Demo",
@@ -851,9 +851,9 @@ public class ZhawEngine implements LifecycleObject
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
-		WorkshopDefinitionService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		WorkshopTemplateService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
 		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
-		ExerciseDefinitionService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
+		ExerciseTemplateService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
 
@@ -879,29 +879,29 @@ public class ZhawEngine implements LifecycleObject
 			POST_ROOT_USER_LOGIN_NAME );
 		UserImpl postRootUser = userService.findByID( userService.persist( user ) );
 
-		// workshop definition (pinkelefant)
+		// workshop template (pinkelefant)
 		String wsTemplateID = workshopTemplateService.persist( new PinkElefantTemplate(
 			postRootUser,
-			"Post Workshop Definition",
-			"Definition für p.i.n.k.elefant Workshop mit der Post",
+			"Post Workshop Template",
+			"Template für p.i.n.k.elefant Workshop mit der Post",
 			"Massnahmen Begleit-Service Paketdienst im Jahr 2020" ) );
 
 		// workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (WorkflowElementTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
 
-		// pinklabs definition 1
+		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Was macht dir Spass?" ) );
 
-		// pinklabs definition 2
+		// pinklabs template 2
 		String pinklabsTemplateID2 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wie kann man dich überraschen?" ) );
 
-		// pinklabs definition 3
+		// pinklabs template 3
 		String pinklabsTemplateID3 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wofür gibst du gerne Geld aus?" ) );
 
-		// pinklabs definition 4
+		// pinklabs template 4
 		String pinklabsTemplateID4 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Was kostet dich zu viel Zeit?" ) );
 
@@ -980,11 +980,11 @@ public class ZhawEngine implements LifecycleObject
 			"ALLE INPUTS aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen zum Thema \"Massnahmen Begleit-Service Paketdiesnst im Jahr 2020\" formuliert.",
 			new ArrayList< String >() ) );
 
-		// evaluation definition
+		// evaluation template
 		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 600, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Die einzelnen Ideen werden nun bewertet.", 5 ) );
 
-		// evaluation result definition
+		// evaluation result template
 		String evaluationResultTemplateID = exerciseTemplateService.persist( new EvaluationResultTemplate(
 			rootUser,
 			false,
@@ -1233,9 +1233,9 @@ public class ZhawEngine implements LifecycleObject
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
-		WorkshopDefinitionService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopDefinitionServiceImpl.class.getSimpleName() );
+		WorkshopTemplateService workshopTemplateService = getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
 		WorkshopService workshopService = getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
-		ExerciseDefinitionService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
+		ExerciseTemplateService exerciseTemplateService = getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		SessionService sessionService = getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
 
@@ -1261,29 +1261,29 @@ public class ZhawEngine implements LifecycleObject
 			SBB_ROOT_USER_LOGIN_NAME );
 		UserImpl sbbRootUser = userService.findByID( userService.persist( user ) );
 
-		// workshop definition (pinkelefant)
+		// workshop template (pinkelefant)
 		String wsTemplateID = workshopTemplateService.persist( new PinkElefantTemplate(
 			sbbRootUser,
-			"SBB Workshop Definition",
-			"Definition für p.i.n.k.elefant Workshop mit der SBB",
+			"SBB Workshop Template",
+			"Template für p.i.n.k.elefant Workshop mit der SBB",
 			"Was wünsche ich mir am Bahnhof" ) );
 
 		// workshop instance
 		String wsID = workshopService.persist( new WorkshopImpl( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (WorkflowElementTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
 
-		// pinklabs definition 1
+		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Was mache ich alles online?" ) );
 
-		// pinklabs definition 2
+		// pinklabs template 2
 		String pinklabsTemplateID2 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Das macht mir Spass?" ) );
 
-		// pinklabs definition 3
+		// pinklabs template 3
 		String pinklabsTemplateID3 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Das spart mir Zeit?" ) );
 
-		// pinklabs definition 4
+		// pinklabs template 4
 		String pinklabsTemplateID4 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Was würde ich nie online kaufen?" ) );
 
@@ -1345,7 +1345,7 @@ public class ZhawEngine implements LifecycleObject
 		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 480, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Die einzelnen Ideen werden nun bewertet.", 5 ) );
 
-		// poster definitions
+		// poster templates
 
 		String introTemplateID1 = exerciseTemplateService
 			.persist( new PosterTemplate(

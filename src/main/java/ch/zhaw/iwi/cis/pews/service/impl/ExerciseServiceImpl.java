@@ -83,9 +83,9 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		EXERCISESPECIFICSERVICES.put( EvaluationResultTemplate.class.getSimpleName(), EvaluationResultExerciseService.class );
 	}
 
-	private Class< ? > getExerciseSpecificService( String exerciseDefinitionClassName )
+	private Class< ? > getExerciseSpecificService( String exerciseTemplateClassName )
 	{
-		return EXERCISESPECIFICSERVICES.get( exerciseDefinitionClassName );
+		return EXERCISESPECIFICSERVICES.get( exerciseTemplateClassName );
 	}
 
 	public ExerciseServiceImpl()
@@ -127,7 +127,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		{
 			// place at end of queue
 			exercise.setOrderInWorkshop( workshop.getExercises().size() );
-			
+
 			// special case: if persisting / updating existing exercise and no
 			// argument for orderInWorkshop provided, exercise keeps existing orderInWorkshop
 			ExerciseImpl check = exerciseDao.findById( exercise.getID() );
@@ -197,14 +197,14 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	public Input getInput()
 	{
 		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).getInput();
+			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDerivedFrom().getClass().getSimpleName() ).getSimpleName() ) ).getInput();
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
 		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( ( (ExerciseImpl)findByID( exerciseID ) ).getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).getInputByExerciseID( exerciseID );
+			getExerciseSpecificService( ( (ExerciseImpl)findByID( exerciseID ) ).getDerivedFrom().getClass().getSimpleName() ).getSimpleName() ) ).getInputByExerciseID( exerciseID );
 	}
 
 	@Override
@@ -239,7 +239,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	public void setOutput( String output )
 	{
 		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).setOutput( output );
+			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDerivedFrom().getClass().getSimpleName() ).getSimpleName() ) ).setOutput( output );
 	}
 
 	@Override
@@ -261,7 +261,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 				throw new RuntimeException( "error performing setOutputByExerciseID: exercise with ID " + exerciseID + " could not be found" );
 			}
 
-			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( exercise.getDefinition().getClass().getSimpleName() ).getSimpleName() ) )
+			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( exercise.getDerivedFrom().getClass().getSimpleName() ).getSimpleName() ) )
 				.setOuputByExerciseID( outputRequestString );
 		}
 		catch ( IOException e )

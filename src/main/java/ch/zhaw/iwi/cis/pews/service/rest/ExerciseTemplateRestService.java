@@ -10,24 +10,24 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
-import ch.zhaw.iwi.cis.pews.service.ExerciseDefinitionService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
-import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDefinitionServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.ExerciseTemplateServiceImpl;
 
-@Path( ExerciseDefinitionRestService.BASE )
+@Path( ExerciseTemplateRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
 @Produces( MediaType.APPLICATION_JSON )
-public class ExerciseDefinitionRestService extends WorkshopObjectRestService
+public class ExerciseTemplateRestService extends WorkshopObjectRestService
 {
 
-	public final static String BASE = "/exerciseService/definition";
+	public final static String BASE = "/exerciseService/template";
 
-	private ExerciseDefinitionService exerciseDefinitionService;
+	private ExerciseTemplateService exerciseTemplateService;
 
-	public ExerciseDefinitionRestService()
+	public ExerciseTemplateRestService()
 	{
 		super();
-		exerciseDefinitionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDefinitionServiceImpl.class.getSimpleName() );
+		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 	}
 
 	@POST
@@ -42,14 +42,14 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public ExerciseTemplate findByID( String id )
 	{
-		return exerciseDefinitionService.findExerciseDefinitionByID( id );
+		return exerciseTemplateService.findExerciseTemplateByID( id );
 	}
 
 	@POST
 	@Path( REMOVE )
 	public void remove( ExerciseTemplate obj )
 	{
-		exerciseDefinitionService.removeExerciseDefinition( obj );
+		exerciseTemplateService.removeExerciseTemplate( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -57,13 +57,13 @@ public class ExerciseDefinitionRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< ExerciseTemplate > findAll()
 	{
-		return exerciseDefinitionService.findAllExerciseDefinitions();
+		return exerciseTemplateService.findAllExerciseTemplates();
 	}
 	
 	@Override
 	protected WorkshopObjectService getWorkshopObjectService()
 	{
-		return exerciseDefinitionService;
+		return exerciseTemplateService;
 	}
 
 }

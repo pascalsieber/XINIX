@@ -29,7 +29,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = P2PTwoTemplate.class )
+@ExerciseSpecificService( exerciseTemplate = P2PTwoTemplate.class )
 public class P2PTwoExerciseService extends ExerciseServiceImpl
 {
 
@@ -46,31 +46,15 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		P2PTwoTemplate definition = (P2PTwoTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		List< P2PKeywordInput > keywords = new ArrayList<>();
-
-		List< ExerciseDataImpl > cascadeOneData = p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
-
-		for ( ExerciseDataImpl data : cascadeOneData )
-		{
-			for ( P2POneKeyword keywordObject : ( (P2POneData)data ).getKeywords() )
-			{
-				keywords.add( new P2PKeywordInput( keywordObject.getKeyword(), keywordObject.getID() ) );
-			}
-		}
-
-		return new P2PTwoInput( definition.getQuestion(), keywords );
+		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		P2PTwoTemplate definition = (P2PTwoTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
 		List< P2PKeywordInput > keywords = new ArrayList<>();
 
-		List< ExerciseDataImpl > cascadeOneData = p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class );
-
-		for ( ExerciseDataImpl data : cascadeOneData )
+		for ( ExerciseDataImpl data : p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class ) )
 		{
 			for ( P2POneKeyword keywordObject : ( (P2POneData)data ).getKeywords() )
 			{
@@ -78,7 +62,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		return new P2PTwoInput( definition.getQuestion(), keywords );
+		return new P2PTwoInput( findExerciseByID( exerciseID ).getQuestion(), keywords );
 	}
 
 	@Override

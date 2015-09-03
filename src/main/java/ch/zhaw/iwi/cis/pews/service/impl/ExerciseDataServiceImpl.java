@@ -108,9 +108,9 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		EXERCISESPECIFICDATASERVICES.put( PosterTemplate.class.getSimpleName(), PosterExerciseDataService.class );
 	}
 
-	private Class< ? > getExerciseDataSpecificService( String exerciseDefinitionClassName )
+	private Class< ? > getExerciseDataSpecificService( String exerciseTemplateClassName )
 	{
-		return EXERCISESPECIFICDATASERVICES.get( exerciseDefinitionClassName );
+		return EXERCISESPECIFICDATASERVICES.get( exerciseTemplateClassName );
 	}
 
 	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISEDATACLASSSPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl > >();
@@ -187,7 +187,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		ExerciseImpl ex = exerciseDao.findById( exerciseID );
-		String defName = ex.getDefinition().getClass().getSimpleName();
+		String defName = ex.getDerivedFrom().getClass().getSimpleName();
 		Class< ? > serviceClass = getExerciseDataSpecificService( defName );
 		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
 		return (List< ExerciseDataImpl >)cleanseData( service.findByExerciseID( exerciseID ) );
@@ -310,10 +310,10 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 					}
 				}
 
-				// simplify workflowElement (i.e. exercise) by excluding definition and workshop
+				// simplify workflowElement (i.e. exercise) by excluding template and workshop
 				if ( null != ( (WorkflowElementDataImpl)obj ).getWorkflowElement() )
 				{
-					( (ExerciseDataImpl)obj ).getWorkflowElement().setDefinition( null );
+					( (ExerciseDataImpl)obj ).getWorkflowElement().setDerivedFrom( null );
 					( (ExerciseImpl)( (ExerciseDataImpl)obj ).getWorkflowElement() ).setWorkshop( null );
 				}
 			}

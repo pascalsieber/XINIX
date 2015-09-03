@@ -14,10 +14,11 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
-@ExerciseSpecificService( exerciseDefinition = You2MeTemplate.class )
+@ExerciseSpecificService( exerciseTemplate = You2MeTemplate.class )
 public class You2MeExerciseService extends ExerciseServiceImpl
 {
 
@@ -29,15 +30,13 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInput()
 	{
-		You2MeTemplate definition = (You2MeTemplate)UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition();
-		return new You2MeInput( new ArrayList<>( definition.getQuestions() ) );
+		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		You2MeTemplate definition = (You2MeTemplate)( (WorkflowElementImpl)findByID( exerciseID ) ).getDefinition();
-		return new You2MeInput( new ArrayList<>( definition.getQuestions() ) );
+		return new You2MeInput( new ArrayList<>( ( (You2MeExercise)findByID( exerciseID ) ).getQuestions() ) );
 	}
 
 	@Override
@@ -67,6 +66,5 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 			throw new UnsupportedOperationException( "malformed json. Output for this exercise is of type " + You2MeOutput.class.getSimpleName() );
 		}
 	}
-	
-	
+
 }
