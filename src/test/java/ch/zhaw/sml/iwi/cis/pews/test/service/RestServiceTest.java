@@ -255,16 +255,41 @@ public class RestServiceTest
 
 		// exercises
 
-		posterExerciseStub.setID( exerciseService.persist( new PosterExercise( "start", "start workshop", posterTemplateStub, defaultWSStub ) ) );
-		pinklabsExerciseStub.setID( exerciseService.persist( new PinkLabsExercise( "pinklabs", "pinklabs exercise", plabsTemplateStub, defaultWSStub ) ) );
-		p2pOneExerciseStub.setID( exerciseService.persist( new P2POneExercise( "p2pone", "p2pone exercise", p2poneTemplateStub, defaultWSStub ) ) );
-		you2meExerciseStub.setID( exerciseService.persist( new You2MeExercise( "you2me", "you2me exercise", you2meTemplateStub, defaultWSStub ) ) );
-		p2pTwoExerciseStub.setID( exerciseService.persist( new P2PTwoExercise( "p2ptwo", "p2ptwo exercise", p2ptwoTemplateStub, defaultWSStub ) ) );
-		simplyprotoExerciseStub.setID( exerciseService.persist( new SimplyPrototypingExercise( "simple proto", "simple proto exercise", sprotoTemplateStub, defaultWSStub ) ) );
-		xinixExerciseStub.setID( exerciseService.persist( new XinixExercise( "xinix", "xinix exercise", xinixTemplateStub, defaultWSStub ) ) );
-		compressionExerciseStub.setID( exerciseService.persist( new CompressionExercise( "compression", "compression exercise", compressionTemplateStub, defaultWSStub ) ) );
-		evaluationExerciseStub.setID( exerciseService.persist( new EvaluationExercise( "evaluation", "evaluation exercise", evalTemplateStub, defaultWSStub ) ) );
-		evaluationResultExerciseStub.setID( exerciseService.persist( new EvaluationResultExercise( "evaluation result", "evaluation result exercise", evalResultTemplateStub, defaultWSStub ) ) );
+		posterExerciseStub.setID( exerciseService.persist( new PosterExercise(
+			"start",
+			"start workshop",
+			(PosterTemplate)exTemplateService.findExerciseTemplateByID( posterTemplateStub.getID() ),
+			defaultWSStub ) ) );
+		pinklabsExerciseStub.setID( exerciseService.persist( new PinkLabsExercise( "pinklabs", "pinklabs exercise", (PinkLabsTemplate)exTemplateService.findExerciseTemplateByID( plabsTemplateStub
+			.getID() ), defaultWSStub ) ) );
+		p2pOneExerciseStub.setID( exerciseService.persist( new P2POneExercise(
+			"p2pone",
+			"p2pone exercise",
+			(P2POneTemplate)exTemplateService.findExerciseTemplateByID( p2poneTemplateStub.getID() ),
+			defaultWSStub ) ) );
+		you2meExerciseStub.setID( exerciseService.persist( new You2MeExercise(
+			"you2me",
+			"you2me exercise",
+			(You2MeTemplate)exTemplateService.findExerciseTemplateByID( you2meTemplateStub.getID() ),
+			defaultWSStub ) ) );
+		p2pTwoExerciseStub.setID( exerciseService.persist( new P2PTwoExercise(
+			"p2ptwo",
+			"p2ptwo exercise",
+			(P2PTwoTemplate)exTemplateService.findExerciseTemplateByID( p2ptwoTemplateStub.getID() ),
+			defaultWSStub ) ) );
+		simplyprotoExerciseStub.setID( exerciseService.persist( new SimplyPrototypingExercise( "simple proto", "simple proto exercise", (SimplyPrototypingTemplate)exTemplateService
+			.findExerciseTemplateByID( sprotoTemplateStub.getID() ), defaultWSStub ) ) );
+		xinixExerciseStub.setID( exerciseService.persist( new XinixExercise(
+			"xinix",
+			"xinix exercise",
+			(XinixTemplate)exTemplateService.findExerciseTemplateByID( xinixTemplateStub.getID() ),
+			defaultWSStub ) ) );
+		compressionExerciseStub.setID( exerciseService.persist( new CompressionExercise( "compression", "compression exercise", (CompressionTemplate)exTemplateService
+			.findExerciseTemplateByID( compressionTemplateStub.getID() ), defaultWSStub ) ) );
+		evaluationExerciseStub.setID( exerciseService.persist( new EvaluationExercise( "evaluation", "evaluation exercise", (EvaluationTemplate)exTemplateService
+			.findExerciseTemplateByID( evalTemplateStub.getID() ), defaultWSStub ) ) );
+		evaluationResultExerciseStub.setID( exerciseService.persist( new EvaluationResultExercise( "evaluation result", "evaluation result exercise", (EvaluationResultTemplate)exTemplateService
+			.findExerciseTemplateByID( evalResultTemplateStub.getID() ), defaultWSStub ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl(
@@ -489,9 +514,7 @@ public class RestServiceTest
 		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
 		assertTrue( ex.getWorkshop().getID().equals( defaultWSStub.getID() ) );
 
-		// since exercise is created directly with constructor, as opposed to being created through Jackson Mapper,
-		// orderInWorkshop will be = 0
-		assertTrue( ex.getOrderInWorkshop() == 0 );
+		assertTrue( ex.getOrderInWorkshop() == 10 );
 
 		// update exercise instance
 		ex.setName( "updated exercise" );
