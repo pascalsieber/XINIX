@@ -13,4 +13,6 @@ public interface InvitationService extends WorkshopObjectService
 
 	public List< Invitation > findAllInvitations();
 
+	public List< Invitation > findByUserID( String userID );
+
 }

@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.dao.impl;
 
+import java.util.List;
+
 import ch.zhaw.iwi.cis.pews.dao.InvitationDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -17,4 +19,13 @@ public class InvitationDaoImpl extends WorkshopObjectDaoImpl implements Invitati
 		return Invitation.class;
 	}
 
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< Invitation > findByUserID( String userID )
+	{
+		return getEntityManager()
+			.createQuery( "from Invitation as i LEFT JOIN FETCH i.inviter LEFT JOIN FETCH i.invitee as user LEFT JOIN FETCH i.session as s LEFT JOIN FETCH s.workshop as w where user.id = :_user_id" )
+			.setParameter( "_user_id", userID )
+			.getResultList();
+	}
 }

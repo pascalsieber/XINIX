@@ -22,6 +22,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 	public static final String BASE = "/workshopService/session/invitation";
 
 	public static final String ACCEPT = "/accept";
+	public static final String FIND_BY_USER_ID = "/findByUserID";
 
 	private InvitationService invitationService;
 
@@ -66,6 +67,13 @@ public class InvitationRestService extends WorkshopObjectRestService
 	public void accept( String invitationID )
 	{
 		invitationService.accept( invitationID );
+	}
+
+	@POST
+	@Path( FIND_BY_USER_ID )
+	public List< Invitation > findByUserID( String userID )
+	{
+		return invitationService.findByUserID( userID );
 	}
 
 	@Override

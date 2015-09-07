@@ -64,4 +64,10 @@ public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements 
 		remove( invitation );
 	}
 
+	@Override
+	public List< Invitation > findByUserID( String userID )
+	{
+		return invitationDao.findByUserID( userID );
+	}
+
 }
