@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
-public class P2PKeywordInput extends Input
+
+public class P2PKeywordInput
 {
 	private String keyword;
 	private String id;

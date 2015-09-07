@@ -36,7 +36,8 @@ public class You2MeExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		return new You2MeInput( new ArrayList<>( ( (You2MeExercise)findByID( exerciseID ) ).getQuestions() ) );
+		You2MeExercise ex = findByID( exerciseID );
+		return new You2MeInput( ex, new ArrayList< String >( ex.getQuestions() ) );
 	}
 
 	@Override

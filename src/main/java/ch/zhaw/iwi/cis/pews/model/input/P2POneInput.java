@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+
 public class P2POneInput extends Input
 {
 	private String picture;
@@ -8,12 +10,11 @@ public class P2POneInput extends Input
 	public P2POneInput()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public P2POneInput( String picture, String question )
+	public P2POneInput( ExerciseImpl exercise, String picture, String question )
 	{
-		super();
+		super( exercise );
 		this.picture = picture;
 		this.question = question;
 	}

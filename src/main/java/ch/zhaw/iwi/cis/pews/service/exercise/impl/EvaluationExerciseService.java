@@ -64,8 +64,8 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		EvaluationExercise ex = (EvaluationExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
-		return new EvaluationInput( solutions, ex.getQuestion(), ex.getNumberOfVotes() );
+		EvaluationExercise ex = findByID( exerciseID );
+		return new EvaluationInput( ex, solutions, ex.getQuestion(), ex.getNumberOfVotes() );
 	}
 
 	@Override

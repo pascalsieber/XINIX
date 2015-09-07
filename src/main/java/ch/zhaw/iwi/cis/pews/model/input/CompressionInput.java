@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.model.input;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
 
 public class CompressionInput extends Input
@@ -18,9 +19,9 @@ public class CompressionInput extends Input
 		this.compressableExerciseData = new ArrayList<>();
 	}
 
-	public CompressionInput( String question, List< String > solutionCriteria, List< CompressableExerciseData > compressableExerciseData )
+	public CompressionInput( ExerciseImpl exercise, String question, List< String > solutionCriteria, List< CompressableExerciseData > compressableExerciseData )
 	{
-		super();
+		super( exercise );
 		this.question = question;
 		this.solutionCriteria = solutionCriteria;
 		this.compressableExerciseData = compressableExerciseData;

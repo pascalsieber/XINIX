@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.model.input;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+
 public class P2PTwoInput extends Input
 {
 	private String question;
@@ -14,9 +16,9 @@ public class P2PTwoInput extends Input
 		this.cascade1Keywords = new ArrayList< P2PKeywordInput >();
 	}
 
-	public P2PTwoInput( String question, List< P2PKeywordInput > cascade1Keywords )
+	public P2PTwoInput( ExerciseImpl exercise, String question, List< P2PKeywordInput > cascade1Keywords )
 	{
-		super();
+		super( exercise );
 		this.question = question;
 		this.cascade1Keywords = cascade1Keywords;
 	}

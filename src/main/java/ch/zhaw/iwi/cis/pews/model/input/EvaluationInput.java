@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.model.input;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+
 public class EvaluationInput extends Input
 {
 	private List< CompressionInputElement > solutions;
@@ -15,9 +17,9 @@ public class EvaluationInput extends Input
 		this.solutions = new ArrayList<>();
 	}
 
-	public EvaluationInput( List< CompressionInputElement > solutions, String question, int numberOfVotes )
+	public EvaluationInput( ExerciseImpl exercise, List< CompressionInputElement > solutions, String question, int numberOfVotes )
 	{
-		super();
+		super( exercise );
 		this.solutions = solutions;
 		this.question = question;
 		this.numberOfVotes = numberOfVotes;

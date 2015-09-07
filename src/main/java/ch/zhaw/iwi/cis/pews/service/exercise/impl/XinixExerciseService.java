@@ -41,8 +41,8 @@ public class XinixExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		XinixExercise ex = (XinixExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
-		return new XinixInput( ex.getQuestion(), (XinixImageMatrix)xinixImageMatrixDao.findById( ex.getImages().getID() ) );
+		XinixExercise ex = findByID( exerciseID );
+		return new XinixInput( ex, ex.getQuestion(), (XinixImageMatrix)xinixImageMatrixDao.findById( ex.getImages().getID() ) );
 	}
 
 	@Override

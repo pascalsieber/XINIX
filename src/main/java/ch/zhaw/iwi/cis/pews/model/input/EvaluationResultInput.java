@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.model.input;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+
 public class EvaluationResultInput extends Input
 {
 	private List< EvaluationResultObject > results;
@@ -15,9 +17,9 @@ public class EvaluationResultInput extends Input
 		this.notEvaluated = new ArrayList<>();
 	}
 
-	public EvaluationResultInput( List< EvaluationResultObject > results, List< CompressionInputElement > notEvaluated )
+	public EvaluationResultInput( ExerciseImpl exercise, List< EvaluationResultObject > results, List< CompressionInputElement > notEvaluated )
 	{
-		super();
+		super( exercise );
 		this.results = results;
 		this.notEvaluated = notEvaluated;
 	}

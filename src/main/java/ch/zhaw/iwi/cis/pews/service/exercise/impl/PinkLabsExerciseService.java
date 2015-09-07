@@ -35,8 +35,8 @@ public class PinkLabsExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		PinkLabsExercise ex = (PinkLabsExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
-		return new PinkLabsInput( ex.getQuestion() );
+		PinkLabsExercise ex = findByID( exerciseID );
+		return new PinkLabsInput( ex, ex.getQuestion() );
 	}
 
 	@Override

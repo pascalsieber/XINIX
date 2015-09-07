@@ -12,9 +12,9 @@ import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
@@ -27,6 +27,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -52,6 +53,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
+		EvaluationResultExercise ex = findByID( exerciseID );
 		Map< CompressionExerciseDataElement, List< Integer > > evaluationsMap = new HashMap< CompressionExerciseDataElement, List< Integer > >();
 		List< ExerciseDataImpl > evaluations = evaluationDataDao.findByWorkshopAndExerciseDataClass( Evaluation.class );
 
@@ -65,7 +67,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 			evaluationsMap.get( ( (EvaluationExerciseData)evaluation ).getEvaluation().getSolution() ).add( ( (EvaluationExerciseData)evaluation ).getEvaluation().getScore().getScore() );
 		}
 
-		EvaluationResultInput input = new EvaluationResultInput();
+		EvaluationResultInput input = new EvaluationResultInput( ex, new ArrayList< EvaluationResultObject >(), new ArrayList< CompressionInputElement >() );
 		List< String > idsOfEvaluatedCompressionElements = new ArrayList< String >();
 
 		for ( Entry< CompressionExerciseDataElement, List< Integer >> entry : evaluationsMap.entrySet() )

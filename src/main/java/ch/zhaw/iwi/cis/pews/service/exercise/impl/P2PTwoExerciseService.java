@@ -26,6 +26,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -53,6 +54,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	public Input getInputByExerciseID( String exerciseID )
 	{
 		List< P2PKeywordInput > keywords = new ArrayList<>();
+		P2PTwoExercise ex = findByID( exerciseID );
 
 		for ( ExerciseDataImpl data : p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class ) )
 		{
@@ -62,7 +64,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		return new P2PTwoInput( findExerciseByID( exerciseID ).getQuestion(), keywords );
+		return new P2PTwoInput( ex, ex.getQuestion(), keywords );
 	}
 
 	@Override

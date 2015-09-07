@@ -8,7 +8,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
-import ch.zhaw.iwi.cis.pews.model.input.SimplePrototypingInput;
+import ch.zhaw.iwi.cis.pews.model.input.SimplyPrototypingInput;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -35,8 +35,8 @@ public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		SimplyPrototypingExercise ex = (SimplyPrototypingExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
-		return new SimplePrototypingInput( ex.getQuestion(), ex.getMimeType() );
+		SimplyPrototypingExercise ex = findByID( exerciseID );
+		return new SimplyPrototypingInput( ex, ex.getQuestion(), ex.getMimeType() );
 	}
 
 	@Override

@@ -1,19 +1,20 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
-public class SimplePrototypingInput extends Input
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+
+public class SimplyPrototypingInput extends Input
 {
 	private String question;
 	private String mimeType;
 
-	public SimplePrototypingInput()
+	public SimplyPrototypingInput()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public SimplePrototypingInput( String question, String mimeType )
+	public SimplyPrototypingInput( ExerciseImpl exercise, String question, String mimeType )
 	{
-		super();
+		super( exercise );
 		this.question = question;
 		this.mimeType = mimeType;
 	}

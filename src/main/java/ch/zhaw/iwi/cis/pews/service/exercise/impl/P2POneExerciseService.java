@@ -35,8 +35,8 @@ public class P2POneExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		P2POneExercise ex = (P2POneExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
-		return new P2POneInput( ex.getPicture(), ex.getQuestion() );
+		P2POneExercise ex = findByID( exerciseID );
+		return new P2POneInput( ex, ex.getPicture(), ex.getQuestion() );
 	}
 
 	@Override

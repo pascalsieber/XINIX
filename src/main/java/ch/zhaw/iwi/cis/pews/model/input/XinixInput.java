@@ -1,7 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
-
 
 public class XinixInput extends Input
 {
@@ -13,9 +13,9 @@ public class XinixInput extends Input
 		super();
 	}
 
-	public XinixInput( String question, XinixImageMatrix xinixImages )
+	public XinixInput( ExerciseImpl exercise, String question, XinixImageMatrix xinixImages )
 	{
-		super();
+		super( exercise );
 		this.question = question;
 		this.xinixImages = xinixImages;
 	}
@@ -39,7 +39,5 @@ public class XinixInput extends Input
 	{
 		this.xinixImages = xinixImages;
 	}
-
-	
 
 }

@@ -28,7 +28,7 @@ import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
 import ch.zhaw.iwi.cis.pews.model.input.PosterInput;
-import ch.zhaw.iwi.cis.pews.model.input.SimplePrototypingInput;
+import ch.zhaw.iwi.cis.pews.model.input.SimplyPrototypingInput;
 import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
 import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
@@ -259,37 +259,37 @@ public class RestServiceTest
 			"start",
 			"start workshop",
 			(PosterTemplate)exTemplateService.findExerciseTemplateByID( posterTemplateStub.getID() ),
-			defaultWSStub ) ) );
+			workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		pinklabsExerciseStub.setID( exerciseService.persist( new PinkLabsExercise( "pinklabs", "pinklabs exercise", (PinkLabsTemplate)exTemplateService.findExerciseTemplateByID( plabsTemplateStub
-			.getID() ), defaultWSStub ) ) );
+			.getID() ), workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		p2pOneExerciseStub.setID( exerciseService.persist( new P2POneExercise(
 			"p2pone",
 			"p2pone exercise",
 			(P2POneTemplate)exTemplateService.findExerciseTemplateByID( p2poneTemplateStub.getID() ),
-			defaultWSStub ) ) );
+			workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		you2meExerciseStub.setID( exerciseService.persist( new You2MeExercise(
 			"you2me",
 			"you2me exercise",
 			(You2MeTemplate)exTemplateService.findExerciseTemplateByID( you2meTemplateStub.getID() ),
-			defaultWSStub ) ) );
+			workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		p2pTwoExerciseStub.setID( exerciseService.persist( new P2PTwoExercise(
 			"p2ptwo",
 			"p2ptwo exercise",
 			(P2PTwoTemplate)exTemplateService.findExerciseTemplateByID( p2ptwoTemplateStub.getID() ),
-			defaultWSStub ) ) );
+			workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		simplyprotoExerciseStub.setID( exerciseService.persist( new SimplyPrototypingExercise( "simple proto", "simple proto exercise", (SimplyPrototypingTemplate)exTemplateService
-			.findExerciseTemplateByID( sprotoTemplateStub.getID() ), defaultWSStub ) ) );
+			.findExerciseTemplateByID( sprotoTemplateStub.getID() ), workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		xinixExerciseStub.setID( exerciseService.persist( new XinixExercise(
 			"xinix",
 			"xinix exercise",
 			(XinixTemplate)exTemplateService.findExerciseTemplateByID( xinixTemplateStub.getID() ),
-			defaultWSStub ) ) );
+			workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		compressionExerciseStub.setID( exerciseService.persist( new CompressionExercise( "compression", "compression exercise", (CompressionTemplate)exTemplateService
-			.findExerciseTemplateByID( compressionTemplateStub.getID() ), defaultWSStub ) ) );
+			.findExerciseTemplateByID( compressionTemplateStub.getID() ), workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		evaluationExerciseStub.setID( exerciseService.persist( new EvaluationExercise( "evaluation", "evaluation exercise", (EvaluationTemplate)exTemplateService
-			.findExerciseTemplateByID( evalTemplateStub.getID() ), defaultWSStub ) ) );
+			.findExerciseTemplateByID( evalTemplateStub.getID() ), workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 		evaluationResultExerciseStub.setID( exerciseService.persist( new EvaluationResultExercise( "evaluation result", "evaluation result exercise", (EvaluationResultTemplate)exTemplateService
-			.findExerciseTemplateByID( evalResultTemplateStub.getID() ), defaultWSStub ) ) );
+			.findExerciseTemplateByID( evalResultTemplateStub.getID() ), workshopService.findWorkshopByID( defaultWSStub.getID() ) ) ) );
 
 		// session
 		defaultSessionStub.setID( sessionService.persist( new SessionImpl(
@@ -502,7 +502,7 @@ public class RestServiceTest
 		assertTrue( exDefBefore - exDefs.size() == 1 );
 
 		// create exercise instance
-		String exID = exerciseService.persist( new ExerciseImpl( "exercise", "exercise description", plabsTemplateStub, defaultWSStub ) );
+		String exID = exerciseService.persist( new ExerciseImpl( "exercise", "exercise description", plabsTemplateStub, workshopService.findWorkshopByID( defaultWSStub.getID() ) ) );
 
 		// read exercise instance
 		ExerciseImpl ex = exerciseService.findByID( exID );
@@ -987,7 +987,7 @@ public class RestServiceTest
 
 		// simple prototyping
 		setExerciseOnDefaultSession( simplyprotoExerciseStub );
-		SimplePrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplePrototypingInput.class );
+		SimplyPrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplyPrototypingInput.class );
 		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exTemplateService.findByID( sprotoTemplateStub.getID() ) ).getQuestionTemplate() ) );
 		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exTemplateService.findByID( sprotoTemplateStub.getID() ) ).getMimeType() ) );
 

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.zhaw.iwi.cis.pews.dao.ExerciseTemplateDao;
-import ch.zhaw.iwi.cis.pews.dao.template.impl.CompressionTemplateDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -33,13 +31,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 public class CompressionExerciseService extends ExerciseServiceImpl
 {
 	private ExerciseDataService exerciseDataService;
-	private ExerciseTemplateDao compressionTemplateDao;
 
 	public CompressionExerciseService()
 	{
 		super();
 		this.exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-		this.compressionTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionTemplateDao.class.getSimpleName() );
 	}
 
 	@Override
@@ -51,9 +47,8 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		CompressionExercise exercise = (CompressionExercise)findExerciseByID( exerciseID );
+		CompressionExercise exercise = findByID( exerciseID );
 		List< CompressableExerciseData > compressableData = new ArrayList<>();
-
 		List< ExerciseDataImpl > dataOfAllExercises = new ArrayList<>();
 
 		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
@@ -69,8 +64,7 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 			}
 		}
 
-		CompressionInput input = new CompressionInput( exercise.getQuestion(), new ArrayList<>( exercise.getSolutionCriteria() ), compressableData );
-		return input;
+		return new CompressionInput( exercise, exercise.getQuestion(), exercise.getSolutionCriteria(), compressableData );
 	}
 
 	@Override

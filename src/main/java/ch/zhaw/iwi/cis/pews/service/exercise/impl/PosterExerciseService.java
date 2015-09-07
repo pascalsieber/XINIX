@@ -31,8 +31,8 @@ public class PosterExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		PosterExercise ex = (PosterExercise)( (WorkflowElementImpl)findByID( exerciseID ) );
-		return new PosterInput( ex.getTitle(), ex.getDescription() );
+		PosterExercise ex = findByID( exerciseID );
+		return new PosterInput( ex, ex.getTitle(), ex.getDescription() );
 	}
 
 	@Override

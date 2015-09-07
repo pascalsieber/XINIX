@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+
 public class PosterInput extends Input
 {
 	private String title;
@@ -10,9 +12,9 @@ public class PosterInput extends Input
 		super();
 	}
 
-	public PosterInput( String title, String description )
+	public PosterInput( ExerciseImpl exercise, String title, String description )
 	{
-		super();
+		super( exercise );
 		this.title = title;
 		this.description = description;
 	}
