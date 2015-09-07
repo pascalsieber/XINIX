@@ -466,29 +466,36 @@ public class ZhawEngine implements LifecycleObject
 			"Resultat der Abstimmung" ) );
 
 		// instantiate exercises based on templates
-		WorkshopImpl workshop = workshopService.findByID( wsID );
-
-		exerciseService.persist( new PosterExercise( "Start", "p.i.n.k.elefant Start", (PosterTemplate)exerciseTemplateService.findByID( startTemplateID ), workshop ) );
-		String pinklabsExID = exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs", "p.i.n.k.labs Tool", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID ), workshop ) );
-		String p2poneExID = exerciseService.persist( new P2POneExercise( "Post2Paper 1", "Post2Paper 1 Tool", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID ), workshop ) );
-		String you2meExID = exerciseService.persist( new You2MeExercise( "You2me", "You2me Tool", (You2MeTemplate)exerciseTemplateService.findByID( you2meTemplateID ), workshop ) );
-		String p2ptwoExID = exerciseService.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshop ) );
-		String xinixExID = exerciseService.persist( new XinixExercise( "XINIX", "XINIX-Tool", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID ), workshop ) );
+		exerciseService.persist( new PosterExercise( "Start", "p.i.n.k.elefant Start", (PosterTemplate)exerciseTemplateService.findByID( startTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		String pinklabsExID = exerciseService.persist( new PinkLabsExercise(
+			"p.i.n.k.labs",
+			"p.i.n.k.labs Tool",
+			(PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID ),
+			workshopService.findWorkshopByID( wsID ) ) );
+		String p2poneExID = exerciseService.persist( new P2POneExercise( "Post2Paper 1", "Post2Paper 1 Tool", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		String you2meExID = exerciseService.persist( new You2MeExercise( "You2me", "You2me Tool", (You2MeTemplate)exerciseTemplateService.findByID( you2meTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		String p2ptwoExID = exerciseService.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		String xinixExID = exerciseService.persist( new XinixExercise( "XINIX", "XINIX-Tool", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
 		String simplyPrototypingExID = exerciseService.persist( new SimplyPrototypingExercise( "Simply Prototyping", "Simply Prototyping Tool", (SimplyPrototypingTemplate)exerciseTemplateService
-			.findByID( simplyprotoTemplateID ), workshop ) );
+			.findByID( simplyprotoTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
 		String compressionExID = exerciseService.persist( new CompressionExercise(
 			"Kompression",
 			"Kompression Tool",
 			(CompressionTemplate)exerciseTemplateService.findByID( compressionTemplateID ),
-			workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
 		String evaluationExID = exerciseService.persist( new EvaluationExercise(
 			"Evaluation",
 			"Evaluation Tool",
 			(EvaluationTemplate)exerciseTemplateService.findByID( evaluationTemplateID ),
-			workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new EvaluationResultExercise( "Auswertung der Evaluation", "Tool zur Auswertung der Evaluation", (EvaluationResultTemplate)exerciseTemplateService
-			.findByID( evaluationResultTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Ende", "p.i.n.k.elefant Workshop Ende", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshop ) );
+			.findByID( evaluationResultTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Ende", "p.i.n.k.elefant Workshop Ende", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
 
 		// sample exercise data
 
@@ -757,29 +764,38 @@ public class ZhawEngine implements LifecycleObject
 			"Resultat der Abstimmung" ) );
 
 		// instantiate exercises based on templates
-		WorkshopImpl workshop = workshopService.findByID( wsID );
+		WorkshopImpl workshop = workshopService.findWorkshopByID( wsID );
 
-		exerciseService.persist( new PosterExercise( "Start", "p.i.n.k.elefant Start", (PosterTemplate)exerciseTemplateService.findByID( startTemplateID ), workshop ) );
-		String pinklabsExID = exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs", "p.i.n.k.labs Tool", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID ), workshop ) );
-		String p2poneExID = exerciseService.persist( new P2POneExercise( "Post2Paper 1", "Post2Paper 1 Tool", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID ), workshop ) );
-		String you2meExID = exerciseService.persist( new You2MeExercise( "You2me", "You2me Tool", (You2MeTemplate)exerciseTemplateService.findByID( you2meTemplateID ), workshop ) );
-		String p2ptwoExID = exerciseService.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshop ) );
-		String xinixExID = exerciseService.persist( new XinixExercise( "XINIX", "XINIX-Tool", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID ), workshop ) );
+		exerciseService.persist( new PosterExercise( "Start", "p.i.n.k.elefant Start", (PosterTemplate)exerciseTemplateService.findByID( startTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		String pinklabsExID = exerciseService.persist( new PinkLabsExercise(
+			"p.i.n.k.labs",
+			"p.i.n.k.labs Tool",
+			(PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID ),
+			workshopService.findWorkshopByID( wsID ) ) );
+		String p2poneExID = exerciseService.persist( new P2POneExercise( "Post2Paper 1", "Post2Paper 1 Tool", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		String you2meExID = exerciseService.persist( new You2MeExercise( "You2me", "You2me Tool", (You2MeTemplate)exerciseTemplateService.findByID( you2meTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		String p2ptwoExID = exerciseService.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		String xinixExID = exerciseService.persist( new XinixExercise( "XINIX", "XINIX-Tool", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
 		String simplyPrototypingExID = exerciseService.persist( new SimplyPrototypingExercise( "Simply Prototyping", "Simply Prototyping Tool", (SimplyPrototypingTemplate)exerciseTemplateService
-			.findByID( simplyprotoTemplateID ), workshop ) );
+			.findByID( simplyprotoTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
 		String compressionExID = exerciseService.persist( new CompressionExercise(
 			"Kompression",
 			"Kompression Tool",
 			(CompressionTemplate)exerciseTemplateService.findByID( compressionTemplateID ),
-			workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
 		String evaluationExID = exerciseService.persist( new EvaluationExercise(
 			"Evaluation",
 			"Evaluation Tool",
 			(EvaluationTemplate)exerciseTemplateService.findByID( evaluationTemplateID ),
-			workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new EvaluationResultExercise( "Auswertung der Evaluation", "Tool zur Auswertung der Evaluation", (EvaluationResultTemplate)exerciseTemplateService
-			.findByID( evaluationResultTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Ende", "p.i.n.k.elefant Workshop Ende", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshop ) );
+			.findByID( evaluationResultTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Ende", "p.i.n.k.elefant Workshop Ende", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl(
@@ -1111,48 +1127,68 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ), "", "", "Gratulation, der XINIX-Workshop ist beendet. Die besten Ideen werden am kommenden Meeting vom xx.xx.2015 im Plenum besprochen und weiterentwickelt." ) );
 
 		// exercise instances
-		WorkshopImpl workshop = workshopService.findByID( wsID );
-		exerciseService.persist( new PosterExercise( "Begrüssung", "Workshop Start Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID1 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Intro", "Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID2 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "p.i.n.k.labs Intro", "p.i.n.k.labs Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( pinklabsIntroTemplateID ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (1/4)", "p.i.n.k.labs Tool 1", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID1 ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (2/4)", "p.i.n.k.labs Tool 2", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID2 ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (3/4)", "p.i.n.k.labs Tool 3", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID3 ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID4 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Post2Paper 1 Intro", "Post2Paper 1 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pOneIntroTemplateID ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (1/4)", "Post2Paper 1 Tool 1", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID1 ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (2/4)", "Post2Paper 1 Tool 2", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID2 ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (3/4)", "Post2Paper 1 Tool 3", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID3 ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (4/4)", "Post2Paper 1 Tool 4", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID4 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Post2Paper 2 Intro", "Post2Paper 2 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pTwoIntroTemplateID ), workshop ) );
-		exerciseService.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "XINIX-Tool Intro", "XINIX-Tool Intro", (PosterTemplate)exerciseTemplateService.findByID( xinixIntroTemplateID ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (1/4)", "XINIX-Tool 1", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID1 ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (2/4)", "XINIX-Tool 2", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID2 ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (3/4)", "XINIX-Tool 3", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID3 ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (4/4)", "XINIX-Tool 4", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID4 ), workshop ) );
+		exerciseService
+			.persist( new PosterExercise( "Begrüssung", "Workshop Start Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID1 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Intro", "Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID2 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "p.i.n.k.labs Intro", "p.i.n.k.labs Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( pinklabsIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (1/4)", "p.i.n.k.labs Tool 1", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID1 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (2/4)", "p.i.n.k.labs Tool 2", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID2 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (3/4)", "p.i.n.k.labs Tool 3", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID3 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID4 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Post2Paper 1 Intro", "Post2Paper 1 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pOneIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (1/4)", "Post2Paper 1 Tool 1", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID1 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (2/4)", "Post2Paper 1 Tool 2", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID2 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (3/4)", "Post2Paper 1 Tool 3", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID3 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (4/4)", "Post2Paper 1 Tool 4", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID4 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Post2Paper 2 Intro", "Post2Paper 2 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pTwoIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "XINIX-Tool Intro", "XINIX-Tool Intro", (PosterTemplate)exerciseTemplateService.findByID( xinixIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (1/4)", "XINIX-Tool 1", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID1 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (2/4)", "XINIX-Tool 2", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID2 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (3/4)", "XINIX-Tool 3", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID3 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (4/4)", "XINIX-Tool 4", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID4 ), workshopService.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new PosterExercise(
 			"Simply Prototyping Intro",
 			"Simply Prototyping Intro Tool",
 			(PosterTemplate)exerciseTemplateService.findByID( simplyprotoIntroTemplateID ),
-			workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new SimplyPrototypingExercise(
 			"Simply Prototyping",
 			"Simply Prototyping Tool",
 			(SimplyPrototypingTemplate)exerciseTemplateService.findByID( simplyprotoTemplateID ),
-			workshop ) );
-		exerciseService.persist( new PosterExercise( "Kompression Intro", "Kompression Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID3 ), workshop ) );
-		exerciseService.persist( new CompressionExercise( "Kompression", "Kompression Tool", (CompressionTemplate)exerciseTemplateService.findByID( compressionTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Bewertung Intro", "Bewertung Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID4 ), workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Kompression Intro", "Kompression Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID3 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new CompressionExercise( "Kompression", "Kompression Tool", (CompressionTemplate)exerciseTemplateService.findByID( compressionTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Bewertung Intro", "Bewertung Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID4 ), workshopService
+			.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new EvaluationExercise( "Bewertungsrunde", "Tool zur Evaluation der erarbeiteten Lösungen", (EvaluationTemplate)exerciseTemplateService
-			.findByID( evaluationTemplateID ), workshop ) );
+			.findByID( evaluationTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new EvaluationResultExercise(
 			"Resultate der Bewertungsrunde",
 			"Tool zur Auswertung der Resultate aus der Bewertungsrunde",
 			(EvaluationResultTemplate)exerciseTemplateService.findByID( evaluationResultTemplateID ),
-			workshop ) );
-		exerciseService.persist( new PosterExercise( "Outro Intro", "Outro Tool", (PosterTemplate)exerciseTemplateService.findByID( outroTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Abschluss", "Workshop End Tool", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Outro Intro", "Outro Tool", (PosterTemplate)exerciseTemplateService.findByID( outroTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Abschluss", "Workshop End Tool", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
 
 		// session
 		String sessionID = sessionService.persist( new SessionImpl(
@@ -1484,44 +1520,64 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ), "", "Abschluss", "Vielen Dank, dass du an diesem XINIX-Workshop teilgenommen hast!" ) );
 
 		// exercise instances
-
-		WorkshopImpl workshop = workshopService.findByID( wsID );
-		exerciseService.persist( new PosterExercise( "Begrüssung", "Workshop Start Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID1 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Intro", "Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID2 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "p.i.n.k.labs Intro", "p.i.n.k.labs Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( pinklabsIntroTemplateID ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (1/4)", "p.i.n.k.labs Tool 1", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID1 ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (2/4)", "p.i.n.k.labs Tool 2", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID2 ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (3/4)", "p.i.n.k.labs Tool 3", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID3 ), workshop ) );
-		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID4 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Post2Paper 1 Intro", "Post2Paper 1 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pOneIntroTemplateID ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (1/4)", "Post2Paper 1 Tool 1", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID1 ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (2/4)", "Post2Paper 1 Tool 2", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID2 ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (3/4)", "Post2Paper 1 Tool 3", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID3 ), workshop ) );
-		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (4/4)", "Post2Paper 1 Tool 4", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID4 ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Post2Paper 2 Intro", "Post2Paper 2 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pTwoIntroTemplateID ), workshop ) );
-		exerciseService.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "XINIX-Tool Intro", "XINIX-Tool Intro", (PosterTemplate)exerciseTemplateService.findByID( xinixIntroTemplateID ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (1/4)", "XINIX-Tool 1", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID1 ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (2/4)", "XINIX-Tool 2", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID2 ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (3/4)", "XINIX-Tool 3", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID3 ), workshop ) );
-		exerciseService.persist( new XinixExercise( "XINIX-Tool (4/4)", "XINIX-Tool 4", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID4 ), workshop ) );
+		exerciseService
+			.persist( new PosterExercise( "Begrüssung", "Workshop Start Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID1 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Intro", "Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID2 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "p.i.n.k.labs Intro", "p.i.n.k.labs Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( pinklabsIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (1/4)", "p.i.n.k.labs Tool 1", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID1 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (2/4)", "p.i.n.k.labs Tool 2", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID2 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (3/4)", "p.i.n.k.labs Tool 3", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID3 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PinkLabsExercise( "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4", (PinkLabsTemplate)exerciseTemplateService.findByID( pinklabsTemplateID4 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Post2Paper 1 Intro", "Post2Paper 1 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pOneIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (1/4)", "Post2Paper 1 Tool 1", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID1 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (2/4)", "Post2Paper 1 Tool 2", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID2 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (3/4)", "Post2Paper 1 Tool 3", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID3 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new P2POneExercise( "Post2Paper 1 (4/4)", "Post2Paper 1 Tool 4", (P2POneTemplate)exerciseTemplateService.findByID( p2poneTemplateID4 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Post2Paper 2 Intro", "Post2Paper 2 Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( p2pTwoIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new P2PTwoExercise( "Post2Paper 2", "Post2Paper 2 Tool", (P2PTwoTemplate)exerciseTemplateService.findByID( p2pTwoTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "XINIX-Tool Intro", "XINIX-Tool Intro", (PosterTemplate)exerciseTemplateService.findByID( xinixIntroTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (1/4)", "XINIX-Tool 1", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID1 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (2/4)", "XINIX-Tool 2", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID2 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (3/4)", "XINIX-Tool 3", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID3 ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new XinixExercise( "XINIX-Tool (4/4)", "XINIX-Tool 4", (XinixTemplate)exerciseTemplateService.findByID( xinixTemplateID4 ), workshopService.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new PosterExercise(
 			"Simply Prototyping Intro",
 			"Simply Prototyping Intro Tool",
 			(PosterTemplate)exerciseTemplateService.findByID( simplyprotoIntroTemplateID ),
-			workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new SimplyPrototypingExercise(
 			"Simply Prototyping",
 			"Simply Prototyping Tool",
 			(SimplyPrototypingTemplate)exerciseTemplateService.findByID( simplyprotoTemplateID ),
-			workshop ) );
-		exerciseService.persist( new PosterExercise( "Kompression Intro", "Kompression Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID3 ), workshop ) );
-		exerciseService.persist( new CompressionExercise( "Kompression", "Kompression Tool", (CompressionTemplate)exerciseTemplateService.findByID( compressionTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Bewertung Intro", "Bewertung Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID4 ), workshop ) );
+			workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Kompression Intro", "Kompression Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID3 ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new CompressionExercise( "Kompression", "Kompression Tool", (CompressionTemplate)exerciseTemplateService.findByID( compressionTemplateID ), workshopService
+			.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Bewertung Intro", "Bewertung Intro Tool", (PosterTemplate)exerciseTemplateService.findByID( introTemplateID4 ), workshopService
+			.findWorkshopByID( wsID ) ) );
 		exerciseService.persist( new EvaluationExercise( "Bewertungsrunde", "Tool zur Evaluation der erarbeiteten Lösungen", (EvaluationTemplate)exerciseTemplateService
-			.findByID( evaluationTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Outro Intro", "Outro Tool", (PosterTemplate)exerciseTemplateService.findByID( outroTemplateID ), workshop ) );
-		exerciseService.persist( new PosterExercise( "Abschluss", "Workshop Abschluss Tool", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshop ) );
+			.findByID( evaluationTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService.persist( new PosterExercise( "Outro Intro", "Outro Tool", (PosterTemplate)exerciseTemplateService.findByID( outroTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
+		exerciseService
+			.persist( new PosterExercise( "Abschluss", "Workshop Abschluss Tool", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
 
 		// sessions and participants
 		// TODO: change theses to participants
