@@ -199,6 +199,12 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return (List< ExerciseDataImpl >)cleanseData( exerciseDataDao.findByExerciseID( exerciseID ) );
 	}
 
+	@Override
+	public void removeExerciseDataByID( String id )
+	{
+		remove( findByID( id ) );
+	}
+
 	@SuppressWarnings( { "resource" } )
 	private Object cleanseData( List< ExerciseDataImpl > data )
 	{

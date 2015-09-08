@@ -166,7 +166,7 @@ public class ZhawEngine implements LifecycleObject
 		setupEntityManager();
 		startWebServer();
 		configureRootUser();
-		// configureSampleWorkshop();
+		configureSampleWorkshop();
 		configureDemoWorkshop();
 		// configurePostWorkshop();
 		// configureSBBWorkshop();
@@ -365,7 +365,6 @@ public class ZhawEngine implements LifecycleObject
 		System.out.println( "participant role created initially" );
 	}
 
-	@SuppressWarnings( "unused" )
 	private static void configureSampleWorkshop()
 	{
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
@@ -377,7 +376,7 @@ public class ZhawEngine implements LifecycleObject
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
-		XinixImageService xinixImageService = getManagedObjectRegistry().getManagedObject( XinixImageService.class.getSimpleName() );
+		XinixImageService xinixImageService = getManagedObjectRegistry().getManagedObject( XinixImageServiceImpl.class.getSimpleName() );
 		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
 
 		// sample workshop template (pinkelefant)

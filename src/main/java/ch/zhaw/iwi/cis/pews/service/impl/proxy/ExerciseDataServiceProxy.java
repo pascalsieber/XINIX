@@ -38,4 +38,10 @@ public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy impleme
 
 	}
 
+	@Override
+	public void removeExerciseDataByID( String id )
+	{
+		getServiceTarget().path( ExerciseDataRestService.REMOVE_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+	}
+
 }

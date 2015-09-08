@@ -21,6 +21,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 {
 	public final static String BASE = "/exerciseService/data";
 	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
+	public final static String REMOVE_BY_ID = "/removeByID";
 
 	private ExerciseDataService exerciseDataService;
 
@@ -65,6 +66,13 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		return exerciseDataService.findByExerciseID( exerciseID );
+	}
+
+	@POST
+	@Path( REMOVE_BY_ID )
+	public void removeExerciseDataByID( String id )
+	{
+		exerciseDataService.removeExerciseDataByID( id );
 	}
 
 	@Override

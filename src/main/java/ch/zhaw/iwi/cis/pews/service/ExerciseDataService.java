@@ -11,4 +11,6 @@ public interface ExerciseDataService extends WorkshopObjectService
 	public List< ExerciseDataImpl > findAllExerciseData();
 
 	public ExerciseDataImpl findExerciseDataByID( String id );
+
+	public void removeExerciseDataByID( String id );
 }
