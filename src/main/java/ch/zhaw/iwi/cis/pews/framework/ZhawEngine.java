@@ -124,6 +124,9 @@ public class ZhawEngine implements LifecycleObject
 	private static Client rootClient;
 	private static UserImpl rootUser;
 
+	private static String imageDirectory = "skylla.zhaw.ch/pews_images";
+	//private static String imageDirectory = "192.168.1.200/images";
+	
 	public static String ROOT_CLIENT_ID;
 
 	// defining these globally, since multiple pre-configured workshops might make use of the same role
@@ -399,7 +402,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2pOne template
 		String p2poneTemplateID = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "http://192.168.1.200/images/business.jpg" ) );
+			.findByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "http://" + imageDirectory + "/business.jpg" ) );
 
 		// p2ptwo template
 		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 180, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -409,7 +412,7 @@ public class ZhawEngine implements LifecycleObject
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( "http://192.168.1.200/images/xinix_img_" + i + ".jpg" );
+			imageUrls.add( "http://" + imageDirectory + "/xinix_img_" + i + ".png" );
 		}
 
 		XINIX_IMAGES = new ArrayList<>();
@@ -694,7 +697,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2pOne template
 		String p2poneTemplateID = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "http://192.168.1.200/images/business.jpg" ) );
+			.findByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "http://" + imageDirectory + "/business.jpg" ) );
 
 		// p2ptwo template
 		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 180, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -704,7 +707,7 @@ public class ZhawEngine implements LifecycleObject
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( "http://192.168.1.200/images/xinix_img_" + i + ".jpg" );
+			imageUrls.add( "http://" + imageDirectory + "/xinix_img_" + i + ".png" );
 		}
 
 		XINIX_IMAGES = new ArrayList<>();
@@ -944,19 +947,19 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2p one iteration 1
 		String p2poneTemplateID1 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://192.168.1.200/images/single.jpg" ) );
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://" + imageDirectory + "/single.jpg" ) );
 
 		// p2p one iteration 2
 		String p2poneTemplateID2 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://192.168.1.200/images/empfangsdame.jpg" ) );
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://" + imageDirectory + "/empfangsdame.jpg" ) );
 
 		// p2p one iteration 3
 		String p2poneTemplateID3 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://192.168.1.200/images/hausfrau.jpg" ) );
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://" + imageDirectory + "/hausfrau.jpg" ) );
 
 		// p2p one iteration 4
 		String p2poneTemplateID4 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://192.168.1.200/images/senioren.jpg" ) );
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "http://" + imageDirectory + "/senioren.jpg" ) );
 
 		// p2p two
 		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 180, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1339,19 +1342,19 @@ public class ZhawEngine implements LifecycleObject
 
 		// p2p one iteration 1
 		String p2poneTemplateID1 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://192.168.1.200/images/familie.jpg" ) );
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://" + imageDirectory + "/familie.jpg" ) );
 
 		// p2p one iteration 2
 		String p2poneTemplateID2 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://192.168.1.200/images/senioren.jpg" ) );
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://" + imageDirectory + "/senioren.jpg" ) );
 
 		// p2p one iteration 3
 		String p2poneTemplateID3 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://192.168.1.200/images/business.jpg" ) );
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://" + imageDirectory + "/business.jpg" ) );
 
 		// p2p one iteration 4
 		String p2poneTemplateID4 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://192.168.1.200/images/schueler.jpg" ) );
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "http://" + imageDirectory + "/schueler.jpg" ) );
 
 		// p2p two
 		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 240, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
