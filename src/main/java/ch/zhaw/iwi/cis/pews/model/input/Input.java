@@ -9,6 +9,8 @@ public class Input
 	private String exerciseID;
 	private String exerciseType;
 	private Integer exerciseOrderInWorkshop;
+	private String exerciseCurrentState;
+
 	private boolean timed;
 	private TimeUnit timeUnit;
 	private Integer duration;
@@ -28,6 +30,7 @@ public class Input
 		this.exerciseID = exercise.getID();
 		this.exerciseType = exercise.getClass().getSimpleName();
 		this.exerciseOrderInWorkshop = exercise.getOrderInWorkshop();
+		this.exerciseCurrentState = exercise.getCurrentState();
 		this.timed = exercise.isTimed();
 		this.timeUnit = exercise.getTimeUnit();
 		this.duration = exercise.getDuration();
@@ -65,6 +68,16 @@ public class Input
 	public void setExerciseOrderInWorkshop( Integer exerciseOrderInWorkshop )
 	{
 		this.exerciseOrderInWorkshop = exerciseOrderInWorkshop;
+	}
+
+	public String getExerciseCurrentState()
+	{
+		return exerciseCurrentState;
+	}
+
+	public void setExerciseCurrentState( String exerciseCurrentState )
+	{
+		this.exerciseCurrentState = exerciseCurrentState;
 	}
 
 	public boolean isTimed()
