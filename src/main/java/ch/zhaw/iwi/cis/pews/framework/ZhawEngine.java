@@ -720,7 +720,7 @@ public class ZhawEngine implements LifecycleObject
 		XINIX_IMAGE_MATRIX_ID = xinixImageMatrixService.persist( new XinixImageMatrix( XINIX_IMAGES ) );
 
 		// xinix template
-		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me template
