@@ -125,8 +125,8 @@ public class ZhawEngine implements LifecycleObject
 	private static UserImpl rootUser;
 
 	private static String imageDirectory = "skylla.zhaw.ch/pews_images";
-	//private static String imageDirectory = "192.168.1.200/images";
-	
+	// private static String imageDirectory = "192.168.1.200/images";
+
 	public static String ROOT_CLIENT_ID;
 
 	// defining these globally, since multiple pre-configured workshops might make use of the same role
@@ -678,7 +678,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.SECONDS,
 			180,
 			false,
-			true,
+			false,
 			false,
 			0,
 			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
@@ -687,7 +687,7 @@ public class ZhawEngine implements LifecycleObject
 			"Der Workshop beginnt in Kürze." ) );
 
 		// workshop end (poster template)
-		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
+		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "", "Ende des p.i.n.k.elefant Workshops", "Vielen Dank für Ihre Teilnahme." ) );
 
 		// pinklabs template
@@ -741,12 +741,12 @@ public class ZhawEngine implements LifecycleObject
 		// simple prototyping template
 		String simplyprotoTemplateID = exerciseTemplateService.persist( new SimplyPrototypingTemplate(
 			rootUser,
-			false,
+			true,
 			TimeUnit.SECONDS,
 			300,
 			true,
-			true,
-			true,
+			false,
+			false,
 			1,
 			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
 			"Mit welcher Aktion wird das Unternehmen weltberühmt?",
@@ -757,7 +757,7 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ), "Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs.", Arrays.asList( "Produkteigenschaften", "Werbung", "Vertrieb" ) ) );
 
 		// evaluation template
-		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
+		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wie bewertest Du diese Lösungen?", 5 ) );
 
 		// evaluation result template
@@ -767,7 +767,7 @@ public class ZhawEngine implements LifecycleObject
 			TimeUnit.MINUTES,
 			10,
 			false,
-			true,
+			false,
 			false,
 			0,
 			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
@@ -861,17 +861,17 @@ public class ZhawEngine implements LifecycleObject
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
 
 		// invitations, in case we show user profile
-		 invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		 invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		 invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo2ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo2ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo2ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		 invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo3ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo3ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo3ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		 invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
-		 invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
 
 		sessionService.start( sessionID );
