@@ -699,7 +699,7 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "http://" + imageDirectory + "/business.jpg" ) );
 
 		// p2ptwo template
-		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 180, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wie kann mit einer Person erfolgreich kommuniziert werden, welche die zwei ausgewählte Eigenschaften hat?" ) );
 
 		// xinix image -> used for xinix template (as part of XinixImageMatrix)
@@ -720,7 +720,7 @@ public class ZhawEngine implements LifecycleObject
 		XINIX_IMAGE_MATRIX_ID = xinixImageMatrixService.persist( new XinixImageMatrix( XINIX_IMAGES ) );
 
 		// xinix template
-		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me template
@@ -743,7 +743,7 @@ public class ZhawEngine implements LifecycleObject
 			rootUser,
 			true,
 			TimeUnit.SECONDS,
-			300,
+			120,
 			true,
 			false,
 			false,
@@ -753,11 +753,11 @@ public class ZhawEngine implements LifecycleObject
 			"mein mimetype" ) );
 
 		// kompression template
-		String compressionTemplateID = exerciseTemplateService.persist( new CompressionTemplate( rootUser, true, TimeUnit.MINUTES, 20, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String compressionTemplateID = exerciseTemplateService.persist( new CompressionTemplate( rootUser, true, TimeUnit.MINUTES, 2, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs.", Arrays.asList( "Produkteigenschaften", "Werbung", "Vertrieb" ) ) );
 
 		// evaluation template
-		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 120, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wie bewertest Du diese Lösungen?", 5 ) );
 
 		// evaluation result template

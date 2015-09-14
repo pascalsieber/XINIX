@@ -89,12 +89,12 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	public < T extends WorkshopObject > String persist( T object )
 	{
 		// evaluations by a specific user for an existing solution need to be updated (overwritten) rather than added
-		List< ExerciseDataImpl > existing = findByWorkshopAndExerciseDataClass( Evaluation.class );
+		List< ExerciseDataImpl > existing = this.findByWorkshopAndExerciseDataClass( Evaluation.class );
 
 		for ( ExerciseDataImpl data : existing )
 		{
 			if ( data.getOwner().getID().equals( ( (OwnableObject)object ).getOwner().getID() )
-					&& ( (EvaluationExerciseData)data ).getEvaluation().getSolution().equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution() ) )
+					&& ( (EvaluationExerciseData)data ).getEvaluation().getSolution().getID().equals( ( (EvaluationExerciseData)object ).getEvaluation().getSolution().getID() ) )
 			{
 
 				( (EvaluationExerciseData)data ).getEvaluation().getScore().setScore( ( (EvaluationExerciseData)object ).getEvaluation().getScore().getScore() );
