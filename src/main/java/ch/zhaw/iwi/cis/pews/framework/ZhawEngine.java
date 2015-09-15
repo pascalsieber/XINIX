@@ -827,6 +827,97 @@ public class ZhawEngine implements LifecycleObject
 		String executorID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ), null, "executor", "@demo", "executor" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
+		// make second async session demo1
+		String asyncSessionID1 = sessionService.persist( new SessionImpl(
+			"Demo Session ASYNC",
+			"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
+			null,
+			SessionSynchronizationImpl.ASYNCHRONOUS,
+			(WorkshopImpl)workshopService.findByID( wsID ),
+			null,
+			null,
+			null,
+			null,
+			null ) );
+		
+		// make second async session demo2
+				String asyncSessionID2 = sessionService.persist( new SessionImpl(
+					"Demo Session ASYNC",
+					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
+					null,
+					SessionSynchronizationImpl.ASYNCHRONOUS,
+					(WorkshopImpl)workshopService.findByID( wsID ),
+					null,
+					null,
+					null,
+					null,
+					null ) );
+				
+				// make second async session demo3
+				String asyncSessionID3 = sessionService.persist( new SessionImpl(
+					"Demo Session ASYNC",
+					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
+					null,
+					SessionSynchronizationImpl.ASYNCHRONOUS,
+					(WorkshopImpl)workshopService.findByID( wsID ),
+					null,
+					null,
+					null,
+					null,
+					null ) );
+				
+				// make second async session demo4
+				String asyncSessionID4 = sessionService.persist( new SessionImpl(
+					"Demo Session ASYNC",
+					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
+					null,
+					SessionSynchronizationImpl.ASYNCHRONOUS,
+					(WorkshopImpl)workshopService.findByID( wsID ),
+					null,
+					null,
+					null,
+					null,
+					null ) );
+				
+				// make second async session demo5
+				String asyncSessionID5 = sessionService.persist( new SessionImpl(
+					"Demo Session ASYNC",
+					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
+					null,
+					SessionSynchronizationImpl.ASYNCHRONOUS,
+					(WorkshopImpl)workshopService.findByID( wsID ),
+					null,
+					null,
+					null,
+					null,
+					null ) );
+				
+				// make second async session demo6
+				String asyncSessionID6 = sessionService.persist( new SessionImpl(
+					"Demo Session ASYNC",
+					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
+					null,
+					SessionSynchronizationImpl.ASYNCHRONOUS,
+					(WorkshopImpl)workshopService.findByID( wsID ),
+					null,
+					null,
+					null,
+					null,
+					null ) );
+				
+				// make second async session demo7
+				String asyncSessionID7 = sessionService.persist( new SessionImpl(
+					"Demo Session ASYNC",
+					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
+					null,
+					SessionSynchronizationImpl.ASYNCHRONOUS,
+					(WorkshopImpl)workshopService.findByID( wsID ),
+					null,
+					null,
+					null,
+					null,
+					null ) );
+
 		// demo1
 		String demo1ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 1", "@demo", "demo1" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo1ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -843,22 +934,17 @@ public class ZhawEngine implements LifecycleObject
 		String demo4ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 4", "@demo", "demo4" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
-		// make second asynch session for user demo5
-		String asyncSessionID = sessionService.persist( new SessionImpl(
-			"Demo Session ASYNC",
-			"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
-			null,
-			SessionSynchronizationImpl.ASYNCHRONOUS,
-			(WorkshopImpl)workshopService.findByID( wsID ),
-			null,
-			null,
-			null,
-			null,
-			null ) );
-
 		// demo5
 		String demo5ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 5", "@demo", "demo5" ) );
-		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+
+		// demo6
+		String demo6ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 4", "@demo", "demo4" ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+
+		// demo7
+		String demo7ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 4", "@demo", "demo4" ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
 		// invitations, in case we show user profile
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -874,8 +960,10 @@ public class ZhawEngine implements LifecycleObject
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
 
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo7ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+
 		sessionService.start( sessionID );
-		sessionService.start( asyncSessionID );
 
 		System.out.println( "demo workshop configured" );
 	}
