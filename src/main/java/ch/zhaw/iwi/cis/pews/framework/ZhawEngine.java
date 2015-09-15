@@ -212,7 +212,7 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startWebServer()
 	{
-		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8888 ) );
+		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8082 ) );
 
 		// Setup session ID manager.
 		webServer.setSessionIdManager( new HashSessionIdManager() );
@@ -864,6 +864,10 @@ public class ZhawEngine implements LifecycleObject
 		String demo6ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 6", "@demo", "demo4" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
+		// async executor
+		String asyncExecutorID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ), null, "async executor", "@demo", " asyncexecutor" ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( asyncExecutorID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
+
 		// async user
 		String asyncUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 7", "@demo", "async" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( asyncUserID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
@@ -885,6 +889,7 @@ public class ZhawEngine implements LifecycleObject
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 		
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( asyncUserID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( asyncExecutorID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
 
 		sessionService.start( sessionID );
 		sessionService.start( asyncSessionID1 );
