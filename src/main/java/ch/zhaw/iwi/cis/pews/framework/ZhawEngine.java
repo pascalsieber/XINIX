@@ -861,11 +861,11 @@ public class ZhawEngine implements LifecycleObject
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
 		// demo6
-		String demo6ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 6", "@demo", "demo4" ) );
+		String demo6ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 6", "@demo", "demo6" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
 		// async executor
-		String asyncExecutorID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ), null, "async executor", "@demo", " asyncexecutor" ) );
+		String asyncExecutorID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ), null, "async executor", "@demo", "asyncexecutor" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( asyncExecutorID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
 
 		// async user
