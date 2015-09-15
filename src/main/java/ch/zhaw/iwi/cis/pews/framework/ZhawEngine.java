@@ -687,19 +687,19 @@ public class ZhawEngine implements LifecycleObject
 			"Der Workshop beginnt in Kürze." ) );
 
 		// workshop end (poster template)
-		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "", "Ende des p.i.n.k.elefant Workshops", "Vielen Dank für Ihre Teilnahme." ) );
 
 		// pinklabs template
-		String pinklabsTemplateID = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String pinklabsTemplateID = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wo oder wie informierst Du Dich im Alltag?" ) );
 
 		// p2pOne template
-		String p2poneTemplateID = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String p2poneTemplateID = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "http://" + imageDirectory + "/business.jpg" ) );
 
 		// p2ptwo template
-		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wie kann mit einer Person erfolgreich kommuniziert werden, welche die zwei ausgewählte Eigenschaften hat?" ) );
 
 		// xinix image -> used for xinix template (as part of XinixImageMatrix)
@@ -720,7 +720,7 @@ public class ZhawEngine implements LifecycleObject
 		XINIX_IMAGE_MATRIX_ID = xinixImageMatrixService.persist( new XinixImageMatrix( XINIX_IMAGES ) );
 
 		// xinix template
-		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me template
@@ -729,7 +729,7 @@ public class ZhawEngine implements LifecycleObject
 				rootUser,
 				true,
 				TimeUnit.MINUTES,
-				2,
+				1,
 				true,
 				false,
 				false,
@@ -743,7 +743,7 @@ public class ZhawEngine implements LifecycleObject
 			rootUser,
 			true,
 			TimeUnit.SECONDS,
-			120,
+			60,
 			true,
 			false,
 			false,
@@ -753,11 +753,11 @@ public class ZhawEngine implements LifecycleObject
 			"mein mimetype" ) );
 
 		// kompression template
-		String compressionTemplateID = exerciseTemplateService.persist( new CompressionTemplate( rootUser, true, TimeUnit.MINUTES, 2, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String compressionTemplateID = exerciseTemplateService.persist( new CompressionTemplate( rootUser, true, TimeUnit.MINUTES, 1, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs.", Arrays.asList( "Produkteigenschaften", "Werbung", "Vertrieb" ) ) );
 
 		// evaluation template
-		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 120, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
+		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
 			.findByID( wsTemplateID ), "Wie bewertest Du diese Lösungen?", 5 ) );
 
 		// evaluation result template
@@ -765,7 +765,7 @@ public class ZhawEngine implements LifecycleObject
 			rootUser,
 			false,
 			TimeUnit.MINUTES,
-			10,
+			1,
 			false,
 			false,
 			false,
@@ -839,84 +839,6 @@ public class ZhawEngine implements LifecycleObject
 			null,
 			null,
 			null ) );
-		
-		// make second async session demo2
-				String asyncSessionID2 = sessionService.persist( new SessionImpl(
-					"Demo Session ASYNC",
-					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
-					null,
-					SessionSynchronizationImpl.ASYNCHRONOUS,
-					(WorkshopImpl)workshopService.findByID( wsID ),
-					null,
-					null,
-					null,
-					null,
-					null ) );
-				
-				// make second async session demo3
-				String asyncSessionID3 = sessionService.persist( new SessionImpl(
-					"Demo Session ASYNC",
-					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
-					null,
-					SessionSynchronizationImpl.ASYNCHRONOUS,
-					(WorkshopImpl)workshopService.findByID( wsID ),
-					null,
-					null,
-					null,
-					null,
-					null ) );
-				
-				// make second async session demo4
-				String asyncSessionID4 = sessionService.persist( new SessionImpl(
-					"Demo Session ASYNC",
-					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
-					null,
-					SessionSynchronizationImpl.ASYNCHRONOUS,
-					(WorkshopImpl)workshopService.findByID( wsID ),
-					null,
-					null,
-					null,
-					null,
-					null ) );
-				
-				// make second async session demo5
-				String asyncSessionID5 = sessionService.persist( new SessionImpl(
-					"Demo Session ASYNC",
-					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
-					null,
-					SessionSynchronizationImpl.ASYNCHRONOUS,
-					(WorkshopImpl)workshopService.findByID( wsID ),
-					null,
-					null,
-					null,
-					null,
-					null ) );
-				
-				// make second async session demo6
-				String asyncSessionID6 = sessionService.persist( new SessionImpl(
-					"Demo Session ASYNC",
-					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
-					null,
-					SessionSynchronizationImpl.ASYNCHRONOUS,
-					(WorkshopImpl)workshopService.findByID( wsID ),
-					null,
-					null,
-					null,
-					null,
-					null ) );
-				
-				// make second async session demo7
-				String asyncSessionID7 = sessionService.persist( new SessionImpl(
-					"Demo Session ASYNC",
-					"Asynchrone Demo Session für p.i.n.k.elefant Workshop",
-					null,
-					SessionSynchronizationImpl.ASYNCHRONOUS,
-					(WorkshopImpl)workshopService.findByID( wsID ),
-					null,
-					null,
-					null,
-					null,
-					null ) );
 
 		// demo1
 		String demo1ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 1", "@demo", "demo1" ) );
@@ -939,12 +861,12 @@ public class ZhawEngine implements LifecycleObject
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
 		// demo6
-		String demo6ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 4", "@demo", "demo4" ) );
-		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		String demo6ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 6", "@demo", "demo4" ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
-		// demo7
-		String demo7ID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 4", "@demo", "demo4" ) );
-		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo4ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		// async user
+		String asyncUserID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "participant 7", "@demo", "async" ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( asyncUserID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
 
 		// invitations, in case we show user profile
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( executorID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
@@ -961,9 +883,11 @@ public class ZhawEngine implements LifecycleObject
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
 
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo7ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		
+		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( asyncUserID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
 
 		sessionService.start( sessionID );
+		sessionService.start( asyncSessionID1 );
 
 		System.out.println( "demo workshop configured" );
 	}
