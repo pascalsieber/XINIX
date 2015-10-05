@@ -44,6 +44,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
@@ -110,6 +111,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.apache.derby.drda.NetworkServerControlWrapper;
@@ -384,8 +386,8 @@ public class ZhawEngine implements LifecycleObject
 			.persist( new PinkElefantTemplate( rootUser, "p.i.n.k.elefant Template", "Template für p.i.n.k.elefant Workshop", "Produkteinfuehrung Teekocher" ) );
 
 		// sample workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ) ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
 
 		// workshop start (poster template)
 		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -668,8 +670,8 @@ public class ZhawEngine implements LifecycleObject
 			"Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?" ) );
 
 		// sample workshop instance
-		String wsID = workshopService
-			.persist( new WorkshopImpl( "p.i.n.k.elefant Workshop", "Demo p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Demo p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
 
 		// workshop start (poster template)
 		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -865,7 +867,13 @@ public class ZhawEngine implements LifecycleObject
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
 
 		// async executor
-		String asyncExecutorID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ), null, "async executor", "@demo", "asyncexecutor" ) );
+		String asyncExecutorID = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc" ),
+			(RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
+			null,
+			"async executor",
+			"@demo",
+			"asyncexecutor" ) );
 		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( asyncExecutorID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
 
 		// async user
@@ -887,7 +895,7 @@ public class ZhawEngine implements LifecycleObject
 		// invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo5ID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
 
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( demo6ID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-		
+
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( asyncUserID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
 		invitationService.persist( new Invitation( demoRootUser, (UserImpl)userService.findByID( asyncExecutorID ), (SessionImpl)sessionService.findByID( asyncSessionID1 ) ) );
 
@@ -943,7 +951,8 @@ public class ZhawEngine implements LifecycleObject
 			"Massnahmen Begleit-Service Paketdienst im Jahr 2020" ) );
 
 		// workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (WorkflowElementTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (WorkflowElementTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1338,7 +1347,8 @@ public class ZhawEngine implements LifecycleObject
 			"Was wünsche ich mir am Bahnhof" ) );
 
 		// workshop instance
-		String wsID = workshopService.persist( new WorkshopImpl( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (WorkflowElementTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (WorkflowElementTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
