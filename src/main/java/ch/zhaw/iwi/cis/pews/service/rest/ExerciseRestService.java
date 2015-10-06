@@ -47,6 +47,8 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public final static String GETOUTPUT = "/getOutput";
 	public final static String GETOUTPUT_BY_EXERCISEID = "/getOutputByExerciseID";
 
+	public final static String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
+
 	// only for testing
 	public final static String GETINPUT_AS_STRING = "/getInputAsString";
 	public final static String GETINPUT_BY_EXERCISEID_AS_STRING = "/getInputByExerciseIDAsString";
@@ -64,6 +66,13 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public String persist( ExerciseImpl obj )
 	{
 		return exerciseService.persistExercise( obj );
+	}
+
+	@POST
+	@Path( GENERATE_FROM_TEMPLATE )
+	public String generateFromTemplate( ExerciseImpl obj )
+	{
+		return exerciseService.generateFromTemplate( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -158,7 +167,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	{
 		exerciseService.setOuputByExerciseID( outputRequestString );
 	}
-	
+
 	@POST
 	@Path( GETOUTPUT )
 	public List< ExerciseDataImpl > getOutput()
@@ -172,7 +181,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	{
 		return exerciseService.getOutputByExerciseID( exerciseID );
 	}
-	
+
 	@POST
 	@Path( START_USER )
 	public void startUser()

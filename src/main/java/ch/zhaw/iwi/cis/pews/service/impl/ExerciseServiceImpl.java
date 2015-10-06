@@ -1,6 +1,8 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +22,19 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.CompressionExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationResultExerciseService;
@@ -42,8 +46,8 @@ import ch.zhaw.iwi.cis.pews.service.exercise.impl.SimplePrototypingExerciseServi
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.XinixExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.You2MeExerciseService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
@@ -61,6 +65,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 {
 	private ObjectMapper objectMapper;
 	private ExerciseDataService exerciseDataService;
+	private ExerciseTemplateService exerciseTemplateService;
 
 	private ExerciseDao exerciseDao;
 	private ExerciseDataDao exerciseDataDao;
@@ -96,6 +101,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 		objectMapper = new ObjectMapper();
 		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
+		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 	}
 
 	public ObjectMapper getObjectMapper()
@@ -123,7 +129,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		// if no argument for orderInWorkshop provided (i.e. null),
 		// place at the end of workshop's exercise queue
 		// else handle order of other exercises
-		if ( exercise.getOrderInWorkshop() == null )
+		if ( exercise.getOrderInWorkshop() == null || exercise.getOrderInWorkshop() == 0)
 		{
 			// place at end of queue
 			exercise.setOrderInWorkshop( workshop.getExercises().size() );
@@ -148,6 +154,48 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		}
 
 		return super.persist( exercise );
+	}
+
+	@Override
+	public String generateFromTemplate( ExerciseImpl obj )
+	{
+		// TODO: discuss with John how to use deflector in this case
+		try
+		{
+			// check if obj in request references an existing exercise template and utilize accordingly
+			ExerciseTemplate template = exerciseTemplateService.findByID( obj.getDerivedFrom().getID() );
+			if ( template != null )
+			{
+				obj.setDerivedFrom( template );
+			}
+
+			// make exercise instance based on template / derivedFrom
+			// Constructor< ? > constructor = ClassWrapper.getConstructor( obj.getClass(), new Class[] { String.class, String.class, ExerciseImpl.class, WorkshopImpl.class } );
+			Constructor< ? > constructor = null;
+			Constructor< ? >[] constructors = obj.getClass().getConstructors();
+			for ( int i = 0; i < constructors.length; i++ )
+			{
+				if ( constructors[ i ].getParameterTypes().length > 0 )
+				{
+					constructor = constructors[ i ];
+				}
+			}
+			
+			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), obj.getWorkshop() );
+
+			// in case of existing exercise, set ID accordingly and don't break reference to exercise template; reset reference on new exercise instance
+			if ( obj.getID() != null && obj.getID() != "" )
+			{
+				exercise.setID( obj.getID() );
+				exercise.setDerivedFrom( exerciseTemplateService.findExerciseTemplateByID( ( (WorkflowElementImpl)findByID( obj.getID() ) ).getDerivedFrom().getID() ) );
+			}
+
+			return persistExercise( exercise );
+		}
+		catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e )
+		{
+			throw new RuntimeException( e );
+		}
 	}
 
 	@SuppressWarnings( "unchecked" )
