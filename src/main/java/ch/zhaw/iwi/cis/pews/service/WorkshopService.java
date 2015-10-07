@@ -13,4 +13,6 @@ public interface WorkshopService extends WorkflowElementService
 
 	public void reset( String workshopID );
 
+	public String generateFromTemplate( WorkshopImpl obj );
+
 }

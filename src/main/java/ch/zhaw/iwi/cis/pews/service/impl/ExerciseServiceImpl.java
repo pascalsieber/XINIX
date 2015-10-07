@@ -182,14 +182,6 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 			}
 			
 			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), obj.getWorkshop() );
-
-			// in case of existing exercise, set ID accordingly and don't break reference to exercise template; reset reference on new exercise instance
-			if ( obj.getID() != null && obj.getID() != "" )
-			{
-				exercise.setID( obj.getID() );
-				exercise.setDerivedFrom( exerciseTemplateService.findExerciseTemplateByID( ( (WorkflowElementImpl)findByID( obj.getID() ) ).getDerivedFrom().getID() ) );
-			}
-
 			return persistExercise( exercise );
 		}
 		catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e )

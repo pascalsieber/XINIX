@@ -26,6 +26,8 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public static final String STOP = "/stop";
 	public static final String RESET = "/resetByID";
 
+	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
+
 	private WorkshopService workshopService;
 
 	public WorkshopRestService()
@@ -39,6 +41,13 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public String persist( WorkshopImpl obj )
 	{
 		return super.persist( obj );
+	}
+
+	@POST
+	@Path( GENERATE_FROM_TEMPLATE )
+	public String generateFromTemplate( WorkshopImpl obj )
+	{
+		return workshopService.generateFromTemplate( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )
