@@ -152,41 +152,70 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 	@Override
 	public String generateFromTemplate( WorkshopImpl obj )
 	{
+		// object to be persisted, init with null
+		PinkElefantWorkshop workshop = null;
+		boolean templateIsValid = false;
+
 		// check if obj in request references an existing workshop template and utilize accordingly
-		WorkshopTemplate template = workshopTemplateService.findByID( obj.getDerivedFrom().getID() );
-		if ( template != null )
+		// if workshop to be based on existing template, use template's values
+		// else use values given in obj
+		WorkshopTemplate template;
+		if ( obj.getDerivedFrom() != null )
 		{
-			obj.setDerivedFrom( template );
+			template = workshopTemplateService.findByID( obj.getDerivedFrom().getID() );
+
+			// check if referenced template actually exists
+			if ( template != null )
+			{
+				obj.setDerivedFrom( template );
+				templateIsValid = true;
+			}
 		}
 
-		// make workshop instance based on template / derivedFrom
-		PinkElefantWorkshop workshop = new PinkElefantWorkshop( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), ( (PinkElefantTemplate)obj.getDerivedFrom() ).getProblem() );
+		// if template is valid make workshop instance based on template / derivedFrom
+		// else take information directly from obj
+		if ( templateIsValid )
+		{
+			workshop = new PinkElefantWorkshop( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), ( (PinkElefantTemplate)obj.getDerivedFrom() ).getProblem() );
+		}
+		else
+		{
+			workshop = new PinkElefantWorkshop( obj.getName(), obj.getDescription(), null, ( (PinkElefantWorkshop)obj ).getProblem() );
+		}
+
+		// persist operation
 		WorkshopImpl persistedWorkshop = findByID( persist( workshop ) );
 
-		for ( ExerciseTemplate exerciseTemplate : ( (WorkshopTemplate)persistedWorkshop.getDerivedFrom() ).getExerciseTemplates() )
+		// handle creation of exercises based on exercise templates which are
+		// attached to the workshop template (derivedFrom of persistedWorkshop)
+		// only do this, of course, if derivedFrom is not null
+		if ( persistedWorkshop.getDerivedFrom() != null )
 		{
-			Constructor< ? > constructor = null;
-			Constructor< ? >[] constructors = getExerciseSubClass( exerciseTemplate.getClass().getSimpleName() ).getConstructors();
-
-			for ( int i = 0; i < constructors.length; i++ )
+			for ( ExerciseTemplate exerciseTemplate : ( (WorkshopTemplate)persistedWorkshop.getDerivedFrom() ).getExerciseTemplates() )
 			{
-				if ( constructors[ i ].getParameterTypes().length > 0 )
+				Constructor< ? > constructor = null;
+				Constructor< ? >[] constructors = getExerciseSubClass( exerciseTemplate.getClass().getSimpleName() ).getConstructors();
+
+				for ( int i = 0; i < constructors.length; i++ )
 				{
-					constructor = constructors[ i ];
+					if ( constructors[ i ].getParameterTypes().length > 0 )
+					{
+						constructor = constructors[ i ];
+					}
 				}
-			}
 
-			try
-			{
-				exerciseService.generateFromTemplate( (ExerciseImpl)constructor.newInstance(
-					"generated for workshop " + persistedWorkshop.getID(),
-					"generated from template " + exerciseTemplate.getID(),
-					exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() ),
-					persistedWorkshop ) );
-			}
-			catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e )
-			{
-				throw new RuntimeException( e );
+				try
+				{
+					exerciseService.generateFromTemplate( (ExerciseImpl)constructor.newInstance(
+						"generated for workshop " + persistedWorkshop.getID(),
+						"generated from template " + exerciseTemplate.getID(),
+						exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() ),
+						persistedWorkshop ) );
+				}
+				catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e )
+				{
+					throw new RuntimeException( e );
+				}
 			}
 		}
 
