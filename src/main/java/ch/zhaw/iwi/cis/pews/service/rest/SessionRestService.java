@@ -38,6 +38,7 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
+	public final static String RENEW = "/renew";
 
 	public static final String JOIN = "/join";
 	public static final String LEAVE = "/leave";
@@ -144,6 +145,13 @@ public class SessionRestService extends WorkshopObjectRestService
 	public void stop( String sessionID )
 	{
 		sessionService.stop( sessionID );
+	}
+
+	@POST
+	@Path( RENEW )
+	public void renewSession( String sessionID )
+	{
+		sessionService.renew( sessionID );
 	}
 
 	@POST

@@ -24,6 +24,7 @@ public class WorkshopRestService extends WorkshopObjectRestService
 
 	public static final String START = "/start";
 	public static final String STOP = "/stop";
+	public static final String RENEW = "/renew";
 	public static final String RESET = "/resetByID";
 
 	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
@@ -85,6 +86,13 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public void stopWorkshop( String workshopID )
 	{
 		workshopService.stop( workshopID );
+	}
+
+	@POST
+	@Path( RENEW )
+	public void renewWorkshop( String workshopID )
+	{
+		workshopService.renew( workshopID );
 	}
 
 	@POST

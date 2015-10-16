@@ -34,6 +34,12 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	}
 
 	@Override
+	public void renew( String id )
+	{
+		getServiceTarget().path( SessionRestService.RENEW ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+	}
+
+	@Override
 	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return getServiceTarget().path( SessionRestService.GET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( ExerciseImpl.class );

@@ -128,6 +128,19 @@ public class ZhawEngine implements LifecycleObject
 	private static String imageDirectory = "skylla.zhaw.ch/pews_images";
 	// private static String imageDirectory = "192.168.1.200/images";
 
+	// port on which application runs.
+	// 8888: pews-test on skylla
+	// 8082: pews on skylla
+	public static int APPLICATION_PORT = 8888;
+	// public static int APPLICATION_PORT = 8082;
+
+	// port on which derby runs.
+	// 1529: pews-test on skylla
+	// 1526: pews on skylla
+	// IMPORTANT: don't forget to change in persistence.xml if you switch ports for build!!
+	private static int DERBY_PORT = 1529;
+	// private static int APPLICATION_PORT = 1526;
+
 	public static String ROOT_CLIENT_ID;
 
 	// defining these globally, since multiple pre-configured workshops might make use of the same role
@@ -207,13 +220,13 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startDatabase()
 	{
-		serverControl = NetworkServerControlWrapper.__new( InetAddressWrapper.getByName( "0.0.0.0" ), 1526 );
+		serverControl = NetworkServerControlWrapper.__new( InetAddressWrapper.getByName( "0.0.0.0" ), DERBY_PORT );
 		NetworkServerControlWrapper.start( serverControl, new PrintWriter( System.out ) );
 	}
 
 	private static void startWebServer()
 	{
-		webServer = new Server( new InetSocketAddress( "0.0.0.0", 8082 ) );
+		webServer = new Server( new InetSocketAddress( "0.0.0.0", APPLICATION_PORT ) );
 
 		// Setup session ID manager.
 		webServer.setSessionIdManager( new HashSessionIdManager() );

@@ -35,6 +35,12 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	}
 
 	@Override
+	public void renew( String id )
+	{
+		getServiceTarget().path( ExerciseRestService.RENEW ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+	}
+
+	@Override
 	public void suspend( SuspensionRequest suspensionRequest )
 	{
 		getServiceTarget().path( ExerciseRestService.SUSPEND ).request( MediaType.APPLICATION_JSON ).post( Entity.json( suspensionRequest ) );

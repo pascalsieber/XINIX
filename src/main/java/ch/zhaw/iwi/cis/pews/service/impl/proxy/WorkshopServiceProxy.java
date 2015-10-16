@@ -29,6 +29,12 @@ public class WorkshopServiceProxy extends WorkshopObjectServiceProxy implements 
 		getServiceTarget().path( WorkshopRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
+	@Override
+	public void renew( String id )
+	{
+		getServiceTarget().path( WorkshopRestService.RENEW ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< WorkshopImpl > findAllWorkshopsSimple()

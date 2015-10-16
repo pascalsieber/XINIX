@@ -29,6 +29,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
+	public final static String RENEW = "/renew";
 	public final static String SUSPEND = "/suspend";
 	public final static String RESUME = "/resume";
 
@@ -110,6 +111,13 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public void stopExercise( String exerciseID )
 	{
 		exerciseService.stop( exerciseID );
+	}
+
+	@POST
+	@Path( RENEW )
+	public void renewExercise( String exerciseID )
+	{
+		exerciseService.renew( exerciseID );
 	}
 
 	@POST
