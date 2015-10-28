@@ -129,7 +129,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		// if no argument for orderInWorkshop provided (i.e. null),
 		// place at the end of workshop's exercise queue
 		// else handle order of other exercises
-		if ( exercise.getOrderInWorkshop() == null || exercise.getOrderInWorkshop() == 0)
+		if ( exercise.getOrderInWorkshop() == null )
 		{
 			// place at end of queue
 			exercise.setOrderInWorkshop( workshop.getExercises().size() );

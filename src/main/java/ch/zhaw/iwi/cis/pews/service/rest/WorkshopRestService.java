@@ -27,6 +27,8 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public static final String RENEW = "/renew";
 	public static final String RESET = "/resetByID";
 
+	public static final String UPDATE_EXERCISES_ORDER = "/updateOrderOfExercises";
+
 	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
 
 	private WorkshopService workshopService;
@@ -100,6 +102,13 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public void resetWorkshop( String workshopID )
 	{
 		workshopService.reset( workshopID );
+	}
+
+	@POST
+	@Path( UPDATE_EXERCISES_ORDER )
+	public void updateOrderOfExercises( WorkshopImpl wrapper )
+	{
+		workshopService.updateOrderOfExercises( wrapper );
 	}
 
 	@Override

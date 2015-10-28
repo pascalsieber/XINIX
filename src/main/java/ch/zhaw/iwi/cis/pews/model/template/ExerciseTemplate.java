@@ -13,6 +13,7 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
+	private Integer orderInWorkshopTemplate = null;
 
 	// for timing of exercises
 	private boolean timed;
@@ -62,6 +63,19 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 		this.cardinality = cardinality;
 		this.workshopTemplate = workshopTemplate;
 		this.questionTemplate = questionTemplate;
+
+		// insert at end of exercise template queue of workshop template
+		this.orderInWorkshopTemplate = workshopTemplate.getExerciseTemplates().size();
+	}
+
+	public Integer getOrderInWorkshopTemplate()
+	{
+		return orderInWorkshopTemplate;
+	}
+
+	public void setOrderInWorkshopTemplate( Integer orderInWorkshopTemplate )
+	{
+		this.orderInWorkshopTemplate = orderInWorkshopTemplate;
 	}
 
 	public boolean isTimed()

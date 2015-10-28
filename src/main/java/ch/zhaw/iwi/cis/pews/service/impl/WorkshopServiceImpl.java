@@ -221,4 +221,15 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 
 		return persistedWorkshop.getID();
 	}
+
+	@Override
+	public void updateOrderOfExercises( WorkshopImpl wrapper )
+	{
+		for ( int i = 0; i < wrapper.getExercises().size(); i++ )
+		{
+			ExerciseImpl exercise = exerciseService.findExerciseByID( wrapper.getExercises().get( i ).getID() );
+			exercise.setOrderInWorkshop( i );
+			exerciseService.persistExercise( exercise );
+		}
+	}
 }

@@ -21,6 +21,7 @@ public class WorkshopTemplateRestService extends WorkshopObjectRestService
 {
 
 	public static final String BASE = "/workshopService/template";
+	public static final String UPDATE_EXERCISE_TEMPLATES_ORDER = "/updateOrderOfExerciseTemplates";
 
 	private WorkshopTemplateService workshopTemplateService;
 
@@ -58,6 +59,13 @@ public class WorkshopTemplateRestService extends WorkshopObjectRestService
 	public List< WorkshopTemplate > findAll()
 	{
 		return workshopTemplateService.findAllWorkshopTemplates();
+	}
+
+	@POST
+	@Path( UPDATE_EXERCISE_TEMPLATES_ORDER )
+	public void updateOrderOfExerciseTemplates( WorkshopTemplate wrapper )
+	{
+		workshopTemplateService.updateOrderOfExerciseTemplates( wrapper );
 	}
 
 	@Override

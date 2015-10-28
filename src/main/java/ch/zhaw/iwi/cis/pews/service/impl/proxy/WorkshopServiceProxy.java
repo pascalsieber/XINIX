@@ -55,6 +55,12 @@ public class WorkshopServiceProxy extends WorkshopObjectServiceProxy implements 
 	}
 
 	@Override
+	public void updateOrderOfExercises( WorkshopImpl wrapper )
+	{
+		getServiceTarget().path( WorkshopRestService.UPDATE_EXERCISES_ORDER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( wrapper ) );
+	}
+
+	@Override
 	public String generateFromTemplate( WorkshopImpl obj )
 	{
 		return getServiceTarget().path( WorkshopRestService.GENERATE_FROM_TEMPLATE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );

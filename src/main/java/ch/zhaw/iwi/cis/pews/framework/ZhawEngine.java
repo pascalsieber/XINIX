@@ -399,7 +399,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// sample workshop instance
 		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
 
 		// workshop start (poster template)
 		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -456,7 +456,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			1,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Mit welcher Aktion wird das Unternehmen weltberühmt?",
 			"mein mimetype" ) );
 
@@ -478,7 +478,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Resultat der Abstimmung" ) );
 
 		// instantiate exercises based on templates
@@ -683,7 +683,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// sample workshop instance
 		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Demo p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
 
 		// workshop start (poster template)
 		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -695,7 +695,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Willkommen zum p.i.n.k.elefant Workshop. Es soll die folgende Frage beantwortet werden: \"Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?\"",
 			"Der Workshop beginnt in Kürze." ) );
@@ -735,7 +735,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// xinix template
 		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findWorkshopTemplateByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me template
 		String you2meTemplateID = exerciseTemplateService
@@ -748,7 +748,7 @@ public class ZhawEngine implements LifecycleObject
 				false,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"Führe mit jemandem einen Dialog.",
 				new HashSet< String >( Arrays.asList( "Was möchtests Du gerne lernen?", "Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) ) );
 
@@ -762,7 +762,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			false,
 			1,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Mit welcher Aktion wird das Unternehmen weltberühmt?",
 			"mein mimetype" ) );
 
@@ -784,7 +784,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Resultat der Abstimmung" ) );
 
 		// instantiate exercises based on templates
@@ -964,7 +964,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// workshop instance
 		String wsID = workshopService.persist( new PinkElefantWorkshop( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1032,7 +1032,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			1,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Zeichne oder Bastle den Postboten 2030!",
 			"tbd" ) );
 
@@ -1046,7 +1046,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"ALLE INPUTS aus Aufgaben 1-5 erscheinen auf dem Screen. Nun werden konkrete Massnahmen zum Thema \"Massnahmen Begleit-Service Paketdiesnst im Jahr 2020\" formuliert.",
 			new ArrayList< String >() ) );
 
@@ -1064,7 +1064,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Resultat der Abstimmung" ) );
 
 		// end template (poster)
@@ -1083,7 +1083,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Willkommen",
 				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet." ) );
@@ -1098,7 +1098,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Inspirationsphase",
 				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
@@ -1121,7 +1121,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"XINIX-Tool",
 			"Nun folgen 4 unterschiedliche Themen. Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln. " ) );
@@ -1136,7 +1136,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Simply Prototyping",
 				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
@@ -1151,7 +1151,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Kompressionsphase",
 				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>. In den nächsten 45 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme in mind. 4 Sätzen.<br/>Erarbeite so viele Massnahmen wie möglich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgeführt. Drücke Random um den Zufallsgenerator auszulösen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet." ) );
@@ -1166,7 +1166,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Bewertungsphase",
 				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums 'Umsetzbarkeit bei der Post'.<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10." ) );
@@ -1360,7 +1360,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// workshop instance
 		String wsID = workshopService.persist( new PinkElefantWorkshop( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ).getProblem() ) );
+			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1424,7 +1424,7 @@ public class ZhawEngine implements LifecycleObject
 				false,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"Was erwartest du vom ÖV in Verbindung mit dem gewürfelten Bild?",
 				(XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
@@ -1438,7 +1438,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			true,
 			1,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"So sieht mein optimaler Bahnhof aus",
 			"tbd" ) );
 
@@ -1462,7 +1462,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Willkommen",
 				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Was wünsche ich mir am Bahnhof?</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.<br/>Bitte nimm dir ca. 45 Minuten Zeit, um diesen Workshop durchzuspielen." ) );
@@ -1477,7 +1477,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Inspirationsphase",
 				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser." ) );
@@ -1500,7 +1500,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"XINIX-Tool",
 			"Nun folgen 4 unterschiedliche Themen.<br/>Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln." ) );
@@ -1515,7 +1515,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Simply Prototyping",
 				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen." ) );
@@ -1530,7 +1530,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Kompressionsphase",
 				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Was wünsche ich mir am Bahnhof?</b>.<br/>In den nächsten 12 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme<br/>Erarbeite so viele Massnahmen wie möglich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgeführt. Drücke Random um den Zufallsgenerator auszulösen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet." ) );
@@ -1545,7 +1545,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"Bewertungsphase",
 				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums \"Umsetzbarkeit realistisch\".<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10." ) );
@@ -1560,7 +1560,7 @@ public class ZhawEngine implements LifecycleObject
 				true,
 				false,
 				0,
-				(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+				(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 				"",
 				"",
 				"Gratulation, der XINIX-Workshop ist beendet. Die besten Ideen werden am 01.07.2015 im Rahmen eines kreativ.workshops besprochen und weiterentwickelt." ) );

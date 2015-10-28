@@ -11,4 +11,6 @@ public interface WorkshopTemplateService extends WorkshopObjectService
 
 	List< WorkshopTemplate > findAllWorkshopTemplates();
 
+	void updateOrderOfExerciseTemplates( WorkshopTemplate wrapper );
+
 }

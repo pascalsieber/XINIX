@@ -23,6 +23,12 @@ public class WorkshopTemplateServiceProxy extends WorkshopObjectServiceProxy imp
 		return getServiceTarget().path( WorkshopTemplateRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( WorkshopTemplate.class );
 	}
 
+	@Override
+	public void updateOrderOfExerciseTemplates( WorkshopTemplate wrapper )
+	{
+		getServiceTarget().path( WorkshopTemplateRestService.UPDATE_EXERCISE_TEMPLATES_ORDER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( wrapper ) );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< WorkshopTemplate > findAllWorkshopTemplates()

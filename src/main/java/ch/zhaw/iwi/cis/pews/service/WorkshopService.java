@@ -15,4 +15,6 @@ public interface WorkshopService extends WorkflowElementService
 
 	public String generateFromTemplate( WorkshopImpl obj );
 
+	public void updateOrderOfExercises( WorkshopImpl wrapper );
+
 }
