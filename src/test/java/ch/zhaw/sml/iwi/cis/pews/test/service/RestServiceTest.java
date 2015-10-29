@@ -215,19 +215,82 @@ public class RestServiceTest
 			defaultWSTemplateStub,
 			"questionTemplate",
 			"start",
-			"start description" ) ) );
+			"start description",
+			"start",
+			"start workshop" ) ) );
 
-		plabsTemplateStub.setID( exTemplateService.persist( new PinkLabsTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "pinklabs?" ) ) );
+		plabsTemplateStub.setID( exTemplateService.persist( new PinkLabsTemplate(
+			defaultUserStub,
+			false,
+			null,
+			0,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"pinklabs?",
+			"pinklabs",
+			"pinklabs exercise" ) ) );
 
-		p2poneTemplateStub.setID( exTemplateService.persist( new P2POneTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "theme", "urltopicture" ) ) );
+		p2poneTemplateStub.setID( exTemplateService.persist( new P2POneTemplate(
+			defaultUserStub,
+			false,
+			null,
+			0,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"theme",
+			"urltopicture",
+			"p2pone",
+			"p2pone exercise" ) ) );
 
-		p2ptwoTemplateStub.setID( exTemplateService.persist( new P2PTwoTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "question?" ) ) );
+		p2ptwoTemplateStub.setID( exTemplateService.persist( new P2PTwoTemplate(
+			defaultUserStub,
+			false,
+			null,
+			0,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"question?",
+			"p2ptwo",
+			"p2ptwo exercise" ) ) );
 
-		you2meTemplateStub.setID( exTemplateService.persist( new You2MeTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "", new HashSet< String >( Arrays
-			.asList( "question?", "counter quesiton?" ) ) ) ) );
+		you2meTemplateStub.setID( exTemplateService.persist( new You2MeTemplate(
+			defaultUserStub,
+			false,
+			null,
+			0,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"",
+			"you2me",
+			"you2me exercise",
+			new HashSet< String >( Arrays.asList( "question?", "counter quesiton?" ) ) ) ) );
 
-		sprotoTemplateStub
-			.setID( exTemplateService.persist( new SimplyPrototypingTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "proto question", "mime" ) ) );
+		sprotoTemplateStub.setID( exTemplateService.persist( new SimplyPrototypingTemplate(
+			defaultUserStub,
+			false,
+			null,
+			0,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"proto question",
+			"mime",
+			"simple proto",
+			"simple proto exercise" ) ) );
 
 		compressionTemplateStub.setID( exTemplateService.persist( new CompressionTemplate(
 			defaultUserStub,
@@ -240,18 +303,57 @@ public class RestServiceTest
 			0,
 			defaultWSTemplateStub,
 			"compression question",
+			"compression",
+			"compression exercise",
 			Arrays.asList( "solution criteria 1", "solution criteria 2" ) ) ) );
 
-		evalTemplateStub.setID( exTemplateService.persist( new EvaluationTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "evaluation question", 3 ) ) );
+		evalTemplateStub.setID( exTemplateService.persist( new EvaluationTemplate(
+			defaultUserStub,
+			false,
+			null,
+			0,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"evaluation question",
+			"evaluation",
+			"evaluation exercise",
+			3 ) ) );
 
-		evalResultTemplateStub.setID( exTemplateService.persist( new EvaluationResultTemplate( defaultUserStub, false, TimeUnit.MINUTES, 10, false, false, false, 0, defaultWSTemplateStub, "" ) ) );
+		evalResultTemplateStub.setID( exTemplateService.persist( new EvaluationResultTemplate(
+			defaultUserStub,
+			false,
+			TimeUnit.MINUTES,
+			10,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"",
+			"evaluation result",
+			"evaluation result exercise" ) ) );
 
 		xinixImageStub.setID( xinixImageService.persist( new XinixImage( "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
 		List< XinixImage > images = new ArrayList<>();
 		images.add( (XinixImage)xinixImageService.findByID( xinixImageStub.getID() ) );
 		xinixImageMatrixStub.setID( xinixImageMatrixService.persist( new XinixImageMatrix( images ) ) );
-		xinixTemplateStub.setID( exTemplateService
-			.persist( new XinixTemplate( defaultUserStub, false, null, 0, false, false, false, 0, defaultWSTemplateStub, "xinix question", xinixImageMatrixStub ) ) );
+		xinixTemplateStub.setID( exTemplateService.persist( new XinixTemplate(
+			defaultUserStub,
+			false,
+			null,
+			0,
+			false,
+			false,
+			false,
+			0,
+			defaultWSTemplateStub,
+			"xinix question",
+			"xinix",
+			"xinix exercise",
+			xinixImageMatrixStub ) ) );
 
 		// exercises
 
@@ -469,7 +571,19 @@ public class RestServiceTest
 	public void crudOperationsExerciseService()
 	{
 		// create exercise definition
-		String exTemplateID = exTemplateService.persist( new PinkLabsTemplate( defaultUserStub, true, TimeUnit.MINUTES, 2, true, true, true, 3, defaultWSTemplateStub, "question" ) );
+		String exTemplateID = exTemplateService.persist( new PinkLabsTemplate(
+			defaultUserStub,
+			true,
+			TimeUnit.MINUTES,
+			2,
+			true,
+			true,
+			true,
+			3,
+			defaultWSTemplateStub,
+			"question",
+			"defaultName",
+			"defaultDescription" ) );
 
 		// read exercise definition
 		ExerciseTemplate exTemplate = exTemplateService.findByID( exTemplateID );
@@ -485,6 +599,8 @@ public class RestServiceTest
 		assertTrue( exTemplate.getTimeUnit().equals( TimeUnit.MINUTES ) );
 		assertTrue( exTemplate.getWorkshopTemplate().getID().equals( defaultWSTemplateStub.getID() ) );
 		assertTrue( ( (PinkLabsTemplate)exTemplate ).getQuestionTemplate().equalsIgnoreCase( "question" ) );
+		assertTrue( exTemplate.getDefaultName().equals( "defaultName" ) );
+		assertTrue( exTemplate.getDefaultDescription().equals( "defaultDescription" ) );
 
 		// update exercise definition
 		exTemplate.setDuration( 12 );

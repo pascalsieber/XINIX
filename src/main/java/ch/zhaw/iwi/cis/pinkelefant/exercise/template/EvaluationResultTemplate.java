@@ -31,9 +31,12 @@ public class EvaluationResultTemplate extends ExerciseTemplate
 			boolean countable,
 			int cardinality,
 			WorkshopTemplate workshopTemplate,
-			String questionTemplate )
+			String questionTemplate,
+			String defaultName,
+			String defaultDescription )
 	{
-		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
+		// TODO Auto-generated constructor stub
 	}
 
 }

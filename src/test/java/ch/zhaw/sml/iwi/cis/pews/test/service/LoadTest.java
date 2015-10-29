@@ -144,18 +144,19 @@ public class LoadTest
 
 			// exercise definitions and instance
 			PosterTemplate startDef = exTemplateService.findByID( exTemplateService.persist( new PosterTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", j + "_start_title", j
-					+ "_start_descr" ) ) );
+					+ "_start_descr", "", "" ) ) );
 			exerciseService.persist( new PosterExercise( j + "_start_ex_name_", j + "_start_ex_descr_", startDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
-			PinkLabsTemplate plabsDef = exTemplateService.findByID( exTemplateService.persist( new PinkLabsTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_plabs_question" ) ) );
+			PinkLabsTemplate plabsDef = exTemplateService.findByID( exTemplateService
+				.persist( new PinkLabsTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_plabs_question", "", "" ) ) );
 			ExerciseImpl plabs = exerciseService.findByID( exerciseService.persist( new PinkLabsExercise( j + "_plabs_ex_name_", j + "_plabs_ex_descr_", plabsDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			P2POneTemplate p1Def = exTemplateService.findByID( exTemplateService.persist( new P2POneTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_p2p1", "url" ) ) );
+			P2POneTemplate p1Def = exTemplateService.findByID( exTemplateService.persist( new P2POneTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_p2p1", "url", "", "" ) ) );
 			ExerciseImpl p1 = exerciseService.findByID( exerciseService.persist( new P2POneExercise( j + "_p1_ex_name_", j + "_p1_ex_descr_", p1Def, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			P2PTwoTemplate p2Def = exTemplateService.findByID( exTemplateService.persist( new P2PTwoTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_p2_question" ) ) );
+			P2PTwoTemplate p2Def = exTemplateService.findByID( exTemplateService.persist( new P2PTwoTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_p2_question", "", "" ) ) );
 			ExerciseImpl p2 = exerciseService.findByID( exerciseService.persist( new P2PTwoExercise( j + "_p2_ex_name_", j + "_p2_ex_descr_", p2Def, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
@@ -170,42 +171,80 @@ public class LoadTest
 				0,
 				wsDef,
 				j + "_xinix_question",
+				"",
+				"",
 				(XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( ZhawEngine.XINIX_IMAGE_MATRIX_ID ) ) ) );
 			ExerciseImpl xinix = exerciseService.findByID( exerciseService.persist( new XinixExercise( j + "_xinix_ex_name_", j + "_xinix_ex_descr_", xinixDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
 			exerciseDefinitionID = xinixDef.getID();
 
-			You2MeTemplate u2mDef = exTemplateService.findByID( exTemplateService.persist( new You2MeTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", new HashSet< String >( Arrays
-				.asList( j + "_u2m1", j + "_u2m2" ) ) ) ) );
+			You2MeTemplate u2mDef = exTemplateService.findByID( exTemplateService.persist( new You2MeTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", "", "", new HashSet< String >(
+				Arrays.asList( j + "_u2m1", j + "_u2m2" ) ) ) ) );
 			ExerciseImpl u2m = exerciseService.findByID( exerciseService.persist( new You2MeExercise( j + "_u2m_ex_name_", j + "_u2m_ex_descr_", u2mDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			SimplyPrototypingTemplate spDef = exTemplateService.findByID( exTemplateService
-				.persist( new SimplyPrototypingTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "sp?", "m" ) ) );
+			SimplyPrototypingTemplate spDef = exTemplateService.findByID( exTemplateService.persist( new SimplyPrototypingTemplate(
+				user,
+				false,
+				null,
+				0,
+				false,
+				false,
+				false,
+				0,
+				wsDef,
+				j + "sp?",
+				"m",
+				"",
+				"" ) ) );
 			ExerciseImpl proto = exerciseService.findByID( exerciseService.persist( new SimplyPrototypingExercise( j + "_sp_ex_name_", j + "_sp_ex_descr_", spDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
 			exerciseID = proto.getID();
 
-			CompressionTemplate cDef = exTemplateService.findByID( exTemplateService.persist( new CompressionTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_compr?", Arrays
-				.asList( j + "_crit1_", j + "_crit2_" ) ) ) );
+			CompressionTemplate cDef = exTemplateService.findByID( exTemplateService.persist( new CompressionTemplate(
+				user,
+				false,
+				null,
+				0,
+				false,
+				false,
+				false,
+				0,
+				wsDef,
+				j + "_compr?",
+				"",
+				"",
+				Arrays.asList( j + "_crit1_", j + "_crit2_" ) ) ) );
 			ExerciseImpl compression = exerciseService.findByID( exerciseService.persist( new CompressionExercise(
 				j + "_compression_ex_name_",
 				j + "_compression_ex_descr_",
 				cDef,
 				(WorkshopImpl)workshopService.findByID( workshopID ) ) ) );
 
-			EvaluationTemplate evalDef = exTemplateService.findByID( exTemplateService.persist( new EvaluationTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_eval?", 3 ) ) );
+			EvaluationTemplate evalDef = exTemplateService
+				.findByID( exTemplateService.persist( new EvaluationTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_eval?", "", "", 3 ) ) );
 			ExerciseImpl eval = exerciseService.findByID( exerciseService.persist( new EvaluationExercise( j + "_eval_ex_name_", j + "_eval_ex_descr_", evalDef, (WorkshopImpl)workshopService
 				.findByID( workshopID ) ) ) );
 
-			EvaluationResultTemplate resDef = exTemplateService
-				.findByID( exTemplateService.persist( new EvaluationResultTemplate( user, false, null, 0, false, false, false, 0, wsDef, j + "_res?" ) ) );
+			EvaluationResultTemplate resDef = exTemplateService.findByID( exTemplateService.persist( new EvaluationResultTemplate(
+				user,
+				false,
+				null,
+				0,
+				false,
+				false,
+				false,
+				0,
+				wsDef,
+				j + "_res?",
+				"",
+				"" ) ) );
 			exerciseService.persist( new EvaluationResultExercise( j + "_res_ex_name_", j + "_res_ex_descr_", resDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
 			PosterTemplate endDef = exTemplateService.findByID( exTemplateService.persist( new PosterTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", j + "_end_title", j
-					+ "_end_descr" ) ) );
+					+ "_end_descr", "", "" ) ) );
 			exerciseService.persist( new PosterExercise( j + "_end_ex_name_", j + "_end_ex_descr_", endDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
 			// session
@@ -257,8 +296,8 @@ public class LoadTest
 					exerciseDataService.persist( new P2PTwoData( u, p2, Arrays.asList( "random p2 answer" ), new HashSet< P2POneKeyword >( Arrays.asList( p1Data.getKeywords().get( 0 ), p1Data
 						.getKeywords()
 						.get( 1 ) ) ) ) );
-					exerciseDataService.persist( new XinixData( u, xinix, new HashSet< String >( Arrays.asList( "random xinix answer" ) ), (XinixImage)xinixImageService
-						.findByID( sampleXinixImageID ) ) );
+					exerciseDataService
+						.persist( new XinixData( u, xinix, new HashSet< String >( Arrays.asList( "random xinix answer" ) ), (XinixImage)xinixImageService.findByID( sampleXinixImageID ) ) );
 
 					// limiting the simply prototyping exercise data to one per user
 					if ( l < 1 )

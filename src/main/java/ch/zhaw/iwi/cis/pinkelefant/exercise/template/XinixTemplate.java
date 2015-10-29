@@ -36,9 +36,11 @@ public class XinixTemplate extends ExerciseTemplate
 			int cardinality,
 			WorkshopTemplate workshopTemplate,
 			String questionTemplate,
+			String defaultName,
+			String defaultDescription,
 			XinixImageMatrix images )
 	{
-		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
 		this.images = images;
 	}
 

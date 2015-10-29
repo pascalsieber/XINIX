@@ -182,6 +182,14 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 			}
 			
 			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), obj.getWorkshop() );
+			
+			// if template not null, use default name and description from template
+			if ( template !=null )
+			{
+				exercise.setName( template.getDefaultName() );
+				exercise.setDescription( template.getDefaultDescription() );
+			}
+			
 			return persistExercise( exercise );
 		}
 		catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e )

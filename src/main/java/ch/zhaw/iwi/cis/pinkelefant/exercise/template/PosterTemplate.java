@@ -36,10 +36,12 @@ public class PosterTemplate extends ExerciseTemplate
 			int cardinality,
 			WorkshopTemplate workshopTemplate,
 			String questionTemplate,
+			String defaultName,
+			String defaultDescription,
 			String title,
 			String description )
 	{
-		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
 		this.title = title;
 		this.description = description;
 	}

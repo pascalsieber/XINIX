@@ -39,9 +39,11 @@ public class You2MeTemplate extends ExerciseTemplate
 			int cardinality,
 			WorkshopTemplate workshopTemplate,
 			String questionTemplate,
+			String defaultName,
+			String defaultDescription,
 			Set< String > questions )
 	{
-		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
 		this.questions = questions;
 	}
 

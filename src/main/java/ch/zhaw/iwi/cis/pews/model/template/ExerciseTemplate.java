@@ -36,6 +36,10 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 	// question template (allows generation by wizard)
 	private String questionTemplate;
 
+	// default values for name and description when generating exercise instances
+	private String defaultName;
+	private String defaultDescription;
+
 	public ExerciseTemplate()
 	{
 		super();
@@ -51,7 +55,9 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 			boolean countable,
 			int cardinality,
 			WorkshopTemplate workshopTemplate,
-			String questionTemplate )
+			String questionTemplate,
+			String defaultName,
+			String defaultDescription )
 	{
 		super( owner );
 		this.timed = timed;
@@ -63,6 +69,8 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 		this.cardinality = cardinality;
 		this.workshopTemplate = workshopTemplate;
 		this.questionTemplate = questionTemplate;
+		this.defaultName = defaultName;
+		this.defaultDescription = defaultDescription;
 
 		// insert at end of exercise template queue of workshop template
 		this.orderInWorkshopTemplate = workshopTemplate.getExerciseTemplates().size();
@@ -166,6 +174,26 @@ public class ExerciseTemplate extends WorkflowElementTemplate
 	public void setQuestionTemplate( String questionTemplate )
 	{
 		this.questionTemplate = questionTemplate;
+	}
+
+	public String getDefaultName()
+	{
+		return defaultName;
+	}
+
+	public void setDefaultName( String defaultName )
+	{
+		this.defaultName = defaultName;
+	}
+
+	public String getDefaultDescription()
+	{
+		return defaultDescription;
+	}
+
+	public void setDefaultDescription( String defaultDescription )
+	{
+		this.defaultDescription = defaultDescription;
 	}
 
 }

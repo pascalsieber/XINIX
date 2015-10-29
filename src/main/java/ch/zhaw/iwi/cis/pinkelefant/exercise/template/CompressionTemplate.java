@@ -39,9 +39,11 @@ public class CompressionTemplate extends ExerciseTemplate
 			int cardinality,
 			WorkshopTemplate workshopTemplate,
 			String questionTemplate,
+			String defaultName,
+			String defaultDescription,
 			List< String > solutionCriteria )
 	{
-		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate );
+		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
 		this.solutionCriteria = solutionCriteria;
 	}
 
