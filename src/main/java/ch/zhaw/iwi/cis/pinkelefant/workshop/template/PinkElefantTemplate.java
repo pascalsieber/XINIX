@@ -12,17 +12,18 @@ public class PinkElefantTemplate extends WorkshopTemplate
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String problem;
+	private String defaultEmailText;
 
 	public PinkElefantTemplate()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public PinkElefantTemplate( PrincipalImpl owner, String name, String description, String problem )
+	public PinkElefantTemplate( PrincipalImpl owner, String name, String description, String problem, String defaultEmailText )
 	{
 		super( owner, name, description );
 		this.problem = problem;
+		this.defaultEmailText = defaultEmailText;
 	}
 
 	public String getProblem()
@@ -33,6 +34,16 @@ public class PinkElefantTemplate extends WorkshopTemplate
 	public void setProblem( String problem )
 	{
 		this.problem = problem;
+	}
+
+	public String getDefaultEmailText()
+	{
+		return defaultEmailText;
+	}
+
+	public void setDefaultEmailText( String defaultEmailText )
+	{
+		this.defaultEmailText = defaultEmailText;
 	}
 
 }

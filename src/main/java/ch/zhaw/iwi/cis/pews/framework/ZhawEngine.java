@@ -44,7 +44,6 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
-import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
@@ -394,12 +393,16 @@ public class ZhawEngine implements LifecycleObject
 		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
 
 		// sample workshop template (pinkelefant)
-		String wsTemplateID = workshopTemplateService
-			.persist( new PinkElefantTemplate( rootUser, "p.i.n.k.elefant Template", "Template für p.i.n.k.elefant Workshop", "Produkteinfuehrung Teekocher" ) );
+		String wsTemplateID = workshopTemplateService.persist( new PinkElefantTemplate(
+			rootUser,
+			"p.i.n.k.elefant Template",
+			"Template für p.i.n.k.elefant Workshop",
+			"Produkteinfuehrung Teekocher",
+			"Willkommensemail" ) );
 
 		// sample workshop instance
-		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (PinkElefantTemplate)workshopTemplateService
+			.findByID( wsTemplateID ) ) );
 
 		// workshop start (poster template)
 		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -688,11 +691,12 @@ public class ZhawEngine implements LifecycleObject
 			rootUser,
 			"p.i.n.k.elefant Demo",
 			"Demo für p.i.n.k.elefant Workshop",
-			"Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?" ) );
+			"Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?",
+			"Willkommen!<br/>Sie sind eingeladen, an einem Workshop teilzunehmen<br/>Mit freundlichen Gruessen,<br/>p.i.n.k.elefant" ) );
 
 		// sample workshop instance
-		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Demo p.i.n.k.elefant Workshops", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Demo p.i.n.k.elefant Workshops", (PinkElefantTemplate)workshopTemplateService
+			.findByID( wsTemplateID ) ) );
 
 		// workshop start (poster template)
 		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -970,11 +974,12 @@ public class ZhawEngine implements LifecycleObject
 			postRootUser,
 			"Post Workshop Template",
 			"Template für p.i.n.k.elefant Workshop mit der Post",
-			"Massnahmen Begleit-Service Paketdienst im Jahr 2020" ) );
+			"Massnahmen Begleit-Service Paketdienst im Jahr 2020",
+			"E-mail Text" ) );
 
 		// workshop instance
-		String wsID = workshopService.persist( new PinkElefantWorkshop( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
+		String wsID = workshopService
+			.persist( new PinkElefantWorkshop( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -993,68 +998,24 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ), "Was kostet dich zu viel Zeit?", "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4" ) );
 
 		// p2p one iteration 1
-		String p2poneTemplateID1 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?",
-			"Post2Paper 1 (1/4)",
-			"Post2Paper 1 Tool 1",
-			"http://" + imageDirectory + "/single.jpg" ) );
+		String p2poneTemplateID1 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "Post2Paper 1 (1/4)", "Post2Paper 1 Tool 1", "http://" + imageDirectory
+				+ "/single.jpg" ) );
 
 		// p2p one iteration 2
-		String p2poneTemplateID2 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?",
-			"Post2Paper 1 (2/4)",
-			"Post2Paper 1 Tool 2",
-			"http://" + imageDirectory + "/empfangsdame.jpg" ) );
+		String p2poneTemplateID2 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "Post2Paper 1 (2/4)", "Post2Paper 1 Tool 2", "http://" + imageDirectory
+				+ "/empfangsdame.jpg" ) );
 
 		// p2p one iteration 3
-		String p2poneTemplateID3 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?",
-			"Post2Paper 1 (3/4)",
-			"Post2Paper 1 Tool 3",
-			"http://" + imageDirectory + "/hausfrau.jpg" ) );
+		String p2poneTemplateID3 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "Post2Paper 1 (3/4)", "Post2Paper 1 Tool 3", "http://" + imageDirectory
+				+ "/hausfrau.jpg" ) );
 
 		// p2p one iteration 4
-		String p2poneTemplateID4 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?",
-			"Post2Paper 1 (4/4)",
-			"Post2Paper 1 Tool 4",
-			"http://" + imageDirectory + "/senioren.jpg" ) );
+		String p2poneTemplateID4 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Welche Dinge haben folgende Personen in ihrem Alltag regelmässig zu erledigen?", "Post2Paper 1 (4/4)", "Post2Paper 1 Tool 4", "http://" + imageDirectory
+				+ "/senioren.jpg" ) );
 
 		// p2p two
 		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 180, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1482,11 +1443,12 @@ public class ZhawEngine implements LifecycleObject
 			sbbRootUser,
 			"SBB Workshop Template",
 			"Template für p.i.n.k.elefant Workshop mit der SBB",
-			"Was wünsche ich mir am Bahnhof" ) );
+			"Was wünsche ich mir am Bahnhof",
+			"E-mail Text" ) );
 
 		// workshop instance
-		String wsID = workshopService.persist( new PinkElefantWorkshop( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (WorkflowElementTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), ( (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ) ).getProblem() ) );
+		String wsID = workshopService
+			.persist( new PinkElefantWorkshop( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1505,68 +1467,24 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ), "Was würde ich nie online kaufen?", "p.i.n.k.labs (4/4)", "p.i.n.k.labs Tool 4" ) );
 
 		// p2p one iteration 1
-		String p2poneTemplateID1 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)",
-			"Post2Paper 1 (1/4)",
-			"Post2Paper 1 Tool 1",
-			"http://" + imageDirectory + "/familie.jpg" ) );
+		String p2poneTemplateID1 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "Post2Paper 1 (1/4)", "Post2Paper 1 Tool 1", "http://" + imageDirectory
+				+ "/familie.jpg" ) );
 
 		// p2p one iteration 2
-		String p2poneTemplateID2 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)",
-			"Post2Paper 1 (2/4)",
-			"Post2Paper 1 Tool 2",
-			"http://" + imageDirectory + "/senioren.jpg" ) );
+		String p2poneTemplateID2 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "Post2Paper 1 (2/4)", "Post2Paper 1 Tool 2", "http://" + imageDirectory
+				+ "/senioren.jpg" ) );
 
 		// p2p one iteration 3
-		String p2poneTemplateID3 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)",
-			"Post2Paper 1 (3/4)",
-			"Post2Paper 1 Tool 3",
-			"http://" + imageDirectory + "/business.jpg" ) );
+		String p2poneTemplateID3 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "Post2Paper 1 (3/4)", "Post2Paper 1 Tool 3", "http://" + imageDirectory
+				+ "/business.jpg" ) );
 
 		// p2p one iteration 4
-		String p2poneTemplateID4 = exerciseTemplateService.persist( new P2POneTemplate(
-			rootUser,
-			true,
-			TimeUnit.SECONDS,
-			120,
-			true,
-			false,
-			false,
-			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
-			"Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)",
-			"Post2Paper 1 (4/4)",
-			"Post2Paper 1 Tool 4",
-			"http://" + imageDirectory + "/schueler.jpg" ) );
+		String p2poneTemplateID4 = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
+			.findByID( wsTemplateID ), "Was machen diese Personen an einem Bahnhof? (ausser in den Zug zu steigen)", "Post2Paper 1 (4/4)", "Post2Paper 1 Tool 4", "http://" + imageDirectory
+				+ "/schueler.jpg" ) );
 
 		// p2p two
 		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate(

@@ -197,7 +197,7 @@ public class RestServiceTest
 		secondUserStub.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "secondUser" ), defaultRoleStub, null, "secondUser", "secondUser", "secondUser" ) ) );
 
 		// workshop definition (pinkelefantDefinition)
-		defaultWSTemplateStub.setID( workshopTemplateService.persist( new PinkElefantTemplate( defaultUserStub, "workshop definition", "workshop definition test entry", "problem description" ) ) );
+		defaultWSTemplateStub.setID( workshopTemplateService.persist( new PinkElefantTemplate( defaultUserStub, "workshop definition", "workshop definition test entry", "problem description", "E-mail Text" ) ) );
 
 		// workshop instance
 		defaultWSStub.setID( workshopService.persist( new WorkshopImpl( "workshop", "workshop test instance", defaultWSTemplateStub ) ) );
@@ -477,7 +477,7 @@ public class RestServiceTest
 	public void crudOperationsWorkshopService()
 	{
 		// create workshop definition
-		String workshopDefinitionID = workshopTemplateService.persist( new PinkElefantTemplate( defaultUserStub, "workshop definition", "workshop definition description", "problem" ) );
+		String workshopDefinitionID = workshopTemplateService.persist( new PinkElefantTemplate( defaultUserStub, "workshop definition", "workshop definition description", "problem", "email text" ) );
 
 		// read workshop definition
 		WorkshopTemplate workshopDefinition = workshopTemplateService.findByID( workshopDefinitionID );

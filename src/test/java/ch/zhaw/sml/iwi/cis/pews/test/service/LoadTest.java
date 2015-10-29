@@ -138,7 +138,7 @@ public class LoadTest
 		for ( int j = 0; j < workshops; j++ )
 		{
 			// Workshop definition and instance
-			WorkshopTemplate wsDef = workshopTemplateService.findByID( workshopTemplateService.persist( new PinkElefantTemplate( user, "ws_def_name_", "ws_def_descr_", "ws_def_problem_" ) ) );
+			WorkshopTemplate wsDef = workshopTemplateService.findByID( workshopTemplateService.persist( new PinkElefantTemplate( user, "ws_def_name_", "ws_def_descr_", "ws_def_problem_", "email text" ) ) );
 			workshopDefinitionID = wsDef.getID();
 			workshopID = workshopService.persist( new WorkshopImpl( j + "_ws_name_", j + "_ws_descr_", wsDef ) );
 
