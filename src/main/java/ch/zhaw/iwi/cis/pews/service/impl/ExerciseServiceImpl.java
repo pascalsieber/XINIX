@@ -26,7 +26,6 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;

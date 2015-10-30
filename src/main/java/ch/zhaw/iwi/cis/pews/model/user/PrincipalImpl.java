@@ -14,11 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )

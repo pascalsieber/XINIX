@@ -3,8 +3,8 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseTemplateDao;
-import ch.zhaw.iwi.cis.pews.dao.WorkshopTemplateDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopTemplateDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseTemplateDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopTemplateDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;

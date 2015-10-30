@@ -5,9 +5,9 @@ import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;

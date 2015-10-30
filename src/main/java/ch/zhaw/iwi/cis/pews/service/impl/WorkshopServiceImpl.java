@@ -155,11 +155,11 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		// object to be persisted, init with null
 		PinkElefantWorkshop workshop = null;
 		boolean templateIsValid = false;
+		PinkElefantTemplate template = null;
 
 		// check if obj in request references an existing workshop template and utilize accordingly
 		// if workshop to be based on existing template, use template's values
 		// else use values given in obj
-		WorkshopTemplate template;
 		if ( obj.getDerivedFrom() != null )
 		{
 			template = workshopTemplateService.findByID( obj.getDerivedFrom().getID() );
@@ -167,20 +167,24 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 			// check if referenced template actually exists
 			if ( template != null )
 			{
-				obj.setDerivedFrom( template );
 				templateIsValid = true;
 			}
 		}
 
 		// if template is valid make workshop instance based on template / derivedFrom
-		// else take information directly from obj
+		// else take information contained in obj
 		if ( templateIsValid )
 		{
-			workshop = new PinkElefantWorkshop( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), ( (PinkElefantTemplate)obj.getDerivedFrom() ).getProblem() );
+			workshop = new PinkElefantWorkshop( obj.getName(), obj.getDescription(), (PinkElefantTemplate)template );
 		}
 		else
 		{
-			workshop = new PinkElefantWorkshop( obj.getName(), obj.getDescription(), null, ( (PinkElefantWorkshop)obj ).getProblem() );
+			workshop = new PinkElefantWorkshop();
+			workshop.setName( obj.getName() );
+			workshop.setDescription( obj.getDescription() );
+			workshop.setEmailText( ( (PinkElefantTemplate)obj.getDerivedFrom() ).getDefaultEmailText() );
+			workshop.setProblem( ( (PinkElefantTemplate)obj.getDerivedFrom() ).getProblem() );
+			workshop.setDerivedFrom( null );			
 		}
 
 		// persist operation

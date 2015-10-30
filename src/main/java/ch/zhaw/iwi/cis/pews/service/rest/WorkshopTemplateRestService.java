@@ -10,8 +10,8 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
-import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopTemplateServiceImpl;
 
 @Path( WorkshopTemplateRestService.BASE )

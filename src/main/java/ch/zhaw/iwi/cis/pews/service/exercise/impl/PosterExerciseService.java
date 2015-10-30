@@ -7,7 +7,6 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.PosterInput;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;

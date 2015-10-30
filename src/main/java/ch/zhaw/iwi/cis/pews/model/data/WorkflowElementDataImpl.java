@@ -6,11 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class WorkflowElementDataImpl extends OwnableObject
