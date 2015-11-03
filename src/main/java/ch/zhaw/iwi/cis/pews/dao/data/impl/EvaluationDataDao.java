@@ -13,6 +13,7 @@ import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
@@ -53,7 +54,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( Class< ? > dataClass )
+	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass )
 	{
 		List< EvaluationExerciseData > data = new ArrayList<>();
 
@@ -66,7 +67,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 			return new ArrayList< ExerciseDataImpl >();
 		}
 
-		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
+		for ( ExerciseImpl ex : workshop.getExercises() )
 		{
 			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( EvaluationTemplate.class.getSimpleName() ) )
 			{
@@ -89,7 +90,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	public < T extends WorkshopObject > String persist( T object )
 	{
 		// evaluations by a specific user for an existing solution need to be updated (overwritten) rather than added
-		List< ExerciseDataImpl > existing = this.findByWorkshopAndExerciseDataClass( Evaluation.class );
+		List< ExerciseDataImpl > existing = this.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), Evaluation.class );
 
 		for ( ExerciseDataImpl data : existing )
 		{

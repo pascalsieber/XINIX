@@ -56,7 +56,7 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 		List< P2PKeywordInput > keywords = new ArrayList<>();
 		P2PTwoExercise ex = findByID( exerciseID );
 
-		for ( ExerciseDataImpl data : p2pOneDataDao.findByWorkshopAndExerciseDataClass( P2POneData.class ) )
+		for ( ExerciseDataImpl data : p2pOneDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), P2POneData.class ) )
 		{
 			for ( P2POneKeyword keywordObject : ( (P2POneData)data ).getKeywords() )
 			{

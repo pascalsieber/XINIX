@@ -6,6 +6,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseDataRestService;
 
@@ -44,4 +46,22 @@ public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy impleme
 		getServiceTarget().path( ExerciseDataRestService.REMOVE_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
+	@Override
+	public String exportByExerciseID( String exerciseID )
+	{
+		return getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_EXERCISE_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( String.class );
+	}
+
+	@Override
+	public String exportByWorkshopID( String workshopID )
+	{
+		return getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_WORKSHOP_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( workshopID ) ).readEntity( String.class );
+	}
+
+	@Override
+	public List< ExerciseDataViewObject > getExportableDataByExerciseID( ExerciseImpl exercise )
+	{
+		// not intended for use in service proxy, only by service instances internally
+		throw new UnsupportedOperationException( "unsupported operation in Service Proxy" );
+	}
 }
