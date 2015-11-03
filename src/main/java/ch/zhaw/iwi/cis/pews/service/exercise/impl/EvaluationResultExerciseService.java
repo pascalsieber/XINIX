@@ -55,7 +55,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 	{
 		EvaluationResultExercise ex = findByID( exerciseID );
 		Map< CompressionExerciseDataElement, List< Integer > > evaluationsMap = new HashMap< CompressionExerciseDataElement, List< Integer > >();
-		List< ExerciseDataImpl > evaluations = evaluationDataDao.findByWorkshopAndExerciseDataClass( Evaluation.class );
+		List< ExerciseDataImpl > evaluations = evaluationDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), Evaluation.class );
 
 		for ( ExerciseDataImpl evaluation : evaluations )
 		{
@@ -86,7 +86,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 		}
 
 		// add solutions which have not been evaluated
-		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
+		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), CompressionExerciseData.class );
 		for ( ExerciseDataImpl compressionDataPoint : compressionData )
 		{
 			for ( CompressionExerciseDataElement solution : ( (CompressionExerciseData)compressionDataPoint ).getSolutions() )

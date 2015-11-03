@@ -8,9 +8,9 @@ import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
@@ -27,7 +27,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 			.createQuery( "select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();
-		
+
 		if ( results.size() > 0 )
 		{
 			return results.get( 0 );
@@ -51,11 +51,11 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( Class< ? > dataClass )
+	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass )
 	{
 		List< CompressionExerciseData > data = new ArrayList<>();
 
-		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
+		for ( ExerciseImpl ex : workshop.getExercises() )
 		{
 			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( CompressionTemplate.class.getSimpleName() ) )
 			{

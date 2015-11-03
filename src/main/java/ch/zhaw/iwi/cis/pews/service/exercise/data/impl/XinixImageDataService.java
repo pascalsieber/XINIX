@@ -6,6 +6,8 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -27,6 +29,13 @@ public class XinixImageDataService extends ExerciseDataServiceImpl
 	public ExerciseDataImpl findExerciseDataByID( String id )
 	{
 		return super.genericFindDataByID( id );
+	}
+
+	@Override
+	public List< ExerciseDataViewObject > getExportableDataByExerciseID( ExerciseImpl exercise )
+	{
+		// not supported
+		return super.getExportableDataByExerciseID( exercise );
 	}
 
 }

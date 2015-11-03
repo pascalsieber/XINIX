@@ -42,6 +42,7 @@ import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
+import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
@@ -65,16 +66,16 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.CloseableWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.IOExceptionWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.ObjectInputStreamWrapper;
@@ -91,30 +92,15 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	private ExerciseDao exerciseDao;
 	private ExerciseDataDao evaluationDataDao;
 
-	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISESPECIFICDATASERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl > >();
+	public ExerciseDataServiceImpl()
+	{
+		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
+		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
+		evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
+	}
 
 	// TODO move this from manual entries to an automatic solution (e.g. with an annotation)
-	static
-	{
-		EXERCISESPECIFICDATASERVICES.put( PinkLabsTemplate.class.getSimpleName(), PinkLabsExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( You2MeTemplate.class.getSimpleName(), You2MeExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( P2POneTemplate.class.getSimpleName(), P2POneExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( P2PTwoTemplate.class.getSimpleName(), P2PTwoExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( SimplyPrototypingTemplate.class.getSimpleName(), SimplePrototypingExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( XinixTemplate.class.getSimpleName(), XinixExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( CompressionTemplate.class.getSimpleName(), CompressionExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( EvaluationTemplate.class.getSimpleName(), EvaluationExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( EvaluationResultTemplate.class.getSimpleName(), EvaluationResultExerciseDataService.class );
-		EXERCISESPECIFICDATASERVICES.put( PosterTemplate.class.getSimpleName(), PosterExerciseDataService.class );
-	}
-
-	private Class< ? > getExerciseDataSpecificService( String exerciseTemplateClassName )
-	{
-		return EXERCISESPECIFICDATASERVICES.get( exerciseTemplateClassName );
-	}
-
 	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISEDATACLASSSPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl > >();
-
 	static
 	{
 		EXERCISEDATACLASSSPECIFICSERVICES.put( PinkLabsExerciseData.class.getSimpleName(), PinkLabsExerciseDataService.class );
@@ -133,11 +119,24 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return EXERCISEDATACLASSSPECIFICSERVICES.get( exerciseDataClassName );
 	}
 
-	public ExerciseDataServiceImpl()
+	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISECLASSSPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl >>();
+	static
 	{
-		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
-		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
-		evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
+		EXERCISECLASSSPECIFICSERVICES.put( PinkLabsExercise.class.getSimpleName(), PinkLabsExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( You2MeExercise.class.getSimpleName(), You2MeExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( P2POneExercise.class.getSimpleName(), P2POneExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( P2PTwoExercise.class.getSimpleName(), P2PTwoExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( SimplyPrototypingExercise.class.getSimpleName(), SimplePrototypingExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( XinixExercise.class.getSimpleName(), XinixExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( CompressionExercise.class.getSimpleName(), CompressionExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( EvaluationExercise.class.getSimpleName(), EvaluationExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( PosterExercise.class.getSimpleName(), PosterExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( EvaluationResultExercise.class.getSimpleName(), EvaluationResultExerciseDataService.class );
+	}
+
+	private Class< ? > getExerciseClassSpecificService( String exerciseClassName )
+	{
+		return EXERCISECLASSSPECIFICSERVICES.get( exerciseClassName );
 	}
 
 	// overriding persist in order to handle special behavior for EvaluationExerciseData
@@ -187,8 +186,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		ExerciseImpl ex = exerciseDao.findById( exerciseID );
-		String defName = ex.getDerivedFrom().getClass().getSimpleName();
-		Class< ? > serviceClass = getExerciseDataSpecificService( defName );
+		Class< ? > serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
 		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
 		return (List< ExerciseDataImpl >)cleanseData( service.findByExerciseID( exerciseID ) );
 	}
@@ -203,6 +201,22 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	public void removeExerciseDataByID( String id )
 	{
 		remove( findByID( id ) );
+	}
+
+	@Override
+	public List< ExerciseDataViewObject > exportByExerciseID( String exerciseID )
+	{
+		ExerciseImpl ex = exerciseDao.findById( exerciseID );
+		Class< ? > serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
+		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
+
+		return service.getExportableDataByExerciseID( ex );
+	}
+
+	@Override
+	public < T extends ExerciseDataViewObject > List< T > getExportableDataByExerciseID( ExerciseImpl exercise )
+	{
+		throw new UnsupportedOperationException( "no suitable Service class found for handling" );
 	}
 
 	@SuppressWarnings( { "resource" } )

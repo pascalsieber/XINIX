@@ -7,7 +7,6 @@ import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
@@ -51,11 +50,9 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( Class< ? > dataClass )
+	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass )
 	{
 		List< ExerciseDataImpl > result = new ArrayList<>();
-
-		WorkshopImpl workshop = getEntityManager().find( WorkshopImpl.class, UserContext.getCurrentUser().getSession().getWorkshop().getID() );
 
 		for ( ExerciseImpl ex : workshop.getExercises() )
 		{

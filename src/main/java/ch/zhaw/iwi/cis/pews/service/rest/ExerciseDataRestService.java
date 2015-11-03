@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
@@ -22,6 +23,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	public final static String BASE = "/exerciseService/data";
 	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
 	public final static String REMOVE_BY_ID = "/removeByID";
+	public final static String EXPORT_BY_EXERCISE_ID = "/exportByExerciseID";
 
 	private ExerciseDataService exerciseDataService;
 
@@ -73,6 +75,13 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	public void removeExerciseDataByID( String id )
 	{
 		exerciseDataService.removeExerciseDataByID( id );
+	}
+
+	@POST
+	@Path( EXPORT_BY_EXERCISE_ID )
+	public < T extends ExerciseDataViewObject > List< T > exportDataByExerciseID( String exerciseID )
+	{
+		return exerciseDataService.exportByExerciseID( exerciseID );
 	}
 
 	@Override

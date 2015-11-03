@@ -28,8 +28,8 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public static final String RESET = "/resetByID";
 
 	public static final String UPDATE_EXERCISES_ORDER = "/updateOrderOfExercises";
-
 	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
+	public static final String EXPORT_DATA = "/exportData";
 
 	private WorkshopService workshopService;
 

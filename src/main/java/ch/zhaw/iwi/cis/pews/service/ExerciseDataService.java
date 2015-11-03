@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.pews.service;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 
 public interface ExerciseDataService extends WorkshopObjectService
 {
@@ -13,4 +15,8 @@ public interface ExerciseDataService extends WorkshopObjectService
 	public ExerciseDataImpl findExerciseDataByID( String id );
 
 	public void removeExerciseDataByID( String id );
+
+	public < T extends ExerciseDataViewObject > List< T > exportByExerciseID( String exerciseID );
+
+	public < T extends ExerciseDataViewObject > List< T > getExportableDataByExerciseID( ExerciseImpl exercise );
 }

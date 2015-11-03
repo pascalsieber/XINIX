@@ -54,7 +54,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	public Input getInputByExerciseID( String exerciseID )
 	{
 		List< CompressionInputElement > solutions = new ArrayList< CompressionInputElement >();
-		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( CompressionExerciseData.class );
+		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), CompressionExerciseData.class );
 
 		for ( ExerciseDataImpl data : compressionData )
 		{
