@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
@@ -23,7 +24,10 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
 	public final static String REMOVE_BY_ID = "/removeByID";
 	public final static String EXPORT_BY_EXERCISE_ID = "/exportByExerciseID";
+<<<<<<< HEAD
 	public final static String EXPORT_BY_WORKSHOP_ID = "/exportByWorkshopID";
+=======
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 
 	private ExerciseDataService exerciseDataService;
 
@@ -79,11 +83,16 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( EXPORT_BY_EXERCISE_ID )
+<<<<<<< HEAD
 	public String exportDataByExerciseID( String exerciseID )
+=======
+	public < T extends ExerciseDataViewObject > List< T > exportDataByExerciseID( String exerciseID )
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	{
 		return exerciseDataService.exportByExerciseID( exerciseID );
 	}
 
+<<<<<<< HEAD
 	@POST
 	@Path( EXPORT_BY_WORKSHOP_ID )
 	public String exportDataByWorkshopID( String workshopID )
@@ -91,6 +100,8 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 		return exerciseDataService.exportByWorkshopID( workshopID );
 	}
 
+=======
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	@Override
 	protected WorkshopObjectService getWorkshopObjectService()
 	{

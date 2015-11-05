@@ -46,6 +46,7 @@ public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy impleme
 		getServiceTarget().path( ExerciseDataRestService.REMOVE_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
+<<<<<<< HEAD
 	@Override
 	public String exportByExerciseID( String exerciseID )
 	{
@@ -56,6 +57,13 @@ public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy impleme
 	public String exportByWorkshopID( String workshopID )
 	{
 		return getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_WORKSHOP_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( workshopID ) ).readEntity( String.class );
+=======
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseDataViewObject > exportByExerciseID( String exerciseID )
+	{
+		return getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_EXERCISE_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( List.class );
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	}
 
 	@Override

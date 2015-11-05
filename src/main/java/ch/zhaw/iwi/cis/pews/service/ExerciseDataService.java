@@ -16,9 +16,13 @@ public interface ExerciseDataService extends WorkshopObjectService
 
 	public void removeExerciseDataByID( String id );
 
+<<<<<<< HEAD
 	public String exportByExerciseID( String exerciseID );
 
 	public String exportByWorkshopID( String workshopID );
+=======
+	public < T extends ExerciseDataViewObject > List< T > exportByExerciseID( String exerciseID );
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 
 	public < T extends ExerciseDataViewObject > List< T > getExportableDataByExerciseID( ExerciseImpl exercise );
 }

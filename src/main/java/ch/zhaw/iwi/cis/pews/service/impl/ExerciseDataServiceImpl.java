@@ -111,7 +111,10 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 		evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
+<<<<<<< HEAD
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
+=======
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	}
 
 	// TODO move this from manual entries to an automatic solution (e.g. with an annotation)
@@ -219,16 +222,24 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	}
 
 	@Override
+<<<<<<< HEAD
 	public String exportByExerciseID( String exerciseID )
+=======
+	public List< ExerciseDataViewObject > exportByExerciseID( String exerciseID )
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	{
 		ExerciseImpl ex = exerciseDao.findById( exerciseID );
 		Class< ? > serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
 		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
 
+<<<<<<< HEAD
 		List< ExerciseDataViewObject > data = service.getExportableDataByExerciseID( ex );
 		Map< ExerciseImpl, List< ExerciseDataViewObject > > exportableDataMap = new HashMap< ExerciseImpl, List< ExerciseDataViewObject > >();
 		exportableDataMap.put( ex, data );
 		return exportDataToFile( exportableDataMap );
+=======
+		return service.getExportableDataByExerciseID( ex );
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	}
 
 	@Override
@@ -237,6 +248,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		throw new UnsupportedOperationException( "no suitable Service class found for handling" );
 	}
 
+<<<<<<< HEAD
 	@Override
 	public String exportByWorkshopID( String workshopID )
 	{
@@ -358,6 +370,8 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return fields;
 	}
 
+=======
+>>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	@SuppressWarnings( { "resource" } )
 	private Object cleanseData( List< ExerciseDataImpl > data )
 	{
