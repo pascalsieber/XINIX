@@ -35,10 +35,6 @@ public class SimplePrototypingExerciseDataService extends ExerciseDataServiceImp
 	public List< ExerciseDataViewObject > getExportableDataByExerciseID( ExerciseImpl exercise )
 	{
 		// TODO finish this, once output of prototyping is image with url
-<<<<<<< HEAD
 		return new ArrayList< ExerciseDataViewObject >();
-=======
-		return super.getExportableDataByExerciseID( exercise );
->>>>>>> 60a1ae12c556ff6b268195e89ed0a187000131a4
 	}
 }
