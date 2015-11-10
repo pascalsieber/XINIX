@@ -102,6 +102,7 @@
 			</zipfileset>
 			<zipfileset dir="${src.main.resources}/defaultConfig" prefix="META-INF">
 				<include name="persistence.xml"/>
+				<include name="pews.properties"/>
 			</zipfileset>
 		</jar>
 	</target>
@@ -140,6 +141,7 @@
 			<tarfileset dir="${src.main.resources}/defaultConfig" prefix="pews/conf">
 				<include name="*.*"/>
 				<exclude name="persistence.xml"/>
+				<exclude name="pews.properties"/>
 			</tarfileset>
 			<tarfileset file="${src.main.resources}/scripts/pews" filemode="755" username="*" group="*" prefix="pews/bin"/>
 			<tarfileset file="${src.main.resources}/scripts/pews.bat" filemode="755" username="*" group="*" prefix="pews/bin"/>

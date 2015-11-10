@@ -268,7 +268,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 
 		String filePath = dir.getAbsolutePath() + File.separator + "export.xlsx";
 		// TODO: make this configurable
-		String downloadPath = "http://localhost:" + ZhawEngine.APPLICATION_PORT + "/export/export.xlsx";
+		String downloadPath = PewsConfig.getWebDirURL() + "/export/export.xlsx";
 		Workbook workbook = new XSSFWorkbook();
 
 		// make sheet for every entry in exportableDataMap
