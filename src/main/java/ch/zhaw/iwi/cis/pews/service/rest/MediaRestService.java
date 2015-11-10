@@ -44,9 +44,9 @@ public class MediaRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( FIND_BY_TYPE )
-	public List< MediaObject > findMediaByType( MediaObjectType type )
+	public List< MediaObject > findMediaByType( String type )
 	{
-		return mediaService.findByType( type );
+		return mediaService.findByType( MediaObjectType.valueOf( type ) );
 	}
 
 	@POST

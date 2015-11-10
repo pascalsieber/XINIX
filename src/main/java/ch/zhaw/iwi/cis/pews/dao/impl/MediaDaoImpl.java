@@ -24,7 +24,7 @@ public class MediaDaoImpl extends WorkshopObjectDaoImpl implements MediaDao
 	@Override
 	public List< MediaObject > findByType( MediaObjectType type )
 	{
-		return getEntityManager().createQuery( "from MediaObject m LEFT JOIN FETCH m.owner where m.type = :_type" ).setParameter( "_type", type ).getResultList();
+		return getEntityManager().createQuery( "from MediaObject m where m.type = :_type" ).setParameter( "_type", type ).getResultList();
 	}
 
 }

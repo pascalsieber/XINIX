@@ -116,11 +116,10 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 		}
 	}
 
-	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< MediaObject > findByType( MediaObjectType type )
 	{
-		return (List< MediaObject >)simplifyOwnerInObjectGraph( mediaDao.findByType( type ) );
+		return mediaDao.findByType( type );
 	}
 
 	@Override
