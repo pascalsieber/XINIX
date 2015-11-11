@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
+import javax.servlet.MultipartConfigElement;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.derby.drda.NetworkServerControl;
@@ -250,6 +251,7 @@ public class ZhawEngine implements LifecycleObject
 		ServletHolder holder = new ServletHolder( new ServletContainer( resourceConfig ) );
 		holder.setInitParameter( "jersey.config.server.provider.classnames", LoggingFilter.class.getName() );
 		holder.setInitOrder( 1 );
+		holder.getRegistration().setMultipartConfig( new MultipartConfigElement( "data/tmp", 1048576, 1048576, 262144 ) );
 		ServletContextHandler handler = new ServletContextHandler();
 		handler.setContextPath( IdentifiableObjectRestService.SERVICES_BASE );
 		handler.addServlet( holder, "/*" );

@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -43,10 +44,11 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 		try
 		{
 			MediaObject mediaObject = new MediaObject();
+			mediaObject.setDate( new Date() );
 
 			// String encoding = request.getCharacterEncoding();
 
-			String mediaLocation = PewsConfig.properties.getProperty( "UPLOAD_DIR" );
+			String mediaLocation = PewsConfig.getWebDir() + File.separator + PewsConfig.getMediaDir();
 
 			Part typePart = request.getPart( "type" );
 
@@ -63,23 +65,6 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 
 			mediaObject.setType( MediaObjectType.valueOf( value.toString() ) );
 
-			// map fileName argument to media object
-			Part fileNamePart = request.getPart( "fileName" );
-
-			if ( fileNamePart == null )
-				throw new RuntimeException( "please specify file name!" );
-
-			reader = new BufferedReader( new InputStreamReader( fileNamePart.getInputStream() ) );
-			value = new StringBuilder();
-			buffer = new char[ 8192 ];
-
-			for ( int length; ( length = reader.read( buffer ) ) > 0; )
-			{
-				value.append( buffer, 0, length );
-			}
-
-			mediaObject.setFileName( value.toString() );
-
 			// store attachment and map path to mediaObject
 			Part filePart = request.getPart( "file" );
 
@@ -93,6 +78,10 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 				dir.mkdirs();
 
 			String nameOfFile = filePart.getSubmittedFileName();
+			
+			// set fileName on mediaObject
+			mediaObject.setFileName( nameOfFile );
+			
 			File serverFile = new File( dir.getAbsolutePath() + File.separator + nameOfFile );
 
 			BufferedInputStream input = new BufferedInputStream( filePart.getInputStream(), 8192 );
@@ -105,7 +94,7 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 			output.close();
 
 			mediaObject.setFilePath( serverFile.getAbsolutePath() );
-			mediaObject.setUrl( "pathToURL" );
+			mediaObject.setUrl( PewsConfig.getMediaDirURL() + "/" + clientFolderURL + "/" + nameOfFile);
 
 			// persist mediaObject
 			return super.persist( mediaObject );

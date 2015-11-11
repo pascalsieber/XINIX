@@ -69,11 +69,6 @@ public class PewsConfig
 		return getPewsHome() + LOG;
 	}
 
-	public static String getUploadDir()
-	{
-		return properties.getProperty( "UPLOAD_DIR" );
-	}
-
 	public static int getApplicationPort()
 	{
 		return Integer.parseInt( properties.getProperty( "APPLICATION_PORT" ) );
@@ -86,13 +81,22 @@ public class PewsConfig
 
 	public static String getWebDirURL()
 	{
-		// TODO configure this in pews.properties
-		return "localhost:8888";
+		return "http://" + properties.getProperty( "APPLICATION_HOST" ) + ":" + properties.getProperty( "APPLICATION_PORT" );
+	}
+
+	public static String getMediaDirURL()
+	{
+		return "http://" + properties.getProperty( "APPLICATION_HOST" ) + ":" + properties.getProperty( "APPLICATION_PORT" ) + "/" + properties.getProperty( "MEDIA_DIR" );
 	}
 
 	public static String getImageDir()
 	{
 		return properties.getProperty( "IMAGE_DIR" );
+	}
+
+	public static String getMediaDir()
+	{
+		return properties.getProperty( "MEDIA_DIR" );
 	}
 
 }
