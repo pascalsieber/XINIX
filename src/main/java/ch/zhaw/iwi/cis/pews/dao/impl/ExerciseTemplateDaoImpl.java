@@ -12,6 +12,13 @@ public class ExerciseTemplateDaoImpl extends WorkshopObjectDaoImpl implements Ex
 {
 
 	@Override
+	public ExerciseTemplate findExerciseTemplateByID( String id )
+	{
+		// use default implementation. for specific behavior, this method is overwritten by corresponding subclass
+		return findById( id );
+	}
+
+	@Override
 	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
 		return ExerciseTemplate.class;
