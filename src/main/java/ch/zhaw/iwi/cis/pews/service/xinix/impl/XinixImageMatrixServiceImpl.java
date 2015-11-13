@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.xinix.impl;
 
+import java.util.List;
+
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.xinix.XinixImageMatrixDao;
 import ch.zhaw.iwi.cis.pews.dao.xinix.impl.XinixImageMatrixDaoImpl;
@@ -31,6 +33,12 @@ public class XinixImageMatrixServiceImpl extends WorkshopObjectServiceImpl imple
 	public XinixImageMatrix findXinixImageMatrixByID( String id )
 	{
 		return xinixImageMatrixDao.findXinixImageMatrixByID( id );
+	}
+
+	@Override
+	public List< XinixImageMatrix > findAllXinixImageMatrices()
+	{
+		return xinixImageMatrixDao.findAllXinixImageMatrices();
 	}
 
 }

@@ -52,7 +52,7 @@ public class XinixImageMatrixRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< XinixImageMatrix > findAllXinixImageMatrices()
 	{
-		return xinixImageMatrixService.findAll();
+		return xinixImageMatrixService.findAllXinixImageMatrices();
 	}
 
 	@POST

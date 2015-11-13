@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.dao.xinix.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopObjectDaoImpl;
@@ -31,10 +33,18 @@ public class XinixImageMatrixDaoImpl extends WorkshopObjectDaoImpl implements Xi
 
 		if ( matrices.size() > 0 )
 		{
-			return matrices.get( 0 );
+			return (XinixImageMatrix)cloneResult( matrices.get( 0 ) );
 		}
 
 		return null;
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< XinixImageMatrix > findAllXinixImageMatrices()
+	{
+		List< XinixImageMatrix > matrices = getEntityManager().createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages" ).getResultList();
+		return (List< XinixImageMatrix >)cloneResult( new ArrayList< XinixImageMatrix >( new HashSet< XinixImageMatrix >( matrices ) ) );
 	}
 
 }
