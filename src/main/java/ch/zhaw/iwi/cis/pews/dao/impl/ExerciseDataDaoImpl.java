@@ -22,6 +22,12 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 		return ExerciseDataImpl.class;
 	}
 
+	@Override
+	public String persistExerciseData( ExerciseDataImpl obj )
+	{
+		return persist( obj );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public ExerciseDataImpl findDataByID( String id )

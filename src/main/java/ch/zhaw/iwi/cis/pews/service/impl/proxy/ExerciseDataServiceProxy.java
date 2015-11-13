@@ -64,4 +64,10 @@ public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy impleme
 		// not intended for use in service proxy, only by service instances internally
 		throw new UnsupportedOperationException( "unsupported operation in Service Proxy" );
 	}
+
+	@Override
+	public String persistExerciseData( ExerciseDataImpl obj )
+	{
+		return getServiceTarget().path( ExerciseDataRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
+	}
 }

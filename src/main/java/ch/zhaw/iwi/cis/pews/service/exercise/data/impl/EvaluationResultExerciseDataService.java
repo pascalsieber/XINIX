@@ -21,6 +21,12 @@ public class EvaluationResultExerciseDataService extends ExerciseDataServiceImpl
 	}
 
 	@Override
+	public String persistExerciseData( ExerciseDataImpl obj )
+	{
+		return super.persist( obj );
+	}
+
+	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		return super.genericFindByExerciseID( exerciseID );

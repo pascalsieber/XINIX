@@ -69,12 +69,7 @@ public class MediaRestService extends WorkshopObjectRestService
 	{
 		MediaObject obj = mediaService.findByID( id );
 		return Response.ok( obj.getBlob(), obj.getMimeType() ).build();
-
-		/*
-		 * return Response.ok().entity( new StreamingOutput() {
-		 * 
-		 * @Override public void write( OutputStream output ) throws IOException, WebApplicationException { output.write( blob ); output.flush(); } } ).build();
-		 */}
+	}
 
 	@POST
 	@Path( FIND_BY_ID )

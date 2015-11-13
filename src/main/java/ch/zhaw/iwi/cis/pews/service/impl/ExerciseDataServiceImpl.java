@@ -102,14 +102,12 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 {
 	private ExerciseDataDao exerciseDataDao;
 	private ExerciseDao exerciseDao;
-	private ExerciseDataDao evaluationDataDao;
 	private WorkshopDao workshopDao;
 
 	public ExerciseDataServiceImpl()
 	{
 		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
-		evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 	}
 
@@ -153,21 +151,11 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return EXERCISECLASSSPECIFICSERVICES.get( exerciseClassName );
 	}
 
-	// overriding persist in order to handle special behavior for EvaluationExerciseData
-	// this needs to be delegated to evaluationDataDao
-	// TODO: this is a quick fix! check if there is a more elegant way to do this
 	@Override
-	public < T extends WorkshopObject > String persist( T object )
+	public String persistExerciseData( ExerciseDataImpl obj )
 	{
-		if ( object instanceof EvaluationExerciseData )
-		{
-			return evaluationDataDao.persist( object );
-		}
-		else
-		{
-			return super.persist( object );
-
-		}
+		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseDataClassSpecificService( obj.getClass().getSimpleName() ).getSimpleName() );
+		return service.persistExerciseData( obj );
 	}
 
 	@Override

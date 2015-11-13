@@ -21,4 +21,12 @@ public interface ExerciseDataService extends WorkshopObjectService
 	public String exportByWorkshopID( String workshopID );
 
 	public < T extends ExerciseDataViewObject > List< T > getExportableDataByExerciseID( ExerciseImpl exercise );
+
+	/**
+	 * enables delegation of persist operation to service subclass corresponding to type (i.e. class) of ExerciseDataImpl object
+	 * 
+	 * @param obj
+	 * @return id of persisted object
+	 */
+	public String persistExerciseData( ExerciseDataImpl obj );
 }

@@ -34,6 +34,12 @@ public class EvaluationExerciseDataService extends ExerciseDataServiceImpl
 	}
 
 	@Override
+	public String persistExerciseData( ExerciseDataImpl obj )
+	{
+		return specificDataDao.persist( obj );
+	}
+
+	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		return specificDataDao.findByExerciseID( exerciseID );

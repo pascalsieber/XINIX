@@ -13,4 +13,12 @@ public interface ExerciseDataDao extends WorkshopObjectDao
 	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass );
 
 	public ExerciseDataImpl findDataByID( String id );
+
+	/**
+	 * enables specialized behavior for persist operations
+	 * 
+	 * @param obj
+	 * @return id of persisted object
+	 */
+	public String persistExerciseData( ExerciseDataImpl obj );
 }

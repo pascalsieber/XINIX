@@ -1,10 +1,12 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -12,28 +14,29 @@ public class SimplePrototypingData extends CompressableExerciseData
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	@Lob
-	private byte[] blob;
+	
+	@OneToOne( cascade = CascadeType.ALL )
+	private MediaObject mediaObject;
 
 	public SimplePrototypingData()
 	{
 		super();
 	}
 
-	public SimplePrototypingData( PrincipalImpl owner, WorkflowElementImpl workflowElement, byte[] blob )
+	public SimplePrototypingData( PrincipalImpl owner, WorkflowElementImpl workflowElement, MediaObject mediaObject )
 	{
 		super( owner, workflowElement );
-		this.blob = blob;
+		this.mediaObject = mediaObject;
 	}
 
-	public byte[] getBlob()
+	public MediaObject getMediaObject()
 	{
-		return blob;
+		return mediaObject;
 	}
 
-	public void setBlob( byte[] blob )
+	public void setMediaObject( MediaObject mediaObject )
 	{
-		this.blob = blob;
+		this.mediaObject = mediaObject;
 	}
 
 }

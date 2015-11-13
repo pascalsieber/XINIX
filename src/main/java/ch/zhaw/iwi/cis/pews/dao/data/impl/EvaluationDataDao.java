@@ -10,7 +10,6 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
-import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
@@ -21,7 +20,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class EvaluationDataDao extends ExerciseDataDaoImpl
 {
-
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
@@ -87,7 +85,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	}
 
 	@Override
-	public < T extends WorkshopObject > String persist( T object )
+	public String persistExerciseData( ExerciseDataImpl object )
 	{
 		// evaluations by a specific user for an existing solution need to be updated (overwritten) rather than added
 		List< ExerciseDataImpl > existing = this.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), Evaluation.class );
@@ -101,11 +99,8 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 				( (EvaluationExerciseData)data ).getEvaluation().getScore().setScore( ( (EvaluationExerciseData)object ).getEvaluation().getScore().getScore() );
 				return super.persist( data );
 			}
-
 		}
 
 		return super.persist( object );
-
 	}
-
 }
