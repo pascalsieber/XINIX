@@ -1,90 +1,78 @@
 package ch.zhaw.iwi.cis.pews.model.media;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
+import ch.zhaw.iwi.cis.pews.service.rest.MediaRestService;
 
 @Entity
 public class MediaObject extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	private Date date;
-	private String url;
-	private String fileName;
-	private String filePath;
+	private String mimeType;
+
+	@Lob
+	private byte[] blob;
 
 	@Enumerated( EnumType.STRING )
-	private MediaObjectType type;
+	private MediaObjectType mediaObjectType;
 
 	public MediaObject()
 	{
 		super();
 	}
 
-	public MediaObject( Date date, String url, String fileName, String filePath, MediaObjectType type )
+	public MediaObject( String mimeType, byte[] blob, MediaObjectType mediaObjectType )
 	{
 		super();
-		this.date = date;
-		this.url = url;
-		this.fileName = fileName;
-		this.filePath = filePath;
-		this.type = type;
+		this.mimeType = mimeType;
+		this.blob = blob;
+		this.mediaObjectType = mediaObjectType;
 	}
 
-	public Date getDate()
+	public String getMimeType()
 	{
-		return date;
+		return mimeType;
 	}
 
-	public void setDate( Date date )
+	public void setMimeType( String mimeType )
 	{
-		this.date = date;
+		this.mimeType = mimeType;
 	}
 
+	public byte[] getBlob()
+	{
+		return blob;
+	}
+
+	public void setBlob( byte[] blob )
+	{
+		this.blob = blob;
+	}
+
+	public MediaObjectType getMediaObjectType()
+	{
+		return mediaObjectType;
+	}
+
+	public void setMediaObjectType( MediaObjectType mediaObjectType )
+	{
+		this.mediaObjectType = mediaObjectType;
+	}
+
+	/**
+	 * provides dynamic url to service endpoint providing object's blob
+	 * 
+	 * @return url to retrieve object's blob
+	 */
 	public String getUrl()
 	{
-		return url;
+		return PewsConfig.getServiceUrl() + MediaRestService.BASE + MediaRestService.GET_CONTENT_BY_ID + "/" + this.getID();
 	}
-
-	public void setUrl( String url )
-	{
-		this.url = url;
-	}
-
-	public String getFileName()
-	{
-		return fileName;
-	}
-
-	public void setFileName( String fileName )
-	{
-		this.fileName = fileName;
-	}
-
-	public String getFilePath()
-	{
-		return filePath;
-	}
-
-	public void setFilePath( String filePath )
-	{
-		this.filePath = filePath;
-	}
-
-	public MediaObjectType getType()
-	{
-		return type;
-	}
-
-	public void setType( MediaObjectType type )
-	{
-		this.type = type;
-	}
-
 }

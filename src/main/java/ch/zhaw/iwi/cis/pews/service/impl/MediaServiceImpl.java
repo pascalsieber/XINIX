@@ -1,28 +1,23 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
-import ch.zhaw.iwi.cis.pews.PewsConfig;
+import org.apache.commons.io.IOUtils;
+
 import ch.zhaw.iwi.cis.pews.dao.MediaDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.MediaDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
@@ -44,11 +39,8 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 		try
 		{
 			MediaObject mediaObject = new MediaObject();
-			mediaObject.setDate( new Date() );
 
 			// String encoding = request.getCharacterEncoding();
-
-			String mediaLocation = PewsConfig.getWebDir() + File.separator + PewsConfig.getMediaDir();
 
 			Part typePart = request.getPart( "type" );
 
@@ -63,38 +55,21 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 				value.append( buffer, 0, length );
 			}
 
-			mediaObject.setType( MediaObjectType.valueOf( value.toString() ) );
+			mediaObject.setMediaObjectType( MediaObjectType.valueOf( value.toString() ) );
 
-			// store attachment and map path to mediaObject
+			// get byte array of file and store as blob
 			Part filePart = request.getPart( "file" );
 
 			if ( filePart == null )
 				throw new RuntimeException( "please specify file to be stored!" );
 
-			String clientFolderURL = URLEncoder.encode( UserContext.getCurrentUser().getClient().getID(), "UTF-8" ).replace( "+", "%20" );
-
-			File dir = new File( mediaLocation + File.separator + clientFolderURL );
-			if ( !dir.exists() )
-				dir.mkdirs();
-
-			String nameOfFile = filePart.getSubmittedFileName();
-			
-			// set fileName on mediaObject
-			mediaObject.setFileName( nameOfFile );
-			
-			File serverFile = new File( dir.getAbsolutePath() + File.separator + nameOfFile );
-
 			BufferedInputStream input = new BufferedInputStream( filePart.getInputStream(), 8192 );
-			BufferedOutputStream output = new BufferedOutputStream( new FileOutputStream( serverFile ), 8192 );
-			byte[] bytes = new byte[ 8192 ];
-			for ( int length = 0; ( ( length = input.read( bytes ) ) > 0 ); )
-			{
-				output.write( bytes, 0, length );
-			}
-			output.close();
+			byte[] bytes = IOUtils.toByteArray( input );
 
-			mediaObject.setFilePath( serverFile.getAbsolutePath() );
-			mediaObject.setUrl( PewsConfig.getMediaDirURL() + "/" + clientFolderURL + "/" + nameOfFile);
+			mediaObject.setBlob( bytes );
+
+			// get content type
+			mediaObject.setMimeType( filePart.getContentType() );
 
 			// persist mediaObject
 			return super.persist( mediaObject );

@@ -99,4 +99,9 @@ public class PewsConfig
 		return properties.getProperty( "MEDIA_DIR" );
 	}
 
+	public static String getServiceUrl()
+	{
+		return properties.getProperty( "EXPOSED_SERVICE_URL" );
+	}
+
 }
