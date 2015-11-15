@@ -2,7 +2,10 @@ package ch.zhaw.sml.iwi.cis.pews.test.service;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,7 +33,6 @@ import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
 import ch.zhaw.iwi.cis.pews.model.input.PosterInput;
-import ch.zhaw.iwi.cis.pews.model.input.SimplyPrototypingInput;
 import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
 import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
@@ -46,7 +50,6 @@ import ch.zhaw.iwi.cis.pews.model.output.Output;
 import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
 import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
-import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
@@ -58,33 +61,32 @@ import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
-import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.GlobalService;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
+import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
-import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDataServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.GlobalServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.InvitationServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.MediaServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
-import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageService;
 import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -109,8 +111,8 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
@@ -139,8 +141,8 @@ public class RestServiceTest
 	private static ExerciseService exerciseServiceForSecondUser = ServiceProxyManager.createServiceProxyWithUser( ExerciseServiceProxy.class, "secondUser", "secondUser" );
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
-	private static XinixImageService xinixImageService = ServiceProxyManager.createServiceProxy( XinixImageServiceProxy.class );
 	private static XinixImageMatrixService xinixImageMatrixService = ServiceProxyManager.createServiceProxy( XinixImageMatrixServiceProxy.class );
+	private static MediaService mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 
 	// using stub objects to mimic the way API will be used
 	private static Client defaultClientStub = new Client();
@@ -175,7 +177,7 @@ public class RestServiceTest
 	private static ExerciseImpl evaluationExerciseStub = new ExerciseImpl();
 	private static ExerciseImpl evaluationResultExerciseStub = new ExerciseImpl();
 
-	private static XinixImage xinixImageStub = new XinixImage();
+	private static MediaObject xinixImageStub = new MediaObject();
 	private static PinkLabsExerciseData pinklabsDataStub = new PinkLabsExerciseData();
 	private static P2POneData p2poneDataStub = new P2POneData();
 	private static P2PTwoData p2ptwoDataStub = new P2PTwoData();
@@ -343,9 +345,20 @@ public class RestServiceTest
 			"evaluation result",
 			"evaluation result exercise" ) ) );
 
-		xinixImageStub.setID( xinixImageService.persist( new XinixImage( "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ) ) );
-		List< XinixImage > images = new ArrayList<>();
-		images.add( (XinixImage)xinixImageService.findByID( xinixImageStub.getID() ) );
+		try
+		{
+			File tempFile = new File( "tempFile" );
+			FileUtils.copyURLToFile( new URL( "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ), tempFile );
+			FileInputStream inputStream = new FileInputStream( tempFile );
+			xinixImageStub.setID( mediaService.persist( new MediaObject( "image/png", IOUtils.toByteArray( inputStream ), MediaObjectType.XINIX ) ) );
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "error in persisting xinix image" );
+		}
+
+		List< MediaObject > images = new ArrayList< MediaObject >();
+		images.add( (MediaObject)mediaService.findByID( xinixImageStub.getID() ) );
 		xinixImageMatrixStub.setID( xinixImageMatrixService.persist( new XinixImageMatrix( images ) ) );
 		xinixTemplateStub.setID( exTemplateService.persist( new XinixTemplate(
 			defaultUserStub,
@@ -1114,37 +1127,26 @@ public class RestServiceTest
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( p2pTwoExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// simple prototyping
-		/*setExerciseOnDefaultSession( simplyprotoExerciseStub );
-		SimplyPrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplyPrototypingInput.class );
-		assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exTemplateService.findByID( sprotoTemplateStub.getID() ) ).getQuestionTemplate() ) );
-		assertTrue( simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exTemplateService.findByID( sprotoTemplateStub.getID() ) ).getMimeType() ) );
-
-		output = new SimplePrototypingOutput( "simpleprototyping".getBytes() );
-		exerciseService.setOutput( mapper.writeValueAsString( output ) );
-
-		success = false;
-
-		List< ExerciseDataImpl > simpleProtoData = exerciseDataService.findByExerciseID( simplyprotoExerciseStub.getID() );
-		List< SimplePrototypingData > simpleProtoDataPrepped = mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( SimplePrototypingData.class ) );
-
-		for ( SimplePrototypingData d : simpleProtoDataPrepped )
-		{
-			if ( Arrays.equals( "simpleprototyping".getBytes(), d.getMediaObject().getBlob() ) && MediaObjectType.SIMPLYPROTOTYPING.equals( d.getMediaObject().getMediaObjectType() ) )
-			{
-				success = true;
-				break;
-			}
-		}
-
-		assertTrue( success );
-		assertTrue( checkOutput(
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( ExerciseDataImpl.class ) ),
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
-		assertTrue( checkOutput(
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( ExerciseDataImpl.class ) ),
-			(List< ExerciseDataImpl >)mapper.readValue(
-				mapper.writeValueAsString( exerciseService.getOutputByExerciseID( simplyprotoExerciseStub.getID() ) ),
-				makeCollectionType( ExerciseDataImpl.class ) ) ) );*/
+		/*
+		 * setExerciseOnDefaultSession( simplyprotoExerciseStub ); SimplyPrototypingInput simpleprotoInput = mapper.readValue( exerciseService.getInputAsString(), SimplyPrototypingInput.class );
+		 * assertTrue( simpleprotoInput.getQuestion().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exTemplateService.findByID( sprotoTemplateStub.getID() ) ).getQuestionTemplate() ) ); assertTrue(
+		 * simpleprotoInput.getMimeType().equalsIgnoreCase( ( (SimplyPrototypingTemplate)exTemplateService.findByID( sprotoTemplateStub.getID() ) ).getMimeType() ) );
+		 * 
+		 * output = new SimplePrototypingOutput( "simpleprototyping".getBytes() ); exerciseService.setOutput( mapper.writeValueAsString( output ) );
+		 * 
+		 * success = false;
+		 * 
+		 * List< ExerciseDataImpl > simpleProtoData = exerciseDataService.findByExerciseID( simplyprotoExerciseStub.getID() ); List< SimplePrototypingData > simpleProtoDataPrepped = mapper.readValue(
+		 * mapper.writeValueAsString( simpleProtoData ), makeCollectionType( SimplePrototypingData.class ) );
+		 * 
+		 * for ( SimplePrototypingData d : simpleProtoDataPrepped ) { if ( Arrays.equals( "simpleprototyping".getBytes(), d.getMediaObject().getBlob() ) && MediaObjectType.SIMPLYPROTOTYPING.equals(
+		 * d.getMediaObject().getMediaObjectType() ) ) { success = true; break; } }
+		 * 
+		 * assertTrue( success ); assertTrue( checkOutput( (List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( ExerciseDataImpl.class ) ),
+		 * (List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) ); assertTrue( checkOutput( (List<
+		 * ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( simpleProtoData ), makeCollectionType( ExerciseDataImpl.class ) ), (List< ExerciseDataImpl >)mapper.readValue(
+		 * mapper.writeValueAsString( exerciseService.getOutputByExerciseID( simplyprotoExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+		 */
 
 		// xinix
 		setExerciseOnDefaultSession( xinixExerciseStub );
@@ -1153,12 +1155,12 @@ public class RestServiceTest
 		assertTrue( xinixInput.getXinixImages().getID().equalsIgnoreCase( xinixImageMatrixStub.getID() ) );
 
 		List< String > imageIDs = new ArrayList<>();
-		for ( XinixImage img : ( xinixInput ).getXinixImages().getXinixImages() )
+		for ( MediaObject img : ( xinixInput ).getXinixImages().getXinixImages() )
 		{
 			imageIDs.add( img.getID() );
 		}
 
-		for ( XinixImage img : ( (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
+		for ( MediaObject img : ( (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrixStub.getID() ) ).getXinixImages() )
 		{
 			assertTrue( imageIDs.contains( img.getID() ) );
 		}

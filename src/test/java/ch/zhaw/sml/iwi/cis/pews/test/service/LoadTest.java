@@ -1,13 +1,15 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
-import javax.xml.bind.DatatypeConverter;
-
+import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,13 +19,14 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
+import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
-import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
@@ -31,6 +34,7 @@ import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.GlobalService;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
+import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
@@ -42,6 +46,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.GlobalServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.InvitationServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.MediaServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
@@ -49,9 +54,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
-import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageService;
 import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -116,8 +119,8 @@ public class LoadTest
 	private static ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 	private static ClientService clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
 	private static InvitationService invitationService = ServiceProxyManager.createServiceProxy( InvitationServiceProxy.class );
-	private static XinixImageService xinixImageService = ServiceProxyManager.createServiceProxy( XinixImageServiceProxy.class );
 	private static XinixImageMatrixService xinixImageMatrixService = ServiceProxyManager.createServiceProxy( XinixImageMatrixServiceProxy.class );
+	private static MediaService mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 
 	@BeforeClass
 	public static void generateLoad()
@@ -133,7 +136,16 @@ public class LoadTest
 
 		user = (UserImpl)userService.findByLoginName( ZhawEngine.ROOT_USER_LOGIN_NAME );
 
-		String sampleXinixImageID = xinixImageService.persist( new XinixImage( "http://skylla.zhaw.ch/xinix_images/xinix_img_13.jpg" ) );
+		String sampleXinixImageID;
+		try
+		{
+			FileInputStream inputStream = new FileInputStream( new File( "http://skylla.zhaw.ch/xinix_images/xinix_img_13.jpg" ) );
+			sampleXinixImageID = mediaService.persist( new MediaObject( "image/jpeg", IOUtils.toByteArray( inputStream ), MediaObjectType.XINIX ) );
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "error in persisting xinix image" );
+		}
 
 		for ( int j = 0; j < workshops; j++ )
 		{
@@ -297,8 +309,7 @@ public class LoadTest
 					exerciseDataService.persist( new P2PTwoData( u, p2, Arrays.asList( "random p2 answer" ), new HashSet< P2POneKeyword >( Arrays.asList( p1Data.getKeywords().get( 0 ), p1Data
 						.getKeywords()
 						.get( 1 ) ) ) ) );
-					exerciseDataService
-						.persist( new XinixData( u, xinix, new HashSet< String >( Arrays.asList( "random xinix answer" ) ), (XinixImage)xinixImageService.findByID( sampleXinixImageID ) ) );
+					exerciseDataService.persist( new XinixData( u, xinix, new HashSet< String >( Arrays.asList( "random xinix answer" ) ), (MediaObject)mediaService.findByID( sampleXinixImageID ) ) );
 
 					// limiting the simply prototyping exercise data to one per user
 					if ( l < 1 )

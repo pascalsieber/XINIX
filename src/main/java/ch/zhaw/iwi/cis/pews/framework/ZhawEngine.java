@@ -1,12 +1,11 @@
 package ch.zhaw.iwi.cis.pews.framework;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
-import java.net.URLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -20,6 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.derby.drda.NetworkServerControl;
 import org.eclipse.jetty.security.ConstraintMapping;
@@ -57,13 +57,13 @@ import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
-import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
+import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.UserService;
@@ -74,6 +74,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseTemplateServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.InvitationServiceImpl;
+import ch.zhaw.iwi.cis.pews.service.impl.MediaServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.RoleServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
@@ -81,9 +82,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopTemplateServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
 import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
-import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageService;
 import ch.zhaw.iwi.cis.pews.service.xinix.impl.XinixImageMatrixServiceImpl;
-import ch.zhaw.iwi.cis.pews.service.xinix.impl.XinixImageServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -141,7 +140,7 @@ public class ZhawEngine implements LifecycleObject
 
 	// defining this globally, since multiple pre-configured workshops might make use of the same xinix-image-matrix
 	public static String XINIX_IMAGE_MATRIX_ID;
-	public static List< XinixImage > XINIX_IMAGES;
+	public static List< MediaObject > XINIX_IMAGES;
 
 	static
 	{
@@ -378,7 +377,7 @@ public class ZhawEngine implements LifecycleObject
 	}
 
 	@SuppressWarnings( "unused" )
-	private static void configureSampleWorkshop() throws IOException
+	private static void configureSampleWorkshop()
 	{
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
@@ -389,8 +388,8 @@ public class ZhawEngine implements LifecycleObject
 		ExerciseService exerciseService = getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
-		XinixImageService xinixImageService = getManagedObjectRegistry().getManagedObject( XinixImageServiceImpl.class.getSimpleName() );
 		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
+		MediaService mediaService = getManagedObjectRegistry().getManagedObject( MediaServiceImpl.class.getSimpleName() );
 
 		// sample workshop template (pinkelefant)
 		String wsTemplateID = workshopTemplateService.persist( new PinkElefantTemplate(
@@ -431,11 +430,22 @@ public class ZhawEngine implements LifecycleObject
 			imageUrls.add( PewsConfig.getImageDir() + "/xinix_img_" + i + ".png" );
 		}
 
-		XINIX_IMAGES = new ArrayList<>();
+		XINIX_IMAGES = new ArrayList< MediaObject >();
 
 		for ( String url : imageUrls )
 		{
-			XINIX_IMAGES.add( (XinixImage)xinixImageService.findByID( xinixImageService.persist( new XinixImage( url ) ) ) );
+			try
+			{
+				File tempFile = new File( "tempFile" );
+				FileUtils.copyURLToFile( new URL( url ), tempFile );
+				FileInputStream input = new FileInputStream( tempFile );
+				XINIX_IMAGES.add( (MediaObject)mediaService.findByID( mediaService.persist( new MediaObject( "image/png", IOUtils.toByteArray( input ), MediaObjectType.XINIX ) ) ) );
+			}
+			catch ( IOException e )
+			{
+				throw new RuntimeException( "an error occured while configuring the XINIX images for sample workshop" );
+			}
+
 		}
 
 		// xinix image matrix
@@ -556,10 +566,21 @@ public class ZhawEngine implements LifecycleObject
 		exerciseDataService.persist( new XinixData( rootUser, (WorkflowElementImpl)exerciseService.findByID( xinixExID ), associations, XINIX_IMAGES.iterator().next() ) );
 
 		// simpleprototyping data
-		File file = new File( "http://91ef69bade70f992a001-b6054e05bb416c4c4b6f3b0ef3e0f71d.r93.cf3.rackcdn.com/laptop-with-business-chart-10032918.jpg" );
-		byte[] blob = IOUtils.toByteArray( new FileInputStream( file ) );
-		exerciseDataService.persist( new SimplePrototypingData( rootUser, (WorkflowElementImpl)exerciseService.findByID( simplyPrototypingExID ), new MediaObject( URLConnection
-			.guessContentTypeFromStream( new ByteArrayInputStream( blob ) ), blob, MediaObjectType.SIMPLYPROTOTYPING ) ) );
+		try
+		{
+
+			File file = new File( "file" );
+			FileUtils.copyURLToFile( new URL( "http://91ef69bade70f992a001-b6054e05bb416c4c4b6f3b0ef3e0f71d.r93.cf3.rackcdn.com/laptop-with-business-chart-10032918.jpg" ), file );
+			byte[] blob = IOUtils.toByteArray( new FileInputStream( file ) );
+			String mediaObjectID = mediaService.persist( new MediaObject( "image/jpeg", blob, MediaObjectType.SIMPLYPROTOTYPING ) );
+
+			exerciseDataService.persist( new SimplePrototypingData( rootUser, (WorkflowElementImpl)exerciseService.findByID( simplyPrototypingExID ), (MediaObject)mediaService
+				.findByID( mediaObjectID ) ) );
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "an error occured while configuring sample data for Simply Prorotyping" );
+		}
 
 		// compression data
 		CompressionExerciseData compressionData = exerciseDataService.findByID( exerciseDataService.persist( new CompressionExerciseData( rootUser, (WorkflowElementImpl)exerciseService
@@ -666,8 +687,9 @@ public class ZhawEngine implements LifecycleObject
 		ExerciseDataService exerciseDataService = getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
 		InvitationService invitationService = getManagedObjectRegistry().getManagedObject( InvitationServiceImpl.class.getSimpleName() );
 		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
-		XinixImageService xinixImageService = getManagedObjectRegistry().getManagedObject( XinixImageServiceImpl.class.getSimpleName() );
 		XinixImageMatrixService xinixImageMatrixService = getManagedObjectRegistry().getManagedObject( XinixImageMatrixServiceImpl.class.getSimpleName() );
+		MediaService mediaService = getManagedObjectRegistry().getManagedObject( MediaServiceImpl.class.getSimpleName() );
+
 		// Demo client
 		Client demoClient = clientService.findByID( clientService.persist( new Client( DEMO_CLIENT_NAME ) ) );
 
@@ -736,11 +758,21 @@ public class ZhawEngine implements LifecycleObject
 			imageUrls.add( PewsConfig.getImageDir() + "/xinix_img_" + i + ".png" );
 		}
 
-		XINIX_IMAGES = new ArrayList<>();
+		XINIX_IMAGES = new ArrayList< MediaObject >();
 
 		for ( String url : imageUrls )
 		{
-			XINIX_IMAGES.add( (XinixImage)xinixImageService.findByID( xinixImageService.persist( new XinixImage( url ) ) ) );
+			try
+			{
+				File tempFile = new File( "tempFile" );
+				FileUtils.copyURLToFile( new URL( url ), tempFile );
+				FileInputStream input = new FileInputStream( tempFile );
+				XINIX_IMAGES.add( (MediaObject)mediaService.findByID( mediaService.persist( new MediaObject( "image/png", IOUtils.toByteArray( input ), MediaObjectType.XINIX ) ) ) );
+			}
+			catch ( IOException e )
+			{
+				throw new RuntimeException( "an error occured while configuring the XINIX images for Demo workshop" );
+			}
 		}
 
 		// xinix image matrix

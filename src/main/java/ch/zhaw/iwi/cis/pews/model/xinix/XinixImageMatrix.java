@@ -8,6 +8,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
+import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 
 @Entity
 public class XinixImageMatrix extends WorkshopObject
@@ -16,7 +17,7 @@ public class XinixImageMatrix extends WorkshopObject
 	private static final long serialVersionUID = 1L;
 
 	@ManyToMany
-	private List< XinixImage > xinixImages;
+	private List< MediaObject > xinixImages;
 
 	public XinixImageMatrix()
 	{
@@ -24,20 +25,19 @@ public class XinixImageMatrix extends WorkshopObject
 		this.xinixImages = new ArrayList<>();
 	}
 
-	public XinixImageMatrix( List< XinixImage > xinixImages )
+	public XinixImageMatrix( List< MediaObject > xinixImages )
 	{
 		super();
 		this.xinixImages = xinixImages;
 	}
 
-	public List< XinixImage > getXinixImages()
+	public List< MediaObject > getXinixImages()
 	{
 		return xinixImages;
 	}
 
-	public void setXinixImages( List< XinixImage > xinixImages )
+	public void setXinixImages( List< MediaObject > xinixImages )
 	{
 		this.xinixImages = xinixImages;
 	}
-
 }

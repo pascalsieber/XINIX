@@ -40,7 +40,6 @@ import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
-import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopDaoImpl;
@@ -50,14 +49,12 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
-import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
 import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
-import ch.zhaw.iwi.cis.pews.model.xinix.XinixImage;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.CompressionExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationExerciseDataService;
@@ -68,7 +65,6 @@ import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PinkLabsExerciseDataServi
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PosterExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.SimplePrototypingExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixImageDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
@@ -95,8 +91,6 @@ import ch.zhaw.sml.iwi.cis.exwrapper.java.io.ObjectOutputStreamWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.OutputStreamWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.lang.ClassWrapper;
 
-// TODO: find a way to merge cleanseData and cleanObjectGraph
-
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implements ExerciseDataService
 {
@@ -122,7 +116,6 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		EXERCISEDATACLASSSPECIFICSERVICES.put( SimplePrototypingData.class.getSimpleName(), SimplePrototypingExerciseDataService.class );
 		EXERCISEDATACLASSSPECIFICSERVICES.put( XinixData.class.getSimpleName(), XinixExerciseDataService.class );
 		EXERCISEDATACLASSSPECIFICSERVICES.put( CompressionExerciseData.class.getSimpleName(), CompressionExerciseDataService.class );
-		EXERCISEDATACLASSSPECIFICSERVICES.put( XinixImage.class.getSimpleName(), XinixImageDataService.class );
 		EXERCISEDATACLASSSPECIFICSERVICES.put( EvaluationExerciseData.class.getSimpleName(), EvaluationExerciseDataService.class );
 	}
 
