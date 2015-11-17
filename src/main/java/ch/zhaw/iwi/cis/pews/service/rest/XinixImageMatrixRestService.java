@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
+import ch.zhaw.iwi.cis.pews.model.xinix.dto.XinixImageMatrixSimpleView;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
 import ch.zhaw.iwi.cis.pews.service.xinix.impl.XinixImageMatrixServiceImpl;
@@ -38,7 +39,7 @@ public class XinixImageMatrixRestService extends WorkshopObjectRestService
 	@Path( PERSIST )
 	public String persistXinixImageMatrix( XinixImageMatrix obj )
 	{
-		return xinixImageMatrixService.persist( obj );
+		return xinixImageMatrixService.persistImageMatrix( obj );
 	}
 
 	@POST
@@ -50,7 +51,7 @@ public class XinixImageMatrixRestService extends WorkshopObjectRestService
 
 	@POST
 	@Path( FIND_ALL )
-	public List< XinixImageMatrix > findAllXinixImageMatrices()
+	public List< XinixImageMatrixSimpleView > findAllXinixImageMatrices()
 	{
 		return xinixImageMatrixService.findAllXinixImageMatrices();
 	}
