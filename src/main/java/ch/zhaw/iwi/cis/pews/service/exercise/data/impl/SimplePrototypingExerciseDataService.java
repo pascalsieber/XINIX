@@ -9,8 +9,10 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
+import ch.zhaw.iwi.cis.pews.model.data.export.SimplePrototypingDataViewObject;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
+import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.MediaServiceImpl;
@@ -47,10 +49,20 @@ public class SimplePrototypingExerciseDataService extends ExerciseDataServiceImp
 		return super.genericFindDataByID( id );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataViewObject > getExportableDataByExerciseID( ExerciseImpl exercise )
+	public List< SimplePrototypingDataViewObject > getExportableDataByExerciseID( ExerciseImpl exercise )
 	{
-		// TODO finish this, once output of prototyping is image with url
-		return new ArrayList< ExerciseDataViewObject >();
+		List< SimplePrototypingDataViewObject > export = new ArrayList< SimplePrototypingDataViewObject >();
+
+		List< ExerciseDataImpl > data = this.findByExerciseID( exercise.getID() );
+		for ( ExerciseDataImpl d : data )
+		{
+			SimplePrototypingData obj = (SimplePrototypingData)d;
+			export.add( new SimplePrototypingDataViewObject( obj.getID(), exercise.getWorkshop().getID(), exercise.getWorkshop().getName(), exercise.getID(), exercise.getName(), exercise
+				.getQuestion(), obj.getOwner().getID(), ( (UserImpl)obj.getOwner() ).getLoginName(), obj.getMediaObject().getUrl() ) );
+		}
+
+		return export;
 	}
 }
