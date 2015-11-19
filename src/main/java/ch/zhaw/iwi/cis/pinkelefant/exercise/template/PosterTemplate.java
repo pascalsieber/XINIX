@@ -1,11 +1,15 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
+import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -20,9 +24,13 @@ public class PosterTemplate extends ExerciseTemplate
 	@Column( length = 20000 )
 	private String description;
 
+	@ManyToMany
+	private List< MediaObject > media;
+
 	public PosterTemplate()
 	{
 		super();
+		media = new ArrayList< MediaObject >();
 	}
 
 	public PosterTemplate(
@@ -39,11 +47,13 @@ public class PosterTemplate extends ExerciseTemplate
 			String defaultName,
 			String defaultDescription,
 			String title,
-			String description )
+			String description,
+			List< MediaObject > media )
 	{
 		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
 		this.title = title;
 		this.description = description;
+		this.media = media;
 	}
 
 	public String getTitle()
@@ -64,6 +74,16 @@ public class PosterTemplate extends ExerciseTemplate
 	public void setDescription( String description )
 	{
 		this.description = description;
+	}
+
+	public List< MediaObject > getMedia()
+	{
+		return media;
+	}
+
+	public void setMedia( List< MediaObject > media )
+	{
+		this.media = media;
 	}
 
 }
