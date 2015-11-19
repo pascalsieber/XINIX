@@ -7,6 +7,7 @@ import java.util.List;
 import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopObjectDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.xinix.XinixImageMatrixDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
@@ -26,10 +27,7 @@ public class XinixImageMatrixDaoImpl extends WorkshopObjectDaoImpl implements Xi
 	@Override
 	public XinixImageMatrix findXinixImageMatrixByID( String id )
 	{
-		List< XinixImageMatrix > matrices = getEntityManager()
-			.createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages as img where x.id = :_id" )
-			.setParameter( "_id", id )
-			.getResultList();
+		List< XinixImageMatrix > matrices = getEntityManager().createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages where x.id = :_id" ).setParameter( "_id", id ).getResultList();
 
 		if ( matrices.size() > 0 )
 		{
@@ -43,7 +41,10 @@ public class XinixImageMatrixDaoImpl extends WorkshopObjectDaoImpl implements Xi
 	@Override
 	public List< XinixImageMatrix > findAllXinixImageMatrices()
 	{
-		List< XinixImageMatrix > matrices = getEntityManager().createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages" ).getResultList();
+		List< XinixImageMatrix > matrices = getEntityManager()
+			.createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages where x.client.id = :_client_id" )
+			.setParameter( "_client_id", UserContext.getCurrentUser().getClient().getID() )
+			.getResultList();
 		return (List< XinixImageMatrix >)cloneResult( new ArrayList< XinixImageMatrix >( new HashSet< XinixImageMatrix >( matrices ) ) );
 	}
 

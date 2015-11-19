@@ -12,6 +12,12 @@ public class ExerciseDaoImpl extends WorkshopObjectDaoImpl implements ExerciseDa
 {
 
 	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return findById( id );
+	}
+
+	@Override
 	protected Class< ? extends WorkshopObject > getWorkshopObjectClass()
 	{
 		return ExerciseImpl.class;

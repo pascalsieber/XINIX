@@ -39,6 +39,12 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	}
 
 	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return super.findByID( id );
+	}
+
+	@Override
 	public Input getInput()
 	{
 		return this.getInputByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );

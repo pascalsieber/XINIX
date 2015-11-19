@@ -20,6 +20,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.P2PKeywordInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -42,6 +43,12 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 		super();
 		this.p2pOneDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneDataDao.class.getSimpleName() );
 		this.p2pOneKeywordDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneKeywordDaoImpl.class.getSimpleName() );
+	}
+
+	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return super.findByID( id );
 	}
 
 	@Override

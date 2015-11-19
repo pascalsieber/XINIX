@@ -21,6 +21,7 @@ import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultObject;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pews.util.comparator.EvaluationResultComparator;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
@@ -42,6 +43,12 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 		super();
 		this.evaluationDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
 		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDaoImpl.class.getSimpleName() );
+	}
+
+	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return super.findByID( id );
 	}
 
 	@Override

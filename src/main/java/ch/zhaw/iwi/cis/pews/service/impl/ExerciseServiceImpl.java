@@ -207,7 +207,9 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public ExerciseImpl findExerciseByID( String id )
 	{
-		return (ExerciseImpl)simplifyOwnerInObjectGraph( findByID( id ) );
+		ExerciseImpl result = ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( ( (ExerciseImpl)findByID( id ) ).getClass() ).getSimpleName() ) )
+			.findExerciseByID( id );
+		return (ExerciseImpl)simplifyOwnerInObjectGraph( result );
 	}
 
 	@Override

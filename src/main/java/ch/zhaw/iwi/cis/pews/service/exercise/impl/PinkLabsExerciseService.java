@@ -9,6 +9,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -24,6 +25,12 @@ public class PinkLabsExerciseService extends ExerciseServiceImpl
 	public PinkLabsExerciseService()
 	{
 		super();
+	}
+
+	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return super.findByID( id );
 	}
 
 	@Override

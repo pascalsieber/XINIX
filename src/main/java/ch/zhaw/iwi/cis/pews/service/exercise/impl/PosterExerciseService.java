@@ -7,6 +7,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.input.PosterInput;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
@@ -19,6 +20,12 @@ public class PosterExerciseService extends ExerciseServiceImpl
 	public PosterExerciseService()
 	{
 		super();
+	}
+
+	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return super.findByID( id );
 	}
 
 	@Override
