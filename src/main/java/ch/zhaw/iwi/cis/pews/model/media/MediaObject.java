@@ -76,6 +76,6 @@ public class MediaObject extends WorkshopObject
 	 */
 	public String getUrl()
 	{
-		return PewsConfig.getServiceUrl() + MediaRestService.BASE + MediaRestService.GET_CONTENT_BY_ID + "/" + this.getID();
+		return PewsConfig.getServiceUrl() + MediaRestService.BASE + MediaRestService.GET_CONTENT_BY_ID + "/" + this.getID() + "." + mimeType.substring( mimeType.indexOf( "/" ) + 1 );
 	}
 }

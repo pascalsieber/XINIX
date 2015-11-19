@@ -1,7 +1,5 @@
 package ch.zhaw.iwi.cis.pews.service.rest;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +9,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
@@ -64,7 +60,7 @@ public class MediaRestService extends WorkshopObjectRestService
 	 * @return blob of mediaObject
 	 */
 	@GET
-	@Path( GET_CONTENT_BY_ID + "/{mediaobjectid}" )
+	@Path( GET_CONTENT_BY_ID + "/{mediaobjectid}.{extension}" )
 	public Response getMediaContentByID( @PathParam( "mediaobjectid" ) String id )
 	{
 		MediaObject obj = mediaService.findByID( id );
