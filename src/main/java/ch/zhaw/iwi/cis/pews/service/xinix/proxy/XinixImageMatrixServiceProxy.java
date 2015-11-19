@@ -6,7 +6,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
-import ch.zhaw.iwi.cis.pews.model.xinix.dto.XinixImageMatrixSimpleView;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopObjectServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.rest.XinixImageMatrixRestService;
 import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
@@ -33,9 +32,8 @@ public class XinixImageMatrixServiceProxy extends WorkshopObjectServiceProxy imp
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< XinixImageMatrixSimpleView > findAllXinixImageMatrices()
+	public List< XinixImageMatrix > findAllXinixImageMatrices()
 	{
 		return getServiceTarget().path( XinixImageMatrixRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
-
 }

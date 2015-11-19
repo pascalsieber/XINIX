@@ -11,9 +11,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
-import ch.zhaw.iwi.cis.pews.model.media.dto.MediaObjectSimpleView;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
-import ch.zhaw.iwi.cis.pews.model.xinix.dto.XinixImageMatrixSimpleView;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.impl.MediaServiceImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopObjectServiceImpl;
@@ -44,20 +42,9 @@ public class XinixImageMatrixServiceImpl extends WorkshopObjectServiceImpl imple
 	}
 
 	@Override
-	public List<XinixImageMatrixSimpleView> findAllXinixImageMatrices()
+	public List< XinixImageMatrix > findAllXinixImageMatrices()
 	{
-		List< XinixImageMatrixSimpleView > results = new ArrayList< XinixImageMatrixSimpleView >();
-		for ( XinixImageMatrix matrix : xinixImageMatrixDao.findAllXinixImageMatrices() )
-		{
-			List< MediaObjectSimpleView > images = new ArrayList< MediaObjectSimpleView >();
-			for ( MediaObject mediaObject : matrix.getXinixImages() )
-			{
-				images.add( new MediaObjectSimpleView( mediaObject.getID(), mediaObject.getMediaObjectType(), mediaObject.getUrl() ) );
-			}
-			results.add( new XinixImageMatrixSimpleView( matrix.getID(), images ));
-		}
-		
-		return results;
+		return xinixImageMatrixDao.findAllXinixImageMatrices();
 	}
 
 	@Override
