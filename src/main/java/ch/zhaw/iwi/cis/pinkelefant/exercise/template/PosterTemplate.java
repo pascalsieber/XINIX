@@ -25,12 +25,16 @@ public class PosterTemplate extends ExerciseTemplate
 	private String description;
 
 	@ManyToMany
-	private List< MediaObject > media;
+	private List< MediaObject > posterImages;
+
+	@ManyToMany
+	private List< MediaObject > posterVideos;
 
 	public PosterTemplate()
 	{
 		super();
-		media = new ArrayList< MediaObject >();
+		posterImages = new ArrayList< MediaObject >();
+		posterVideos = new ArrayList< MediaObject >();
 	}
 
 	public PosterTemplate(
@@ -48,12 +52,14 @@ public class PosterTemplate extends ExerciseTemplate
 			String defaultDescription,
 			String title,
 			String description,
-			List< MediaObject > media )
+			List< MediaObject > posterImages,
+			List< MediaObject > posterVideos )
 	{
 		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
 		this.title = title;
 		this.description = description;
-		this.media = media;
+		this.posterImages = posterImages;
+		this.posterVideos = posterVideos;
 	}
 
 	public String getTitle()
@@ -76,14 +82,23 @@ public class PosterTemplate extends ExerciseTemplate
 		this.description = description;
 	}
 
-	public List< MediaObject > getMedia()
+	public List< MediaObject > getPosterImages()
 	{
-		return media;
+		return posterImages;
 	}
 
-	public void setMedia( List< MediaObject > media )
+	public void setPosterImages( List< MediaObject > posterImages )
 	{
-		this.media = media;
+		this.posterImages = posterImages;
 	}
 
+	public List< MediaObject > getPosterVideos()
+	{
+		return posterVideos;
+	}
+
+	public void setPosterVideos( List< MediaObject > posterVideos )
+	{
+		this.posterVideos = posterVideos;
+	}
 }

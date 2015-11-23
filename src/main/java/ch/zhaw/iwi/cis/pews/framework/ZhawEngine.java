@@ -404,12 +404,42 @@ public class ZhawEngine implements LifecycleObject
 			.findByID( wsTemplateID ) ) );
 
 		// workshop start (poster template)
-		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "", "Workshop Start", "Start des Workshops", "Willkommen zum p.i.n.k.elefant Workshop", "Der Workshop beginnt in Kürze.", new ArrayList< MediaObject >() ) );
+		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate(
+			rootUser,
+			false,
+			TimeUnit.SECONDS,
+			180,
+			false,
+			true,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			"",
+			"Workshop Start",
+			"Start des Workshops",
+			"Willkommen zum p.i.n.k.elefant Workshop",
+			"Der Workshop beginnt in Kürze.",
+			new ArrayList< MediaObject >(),
+			new ArrayList< MediaObject >() ) );
 
 		// workshop end (poster template)
-		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "", "Workshop Ende", "Ende des Workshops", "Ende des p.i.n.k.elefant Workshops", "Vielen Dank für Ihre Teilnahme.", new ArrayList< MediaObject >() ) );
+		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate(
+			rootUser,
+			false,
+			TimeUnit.SECONDS,
+			180,
+			false,
+			true,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			"",
+			"Workshop Ende",
+			"Ende des Workshops",
+			"Ende des p.i.n.k.elefant Workshops",
+			"Vielen Dank für Ihre Teilnahme.",
+			new ArrayList< MediaObject >(),
+			new ArrayList< MediaObject >() ) );
 
 		// pinklabs template
 		String pinklabsTemplateID = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -734,11 +764,27 @@ public class ZhawEngine implements LifecycleObject
 			"p.i.n.k.elefant Start",
 			"Willkommen zum p.i.n.k.elefant Workshop. Es soll die folgende Frage beantwortet werden: \"Wie können unsere Unternehmenswerte den Mitarbeitenden vermittelt werden?\"",
 			"Der Workshop beginnt in Kürze.",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		// workshop end (poster template)
-		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "", "Ende", "p.i.n.k.elefant Workshop Ende", "Ende des p.i.n.k.elefant Workshops", "Vielen Dank für Ihre Teilnahme.", new ArrayList< MediaObject >() ) );
+		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate(
+			rootUser,
+			false,
+			TimeUnit.SECONDS,
+			60,
+			false,
+			false,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			"",
+			"Ende",
+			"p.i.n.k.elefant Workshop Ende",
+			"Ende des p.i.n.k.elefant Workshops",
+			"Vielen Dank für Ihre Teilnahme.",
+			new ArrayList< MediaObject >(),
+			new ArrayList< MediaObject >() ) );
 
 		// pinklabs template
 		String pinklabsTemplateID = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 60, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1135,8 +1181,23 @@ public class ZhawEngine implements LifecycleObject
 			"Tool zur Auswertung der Resultate aus der Bewertungsrunde" ) );
 
 		// end template (poster)
-		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "", "Abschluss", "Workshop End Tool", "Abschluss", "Vielen Dank, dass Sie an diesem XINIX-Workshop teilgenommen haben!", new ArrayList< MediaObject >() ) );
+		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate(
+			rootUser,
+			false,
+			TimeUnit.SECONDS,
+			180,
+			false,
+			true,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			"",
+			"Abschluss",
+			"Workshop End Tool",
+			"Abschluss",
+			"Vielen Dank, dass Sie an diesem XINIX-Workshop teilgenommen haben!",
+			new ArrayList< MediaObject >(),
+			new ArrayList< MediaObject >() ) );
 
 		// intro templates (posters)
 
@@ -1156,6 +1217,7 @@ public class ZhawEngine implements LifecycleObject
 				"Workshop Start Tool",
 				"Willkommen",
 				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String introTemplateID2 = exerciseTemplateService
@@ -1174,10 +1236,26 @@ public class ZhawEngine implements LifecycleObject
 				"Intro Tool",
 				"Inspirationsphase",
 				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
-		String pinklabsIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 15, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "", "p.i.n.k.labs", "Beantworte die folgenden 4 unterschiedlichen Fragen.", "p.i.n.k.labs Intro", "p.i.n.k.labs Intro Tool", new ArrayList< MediaObject >() ) );
+		String pinklabsIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
+			rootUser,
+			false,
+			TimeUnit.SECONDS,
+			15,
+			false,
+			true,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			"",
+			"p.i.n.k.labs",
+			"Beantworte die folgenden 4 unterschiedlichen Fragen.",
+			"p.i.n.k.labs Intro",
+			"p.i.n.k.labs Intro Tool",
+			new ArrayList< MediaObject >(),
+			new ArrayList< MediaObject >() ) );
 
 		String p2pOneIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
 			rootUser,
@@ -1194,6 +1272,7 @@ public class ZhawEngine implements LifecycleObject
 			"Post2Paper 1 Intro Tool",
 			"Post2Paper 1",
 			"Du siehst nun nacheinander 4 unterschiedliche Zielgruppen. Beantworte zu jeder dieser Zielgruppen die folgende Frage.",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		String p2pTwoIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -1211,6 +1290,7 @@ public class ZhawEngine implements LifecycleObject
 			"Post2Paper 2 Intro Tool",
 			"Post2Paper 2",
 			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage. Umschreibe die Dienstleistung mit 1-2 Sätzen.",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		String xinixIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -1228,6 +1308,7 @@ public class ZhawEngine implements LifecycleObject
 			"XINIX-Tool Intro",
 			"XINIX-Tool",
 			"Nun folgen 4 unterschiedliche Themen. Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln. ",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		String simplyprotoIntroTemplateID = exerciseTemplateService
@@ -1246,6 +1327,7 @@ public class ZhawEngine implements LifecycleObject
 				"Simply Prototyping Intro Tool",
 				"Simply Prototyping",
 				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String introTemplateID3 = exerciseTemplateService
@@ -1264,6 +1346,7 @@ public class ZhawEngine implements LifecycleObject
 				"Kompression Intro Tool",
 				"Kompressionsphase",
 				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Massnahmen Begleit-Service Paketdienst im Jahr 2020</b>. In den nächsten 45 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme in mind. 4 Sätzen.<br/>Erarbeite so viele Massnahmen wie möglich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgeführt. Drücke Random um den Zufallsgenerator auszulösen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String introTemplateID4 = exerciseTemplateService
@@ -1282,6 +1365,7 @@ public class ZhawEngine implements LifecycleObject
 				"Bewertung Intro Tool",
 				"Bewertungsphase",
 				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums 'Umsetzbarkeit bei der Post'.<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String outroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -1299,6 +1383,7 @@ public class ZhawEngine implements LifecycleObject
 			"Outro Tool",
 			"",
 			"Gratulation, der XINIX-Workshop ist beendet. Die besten Ideen werden am kommenden Meeting vom xx.xx.2015 im Plenum besprochen und weiterentwickelt.",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		// exercise instances
@@ -1603,6 +1688,7 @@ public class ZhawEngine implements LifecycleObject
 				"Workshop Start Tool",
 				"Willkommen",
 				"Herzlich Willkommen beim XINIX-Workshop zum Thema <b>Was wünsche ich mir am Bahnhof?</b>.<br/>Bei diesem Wokshop kommen folgende Phasen auf dich zu:<br/><b>Inspirationsphase</b>: Hier werden möglichst viele Gedanken gesammelt, welche in der Kompressionsphase helfen sollen, konkrete Ideen zu generieren.<br/><b>Kompressionsphase</b>: Hier werden die Inspirationen miteinander kombiniert und konkrete Ideen ausformuliert.<br/><b>Bewertung</b>: Die Ideen werden entsprechend gewissen Kriterien bewertet.<br/>Bitte nimm dir ca. 45 Minuten Zeit, um diesen Workshop durchzuspielen.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String introTemplateID2 = exerciseTemplateService
@@ -1621,10 +1707,26 @@ public class ZhawEngine implements LifecycleObject
 				"Intro Tool",
 				"Inspirationsphase",
 				"Du befindest dich jetzt in der <b>Inspirationsphase</b>. Hier erwarten dich 5 unterschiedliche Kreativitätstools. Wichtig bei all diesen Tools ist folgender Grundsatz: Ohne lange zu überlegen, schreib alles auf, was dir in den Sinn kommt. Ohne wenn und aber. Je mehr Antworten, desto besser.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
-		String pinklabsIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 30, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "", "p.i.n.k.labs", "Beantworte die folgenden 4 unterschiedlichen Fragen.", "p.i.n.k.labs Intro", "p.i.n.k.labs Intro Tool", new ArrayList< MediaObject >() ) );
+		String pinklabsIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
+			rootUser,
+			false,
+			TimeUnit.SECONDS,
+			30,
+			false,
+			true,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			"",
+			"p.i.n.k.labs",
+			"Beantworte die folgenden 4 unterschiedlichen Fragen.",
+			"p.i.n.k.labs Intro",
+			"p.i.n.k.labs Intro Tool",
+			new ArrayList< MediaObject >(),
+			new ArrayList< MediaObject >() ) );
 
 		String p2pOneIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
 			rootUser,
@@ -1641,6 +1743,7 @@ public class ZhawEngine implements LifecycleObject
 			"Post2Paper 1 Intro Tool",
 			"Post2Paper 1",
 			"Du siehst nun nacheinander 4 unterschiedliche Zielgruppen. Beantworte zu jeder dieser Zielgruppen die folgende Frage.",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		String p2pTwoIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -1658,6 +1761,7 @@ public class ZhawEngine implements LifecycleObject
 			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage.",
 			"Post2Paper 2 Intro",
 			"Post2Paper 2 Intro Tool",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		String xinixIntroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -1675,6 +1779,7 @@ public class ZhawEngine implements LifecycleObject
 			"XINIX-Tool Intro",
 			"XINIX-Tool",
 			"Nun folgen 4 unterschiedliche Themen.<br/>Bitte würfeln und das angezeigte Bild mit dem Thema verknüpfen. Pro Bild sind mehrere Antworten möglich. Du darfst beliebig oft würfeln.",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
 		String simplyprotoIntroTemplateID = exerciseTemplateService
@@ -1693,6 +1798,7 @@ public class ZhawEngine implements LifecycleObject
 				"Simply Prototyping Intro Tool",
 				"Simply Prototyping",
 				"Beantworte die folgende Frage indem du zeichnest, bastelst oder schreibst. Nimm dafür ein A3-Blatt zur Hand.<br/>iPad: Das Resultat bitte direkt mit dem Tablet fotografieren und hochladen.<br/>PC & Laptop: Das Resultat bitte mit dem PC oder Laptop via QR Code hochladen.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String introTemplateID3 = exerciseTemplateService
@@ -1711,6 +1817,7 @@ public class ZhawEngine implements LifecycleObject
 				"Kompression Intro Tool",
 				"Kompressionsphase",
 				"Du befindest dich jetzt in der <b>Kompressionsphase</b>. Nun kommen wir zurück auf unser Workshop-Thema: <b>Was wünsche ich mir am Bahnhof?</b>.<br/>In den nächsten 12 Minuten geht es darum, konkrete Ideen dazu zu entwicklen. Gib jeder Massnahme einen Titel und beschreibe die Massnahme<br/>Erarbeite so viele Massnahmen wie möglich.<br/>Wichtig: Lass dich von den Inspirationen, die auf dem Bildschirm erscheinen, anregen.<br/><br/>iPad: Die Inspirationen werden mit einem Zufallsgenerator aufgeführt. Drücke Random um den Zufallsgenerator auszulösen.<br/>PC & Laptop:  Alle Inspirationen sind den Aufgaben nach aufgelistet.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String introTemplateID4 = exerciseTemplateService
@@ -1729,6 +1836,7 @@ public class ZhawEngine implements LifecycleObject
 				"Bewertung Intro Tool",
 				"Bewertungsphase",
 				"Gratuliere. Du bist bald am Ende dieses XINIX-Workshops. Nun kommt die <b>Bewertungsphase</b>. Die Ideen aller Teilnehmenden von diesem Workshop erscheinen nun auf deinem Screen. Lies diese durch und bewerte sie unter Einbezug des Kriteriums \"Umsetzbarkeit realistisch\".<br/>Bestimme deine 5 favorisierten Ideen und gewichte diese noch gemäss einer Skala von 1-10.",
+				new ArrayList< MediaObject >(),
 				new ArrayList< MediaObject >() ) );
 
 		String outroTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -1746,10 +1854,26 @@ public class ZhawEngine implements LifecycleObject
 			"Outro Tool",
 			"",
 			"Gratulation, der XINIX-Workshop ist beendet. Die besten Ideen werden am 01.07.2015 im Rahmen eines kreativ.workshops besprochen und weiterentwickelt.",
+			new ArrayList< MediaObject >(),
 			new ArrayList< MediaObject >() ) );
 
-		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate( rootUser, false, TimeUnit.SECONDS, 180, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "", "Abschluss", "Workshop Abschluss Tool", "Abschluss", "Vielen Dank, dass du an diesem XINIX-Workshop teilgenommen hast!", new ArrayList< MediaObject >() ) );
+		String endTemplateID = exerciseTemplateService.persist( new PosterTemplate(
+			rootUser,
+			false,
+			TimeUnit.SECONDS,
+			180,
+			false,
+			true,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			"",
+			"Abschluss",
+			"Workshop Abschluss Tool",
+			"Abschluss",
+			"Vielen Dank, dass du an diesem XINIX-Workshop teilgenommen hast!",
+			new ArrayList< MediaObject >(),
+			new ArrayList< MediaObject >() ) );
 
 		// exercise instances
 		exerciseService

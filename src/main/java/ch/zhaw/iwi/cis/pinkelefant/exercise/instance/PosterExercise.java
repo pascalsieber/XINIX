@@ -24,12 +24,16 @@ public class PosterExercise extends ExerciseImpl
 	private String description;
 
 	@ManyToMany
-	private List< MediaObject > media;
+	private List< MediaObject > posterImages;
+
+	@ManyToMany
+	private List< MediaObject > posterVideos;
 
 	public PosterExercise()
 	{
 		super();
-		media = new ArrayList< MediaObject >();
+		posterImages = new ArrayList< MediaObject >();
+		posterVideos = new ArrayList< MediaObject >();
 	}
 
 	public PosterExercise( String name, String description, PosterTemplate derivedFrom, WorkshopImpl workshop )
@@ -37,6 +41,8 @@ public class PosterExercise extends ExerciseImpl
 		super( name, description, derivedFrom, workshop );
 		this.title = derivedFrom.getTitle();
 		this.description = derivedFrom.getDescription();
+		this.posterImages = derivedFrom.getPosterImages();
+		this.posterVideos = derivedFrom.getPosterVideos();
 	}
 
 	public String getTitle()
@@ -59,14 +65,23 @@ public class PosterExercise extends ExerciseImpl
 		this.description = description;
 	}
 
-	public List< MediaObject > getMedia()
+	public List< MediaObject > getPosterImages()
 	{
-		return media;
+		return posterImages;
 	}
 
-	public void setMedia( List< MediaObject > media )
+	public void setPosterImages( List< MediaObject > posterImages )
 	{
-		this.media = media;
+		this.posterImages = posterImages;
 	}
 
+	public List< MediaObject > getPosterVideos()
+	{
+		return posterVideos;
+	}
+
+	public void setPosterVideos( List< MediaObject > posterVideos )
+	{
+		this.posterVideos = posterVideos;
+	}
 }

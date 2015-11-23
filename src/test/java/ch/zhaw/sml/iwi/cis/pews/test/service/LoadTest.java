@@ -158,7 +158,7 @@ public class LoadTest
 
 			// exercise definitions and instance
 			PosterTemplate startDef = exTemplateService.findByID( exTemplateService.persist( new PosterTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", j + "_start_title", j
-					+ "_start_descr", "", "", new ArrayList< MediaObject >() ) ) );
+					+ "_start_descr", "", "", new ArrayList< MediaObject >(), new ArrayList< MediaObject >() ) ) );
 			exerciseService.persist( new PosterExercise( j + "_start_ex_name_", j + "_start_ex_descr_", startDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
 			PinkLabsTemplate plabsDef = exTemplateService.findByID( exTemplateService
@@ -258,7 +258,7 @@ public class LoadTest
 			exerciseService.persist( new EvaluationResultExercise( j + "_res_ex_name_", j + "_res_ex_descr_", resDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
 			PosterTemplate endDef = exTemplateService.findByID( exTemplateService.persist( new PosterTemplate( user, false, null, 0, false, false, false, 0, wsDef, "", j + "_end_title", j
-					+ "_end_descr", "", "", new ArrayList< MediaObject >() ) ) );
+					+ "_end_descr", "", "", new ArrayList< MediaObject >(), new ArrayList< MediaObject >() ) ) );
 			exerciseService.persist( new PosterExercise( j + "_end_ex_name_", j + "_end_ex_descr_", endDef, (WorkshopImpl)workshopService.findByID( workshopID ) ) );
 
 			// session
