@@ -33,7 +33,7 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 
 		if ( results.size() > 0 )
 		{
-			return results.get( 0 );
+			return (PrincipalImpl)cloneResult( results.get( 0 ));
 		}
 		else
 		{
@@ -56,7 +56,7 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 
 		if ( results.size() > 0 )
 		{
-			return results.get( 0 );
+			return (PrincipalImpl)cloneResult( results.get( 0 ));
 		}
 		else
 		{
