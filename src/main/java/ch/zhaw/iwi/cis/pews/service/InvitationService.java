@@ -15,4 +15,12 @@ public interface InvitationService extends WorkshopObjectService
 
 	public List< Invitation > findByUserID( String userID );
 
+	public List< Invitation > findBySessionID( String sessionID );
+
+	public void sendByID( String invitationID );
+
+	public void sendBySessionID( String sessionID );
+
+	public void sendByWorkshopID( String workshopID );
+
 }

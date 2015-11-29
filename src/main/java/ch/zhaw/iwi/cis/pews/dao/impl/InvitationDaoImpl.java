@@ -28,4 +28,14 @@ public class InvitationDaoImpl extends WorkshopObjectDaoImpl implements Invitati
 			.setParameter( "_user_id", userID )
 			.getResultList();
 	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< Invitation > findBySessionID( String sessionID )
+	{
+		return getEntityManager()
+			.createQuery( "from Invitation as i LEFT JOIN FETCH i.inviter LEFT JOIN FETCH i.invitee as user LEFT JOIN FETCH i.session as s LEFT JOIN FETCH s.workshop as w where s.id = :_session_id" )
+			.setParameter( "_session_id", sessionID )
+			.getResultList();
+	}
 }

@@ -43,4 +43,29 @@ public class InvitationServiceProxy extends WorkshopObjectServiceProxy implement
 		return getServiceTarget().path( InvitationRestService.FIND_BY_USER_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) ).readEntity( List.class );
 	}
 
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< Invitation > findBySessionID( String sessionID )
+	{
+		return getServiceTarget().path( InvitationRestService.FIND_BY_USER_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( List.class );
+	}
+
+	@Override
+	public void sendByID( String invitationID )
+	{
+		getServiceTarget().path( InvitationRestService.SEND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitationID ) );
+	}
+
+	@Override
+	public void sendBySessionID( String sessionID )
+	{
+		getServiceTarget().path( InvitationRestService.SEND_BY_SESSION_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) );
+	}
+
+	@Override
+	public void sendByWorkshopID( String workshopID )
+	{
+		getServiceTarget().path( InvitationRestService.SEND_BY_WORKSHOP_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( workshopID ) );
+	}
+
 }

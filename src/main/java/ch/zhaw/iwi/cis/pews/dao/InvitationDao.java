@@ -9,4 +9,5 @@ public interface InvitationDao extends WorkshopObjectDao
 
 	public List< Invitation > findByUserID( String userID );
 
+	public List< Invitation > findBySessionID( String sessionID );
 }

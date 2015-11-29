@@ -104,4 +104,78 @@ public class PewsConfig
 		return properties.getProperty( "EXPOSED_SERVICE_URL" );
 	}
 
+	public static String getWebClientAuthenticationUrl()
+	{
+		return properties.getProperty( "WEB_CLIENT_URL" ) + properties.getProperty( "WEB_CLIENT_AUTH" );
+	}
+
+	public static String getWebClientAuthenticationUserParam()
+	{
+		return properties.getProperty( "WEB_CLIENT_AUTH_USER" );
+	}
+
+	public static String getWebClientAuthenticationPasswordParam()
+	{
+		return properties.getProperty( "WEB_CLIENT_AUTH_PW" );
+	}
+
+	public static String getWebClientAuthenticationProfileTarget()
+	{
+		return properties.getProperty( "WEB_CLIENT_AUTH_TARGET_PROFILE" );
+	}
+
+	public static String getMailHost()
+	{
+		return properties.getProperty( "MAIL_SMTP_HOST" );
+	}
+
+	public static String getMailSocketFactoryPort()
+	{
+		return properties.getProperty( "MAIL_SMTP_SOCKETFACTORY_PORT" );
+	}
+
+	public static String getMailSocketFactoryClass()
+	{
+		return properties.getProperty( "MAIL_SMTP_SOCKETFACTORY_CLASS" );
+	}
+
+	public static String getMailPort()
+	{
+		return properties.getProperty( "MAIL_SMTP_PORT" );
+	}
+
+	public static String getMailUserName()
+	{
+		return properties.getProperty( "MAIL_ACCOUNT_USER" );
+	}
+
+	public static String getMailPassword()
+	{
+		return properties.getProperty( "MAIL_ACCOUNT_PASSWORD" );
+	}
+
+	public static String getMailSubjectForInvitation()
+	{
+		return properties.getProperty( "MAIL_INVITATION_SUBJECT" );
+	}
+
+	public static String getMailSubjectForProfile()
+	{
+		return properties.getProperty( "MAIL_PROFILE_SUBJECT" );
+	}
+
+	public static String getMailSenderNameForInvitation()
+	{
+		return properties.getProperty( "MAIL_INVITATION_FROM" );
+	}
+
+	public static String getMailSenderNameForProfile()
+	{
+		return properties.getProperty( "MAIL_PROFILE_FROM" );
+	}
+
+	public static String getMailWebClientInfo()
+	{
+		return properties.getProperty( "MAIL_WEB_CLIENT_INTRO" );
+	}
 }
