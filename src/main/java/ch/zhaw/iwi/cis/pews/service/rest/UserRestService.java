@@ -21,6 +21,7 @@ public class UserRestService extends WorkshopObjectRestService
 	public static final String USER_BASE = "/userService/user";
 	public static final String FIND_BY_LOGIN_NAME = "/findByLogin";
 	public static final String REQUEST_PASSWORD = "/requestPassword";
+	public static final String SEND_PROFILE = "/sendProfile";
 
 	public UserRestService()
 	{
@@ -69,6 +70,13 @@ public class UserRestService extends WorkshopObjectRestService
 	public boolean requestNewPassword( String userID )
 	{
 		return getUserService().requestNewPassword( userID );
+	}
+
+	@POST
+	@Path( SEND_PROFILE )
+	public void sendUserProfile( String userID )
+	{
+		getUserService().sendProfile( userID );
 	}
 
 	@Override

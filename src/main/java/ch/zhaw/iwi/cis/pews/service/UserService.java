@@ -14,4 +14,6 @@ public interface UserService extends WorkshopObjectService
 	public List< PrincipalImpl > findAllUsersForLoginService();
 
 	public PrincipalImpl findUserByID( String id );
+
+	public void sendProfile( String userID );
 }

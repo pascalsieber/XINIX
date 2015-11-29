@@ -178,4 +178,9 @@ public class PewsConfig
 	{
 		return properties.getProperty( "MAIL_WEB_CLIENT_INTRO" );
 	}
+
+	public static String getMailTextProfile()
+	{
+		return properties.getProperty( "MAIL_TEXT_PROFILE" );
+	}
 }

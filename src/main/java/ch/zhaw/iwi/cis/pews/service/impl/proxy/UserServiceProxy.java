@@ -41,4 +41,10 @@ public class UserServiceProxy extends WorkshopObjectServiceProxy implements User
 	{
 		return getServiceTarget().path( UserRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( PrincipalImpl.class );
 	}
+
+	@Override
+	public void sendProfile( String userID )
+	{
+		getServiceTarget().path( UserRestService.SEND_PROFILE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) );
+	}
 }
