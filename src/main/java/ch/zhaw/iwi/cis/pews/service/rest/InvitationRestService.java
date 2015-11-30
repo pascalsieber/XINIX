@@ -23,6 +23,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 
 	public static final String ACCEPT = "/accept";
 	public static final String FIND_BY_USER_ID = "/findByUserID";
+	public static final String FIND_BY_SESSION_ID = "/findBySessionID";
 	public static final String SEND_BY_ID = "/sendByID";
 	public static final String SEND_BY_SESSION_ID = "/sendBySessionID";
 	public static final String SEND_BY_WORKSHOP_ID = "/sendByWorkshopID";
@@ -77,6 +78,13 @@ public class InvitationRestService extends WorkshopObjectRestService
 	public List< Invitation > findByUserID( String userID )
 	{
 		return invitationService.findByUserID( userID );
+	}
+
+	@POST
+	@Path( FIND_BY_SESSION_ID )
+	public List< Invitation > findBySessionID( String sessionID )
+	{
+		return invitationService.findBySessionID( sessionID );
 	}
 
 	@POST
