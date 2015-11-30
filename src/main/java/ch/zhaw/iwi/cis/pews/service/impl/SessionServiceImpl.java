@@ -63,7 +63,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	public SessionImpl findSessionByID( String id )
 	{
 		// simplify object for JSON mapper
-		SessionImpl session = (SessionImpl)simplifyOwnerInObjectGraph( findByID( id ) );
+		SessionImpl session = (SessionImpl)simplifyOwnerInObjectGraph( sessionDao.findSessionByID( id ) );
 		session.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
 
 		for ( Participant part : session.getParticipants() )

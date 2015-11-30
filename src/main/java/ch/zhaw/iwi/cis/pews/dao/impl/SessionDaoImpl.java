@@ -15,17 +15,18 @@ public class SessionDaoImpl extends WorkshopObjectDaoImpl implements SessionDao
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public SessionImpl findById( String id )
+	public SessionImpl findSessionByID( String id )
 	{
 		List< SessionImpl > exercises = getEntityManager()
 			.createQuery(
-				"from SessionImpl as s LEFT JOIN FETCH s.workshop as w LEFT JOIN FETCH w.exercises as ex LEFT JOIN FETCH s.acceptees as acceptees LEFT JOIN FETCH s.participants as participants LEFT JOIN FETCH s.executers as executers where s.id = '"
-						+ id + "'" )
+				"from SessionImpl as s " + "LEFT JOIN FETCH s.workshop as w " + "LEFT JOIN FETCH w.exercises as ex " + "LEFT JOIN FETCH s.acceptees as acceptees "
+						+ "LEFT JOIN FETCH s.participants as participants " + "LEFT JOIN FETCH s.executers as executers " + "LEFT JOIN FETCH s.invitations as i " + "WHERE s.id = :_id" )
+			.setParameter( "_id", id )
 			.getResultList();
 
 		if ( exercises.size() > 0 )
 		{
-			return exercises.get( 0 );
+			return (SessionImpl)cloneResult( exercises.get( 0 ) );
 		}
 
 		return null;
