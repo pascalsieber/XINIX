@@ -728,12 +728,12 @@ public class ZhawEngine implements LifecycleObject
 		UserContext.setCurrentUser( bootstrapUser );
 
 		// Post root role
-		RoleImpl postRootRole = new RoleImpl( "root", "root" );
-		postRootRole.setClient( demoClient );
-		String postRootRoleID = roleService.persist( postRootRole );
+//		RoleImpl postRootRole = new RoleImpl( "root", "root" );
+//		postRootRole.setClient( demoClient );
+//		String postRootRoleID = roleService.persist( postRootRole );
 
 		// Post root user
-		UserImpl user = new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( postRootRoleID ), null, "root", "demo", DEMO_ROOT_USER_LOGIN_NAME );
+		UserImpl user = new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( ROOT_ROLE_ID ), null, "root", "demo", DEMO_ROOT_USER_LOGIN_NAME );
 		UserImpl demoRootUser = userService.findByID( userService.persist( user ) );
 
 		// sample workshop template (pinkelefant)
@@ -1549,14 +1549,14 @@ public class ZhawEngine implements LifecycleObject
 		UserContext.setCurrentUser( bootstrapUser );
 
 		// sbb root role
-		RoleImpl sbbRootRole = new RoleImpl( "sbb_root", "sbb_root" );
-		sbbRootRole.setClient( sbb );
-		String sbbRootRoleID = roleService.persist( sbbRootRole );
+//		RoleImpl sbbRootRole = new RoleImpl( "sbb_root", "sbb_root" );
+//		sbbRootRole.setClient( sbb );
+//		String sbbRootRoleID = roleService.persist( sbbRootRole );
 
 		// sbb root user
 		UserImpl user = new UserImpl(
 			new PasswordCredentialImpl( "root" ),
-			(RoleImpl)roleService.findByID( sbbRootRoleID ),
+			(RoleImpl)roleService.findByID( ROOT_ROLE_ID ),
 			null,
 			"sbb root first name",
 			"sbb root last name",

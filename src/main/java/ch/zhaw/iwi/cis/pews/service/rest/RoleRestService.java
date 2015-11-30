@@ -57,7 +57,7 @@ public class RoleRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< RoleImpl > findAll()
 	{
-		return super.findAll();
+		return roleService.findAllRoles();
 	}
 
 	@Override
