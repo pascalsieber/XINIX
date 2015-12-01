@@ -19,6 +19,7 @@ import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.MediaServiceImpl;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 
 @Path( MediaRestService.BASE )
 @Consumes( { MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA } )
@@ -29,6 +30,9 @@ public class MediaRestService extends WorkshopObjectRestService
 
 	public static final String FIND_BY_TYPE = "/findByType";
 	public static final String GET_CONTENT_BY_ID = "/getContentByID";
+
+	public static final String UPDATE_POSTER_IMAGES = "/updatePosterImages";
+	public static final String UPDATE_POSTER_VIDEOS = "/updatePosterVideos";
 
 	private MediaService mediaService;
 
@@ -86,6 +90,20 @@ public class MediaRestService extends WorkshopObjectRestService
 	public void removeMedia( MediaObject object )
 	{
 		mediaService.remove( object );
+	}
+
+	@POST
+	@Path( UPDATE_POSTER_IMAGES )
+	public void updatePosterImages( PosterExercise exercise )
+	{
+		mediaService.updatePosterImages( exercise );
+	}
+
+	@POST
+	@Path( UPDATE_POSTER_VIDEOS )
+	public void updatePosterVideos( PosterExercise exercise )
+	{
+		mediaService.updatePosterVideos( exercise );
 	}
 
 	@Override

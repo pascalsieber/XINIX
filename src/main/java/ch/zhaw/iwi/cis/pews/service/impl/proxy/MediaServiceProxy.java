@@ -10,6 +10,7 @@ import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.rest.MediaRestService;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 
 public class MediaServiceProxy extends WorkshopObjectServiceProxy implements MediaService
 {
@@ -31,4 +32,17 @@ public class MediaServiceProxy extends WorkshopObjectServiceProxy implements Med
 	{
 		throw new UnsupportedOperationException( "persisting of MediaObject not to be used in proxy service" );
 	}
+
+	@Override
+	public void updatePosterImages( PosterExercise exercise )
+	{
+		getServiceTarget().path( MediaRestService.UPDATE_POSTER_IMAGES ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exercise ) );
+	}
+
+	@Override
+	public void updatePosterVideos( PosterExercise exercise )
+	{
+		getServiceTarget().path( MediaRestService.UPDATE_POSTER_VIDEOS ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exercise ) );
+	}
+	
 }

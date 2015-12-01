@@ -21,16 +21,20 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
+import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class MediaServiceImpl extends WorkshopObjectServiceImpl implements MediaService
 {
 	private MediaDao mediaDao;
+	private ExerciseService exerciseService;
 
 	public MediaServiceImpl()
 	{
 		mediaDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( MediaDaoImpl.class.getSimpleName() );
+		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 	}
 
 	@Override
@@ -84,6 +88,32 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 	public List< MediaObject > findByType( MediaObjectType type )
 	{
 		return mediaDao.findByType( type );
+	}
+
+	@Override
+	public void updatePosterImages( PosterExercise exercise )
+	{
+		PosterExercise orig = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
+		orig.getPosterImages().clear();
+		for ( MediaObject image : exercise.getPosterImages() )
+		{
+			orig.getPosterImages().add( (MediaObject)findByID( image.getID() ) );
+		}
+
+		exerciseService.persist( orig );
+	}
+
+	@Override
+	public void updatePosterVideos( PosterExercise exercise )
+	{
+		PosterExercise orig = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
+		orig.getPosterVideos().clear();
+		for ( MediaObject video : exercise.getPosterVideos() )
+		{
+			orig.getPosterVideos().add( (MediaObject)findByID( video.getID() ) );
+		}
+
+		exerciseService.persist( orig );
 	}
 
 	@Override
