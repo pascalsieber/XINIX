@@ -95,9 +95,9 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 	{
 		PosterExercise orig = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
 		orig.getPosterImages().clear();
-		for ( MediaObject image : exercise.getPosterImages() )
+		for ( String image : exercise.getPosterImages() )
 		{
-			orig.getPosterImages().add( (MediaObject)findByID( image.getID() ) );
+			orig.getPosterImages().add( image );
 		}
 
 		exerciseService.persist( orig );
@@ -108,9 +108,9 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 	{
 		PosterExercise orig = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
 		orig.getPosterVideos().clear();
-		for ( MediaObject video : exercise.getPosterVideos() )
+		for ( String video : exercise.getPosterVideos() )
 		{
-			orig.getPosterVideos().add( (MediaObject)findByID( video.getID() ) );
+			orig.getPosterVideos().add( video );
 		}
 
 		exerciseService.persist( orig );

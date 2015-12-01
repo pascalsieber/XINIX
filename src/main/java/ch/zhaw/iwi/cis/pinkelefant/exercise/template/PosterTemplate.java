@@ -1,15 +1,14 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.template;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -24,17 +23,17 @@ public class PosterTemplate extends ExerciseTemplate
 	@Column( length = 20000 )
 	private String description;
 
-	@ManyToMany
-	private List< MediaObject > posterImages;
+	@ElementCollection
+	private Set< String > posterImages;
 
-	@ManyToMany
-	private List< MediaObject > posterVideos;
+	@ElementCollection
+	private Set< String > posterVideos;
 
 	public PosterTemplate()
 	{
 		super();
-		posterImages = new ArrayList< MediaObject >();
-		posterVideos = new ArrayList< MediaObject >();
+		posterImages = new HashSet< String >();
+		posterVideos = new HashSet< String >();
 	}
 
 	public PosterTemplate(
@@ -52,8 +51,8 @@ public class PosterTemplate extends ExerciseTemplate
 			String defaultDescription,
 			String title,
 			String description,
-			List< MediaObject > posterImages,
-			List< MediaObject > posterVideos )
+			Set< String > posterImages,
+			Set< String > posterVideos )
 	{
 		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
 		this.title = title;
@@ -82,23 +81,24 @@ public class PosterTemplate extends ExerciseTemplate
 		this.description = description;
 	}
 
-	public List< MediaObject > getPosterImages()
+	public Set< String > getPosterImages()
 	{
 		return posterImages;
 	}
 
-	public void setPosterImages( List< MediaObject > posterImages )
+	public void setPosterImages( Set< String > posterImages )
 	{
 		this.posterImages = posterImages;
 	}
 
-	public List< MediaObject > getPosterVideos()
+	public Set< String > getPosterVideos()
 	{
 		return posterVideos;
 	}
 
-	public void setPosterVideos( List< MediaObject > posterVideos )
+	public void setPosterVideos( Set< String > posterVideos )
 	{
 		this.posterVideos = posterVideos;
 	}
+
 }

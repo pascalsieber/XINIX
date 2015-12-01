@@ -227,8 +227,8 @@ public class RestServiceTest
 			"start description",
 			"start",
 			"start workshop",
-			new ArrayList< MediaObject >(),
-			new ArrayList< MediaObject >() ) ) );
+			new HashSet< String >(),
+			new HashSet< String >() ) ) );
 
 		plabsTemplateStub.setID( exTemplateService.persist( new PinkLabsTemplate(
 			defaultUserStub,

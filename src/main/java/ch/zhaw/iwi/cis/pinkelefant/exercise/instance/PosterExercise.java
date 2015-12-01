@@ -1,16 +1,16 @@
 package ch.zhaw.iwi.cis.pinkelefant.exercise.instance;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
 
 @Entity
@@ -23,17 +23,17 @@ public class PosterExercise extends ExerciseImpl
 	@Column( length = 20000 )
 	private String description;
 
-	@ManyToMany
-	private List< MediaObject > posterImages;
+	@ElementCollection( fetch = FetchType.EAGER )
+	private Set< String > posterImages;
 
-	@ManyToMany
-	private List< MediaObject > posterVideos;
+	@ElementCollection( fetch = FetchType.EAGER )
+	private Set< String > posterVideos;
 
 	public PosterExercise()
 	{
 		super();
-		posterImages = new ArrayList< MediaObject >();
-		posterVideos = new ArrayList< MediaObject >();
+		posterImages = new HashSet< String >();
+		posterVideos = new HashSet< String >();
 	}
 
 	public PosterExercise( String name, String description, PosterTemplate derivedFrom, WorkshopImpl workshop )
@@ -65,23 +65,24 @@ public class PosterExercise extends ExerciseImpl
 		this.description = description;
 	}
 
-	public List< MediaObject > getPosterImages()
+	public Set< String > getPosterImages()
 	{
 		return posterImages;
 	}
 
-	public void setPosterImages( List< MediaObject > posterImages )
+	public void setPosterImages( Set< String > posterImages )
 	{
 		this.posterImages = posterImages;
 	}
 
-	public List< MediaObject > getPosterVideos()
+	public Set< String > getPosterVideos()
 	{
 		return posterVideos;
 	}
 
-	public void setPosterVideos( List< MediaObject > posterVideos )
+	public void setPosterVideos( Set< String > posterVideos )
 	{
 		this.posterVideos = posterVideos;
 	}
+
 }
