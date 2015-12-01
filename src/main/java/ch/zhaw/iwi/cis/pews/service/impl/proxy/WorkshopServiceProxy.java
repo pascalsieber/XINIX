@@ -65,4 +65,10 @@ public class WorkshopServiceProxy extends WorkshopObjectServiceProxy implements 
 	{
 		return getServiceTarget().path( WorkshopRestService.GENERATE_FROM_TEMPLATE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
 	}
+
+	@Override
+	public void updateBasicInformation( WorkshopImpl workshop )
+	{
+		getServiceTarget().path( WorkshopRestService.UPDATE_BASIC_INFO ).request( MediaType.APPLICATION_JSON ).post( Entity.json( workshop ) );
+	}
 }

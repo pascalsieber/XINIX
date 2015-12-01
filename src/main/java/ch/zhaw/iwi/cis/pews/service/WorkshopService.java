@@ -17,4 +17,6 @@ public interface WorkshopService extends WorkflowElementService
 
 	public void updateOrderOfExercises( WorkshopImpl wrapper );
 
+	public void updateBasicInformation( WorkshopImpl workshop );
+
 }

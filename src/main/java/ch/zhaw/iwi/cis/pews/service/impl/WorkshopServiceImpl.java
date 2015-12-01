@@ -236,4 +236,16 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 			exerciseService.persistExercise( exercise );
 		}
 	}
+
+	@Override
+	public void updateBasicInformation( WorkshopImpl workshop )
+	{
+		PinkElefantWorkshop mergeable = (PinkElefantWorkshop)findWorkshopByID( workshop.getID() );
+		mergeable.setDescription( workshop.getDescription() );
+		mergeable.setName( workshop.getName() );
+		mergeable.setEmailText( ( (PinkElefantWorkshop)workshop ).getEmailText());
+		mergeable.setProblem( ( (PinkElefantWorkshop)workshop ).getProblem() );
+		
+		persist( mergeable );
+	}
 }

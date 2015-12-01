@@ -30,6 +30,7 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public static final String UPDATE_EXERCISES_ORDER = "/updateOrderOfExercises";
 	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
 	public static final String EXPORT_DATA = "/exportData";
+	public static final String UPDATE_BASIC_INFO = "/updateBasicInformation";
 
 	private WorkshopService workshopService;
 
@@ -109,6 +110,13 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public void updateOrderOfExercises( WorkshopImpl wrapper )
 	{
 		workshopService.updateOrderOfExercises( wrapper );
+	}
+
+	@POST
+	@Path( UPDATE_BASIC_INFO )
+	public void updateWorkshopBasicInformation( WorkshopImpl workshop )
+	{
+		workshopService.updateBasicInformation(workshop);
 	}
 
 	@Override
