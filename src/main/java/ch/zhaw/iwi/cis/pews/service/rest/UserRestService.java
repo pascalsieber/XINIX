@@ -23,6 +23,8 @@ public class UserRestService extends WorkshopObjectRestService
 	public static final String REQUEST_PASSWORD = "/requestPassword";
 	public static final String SEND_PROFILE = "/sendProfile";
 
+	public static final String PERSIST_FOR_CLIENT = "persistForClient";
+
 	public UserRestService()
 	{
 		super();
@@ -33,6 +35,13 @@ public class UserRestService extends WorkshopObjectRestService
 	public String persist( PrincipalImpl principal )
 	{
 		return super.persist( principal );
+	}
+
+	@POST
+	@Path( PERSIST_FOR_CLIENT )
+	public String persistUserForClient( PrincipalImpl principal )
+	{
+		return getUserService().persistForClient( principal );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -56,6 +65,13 @@ public class UserRestService extends WorkshopObjectRestService
 	public List< UserImpl > findAll()
 	{
 		return super.findAll();
+	}
+
+	@POST
+	@Path( FIND_ALL_BY_CLIENT_ID )
+	public List< UserImpl > findAllUsersByClientID( String clientID )
+	{
+		return super.findAllByClientID( clientID );
 	}
 
 	@POST

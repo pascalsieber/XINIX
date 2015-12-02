@@ -14,6 +14,7 @@ public abstract class WorkshopObjectRestService extends RestService
 	public static final String REMOVE = "/remove";
 	public static final String FIND_BY_ID = "/findByID";
 	public static final String FIND_ALL = "/findAll";
+	public static final String FIND_ALL_BY_CLIENT_ID = "/findAllByClientID";
 
 	private UserService userService;
 
@@ -41,6 +42,11 @@ public abstract class WorkshopObjectRestService extends RestService
 	public < T extends WorkshopObject > List< T > findAll()
 	{
 		return getWorkshopObjectService().findAll();
+	}
+
+	public < T extends WorkshopObject > List< T > findAllByClientID( String clientID )
+	{
+		return getWorkshopObjectService().findAllByClientID( clientID );
 	}
 
 	public UserService getUserService()

@@ -76,6 +76,12 @@ public abstract class WorkshopObjectServiceImpl extends ServiceImpl implements W
 	}
 
 	@Override
+	public < T extends WorkshopObject > List< T > findAllByClientID( String clientID )
+	{
+		return getWorkshopObjectDao().findByAll( clientID );
+	}
+
+	@Override
 	public Object simplifyOwnerInObjectGraph( Object object )
 	{
 		byte[] byteArray = serialize( object );

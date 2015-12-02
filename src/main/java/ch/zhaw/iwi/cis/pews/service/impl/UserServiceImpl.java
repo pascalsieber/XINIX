@@ -60,6 +60,12 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 	}
 
 	@Override
+	public String persistForClient( PrincipalImpl principal )
+	{
+		return getWorkshopObjectDao().persist( principal );
+	}
+
+	@Override
 	public boolean requestNewPassword( String userID )
 	{
 		PrincipalImpl user = findByID( userID );
