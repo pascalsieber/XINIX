@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
@@ -23,10 +24,10 @@ public class PosterTemplate extends ExerciseTemplate
 	@Column( length = 20000 )
 	private String description;
 
-	@ElementCollection
+	@ElementCollection( fetch = FetchType.EAGER )
 	private Set< String > posterImages;
 
-	@ElementCollection
+	@ElementCollection( fetch = FetchType.EAGER )
 	private Set< String > posterVideos;
 
 	public PosterTemplate()
