@@ -47,4 +47,23 @@ public class WorkshopDaoImpl extends WorkshopObjectDaoImpl implements WorkshopDa
 		}
 	}
 
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public WorkshopImpl findWorkshopByIDForBasicUpdate( String id )
+	{
+		List< WorkshopImpl > results = getEntityManager()
+			.createQuery(
+				"from WorkshopImpl ws LEFT JOIN FETCH ws.sessions s LEFT JOIN FETCH s.invitations inv LEFT JOIN FETCH s.participants p LEFT JOIN FETCH p.principal LEFT JOIN FETCH p.session LEFT JOIN FETCH ws.exercises ex where ws.id = '"
+						+ id + "'" )
+			.getResultList();
+		if ( results.size() > 0 )
+		{
+			return results.get( 0 );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
 }

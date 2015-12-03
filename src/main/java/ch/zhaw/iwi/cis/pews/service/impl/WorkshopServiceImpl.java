@@ -184,7 +184,7 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 			workshop.setDescription( obj.getDescription() );
 			workshop.setEmailText( ( (PinkElefantTemplate)obj.getDerivedFrom() ).getDefaultEmailText() );
 			workshop.setProblem( ( (PinkElefantTemplate)obj.getDerivedFrom() ).getProblem() );
-			workshop.setDerivedFrom( null );			
+			workshop.setDerivedFrom( null );
 		}
 
 		// persist operation
@@ -240,12 +240,12 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 	@Override
 	public void updateBasicInformation( WorkshopImpl workshop )
 	{
-		PinkElefantWorkshop mergeable = (PinkElefantWorkshop)findWorkshopByID( workshop.getID() );
+		PinkElefantWorkshop mergeable = (PinkElefantWorkshop)workshopDao.findWorkshopByIDForBasicUpdate( workshop.getID() );
 		mergeable.setDescription( workshop.getDescription() );
 		mergeable.setName( workshop.getName() );
-		mergeable.setEmailText( ( (PinkElefantWorkshop)workshop ).getEmailText());
+		mergeable.setEmailText( ( (PinkElefantWorkshop)workshop ).getEmailText() );
 		mergeable.setProblem( ( (PinkElefantWorkshop)workshop ).getProblem() );
-		
+
 		persist( mergeable );
 	}
 }
