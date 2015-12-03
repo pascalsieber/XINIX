@@ -1,5 +1,6 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,53 @@ public class ExerciseTemplateServiceImpl extends WorkshopObjectServiceImpl imple
 	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return exerciseTemplateDao;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService#persistExerciseTemplate(ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate)
+	 * 
+	 * specialized persist method for handling orderInWorkshopTemplate correctly.
+	 */
+	@Override
+	public String persistExerciseTemplate( ExerciseTemplate obj )
+	{
+		WorkshopTemplate workshopTemplate = workshopTemplateDao.findByIDWithExerciseTemplates( obj.getWorkshopTemplate().getID() );
+		List< String > exerciseTemplateIDs = new ArrayList< String >();
+		for ( ExerciseTemplate e : workshopTemplate.getExerciseTemplates() )
+		{
+			exerciseTemplateIDs.add( e.getID() );
+		}
+
+		// if no argument for orderInWorkshopTemplate provided (i.e. null),
+		// place at the end of workshopTemplate's exerciseTemplate queue
+		// else handle order of other exerciseTemplates
+		if ( obj.getOrderInWorkshopTemplate() == null )
+		{
+			// place at the end of queue
+			obj.setOrderInWorkshopTemplate( workshopTemplate.getExerciseTemplates().size() );
+
+			// special case: if persisting / updating existing exerciseTemplate and no
+			// argument for orderInWorkshopTemplate provided, exerciseTemplate keeps existing orderInWorkshopTemplate
+			ExerciseTemplate check = exerciseTemplateDao.findById( obj.getID() );
+			if ( null !=check )
+			{
+				obj.setOrderInWorkshopTemplate( check.getOrderInWorkshopTemplate() );
+			}
+		}
+		else
+		{
+			// handler order of exerciseTemplate
+			for ( int i = obj.getOrderInWorkshopTemplate(); i < exerciseTemplateIDs.size(); i++ )
+			{
+				ExerciseTemplate t = exerciseTemplateDao.findById( exerciseTemplateIDs.get(i) );
+				t.setOrderInWorkshopTemplate( i + 1 );
+				super.persist( obj );
+			}
+		}
+		
+		return super.persist( obj );
 	}
 
 	@Override

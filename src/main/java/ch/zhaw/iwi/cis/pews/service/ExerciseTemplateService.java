@@ -13,4 +13,6 @@ public interface ExerciseTemplateService extends WorkshopObjectService
 	List< ExerciseTemplate > findAllExerciseTemplates();
 
 	void removeExerciseTemplate( ExerciseTemplate obj );
+
+	public String persistExerciseTemplate( ExerciseTemplate obj );
 }

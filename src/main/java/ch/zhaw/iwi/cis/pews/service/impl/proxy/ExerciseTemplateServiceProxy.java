@@ -18,6 +18,12 @@ public class ExerciseTemplateServiceProxy extends WorkshopObjectServiceProxy imp
 	}
 
 	@Override
+	public String persistExerciseTemplate( ExerciseTemplate obj )
+	{
+		return getServiceTarget().path( ExerciseTemplateRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
+	}
+
+	@Override
 	public ExerciseTemplate findExerciseTemplateByID( String id )
 	{
 		return getServiceTarget().path( ExerciseTemplateRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( ExerciseTemplate.class );
