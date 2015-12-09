@@ -137,6 +137,7 @@ public class ZhawEngine implements LifecycleObject
 	public static String ROOT_ROLE_ID;
 	public static String PARTICIPANT_ROLE_ID;
 	public static String EXECUTER_ROLE_ID;
+	public static String ORGANIZER_ROLE_ID;
 
 	// defining this globally, since multiple pre-configured workshops might make use of the same xinix-image-matrix
 	public static String XINIX_IMAGE_MATRIX_ID;
@@ -179,7 +180,7 @@ public class ZhawEngine implements LifecycleObject
 		// configureSampleWorkshop();
 		configureDemoWorkshop();
 		// configurePostWorkshop();
-		// configureSBBWorkshop();
+		configureSBBWorkshop();
 
 		System.out.println( "PEWS running and ready to go!" );
 	}
@@ -366,7 +367,7 @@ public class ZhawEngine implements LifecycleObject
 		System.out.println( "root user registered initially" );
 
 		// configure default roles
-		roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
+		ORGANIZER_ROLE_ID = roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
 		System.out.println( "organizer role created initially" );
 
 		EXECUTER_ROLE_ID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
@@ -413,7 +414,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Workshop Start",
 			"Start des Workshops",
@@ -432,7 +433,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Workshop Ende",
 			"Ende des Workshops",
@@ -777,7 +778,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Ende",
 			"p.i.n.k.elefant Workshop Ende",
@@ -1055,8 +1056,8 @@ public class ZhawEngine implements LifecycleObject
 			"E-mail Text" ) );
 
 		// workshop instance
-		String wsID = workshopService
-			.persist( new PinkElefantWorkshop( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "Post Workshop", "p.i.n.k.elefant Workshop mit der Post", (PinkElefantTemplate)workshopTemplateService
+			.findWorkshopTemplateByID( wsTemplateID ) ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1108,7 +1109,7 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Was fällt dir ein zum Thema Kundenservice in Verbindung mit dem gewürfelten Bild?",
 			"XINIX-Tool (1/4)",
 			"XINIX-Tool 1",
@@ -1190,7 +1191,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Abschluss",
 			"Workshop End Tool",
@@ -1248,7 +1249,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"p.i.n.k.labs",
 			"Beantworte die folgenden 4 unterschiedlichen Fragen.",
@@ -1266,7 +1267,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Post2Paper 1 Intro",
 			"Post2Paper 1 Intro Tool",
@@ -1284,7 +1285,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Post2Paper 2 Intro",
 			"Post2Paper 2 Intro Tool",
@@ -1377,7 +1378,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Outro Intro",
 			"Outro Tool",
@@ -1529,7 +1530,6 @@ public class ZhawEngine implements LifecycleObject
 	public static final String SBB_ROOT_CLIENT_NAME = "sbb";
 	public static final String SBB_ROOT_USER_LOGIN_NAME = POST_ROOT_CLIENT_NAME + "/root@sbb";
 
-	@SuppressWarnings( "unused" )
 	private static void configureSBBWorkshop()
 	{
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
@@ -1566,8 +1566,8 @@ public class ZhawEngine implements LifecycleObject
 			"E-mail Text" ) );
 
 		// workshop instance
-		String wsID = workshopService
-			.persist( new PinkElefantWorkshop( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (PinkElefantTemplate)workshopTemplateService.findByID( wsTemplateID ) ) );
+		String wsID = workshopService.persist( new PinkElefantWorkshop( "SBB Workshop", "p.i.n.k.elefant Workshop mit der SBB", (PinkElefantTemplate)workshopTemplateService
+			.findByID( wsTemplateID ) ) );
 
 		// pinklabs template 1
 		String pinklabsTemplateID1 = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1615,25 +1615,58 @@ public class ZhawEngine implements LifecycleObject
 			false,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"Formuliere eine mögliche neue Dienstleistung, welche dafür am Bahnhof angeboten werden könnte. Umschreibe die Dienstleistung mit 1-2 Sätzen.",
 			"Post2Paper 2",
 			"Post2Paper 2 Tool" ) );
 
 		// xinix template iteration 1
-		String xinixTemplateID1 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was bedeutet für mich \"Service\" in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (1/4)", "XINIX-Tool 1", (XinixImageMatrix)xinixImageMatrixService
-			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
+		String xinixTemplateID1 = exerciseTemplateService.persist( new XinixTemplate(
+			rootUser,
+			true,
+			TimeUnit.SECONDS,
+			90,
+			false,
+			false,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
+			"Was bedeutet für mich \"Service\" in Verbindung mit dem gewürfelten Bild?",
+			"XINIX-Tool (1/4)",
+			"XINIX-Tool 1",
+			(XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 2
-		String xinixTemplateID2 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Neue Dienstleistung am Bahnhof in Verbindung mit dem gewürfelten Bild.", "XINIX-Tool (2/4)", "XINIX-Tool 2", (XinixImageMatrix)xinixImageMatrixService
-			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
+		String xinixTemplateID2 = exerciseTemplateService.persist( new XinixTemplate(
+			rootUser,
+			true,
+			TimeUnit.SECONDS,
+			90,
+			false,
+			false,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
+			"Neue Dienstleistung am Bahnhof in Verbindung mit dem gewürfelten Bild.",
+			"XINIX-Tool (2/4)",
+			"XINIX-Tool 2",
+			(XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 3
-		String xinixTemplateID3 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was erwartest du vom Bahnhof 2050 in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (3/4)", "XINIX-Tool 3", (XinixImageMatrix)xinixImageMatrixService
-			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
+		String xinixTemplateID3 = exerciseTemplateService.persist( new XinixTemplate(
+			rootUser,
+			true,
+			TimeUnit.SECONDS,
+			90,
+			false,
+			false,
+			false,
+			0,
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
+			"Was erwartest du vom Bahnhof 2050 in Verbindung mit dem gewürfelten Bild?",
+			"XINIX-Tool (3/4)",
+			"XINIX-Tool 3",
+			(XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 4
 		String xinixTemplateID4 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 90, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
@@ -1713,7 +1746,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"p.i.n.k.labs",
 			"Beantworte die folgenden 4 unterschiedlichen Fragen.",
@@ -1731,7 +1764,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Post2Paper 1 Intro",
 			"Post2Paper 1 Intro Tool",
@@ -1749,7 +1782,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Post2Paper 2",
 			"Nimm jeweils 2 Antworten der letzten Aufgabe und beantworte die folgende Frage.",
@@ -1860,7 +1893,7 @@ public class ZhawEngine implements LifecycleObject
 			true,
 			false,
 			0,
-			(WorkshopTemplate)workshopTemplateService.findByID( wsTemplateID ),
+			(WorkshopTemplate)workshopTemplateService.findWorkshopTemplateByID( wsTemplateID ),
 			"",
 			"Abschluss",
 			"Workshop Abschluss Tool",
@@ -1929,54 +1962,116 @@ public class ZhawEngine implements LifecycleObject
 		exerciseService
 			.persist( new PosterExercise( "Abschluss", "Workshop Abschluss Tool", (PosterTemplate)exerciseTemplateService.findByID( endTemplateID ), workshopService.findWorkshopByID( wsID ) ) );
 
+		// synchronous session
+		String syncSessionID = sessionService.persist( new SessionImpl(
+			"Synchrone SBB Session",
+			"Synchrone Session SBB Workshop",
+			null,
+			SessionSynchronizationImpl.SYNCHRONOUS,
+			(WorkshopImpl)workshopService.findByID( wsID ),
+			null,
+			null,
+			null,
+			null,
+			null ) );
+
+		// synchronous participant
+		String syncParticipantID = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc" ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
+			null,
+			"Teilnehmer",
+			"SBB Synchron",
+			"synchron@sbb" ) );
+
+		// synchronous executor
+		String syncExecutorID = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc" ),
+			(RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
+			null,
+			"Executor",
+			"SBB Synchron",
+			"executor@sbb" ) );
+
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( syncParticipantID ), (SessionImpl)sessionService.findByID( syncSessionID ) ) );
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( syncExecutorID ), (SessionImpl)sessionService.findByID( syncSessionID ) ) );
+
+		// asynchronous session
+		String asyncSessionID = sessionService.persist( new SessionImpl(
+			"Asynchrone SBB Session",
+			"Asynchrone Session SBB Workshop",
+			null,
+			SessionSynchronizationImpl.ASYNCHRONOUS,
+			(WorkshopImpl)workshopService.findByID( wsID ),
+			null,
+			null,
+			null,
+			null,
+			null ) );
+
+		// asynchronous participant
+		String asyncParticipantID = userService.persist( new UserImpl(
+			new PasswordCredentialImpl( "abc" ),
+			(RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ),
+			null,
+			"Teilnehmer",
+			"SBB Asynchron",
+			"asynchron@sbb" ) );
+
+		sessionService.join( new Invitation( null, (UserImpl)userService.findByID( asyncParticipantID ), (SessionImpl)sessionService.findByID( asyncSessionID ) ) );
+
+		// administrator
+		userService
+			.persist( new UserImpl( new PasswordCredentialImpl( "abc" ), (RoleImpl)roleService.findByID( ORGANIZER_ROLE_ID ), null, "Administrator", "SBB Workshop Manager", "administrator@sbb" ) );
+
 		// sessions and participants
-		// TODO: change theses to participants
-		for ( int i = 0; i < 10; i++ )
-		{
-			String sessionID = sessionService.persist( new SessionImpl(
-				"Session für Teilnehmer " + i,
-				"Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
-				null,
-				SessionSynchronizationImpl.SYNCHRONOUS,
-				(WorkshopImpl)workshopService.findByID( wsID ),
-				null,
-				null,
-				null,
-				null,
-				null ) );
-
-			String participantID = userService.persist( new UserImpl(
-				new PasswordCredentialImpl( "abc123" ),
-				(RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
-				null,
-				"teilnehmer",
-				"teilnehmer " + i,
-				SBB_ROOT_CLIENT_NAME + "/e" + i + "@sbb" ) );
-
-			sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-			sessionService.start( sessionID );
-		}
-
-		for ( int i = 0; i < 2; i++ )
-		{
-			String sessionID = sessionService.persist( new SessionImpl(
-				"Asynchrone Session für Teilnehmer " + i,
-				"Asynchrone Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
-				null,
-				SessionSynchronizationImpl.ASYNCHRONOUS,
-				(WorkshopImpl)workshopService.findByID( wsID ),
-				null,
-				null,
-				null,
-				null,
-				null ) );
-
-			String participantID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc123" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "teilnehmer", "teilnehmer "
-					+ i, SBB_ROOT_CLIENT_NAME + "/p" + i + "@sbb" ) );
-
-			sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
-			sessionService.start( sessionID );
-		}
+		// old configuration for SBB workshop
+		// for ( int i = 0; i < 10; i++ )
+		// {
+		// String sessionID = sessionService.persist( new SessionImpl(
+		// "Session für Teilnehmer " + i,
+		// "Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
+		// null,
+		// SessionSynchronizationImpl.SYNCHRONOUS,
+		// (WorkshopImpl)workshopService.findByID( wsID ),
+		// null,
+		// null,
+		// null,
+		// null,
+		// null ) );
+		//
+		// String participantID = userService.persist( new UserImpl(
+		// new PasswordCredentialImpl( "abc123" ),
+		// (RoleImpl)roleService.findByID( EXECUTER_ROLE_ID ),
+		// null,
+		// "teilnehmer",
+		// "teilnehmer " + i,
+		// SBB_ROOT_CLIENT_NAME + "/e" + i + "@sbb" ) );
+		//
+		// sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		// sessionService.start( sessionID );
+		// }
+		//
+		// for ( int i = 0; i < 2; i++ )
+		// {
+		// String sessionID = sessionService.persist( new SessionImpl(
+		// "Asynchrone Session für Teilnehmer " + i,
+		// "Asynchrone Session für Teilnehmer " + i + " für p.i.n.k.elefant Workshop mit SBB",
+		// null,
+		// SessionSynchronizationImpl.ASYNCHRONOUS,
+		// (WorkshopImpl)workshopService.findByID( wsID ),
+		// null,
+		// null,
+		// null,
+		// null,
+		// null ) );
+		//
+		// String participantID = userService.persist( new UserImpl( new PasswordCredentialImpl( "abc123" ), (RoleImpl)roleService.findByID( PARTICIPANT_ROLE_ID ), null, "teilnehmer", "teilnehmer "
+		// + i, SBB_ROOT_CLIENT_NAME + "/p" + i + "@sbb" ) );
+		//
+		// sessionService.join( new Invitation( null, (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService.findByID( sessionID ) ) );
+		// sessionService.start( sessionID );
+		// }
 
 		System.out.println( "workshop for SBB configured" );
 

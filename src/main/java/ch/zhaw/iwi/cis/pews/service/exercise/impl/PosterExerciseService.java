@@ -38,7 +38,7 @@ public class PosterExerciseService extends ExerciseServiceImpl
 	public Input getInputByExerciseID( String exerciseID )
 	{
 		PosterExercise ex = findByID( exerciseID );
-		return new PosterInput( ex, ex.getTitle(), ex.getDescription(), ex.getPosterImages(), ex.getPosterVideos() );
+		return new PosterInput( ex, ex.getPosterTitle(), ex.getPosterDescription(), ex.getPosterImages(), ex.getPosterVideos() );
 	}
 
 	@Override
