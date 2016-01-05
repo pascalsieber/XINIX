@@ -38,6 +38,7 @@ import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
+import ch.zhaw.iwi.cis.pews.service.AuthenticationTokenService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetCurrentExerciseJob;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetNextExerciseJob;
@@ -50,6 +51,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	private UserDao userDao;
 	private ParticipantDao participantDao;
 	private ExerciseDao exerciseDao;
+	private AuthenticationTokenService authenticationTokenService;
 
 	public SessionServiceImpl()
 	{
@@ -57,6 +59,23 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		userDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
 		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
+		authenticationTokenService = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
+	}
+
+	@Override
+	public void stop( String id )
+	{
+		super.stop( id );
+		// remove authentication tokens
+		authenticationTokenService.removeBySessionID( id );
+	}
+
+	@Override
+	public void renew( String id )
+	{
+		super.renew( id );
+		// remove authentication tokens
+		authenticationTokenService.removeBySessionID( id );
 	}
 
 	@Override

@@ -313,11 +313,16 @@ public class ZhawEngine implements LifecycleObject
 		ConstraintMapping passwordHelpMapping = new ConstraintMapping();
 		passwordHelpMapping.setPathSpec( "/pews/userService/user/requestPassword" );
 		passwordHelpMapping.setConstraint( whitelist );
+		
+		ConstraintMapping tokenAuthMapping = new ConstraintMapping();
+		tokenAuthMapping.setPathSpec( "/pews/authenticationService/authenticateWithToken" );
+		tokenAuthMapping.setConstraint( whitelist );
 
 		List< ConstraintMapping > mappings = new ArrayList< ConstraintMapping >();
 		mappings.add( mapping );
 		mappings.add( pingMapping );
 		mappings.add( passwordHelpMapping );
+		mappings.add( tokenAuthMapping );
 
 		ConstraintSecurityHandler handler = new ConstraintSecurityHandler();
 		handler.setConstraintMappings( mappings );

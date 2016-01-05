@@ -25,6 +25,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
+import ch.zhaw.iwi.cis.pews.service.AuthenticationTokenService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
@@ -63,6 +64,8 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 	private WorkshopTemplateService workshopTemplateService;
 	private ExerciseService exerciseService;
 	private ExerciseTemplateService exerciseTemplateService;
+	private AuthenticationTokenService authenticationTokenService;
+
 	private static final Map< String, Class< ? extends ExerciseImpl > > EXERCISETEMPLATESUBCLASSESMAP = new HashMap< String, Class< ? extends ExerciseImpl >>();
 
 	static
@@ -92,12 +95,38 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		workshopTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
 		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
+		authenticationTokenService = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
 	}
 
 	@Override
 	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return workshopDao;
+	}
+
+	@Override
+	public void stop( String id )
+	{
+		super.stop( id );
+		// remove authentication tokens on all sessions
+		this.removeAuthenticationTokens( id );
+	}
+
+	@Override
+	public void renew( String id )
+	{
+		super.renew( id );
+		// remove authentication tokens on all sessions
+		this.removeAuthenticationTokens( id );
+	}
+
+	private void removeAuthenticationTokens( String workshopID )
+	{
+		WorkshopImpl workshop = findWorkshopByID( workshopID );
+		for ( SessionImpl session : workshop.getSessions() )
+		{
+			authenticationTokenService.removeBySessionID( session.getID() );
+		}
 	}
 
 	// TODO: find more elegant way to remove duplicates caused by sql query than putting through HashMap
@@ -146,6 +175,8 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		{
 			session.setCurrentExercise( ws.getExercises().get( 0 ) );
 			sessionService.setCurrentExercise( session );
+			// remove authentication tokens
+			authenticationTokenService.removeBySessionID( session.getID() );
 		}
 	}
 
