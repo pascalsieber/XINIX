@@ -19,9 +19,9 @@ public class PosterExercise extends ExerciseImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 	@Column( length = 2000 )
-	private String title;
+	private String posterTitle;
 	@Column( length = 20000 )
-	private String description;
+	private String posterDescription;
 
 	@ElementCollection( fetch = FetchType.EAGER )
 	private Set< String > posterImages;
@@ -39,30 +39,30 @@ public class PosterExercise extends ExerciseImpl
 	public PosterExercise( String name, String description, PosterTemplate derivedFrom, WorkshopImpl workshop )
 	{
 		super( name, description, derivedFrom, workshop );
-		this.title = derivedFrom.getTitle();
-		this.description = derivedFrom.getDescription();
+		this.posterTitle = derivedFrom.getPosterTitle();
+		this.posterDescription = derivedFrom.getPosterDescription();
 		this.posterImages = derivedFrom.getPosterImages();
 		this.posterVideos = derivedFrom.getPosterVideos();
 	}
 
-	public String getTitle()
+	public String getPosterTitle()
 	{
-		return title;
+		return posterTitle;
 	}
 
-	public void setTitle( String title )
+	public void setPosterTitle( String title )
 	{
-		this.title = title;
+		this.posterTitle = title;
 	}
 
-	public String getDescription()
+	public String getPosterDescription()
 	{
-		return description;
+		return posterDescription;
 	}
 
-	public void setDescription( String description )
+	public void setPosterDescription( String posterDescription )
 	{
-		this.description = description;
+		this.posterDescription = posterDescription;
 	}
 
 	public Set< String > getPosterImages()

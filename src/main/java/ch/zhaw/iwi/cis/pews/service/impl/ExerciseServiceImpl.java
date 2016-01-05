@@ -180,13 +180,13 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 				}
 			}
 
-			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), obj.getWorkshop() );
+			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(), obj.getPosterDescription(), obj.getDerivedFrom(), obj.getWorkshop() );
 
 			// if template not null, use default name and description from template
 			if ( template != null )
 			{
 				exercise.setName( template.getDefaultName() );
-				exercise.setDescription( template.getDefaultDescription() );
+				exercise.setPosterDescription( template.getDefaultDescription() );
 			}
 
 			return persistExercise( exercise );

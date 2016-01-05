@@ -20,9 +20,9 @@ public class PosterTemplate extends ExerciseTemplate
 	@Transient
 	private static final long serialVersionUID = 1L;
 	@Column( length = 2000 )
-	private String title;
+	private String posterTitle;
 	@Column( length = 20000 )
-	private String description;
+	private String posterDescription;
 
 	@ElementCollection( fetch = FetchType.EAGER )
 	private Set< String > posterImages;
@@ -50,36 +50,36 @@ public class PosterTemplate extends ExerciseTemplate
 			String questionTemplate,
 			String defaultName,
 			String defaultDescription,
-			String title,
-			String description,
+			String posterTitle,
+			String posterDescription,
 			Set< String > posterImages,
 			Set< String > posterVideos )
 	{
 		super( owner, timed, timeUnit, duration, sharing, skippable, countable, cardinality, workshopTemplate, questionTemplate, defaultName, defaultDescription );
-		this.title = title;
-		this.description = description;
+		this.posterTitle = posterTitle;
+		this.posterDescription = posterDescription;
 		this.posterImages = posterImages;
 		this.posterVideos = posterVideos;
 	}
 
-	public String getTitle()
+	public String getPosterTitle()
 	{
-		return title;
+		return posterTitle;
 	}
 
-	public void setTitle( String title )
+	public void setPosterTitle( String posterTitle )
 	{
-		this.title = title;
+		this.posterTitle = posterTitle;
 	}
 
-	public String getDescription()
+	public String getPosterDescription()
 	{
-		return description;
+		return posterDescription;
 	}
 
-	public void setDescription( String description )
+	public void setPosterDescription( String posterDescription )
 	{
-		this.description = description;
+		this.posterDescription = posterDescription;
 	}
 
 	public Set< String > getPosterImages()
