@@ -206,13 +206,13 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		// else take information contained in obj
 		if ( templateIsValid )
 		{
-			workshop = new PinkElefantWorkshop( obj.getName(), obj.getPosterDescription(), (PinkElefantTemplate)template );
+			workshop = new PinkElefantWorkshop( obj.getName(), obj.getDescription(), (PinkElefantTemplate)template );
 		}
 		else
 		{
 			workshop = new PinkElefantWorkshop();
 			workshop.setName( obj.getName() );
-			workshop.setPosterDescription( obj.getPosterDescription() );
+			workshop.setDescription( obj.getDescription() );
 			workshop.setEmailText( ( (PinkElefantTemplate)obj.getDerivedFrom() ).getDefaultEmailText() );
 			workshop.setProblem( ( (PinkElefantTemplate)obj.getDerivedFrom() ).getProblem() );
 			workshop.setDerivedFrom( null );
@@ -272,7 +272,7 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 	public void updateBasicInformation( WorkshopImpl workshop )
 	{
 		PinkElefantWorkshop mergeable = (PinkElefantWorkshop)workshopDao.findWorkshopByIDForBasicUpdate( workshop.getID() );
-		mergeable.setPosterDescription( workshop.getPosterDescription() );
+		mergeable.setDescription( workshop.getDescription() );
 		mergeable.setName( workshop.getName() );
 		mergeable.setEmailText( ( (PinkElefantWorkshop)workshop ).getEmailText() );
 		mergeable.setProblem( ( (PinkElefantWorkshop)workshop ).getProblem() );

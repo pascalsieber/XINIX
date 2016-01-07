@@ -532,7 +532,7 @@ public class RestServiceTest
 		assertTrue( ws.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( ws.getID().equals( wsID ) );
 		assertTrue( ws.getName().equalsIgnoreCase( "workshop instance" ) );
-		assertTrue( ws.getPosterDescription().equalsIgnoreCase( "workshop instance description" ) );
+		assertTrue( ws.getDescription().equalsIgnoreCase( "workshop instance description" ) );
 		assertTrue( ws.getCurrentState().equalsIgnoreCase( "new" ) );
 		assertTrue( ws.getDerivedFrom().getID().equals( defaultWSTemplateStub.getID() ) );
 
@@ -569,7 +569,7 @@ public class RestServiceTest
 		assertTrue( session.getClient().getID().equals( defaultClientStub.getID() ) );
 		assertTrue( session.getID().equals( sessionID ) );
 		assertTrue( session.getName().equalsIgnoreCase( "session instance" ) );
-		assertTrue( session.getPosterDescription().equalsIgnoreCase( "session description" ) );
+		assertTrue( session.getDescription().equalsIgnoreCase( "session description" ) );
 		assertTrue( session.getDerivedFrom() == null );
 		assertTrue( session.getWorkshop().getID().equals( defaultWSStub.getID() ) );
 
@@ -649,7 +649,7 @@ public class RestServiceTest
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "new" ) );
 		assertTrue( ex.getDerivedFrom().getID().equals( plabsTemplateStub.getID() ) );
 		assertTrue( ex.getName().equalsIgnoreCase( "exercise" ) );
-		assertTrue( ex.getPosterDescription().equalsIgnoreCase( "exercise description" ) );
+		assertTrue( ex.getDescription().equalsIgnoreCase( "exercise description" ) );
 		assertTrue( ex.getWorkshop().getID().equals( defaultWSStub.getID() ) );
 
 		assertTrue( ex.getOrderInWorkshop() == 10 );

@@ -1,5 +1,6 @@
 package ch.zhaw.iwi.cis.pinkelefant.workshop.instance;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -13,6 +14,7 @@ public class PinkElefantWorkshop extends WorkshopImpl
 	@Transient
 	private static final long serialVersionUID = 1L;
 	private String problem;
+	@Column( length = 10000 )
 	private String emailText;
 
 	public PinkElefantWorkshop()

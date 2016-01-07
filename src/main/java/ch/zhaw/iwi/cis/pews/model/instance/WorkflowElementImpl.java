@@ -70,12 +70,12 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.name = name;
 	}
 
-	public String getPosterDescription()
+	public String getDescription()
 	{
 		return description;
 	}
 
-	public void setPosterDescription( String description )
+	public void setDescription( String description )
 	{
 		this.description = description;
 	}
