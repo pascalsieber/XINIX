@@ -176,11 +176,11 @@ public class ZhawEngine implements LifecycleObject
 
 		setupEntityManager();
 		startWebServer();
-		configureRootUser();
+		// configureRootUser();
 		// configureSampleWorkshop();
-		configureDemoWorkshop();
+		// configureDemoWorkshop();
 		// configurePostWorkshop();
-		configureSBBWorkshop();
+		// configureSBBWorkshop();
 
 		System.out.println( "PEWS running and ready to go!" );
 	}

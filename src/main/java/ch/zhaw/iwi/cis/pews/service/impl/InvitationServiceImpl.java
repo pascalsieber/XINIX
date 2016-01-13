@@ -17,7 +17,6 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
-import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
 import ch.zhaw.iwi.cis.pews.service.util.MailService;
@@ -115,10 +114,6 @@ public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements 
 
 	private void sendInvitation( Invitation invitation, SessionImpl session )
 	{
-		mailService.sendMail(
-			(UserImpl)invitation.getInvitee(),
-			( (PinkElefantWorkshop)session.getWorkshop() ).getEmailText(),
-			PewsConfig.getMailSubjectForInvitation(),
-			PewsConfig.getMailSenderNameForInvitation() );
+		mailService.sendInvitation( invitation, ( (PinkElefantWorkshop)session.getWorkshop() ).getEmailText(), PewsConfig.getMailSubjectForInvitation(), PewsConfig.getMailSenderNameForInvitation() );
 	}
 }

@@ -123,7 +123,14 @@ public class PewsConfig
 	{
 		return properties.getProperty( "WEB_CLIENT_AUTH_TARGET_PROFILE" );
 	}
+	
+	public static String getWebClientAuthenticationInvitationTarget(){
+		return properties.getProperty( "WEB_CLIENT_AUTH_TARGET_INIVITATION" ); 
+	}
 
+	public static String getWebClientAuthenticationInvitationParam(){
+		return properties.getProperty( "WEB_CLIENT_AUTH_SESSIONID" );
+	}
 	public static String getMailHost()
 	{
 		return properties.getProperty( "MAIL_SMTP_HOST" );
