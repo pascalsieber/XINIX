@@ -11,7 +11,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class P2POneDataDao extends ExerciseDataDaoImpl
@@ -52,7 +52,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 
 		for ( ExerciseImpl ex : workshop.getExercises() )
 		{
-			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( P2POneTemplate.class.getSimpleName() ) )
+			if ( ex.getClass().getSimpleName().equalsIgnoreCase( P2POneExercise.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
 					.createQuery( "select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + ex.getID() + "' ORDER BY d.timestamp ASC" )

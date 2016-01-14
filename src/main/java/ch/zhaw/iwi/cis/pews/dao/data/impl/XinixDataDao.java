@@ -11,7 +11,7 @@ import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class XinixDataDao extends ExerciseDataDaoImpl
@@ -55,7 +55,7 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 
 		for ( ExerciseImpl ex : workshop.getExercises() )
 		{
-			if ( ex.getDerivedFrom().getClass().getSimpleName().equalsIgnoreCase( XinixTemplate.class.getSimpleName() ) )
+			if ( ex.getClass().getSimpleName().equalsIgnoreCase( XinixExercise.class.getSimpleName() ) )
 			{
 				data.addAll( getEntityManager()
 					.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id = :_exercise_id ORDER BY d.timestamp ASC" )
