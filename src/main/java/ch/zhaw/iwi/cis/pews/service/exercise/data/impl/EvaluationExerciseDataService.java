@@ -36,7 +36,7 @@ public class EvaluationExerciseDataService extends ExerciseDataServiceImpl
 	@Override
 	public String persistExerciseData( ExerciseDataImpl obj )
 	{
-		return specificDataDao.persist( obj );
+		return specificDataDao.persistExerciseData( obj );
 	}
 
 	@Override

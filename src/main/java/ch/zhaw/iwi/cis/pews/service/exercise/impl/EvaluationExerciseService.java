@@ -86,7 +86,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			{
 				CompressionExerciseDataElement solution = compressionDataDao.findBySolutionAndDescription( evaluation.getSolution(), evaluation.getDescription() );
 
-				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), new Evaluation(
+				evaluationExerciseDataDao.persistExerciseData( new EvaluationExerciseData( UserContext.getCurrentUser(), UserContext.getCurrentUser().getSession().getCurrentExercise(), new Evaluation(
 					UserContext.getCurrentUser(),
 					solution,
 					new Score( UserContext.getCurrentUser(), evaluation.getScore() ) ) ) );
@@ -111,7 +111,7 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 			{
 				CompressionExerciseDataElement solution = compressionDataDao.findBySolutionAndDescription( evaluation.getSolution(), evaluation.getDescription() );
 
-				evaluationExerciseDataDao.persist( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), new Evaluation( UserContext
+				evaluationExerciseDataDao.persistExerciseData( new EvaluationExerciseData( UserContext.getCurrentUser(), (WorkflowElementImpl)findByID( finalOutput.getExerciseID() ), new Evaluation( UserContext
 					.getCurrentUser(), solution, new Score( UserContext.getCurrentUser(), evaluation.getScore() ) ) ) );
 
 			}
