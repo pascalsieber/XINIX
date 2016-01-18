@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
@@ -25,6 +26,8 @@ public class SessionRestService extends WorkshopObjectRestService
 {
 
 	public static final String BASE = "/workshopService/session";
+
+	public static final String GET_CURRENT_EXERCISE_ID = "/getCurrentExerciseID";
 
 	public final static String GET_CURRENT_EXERCISE = "/getCurrentExercise";
 	public final static String SET_CURRENT_EXERCISE = "/setCurrentExercise";
@@ -89,6 +92,14 @@ public class SessionRestService extends WorkshopObjectRestService
 	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return sessionService.getCurrentExercise( sessionID );
+	}
+
+	@POST
+	@Path( GET_CURRENT_EXERCISE_ID )
+	public String getCurrentExerciseID()
+	{
+		// not delegating to service on purpose, in order to decrease response time since this request will be fired often (client polling)
+		return UserContext.getCurrentUser().getSession().getCurrentExercise().getID();
 	}
 
 	@POST
