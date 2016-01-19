@@ -6,11 +6,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.service.rest.MediaRestService;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class MediaObject extends WorkshopObject
