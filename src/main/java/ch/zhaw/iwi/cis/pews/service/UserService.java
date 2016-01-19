@@ -9,6 +9,8 @@ public interface UserService extends WorkshopObjectService
 
 	public PrincipalImpl findByLoginName( String loginName );
 
+	public PrincipalImpl findByLoginNameForUserContext( String loginName );
+
 	public boolean requestNewPassword( String userID );
 
 	public List< PrincipalImpl > findAllUsersForLoginService();
@@ -21,7 +23,8 @@ public interface UserService extends WorkshopObjectService
 	 * specialized method for persisting user belonging to a different client than the one with whom the user making the request is connected. this is required for admins to create users for varying
 	 * clients
 	 * 
-	 * @param principal user / principal to be persisted
+	 * @param principal
+	 *            user / principal to be persisted
 	 * @return ID of persisted user / principal
 	 */
 	public String persistForClient( PrincipalImpl principal );

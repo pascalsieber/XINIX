@@ -24,6 +24,13 @@ public class UserServiceProxy extends WorkshopObjectServiceProxy implements User
 	}
 
 	@Override
+	public PrincipalImpl findByLoginNameForUserContext( String loginName )
+	{
+		// return same as findByLoginName
+		return getServiceTarget().path( UserRestService.FIND_BY_LOGIN_NAME ).request( MediaType.APPLICATION_JSON ).post( Entity.json( loginName ) ).readEntity( PrincipalImpl.class );
+	}
+
+	@Override
 	public boolean requestNewPassword( String userID )
 	{
 		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) ).readEntity( boolean.class );

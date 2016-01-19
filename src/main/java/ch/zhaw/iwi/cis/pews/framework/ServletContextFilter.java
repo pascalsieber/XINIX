@@ -34,7 +34,7 @@ public class ServletContextFilter implements Filter
 	public UserImpl getCurrentUser( HttpServletRequest request )
 	{
 		String loginName = request.getUserPrincipal().getName();
-		UserImpl user = (UserImpl)getUserService().findByLoginName( loginName );
+		UserImpl user = (UserImpl)getUserService().findByLoginNameForUserContext( loginName );
 
 		return user;
 	}
