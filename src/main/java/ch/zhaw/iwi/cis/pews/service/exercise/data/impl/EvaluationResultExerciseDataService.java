@@ -33,6 +33,12 @@ public class EvaluationResultExerciseDataService extends ExerciseDataServiceImpl
 	}
 
 	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		return super.genericFindByExerciseIDs( exerciseIDs );
+	}
+
+	@Override
 	public List< ExerciseDataViewObject > getExportableDataByExerciseID( ExerciseImpl exercise )
 	{
 		// since EvaluationResultExercise does not generate any exercise data, return empty array

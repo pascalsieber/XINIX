@@ -10,7 +10,6 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
@@ -54,21 +53,7 @@ public class CompressionExerciseService extends ExerciseServiceImpl
 	public Input getInputByExerciseID( String exerciseID )
 	{
 		CompressionExercise exercise = findByID( exerciseID );
-		List< CompressableExerciseData > compressableData = new ArrayList<>();
-		List< ExerciseDataImpl > dataOfAllExercises = new ArrayList<>();
-
-		for ( ExerciseImpl ex : UserContext.getCurrentUser().getSession().getWorkshop().getExercises() )
-		{
-			dataOfAllExercises.addAll( exerciseDataService.findByExerciseID( ex.getID() ) );
-		}
-
-		for ( ExerciseDataImpl data : dataOfAllExercises )
-		{
-			if ( CompressableExerciseData.class.isAssignableFrom( data.getClass() ) )
-			{
-				compressableData.add( (CompressableExerciseData)data );
-			}
-		}
+		List< CompressableExerciseData > compressableData = exerciseDataService.getCompressableExerciseDataByWorkshop( exercise.getWorkshop() );
 
 		return new CompressionInput( exercise, exercise.getQuestion(), exercise.getSolutionCriteria(), compressableData );
 	}

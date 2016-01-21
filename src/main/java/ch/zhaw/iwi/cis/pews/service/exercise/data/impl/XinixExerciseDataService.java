@@ -39,6 +39,12 @@ public class XinixExerciseDataService extends ExerciseDataServiceImpl
 	}
 
 	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		return specificDataDao.findByExerciseIDs( exerciseIDs );
+	}
+
+	@Override
 	public ExerciseDataImpl findExerciseDataByID( String id )
 	{
 		return specificDataDao.findDataByID( id );

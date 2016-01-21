@@ -47,6 +47,17 @@ public class P2PTwoDataDao extends ExerciseDataDaoImpl
 
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		List< P2PTwoData > data = getEntityManager()
+			.createQuery( "select distinct d from P2PTwoData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.selectedKeywords where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
+			.setParameter( "ids", exerciseIDs )
+			.getResultList();
+		return (List< ExerciseDataImpl >)cloneResult( data );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass )
 	{
 		List< P2PTwoData > data = new ArrayList<>();

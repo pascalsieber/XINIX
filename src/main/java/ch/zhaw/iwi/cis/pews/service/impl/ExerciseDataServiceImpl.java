@@ -43,6 +43,7 @@ import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopDaoImpl;
+import ch.zhaw.iwi.cis.pews.framework.CleanCompressableDataOutputStream;
 import ch.zhaw.iwi.cis.pews.framework.CleanExerciseDataOutputStream;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -66,6 +67,7 @@ import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PosterExerciseDataService
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.SimplePrototypingExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
@@ -186,16 +188,65 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return (List< ExerciseDataImpl >)cleanseData( service.findByExerciseID( exerciseID ) );
 	}
 
+	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		throw new UnsupportedOperationException( "no suitable Service class found for handling" );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	public List< ExerciseDataImpl > genericFindByExerciseID( String exerciseID )
 	{
 		return (List< ExerciseDataImpl >)cleanseData( exerciseDataDao.findByExerciseID( exerciseID ) );
 	}
 
+	public List< ExerciseDataImpl > genericFindByExerciseIDs( List< String > exerciseIDs )
+	{
+		return exerciseDataDao.findByExerciseIDs( exerciseIDs );
+	}
+
 	@Override
 	public void removeExerciseDataByID( String id )
 	{
 		remove( findByID( id ) );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< CompressableExerciseData > getCompressableExerciseDataByWorkshop( WorkshopImpl workshop )
+	{
+		List< ExerciseDataImpl > data = new ArrayList< ExerciseDataImpl >();
+
+		Map< Class< ? extends ExerciseImpl >, List< String > > compressableExercises = new HashMap< Class< ? extends ExerciseImpl >, List< String >>();
+		compressableExercises.put( PinkLabsExercise.class, new ArrayList< String >() );
+		compressableExercises.put( P2POneExercise.class, new ArrayList< String >() );
+		compressableExercises.put( P2PTwoExercise.class, new ArrayList< String >() );
+		compressableExercises.put( XinixExercise.class, new ArrayList< String >() );
+		compressableExercises.put( You2MeExercise.class, new ArrayList< String >() );
+		compressableExercises.put( SimplyPrototypingExercise.class, new ArrayList< String >() );
+
+		// assign workshop's exercise IDs to map
+		for ( ExerciseImpl ex : workshop.getExercises() )
+		{
+			List< String > ids = compressableExercises.get( ex.getClass() );
+			if ( ids != null )
+			{
+				ids.add( ex.getID() );
+			}
+		}
+
+		// get data for assigned exercise IDs
+		for ( Entry< Class< ? extends ExerciseImpl >, List< String >> entry : compressableExercises.entrySet() )
+		{
+			if ( !entry.getValue().isEmpty() )
+			{
+				Class< ? > serviceClass = getExerciseClassSpecificService( entry.getKey().getSimpleName() );
+				ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
+				data.addAll( service.findByExerciseIDs( entry.getValue() ) );
+			}
+		}
+
+		return (List< CompressableExerciseData >)cleanseCompressableData( data );
 	}
 
 	@Override
@@ -345,6 +396,27 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream ooStream = new CleanExerciseDataOutputStream( baos );
+			ooStream.writeObject( data );
+
+			byte[] bytes = baos.toByteArray();
+
+			ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
+			ObjectInputStream oiStream = new ObjectInputStream( bais );
+			return oiStream.readObject();
+		}
+		catch ( Exception e )
+		{
+			throw new RuntimeException( e );
+		}
+	}
+
+	@SuppressWarnings( "resource" )
+	private Object cleanseCompressableData( List< ExerciseDataImpl > data )
+	{
+		try
+		{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream ooStream = new CleanCompressableDataOutputStream( baos );
 			ooStream.writeObject( data );
 
 			byte[] bytes = baos.toByteArray();

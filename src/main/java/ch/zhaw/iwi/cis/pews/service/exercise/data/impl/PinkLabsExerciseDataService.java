@@ -34,6 +34,12 @@ public class PinkLabsExerciseDataService extends ExerciseDataServiceImpl
 	}
 
 	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		return super.genericFindByExerciseIDs( exerciseIDs );
+	}
+
+	@Override
 	public ExerciseDataImpl findExerciseDataByID( String id )
 	{
 		return super.genericFindDataByID( id );

@@ -43,6 +43,12 @@ public class SimplePrototypingExerciseDataService extends ExerciseDataServiceImp
 	}
 
 	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		return super.genericFindByExerciseIDs( exerciseIDs );
+	}
+
+	@Override
 	public ExerciseDataImpl findExerciseDataByID( String id )
 	{
 		return super.genericFindDataByID( id );

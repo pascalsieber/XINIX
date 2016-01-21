@@ -56,6 +56,17 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		List< ExerciseDataImpl > data = getEntityManager()
+			.createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
+			.setParameter( "ids", exerciseIDs )
+			.getResultList();
+		return (List< ExerciseDataImpl >)cloneResult( data );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass )
 	{
 		List< ExerciseDataImpl > result = new ArrayList<>();

@@ -40,4 +40,16 @@ public class You2MeExerciseDataDao extends ExerciseDataDaoImpl
 
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		List< You2MeExerciseData > data = getEntityManager()
+			.createQuery( "select distinct d from You2MeExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.dialog where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
+			.setParameter( "ids", exerciseIDs )
+			.getResultList();
+
+		return (List< ExerciseDataImpl >)cloneResult( data );
+	}
 }

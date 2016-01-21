@@ -51,6 +51,17 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		List< CompressionExerciseData > data = getEntityManager()
+			.createQuery( "select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
+			.setParameter( "ids", exerciseIDs )
+			.getResultList();
+		return (List< ExerciseDataImpl >)cloneResult( data );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass )
 	{
 		List< CompressionExerciseData > data = new ArrayList<>();
