@@ -176,11 +176,11 @@ public class ZhawEngine implements LifecycleObject
 
 		setupEntityManager();
 		startWebServer();
-		// configureRootUser();
-		// configureSampleWorkshop();
-		// configureDemoWorkshop();
-		// configurePostWorkshop();
-		// configureSBBWorkshop();
+		configureRootUser();
+		configureSampleWorkshop();
+		configureDemoWorkshop();
+		configurePostWorkshop();
+		configureSBBWorkshop();
 
 		System.out.println( "PEWS running and ready to go!" );
 	}
@@ -407,7 +407,7 @@ public class ZhawEngine implements LifecycleObject
 
 		// sample workshop instance
 		String wsID = workshopService.persist( new PinkElefantWorkshop( "p.i.n.k.elefant Workshop", "Beispiel eines p.i.n.k.elefant Workshops", (PinkElefantTemplate)workshopTemplateService
-			.findByID( wsTemplateID ) ) );
+			.findWorkshopTemplateByID( wsTemplateID ) ) );
 
 		// workshop start (poster template)
 		String startTemplateID = exerciseTemplateService.persist( new PosterTemplate(
@@ -449,15 +449,15 @@ public class ZhawEngine implements LifecycleObject
 
 		// pinklabs template
 		String pinklabsTemplateID = exerciseTemplateService.persist( new PinkLabsTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Wo oder wie informierst Du Dich im Alltag?", "p.i.n.k.labs", "p.i.n.k.labs Tool" ) );
+			.findWorkshopTemplateByID( wsTemplateID ), "Wo oder wie informierst Du Dich im Alltag?", "p.i.n.k.labs", "p.i.n.k.labs Tool" ) );
 
 		// p2pOne template
 		String p2poneTemplateID = exerciseTemplateService.persist( new P2POneTemplate( rootUser, true, TimeUnit.SECONDS, 120, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "Post2Paper 1", "Post2Paper 1 Tool", PewsConfig.getImageDir() + "/business.jpg" ) );
+			.findWorkshopTemplateByID( wsTemplateID ), "Benenne Eigenschaften oder Bedürfnisse der Anspruchsgruppe auf dem Bild.", "Post2Paper 1", "Post2Paper 1 Tool", PewsConfig.getImageDir() + "/business.jpg" ) );
 
 		// p2ptwo template
 		String p2pTwoTemplateID = exerciseTemplateService.persist( new P2PTwoTemplate( rootUser, true, TimeUnit.SECONDS, 180, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Wie kann mit einer Person erfolgreich kommuniziert werden, welche die zwei ausgewählte Eigenschaften hat?", "Post2Paper 2", "Post2Paper 2 Tool" ) );
+			.findWorkshopTemplateByID( wsTemplateID ), "Wie kann mit einer Person erfolgreich kommuniziert werden, welche die zwei ausgewählte Eigenschaften hat?", "Post2Paper 2", "Post2Paper 2 Tool" ) );
 
 		// xinix image -> used for xinix template (as part of XinixImageMatrix)
 		List< String > imageUrls = new ArrayList<>();
@@ -489,11 +489,11 @@ public class ZhawEngine implements LifecycleObject
 
 		// xinix template
 		String xinixTemplateID = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", "XINIX", "XINIX-Tool", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
+			.findWorkshopTemplateByID( wsTemplateID ), "Was fällt Dir ein zum Thema ENGAGEMENT?", "XINIX", "XINIX-Tool", (XinixImageMatrix)xinixImageMatrixService.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// you2me template
 		String you2meTemplateID = exerciseTemplateService.persist( new You2MeTemplate( rootUser, true, TimeUnit.MINUTES, 2, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Führe mit jemandem einen Dialog.", "You2Me", "You2Me Tool", new HashSet<>( Arrays.asList(
+			.findWorkshopTemplateByID( wsTemplateID ), "Führe mit jemandem einen Dialog.", "You2Me", "You2Me Tool", new HashSet<>( Arrays.asList(
 			"Was möchtests Du gerne lernen?",
 			"Wie kannst DU dies Deinem Gegenüber beibringen?" ) ) ) );
 
@@ -515,14 +515,14 @@ public class ZhawEngine implements LifecycleObject
 
 		// kompression template
 		String compressionTemplateID = exerciseTemplateService.persist( new CompressionTemplate( rootUser, true, TimeUnit.MINUTES, 20, true, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs.", "Kompression", "Kompression Tool", Arrays.asList(
+			.findWorkshopTemplateByID( wsTemplateID ), "Erarbeite Massnahmenvorschläge aufgrund des bisherigen Inputs.", "Kompression", "Kompression Tool", Arrays.asList(
 			"Produkteigenschaften",
 			"Werbung",
 			"Vertrieb" ) ) );
 
 		// evaluation template
 		String evaluationTemplateID = exerciseTemplateService.persist( new EvaluationTemplate( rootUser, true, TimeUnit.SECONDS, 60, false, true, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Wie bewertest Du diese Lösungen?", "Evaluation", "Evaluation Tool", 5 ) );
+			.findWorkshopTemplateByID( wsTemplateID ), "Wie bewertest Du diese Lösungen?", "Evaluation", "Evaluation Tool", 5 ) );
 
 		// evaluation result template
 		String evaluationResultTemplateID = exerciseTemplateService.persist( new EvaluationResultTemplate(
@@ -1122,17 +1122,17 @@ public class ZhawEngine implements LifecycleObject
 
 		// xinix template iteration 2
 		String xinixTemplateID2 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Paket in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (2/4)", "XINIX-Tool 2", (XinixImageMatrix)xinixImageMatrixService
+			.findWorkshopTemplateByID( wsTemplateID ), "Was fällt dir ein zum Thema Paket in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (2/4)", "XINIX-Tool 2", (XinixImageMatrix)xinixImageMatrixService
 			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 3
 		String xinixTemplateID3 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Postbote in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (3/4)", "XINIX-Tool 3", (XinixImageMatrix)xinixImageMatrixService
+			.findWorkshopTemplateByID( wsTemplateID ), "Was fällt dir ein zum Thema Postbote in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (3/4)", "XINIX-Tool 3", (XinixImageMatrix)xinixImageMatrixService
 			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// xinix template iteration 4
 		String xinixTemplateID4 = exerciseTemplateService.persist( new XinixTemplate( rootUser, true, TimeUnit.SECONDS, 180, false, false, false, 0, (WorkshopTemplate)workshopTemplateService
-			.findByID( wsTemplateID ), "Was fällt dir ein zum Thema Jahr 2020 in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (4/4)", "XINIX-Tool 4", (XinixImageMatrix)xinixImageMatrixService
+			.findWorkshopTemplateByID( wsTemplateID ), "Was fällt dir ein zum Thema Jahr 2020 in Verbindung mit dem gewürfelten Bild?", "XINIX-Tool (4/4)", "XINIX-Tool 4", (XinixImageMatrix)xinixImageMatrixService
 			.findXinixImageMatrixByID( XINIX_IMAGE_MATRIX_ID ) ) );
 
 		// simply prototyping template
