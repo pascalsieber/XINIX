@@ -64,6 +64,28 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public PrincipalImpl findByLoginNameForUserContext( String loginName )
+	{
+		List< PrincipalImpl > results = getEntityManager()
+			.createQuery(
+				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.sessionInvitations as invitations "
+						+ "LEFT JOIN FETCH principal.participation as participation " + "LEFT JOIN FETCH participation.session as session " + "LEFT JOIN FETCH session.workshop as workshop "
+						+ "where principal.loginName = :login_name" )
+			.setParameter( "login_name", loginName )
+			.getResultList();
+
+		if ( results.size() > 0 )
+		{
+			return (PrincipalImpl)cloneResult( results.get( 0 ) );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< PrincipalImpl > finAllUsersForLoginService()
 	{
 		return getEntityManager().createQuery( "from " + getWorkshopObjectClass().getSimpleName() ).getResultList();

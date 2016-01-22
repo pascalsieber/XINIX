@@ -22,6 +22,7 @@ import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultInput;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultObject;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pews.util.comparator.EvaluationResultComparator;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
@@ -60,9 +61,11 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
+		WorkshopImpl workshop = getWorkshopDao().findWorkshopByID( UserContext.getCurrentUser().getSession().getWorkshop().getID() );
+
 		EvaluationResultExercise ex = findByID( exerciseID );
 		Map< CompressionExerciseDataElement, List< Integer > > evaluationsMap = new HashMap< CompressionExerciseDataElement, List< Integer > >();
-		List< ExerciseDataImpl > evaluations = evaluationDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), Evaluation.class );
+		List< ExerciseDataImpl > evaluations = evaluationDataDao.findByWorkshopAndExerciseDataClass( workshop, Evaluation.class );
 
 		for ( ExerciseDataImpl evaluation : evaluations )
 		{
@@ -93,7 +96,7 @@ public class EvaluationResultExerciseService extends ExerciseServiceImpl
 		}
 
 		// add solutions which have not been evaluated
-		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), CompressionExerciseData.class );
+		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( workshop, CompressionExerciseData.class );
 		for ( ExerciseDataImpl compressionDataPoint : compressionData )
 		{
 			for ( CompressionExerciseDataElement solution : ( (CompressionExerciseData)compressionDataPoint ).getSolutions() )

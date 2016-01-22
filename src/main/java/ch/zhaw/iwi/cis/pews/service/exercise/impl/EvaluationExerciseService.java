@@ -20,6 +20,7 @@ import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutputElement;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
@@ -60,8 +61,9 @@ public class EvaluationExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
+		WorkshopImpl workshop = getWorkshopDao().findWorkshopByID( UserContext.getCurrentUser().getSession().getWorkshop().getID() );
 		List< CompressionInputElement > solutions = new ArrayList< CompressionInputElement >();
-		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), CompressionExerciseData.class );
+		List< ExerciseDataImpl > compressionData = compressionDataDao.findByWorkshopAndExerciseDataClass( workshop, CompressionExerciseData.class );
 
 		for ( ExerciseDataImpl data : compressionData )
 		{

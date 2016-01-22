@@ -22,6 +22,7 @@ import ch.zhaw.iwi.cis.pews.model.input.P2PKeywordInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
@@ -60,10 +61,11 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
+		WorkshopImpl workshop = getWorkshopDao().findWorkshopByID( UserContext.getCurrentUser().getSession().getWorkshop().getID() );
 		List< P2PKeywordInput > keywords = new ArrayList<>();
 		P2PTwoExercise ex = findByID( exerciseID );
 
-		for ( ExerciseDataImpl data : p2pOneDataDao.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), P2POneData.class ) )
+		for ( ExerciseDataImpl data : p2pOneDataDao.findByWorkshopAndExerciseDataClass( workshop, P2POneData.class ) )
 		{
 			for ( P2POneKeyword keywordObject : ( (P2POneData)data ).getKeywords() )
 			{

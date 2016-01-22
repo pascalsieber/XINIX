@@ -100,6 +100,11 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	private ExerciseDao exerciseDao;
 	private WorkshopDao workshopDao;
 
+	protected WorkshopDao getWorkshopDao()
+	{
+		return this.workshopDao;
+	}
+
 	public ExerciseDataServiceImpl()
 	{
 		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );

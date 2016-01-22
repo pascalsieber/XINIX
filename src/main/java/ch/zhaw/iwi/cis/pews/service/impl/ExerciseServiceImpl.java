@@ -72,6 +72,11 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	private WorkshopDao workshopDao;
 	private static final Map< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl >>();
 
+	protected WorkshopDao getWorkshopDao()
+	{
+		return this.workshopDao;
+	}
+
 	// TODO move this from manual entries to an automatic solution, preferably using annotation @ExerciseSpecificService (which is already implemented)
 	static
 	{

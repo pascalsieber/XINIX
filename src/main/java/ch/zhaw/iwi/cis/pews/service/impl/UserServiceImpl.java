@@ -62,7 +62,7 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 	@Override
 	public PrincipalImpl findByLoginNameForUserContext( String loginName )
 	{
-		return userdao.findByLoginName( loginName );
+		return userdao.findByLoginNameForUserContext( loginName );
 	}
 
 	@Override
