@@ -10,6 +10,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.rest.SessionRestService;
 
@@ -116,6 +117,12 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public List< SessionImpl > findAllSessions()
 	{
 		return getServiceTarget().path( SessionRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
+	}
+
+	@Override
+	public PollingWrapper getCurrentExericseIDWithOutput()
+	{
+		return getServiceTarget().path( SessionRestService.GET_CURRENT_EXERCISE_ID_WITH_OUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( PollingWrapper.class );
 	}
 
 }

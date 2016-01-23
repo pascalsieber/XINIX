@@ -38,7 +38,9 @@ import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 import ch.zhaw.iwi.cis.pews.service.AuthenticationTokenService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetCurrentExerciseJob;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetNextExerciseJob;
@@ -52,6 +54,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	private ParticipantDao participantDao;
 	private ExerciseDao exerciseDao;
 	private AuthenticationTokenService authenticationTokenService;
+	private ExerciseService exerciseService;
 
 	public SessionServiceImpl()
 	{
@@ -60,6 +63,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 		authenticationTokenService = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
+		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 	}
 
 	@Override
@@ -340,4 +344,9 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		return sessionDao;
 	}
 
+	@Override
+	public PollingWrapper getCurrentExericseIDWithOutput()
+	{
+		return new PollingWrapper( UserContext.getCurrentUser().getSession().getCurrentExercise().getID(), exerciseService.getOutput() );
+	}
 }

@@ -15,6 +15,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
@@ -48,6 +49,8 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	public static final String ADD_EXECUTER = "/addExecuter";
 	public static final String REMOVE_EXECUTER = "/removeExecuter";
+
+	public final static String GET_CURRENT_EXERCISE_ID_WITH_OUTPUT = "/getCurrentExerciseIDWithOutput";
 
 	private SessionService sessionService;
 
@@ -100,6 +103,13 @@ public class SessionRestService extends WorkshopObjectRestService
 	{
 		// not delegating to service on purpose, in order to decrease response time since this request will be fired often (client polling)
 		return UserContext.getCurrentUser().getSession().getCurrentExercise().getID();
+	}
+
+	@POST
+	@Path( GET_CURRENT_EXERCISE_ID_WITH_OUTPUT )
+	public PollingWrapper getCurrentExerciseIDWithOutput()
+	{
+		return sessionService.getCurrentExericseIDWithOutput();
 	}
 
 	@POST
