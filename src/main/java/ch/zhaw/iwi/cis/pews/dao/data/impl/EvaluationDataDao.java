@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDataDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.OwnableObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
@@ -20,6 +23,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class EvaluationDataDao extends ExerciseDataDaoImpl
 {
+	private WorkshopDao workshopDao;
+
+	public EvaluationDataDao()
+	{
+		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
@@ -99,7 +109,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	public String persistExerciseData( ExerciseDataImpl object )
 	{
 		// evaluations by a specific user for an existing solution need to be updated (overwritten) rather than added
-		List< ExerciseDataImpl > existing = this.findByWorkshopAndExerciseDataClass( UserContext.getCurrentUser().getSession().getWorkshop(), Evaluation.class );
+		List< ExerciseDataImpl > existing = this.findByWorkshopAndExerciseDataClass( workshopDao.findWorkshopByID( UserContext.getCurrentUser().getSession().getWorkshop().getID() ), Evaluation.class );
 
 		for ( ExerciseDataImpl data : existing )
 		{
