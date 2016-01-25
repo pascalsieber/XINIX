@@ -41,9 +41,13 @@ public class MailServiceImpl implements MailService
 			}
 		} );
 
+		// turn messageString into html (line breaks)
+		messageString = messageString.replaceAll( "(\r\n|\r|\n)", "<br />" );
+		
 		// append login information to message
-		messageString += "\n\n" + PewsConfig.getMailWebClientInfo() + " " + recipient.getAuthenticationUrl();
-
+		messageString += "<br /><br />" + "<a href=\"" + recipient.getAuthenticationUrl() + "\">" + PewsConfig.getMailWebClientInfo() + "</a>";
+		messageString += "<br />" + PewsConfig.getUrlHelp() + "<br />" + recipient.getAuthenticationUrl();
+		
 		try
 		{
 			Message message = new MimeMessage( mailSession );
@@ -83,7 +87,11 @@ public class MailServiceImpl implements MailService
 		String link = PewsConfig.getWebClientAuthenticationUrl() + PewsConfig.getWebClientAuthenticationUserParam() + encodedLoginName + PewsConfig.getWebClientAuthenticationPasswordParam()
 				+ encodedPassword + PewsConfig.getWebClientAuthenticationInvitationTarget() + PewsConfig.getWebClientAuthenticationInvitationParam() + invitation.getSession().getID();
 
-		messageString += "\n\n" + "<a href=\"" + link + "\">" + PewsConfig.getMailWebClientInfo() + "</a>";
+		// turn messageString into html (line breaks)
+		messageString = messageString.replaceAll( "(\r\n|\r|\n)", "<br />" );
+		
+		messageString += "<br /><br />" + "<a href=\"" + link + "\">" + PewsConfig.getMailWebClientInfo() + "</a>";
+		messageString += "<br />" + PewsConfig.getUrlHelp() + "<br />" + link;
 
 		try
 		{

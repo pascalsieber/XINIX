@@ -123,14 +123,17 @@ public class PewsConfig
 	{
 		return properties.getProperty( "WEB_CLIENT_AUTH_TARGET_PROFILE" );
 	}
-	
-	public static String getWebClientAuthenticationInvitationTarget(){
-		return properties.getProperty( "WEB_CLIENT_AUTH_TARGET_INIVITATION" ); 
+
+	public static String getWebClientAuthenticationInvitationTarget()
+	{
+		return properties.getProperty( "WEB_CLIENT_AUTH_TARGET_INIVITATION" );
 	}
 
-	public static String getWebClientAuthenticationInvitationParam(){
+	public static String getWebClientAuthenticationInvitationParam()
+	{
 		return properties.getProperty( "WEB_CLIENT_AUTH_SESSIONID" );
 	}
+
 	public static String getMailHost()
 	{
 		return properties.getProperty( "MAIL_SMTP_HOST" );
@@ -189,5 +192,10 @@ public class PewsConfig
 	public static String getMailTextProfile()
 	{
 		return properties.getProperty( "MAIL_TEXT_PROFILE" );
+	}
+
+	public static String getUrlHelp()
+	{
+		return properties.getProperty( "URL_HELP_TEXT" );
 	}
 }
