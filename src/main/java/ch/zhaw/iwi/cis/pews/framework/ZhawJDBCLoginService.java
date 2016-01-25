@@ -54,4 +54,16 @@ public class ZhawJDBCLoginService extends MappedLoginService
 		}
 	}
 
+	@Override
+	public UserIdentity login( String username, Object credentials )
+	{
+		// if login fails, try reloading user (in case of password changes)
+		if ( super.login( username, credentials ) == null )
+		{
+			this.loadUser( username );
+		}
+		
+		return super.login( username, credentials );
+	}
+
 }
