@@ -1,6 +1,8 @@
 package ch.zhaw.iwi.cis.pews.service.exercise.data.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
@@ -36,13 +38,39 @@ public class You2MeExerciseDataService extends ExerciseDataServiceImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		return specificDataDao.findByExerciseID( exerciseID );
+		List< ExerciseDataImpl > results = specificDataDao.findByExerciseID( exerciseID );
+
+		for ( ExerciseDataImpl result : results )
+		{
+			Collections.sort( ( (You2MeExerciseData)result ).getDialog(), new Comparator< DialogEntry >() {
+				@Override
+				public int compare( DialogEntry o1, DialogEntry o2 )
+				{
+					return o1.getOrderInDialog().compareTo( o2.getOrderInDialog() );
+				}
+			} );
+		}
+
+		return results;
 	}
 
 	@Override
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
 	{
-		return specificDataDao.findByExerciseIDs( exerciseIDs );
+		List< ExerciseDataImpl > results = specificDataDao.findByExerciseIDs( exerciseIDs );
+
+		for ( ExerciseDataImpl result : results )
+		{
+			Collections.sort( ( (You2MeExerciseData)result ).getDialog(), new Comparator< DialogEntry >() {
+				@Override
+				public int compare( DialogEntry o1, DialogEntry o2 )
+				{
+					return o1.getOrderInDialog().compareTo( o2.getOrderInDialog() );
+				}
+			} );
+		}
+
+		return results;
 	}
 
 	@Override
