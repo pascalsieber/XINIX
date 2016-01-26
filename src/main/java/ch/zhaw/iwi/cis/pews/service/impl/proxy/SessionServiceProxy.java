@@ -125,4 +125,10 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 		return getServiceTarget().path( SessionRestService.GET_CURRENT_EXERCISE_ID_WITH_OUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( PollingWrapper.class );
 	}
 
+	@Override
+	public String persistSession( SessionImpl obj )
+	{
+		return getServiceTarget().path( SessionRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
+	}
+
 }

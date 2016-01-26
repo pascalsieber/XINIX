@@ -64,7 +64,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	@Path( PERSIST )
 	public String persist( SessionImpl obj )
 	{
-		return super.persist( obj );
+		return sessionService.persistSession( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )

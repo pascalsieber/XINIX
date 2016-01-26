@@ -40,4 +40,6 @@ public interface SessionService extends WorkflowElementService
 
 	public PollingWrapper getCurrentExericseIDWithOutput();
 
+	public String persistSession( SessionImpl obj );
+
 }

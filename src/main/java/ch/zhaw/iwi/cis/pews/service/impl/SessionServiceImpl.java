@@ -19,11 +19,13 @@ import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ParticipantDao;
 import ch.zhaw.iwi.cis.pews.dao.SessionDao;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.ExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.ParticipantDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.SessionDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.impl.WorkshopDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
@@ -34,6 +36,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Timer;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
@@ -42,6 +45,7 @@ import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 import ch.zhaw.iwi.cis.pews.service.AuthenticationTokenService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
+import ch.zhaw.iwi.cis.pews.service.WorkshopService;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetCurrentExerciseJob;
 import ch.zhaw.iwi.cis.pews.service.impl.timed.SetNextExerciseJob;
 import ch.zhaw.iwi.cis.pews.util.comparator.ExerciseImplComparator;
@@ -55,6 +59,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	private ExerciseDao exerciseDao;
 	private AuthenticationTokenService authenticationTokenService;
 	private ExerciseService exerciseService;
+	private WorkshopDao workshopDao;
 
 	public SessionServiceImpl()
 	{
@@ -64,6 +69,28 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 		authenticationTokenService = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
 		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
+		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
+	}
+
+	@Override
+	public String persistSession( SessionImpl session )
+	{
+		// if new session, use first exercise in workshop as currentExercise
+		// if existing session, use currentExercise referenced in database if null
+		SessionImpl probed = findByID( session.getID() );
+
+		if ( probed == null && session.getCurrentExercise() == null )
+		{
+			WorkshopImpl workshop = workshopDao.findWorkshopByID( session.getWorkshop().getID() );
+			session.setCurrentExercise( workshop.getExercises().get( 0 ) );
+		}
+
+		if ( probed != null && session.getCurrentExercise() == null )
+		{
+			session.setCurrentExercise( probed.getCurrentExercise() );
+		}
+
+		return super.persist( session );
 	}
 
 	@Override
