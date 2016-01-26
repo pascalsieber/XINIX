@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -277,7 +278,13 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	public String exportByWorkshopID( String workshopID )
 	{
 		WorkshopImpl workshop = workshopDao.findWorkshopByID( workshopID );
-		Map< ExerciseImpl, List< ExerciseDataViewObject > > exportableDataMap = new HashMap< ExerciseImpl, List< ExerciseDataViewObject > >();
+		Map< ExerciseImpl, List< ExerciseDataViewObject > > exportableDataMap = new TreeMap< ExerciseImpl, List< ExerciseDataViewObject >>( new Comparator< ExerciseImpl >() {
+			@Override
+			public int compare( ExerciseImpl o1, ExerciseImpl o2 )
+			{
+				return o1.getOrderInWorkshop().compareTo( o2.getOrderInWorkshop() );
+			}
+		} );
 
 		for ( ExerciseImpl exercise : workshop.getExercises() )
 		{
@@ -312,8 +319,19 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		{
 			// generate sheet with headers
 			int rowIndex = 0;
-			Sheet sheet = workbook.createSheet( entry.getKey().getID() );
-			sheet.createRow( rowIndex++ ).createCell( 0 ).setCellValue( entry.getKey().getName() );
+
+			String name = entry.getKey().getName();
+			if ( name == null )
+			{
+				name = entry.getKey().getOrderInWorkshop() + "_undefiniert";
+			}
+			else
+			{
+				name = entry.getKey().getOrderInWorkshop() + "_" + name;
+			}
+
+			Sheet sheet = workbook.createSheet( name );
+			sheet.createRow( rowIndex++ ).createCell( 0 ).setCellValue( name );
 			sheet.createRow( rowIndex++ ).createCell( 0 ).setCellValue( entry.getKey().getQuestion() );
 			sheet.createRow( rowIndex++ ); // empty row
 
@@ -349,7 +367,17 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 						field.setAccessible( true );
 						try
 						{
-							dataRow.createCell( dataColIndex++ ).setCellValue( field.get( dataObj ).toString() );
+							String value = "";
+							try
+							{
+								value = field.get( dataObj ).toString();
+							}
+							catch ( NullPointerException e )
+							{
+								value = "undefiniert";
+							}
+
+							dataRow.createCell( dataColIndex++ ).setCellValue( value );
 						}
 						catch ( IllegalArgumentException | IllegalAccessException e )
 						{
