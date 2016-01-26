@@ -62,12 +62,10 @@ public class ExerciseImpl extends WorkflowElementImpl
 		this.countable = derivedFrom.isCountable();
 		this.cardinality = derivedFrom.getCardinality();
 		this.question = derivedFrom.getQuestionTemplate();
+		this.orderInWorkshop = derivedFrom.getOrderInWorkshopTemplate();
 
 		this.participants = new HashSet< PrincipalImpl >();
 		this.workshop = workshop;
-		
-		// insert at end of exercise queue of workshop
-		this.orderInWorkshop = workshop.getExercises().size();
 	}
 
 	public Integer getOrderInWorkshop()
