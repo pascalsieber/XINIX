@@ -84,19 +84,9 @@ public class PewsConfig
 		return "http://" + properties.getProperty( "APPLICATION_HOST" ) + ":" + properties.getProperty( "APPLICATION_PORT" );
 	}
 
-	public static String getMediaDirURL()
-	{
-		return "http://" + properties.getProperty( "APPLICATION_HOST" ) + ":" + properties.getProperty( "APPLICATION_PORT" ) + "/" + properties.getProperty( "MEDIA_DIR" );
-	}
-
 	public static String getImageDir()
 	{
 		return properties.getProperty( "IMAGE_DIR" );
-	}
-
-	public static String getMediaDir()
-	{
-		return properties.getProperty( "MEDIA_DIR" );
 	}
 
 	public static String getServiceUrl()
