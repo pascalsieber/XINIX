@@ -33,8 +33,9 @@ public class MailServiceImpl implements MailService
 		props.put( "mail.smtp.starttls.enable", "true" );
 		props.put( "mail.smtp.auth", "true" );
 		props.put( "mail.smtp.port", PewsConfig.getMailPort() );
+		props.put( "mail.smtp.from", messageFrom );		
 
-		Session mailSession = Session.getDefaultInstance( props, new Authenticator() {
+		Session mailSession = Session.getInstance( props, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication()
 			{
 				return new PasswordAuthentication( PewsConfig.getMailUserName(), PewsConfig.getMailPassword() );
@@ -43,11 +44,11 @@ public class MailServiceImpl implements MailService
 
 		// turn messageString into html (line breaks)
 		messageString = messageString.replaceAll( "(\r\n|\r|\n)", "<br />" );
-		
+
 		// append login information to message
 		messageString += "<br /><br />" + "<a href=\"" + recipient.getAuthenticationUrl() + "\">" + PewsConfig.getMailWebClientInfo() + "</a>";
-		messageString += "<br />" + PewsConfig.getUrlHelp() + "<br />" + recipient.getAuthenticationUrl();
-		
+		messageString += "<br /><br />" + PewsConfig.getUrlHelp() + "<br />" + recipient.getAuthenticationUrl();
+
 		try
 		{
 			Message message = new MimeMessage( mailSession );
@@ -72,8 +73,9 @@ public class MailServiceImpl implements MailService
 		props.put( "mail.smtp.starttls.enable", "true" );
 		props.put( "mail.smtp.auth", "true" );
 		props.put( "mail.smtp.port", PewsConfig.getMailPort() );
+		props.put( "mail.smtp.from", messageFrom );
 
-		Session mailSession = Session.getDefaultInstance( props, new Authenticator() {
+		Session mailSession = Session.getInstance( props, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication()
 			{
 				return new PasswordAuthentication( PewsConfig.getMailUserName(), PewsConfig.getMailPassword() );
@@ -89,9 +91,9 @@ public class MailServiceImpl implements MailService
 
 		// turn messageString into html (line breaks)
 		messageString = messageString.replaceAll( "(\r\n|\r|\n)", "<br />" );
-		
+
 		messageString += "<br /><br />" + "<a href=\"" + link + "\">" + PewsConfig.getMailWebClientInfo() + "</a>";
-		messageString += "<br />" + PewsConfig.getUrlHelp() + "<br />" + link;
+		messageString += "<br /><br />" + PewsConfig.getUrlHelp() + "<br />" + link;
 
 		try
 		{

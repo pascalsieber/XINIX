@@ -121,7 +121,7 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 		String messageString = PewsConfig.getMailTextProfile();
 		messageString += "\n\n" + "Login: " + user.getLoginName() + "\n" + "Passwort: " + user.getCredential().getPassword();
 
-		mailService.sendProfile( user, messageString, PewsConfig.getMailSubjectForProfile(), PewsConfig.getMailSenderNameForProfile() );
+		mailService.sendProfile( user, messageString, PewsConfig.getMailSubjectForProfile(), PewsConfig.getMailUserName() );
 	}
 
 	@Override

@@ -114,6 +114,6 @@ public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements 
 
 	private void sendInvitation( Invitation invitation, SessionImpl session )
 	{
-		mailService.sendInvitation( invitation, ( (PinkElefantWorkshop)session.getWorkshop() ).getEmailText(), PewsConfig.getMailSubjectForInvitation(), PewsConfig.getMailSenderNameForInvitation() );
+		mailService.sendInvitation( invitation, ( (PinkElefantWorkshop)session.getWorkshop() ).getEmailText(), PewsConfig.getMailSubjectForInvitation(), PewsConfig.getMailUserName() );
 	}
 }

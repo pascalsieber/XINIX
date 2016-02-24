@@ -164,16 +164,6 @@ public class PewsConfig
 		return properties.getProperty( "MAIL_PROFILE_SUBJECT" );
 	}
 
-	public static String getMailSenderNameForInvitation()
-	{
-		return properties.getProperty( "MAIL_INVITATION_FROM" );
-	}
-
-	public static String getMailSenderNameForProfile()
-	{
-		return properties.getProperty( "MAIL_PROFILE_FROM" );
-	}
-
 	public static String getMailWebClientInfo()
 	{
 		return properties.getProperty( "MAIL_WEB_CLIENT_INTRO" );
