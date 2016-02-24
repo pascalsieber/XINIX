@@ -43,10 +43,17 @@ public class You2MeExerciseDataService extends ExerciseDataServiceImpl
 		for ( ExerciseDataImpl result : results )
 		{
 			Collections.sort( ( (You2MeExerciseData)result ).getDialog(), new Comparator< DialogEntry >() {
+
 				@Override
 				public int compare( DialogEntry o1, DialogEntry o2 )
 				{
-					return o1.getOrderInDialog().compareTo( o2.getOrderInDialog() );
+					return compareHandlingNullValues(o1.getOrderInDialog(), o2.getOrderInDialog());
+				}
+
+				// compare function which handles null values
+				private < T extends Comparable< T >> int compareHandlingNullValues( T a, T b )
+				{
+					return a == null ? ( b == null ? 0 : Integer.MIN_VALUE ) : ( b == null ? Integer.MAX_VALUE : a.compareTo( b ) );
 				}
 			} );
 		}
@@ -62,10 +69,17 @@ public class You2MeExerciseDataService extends ExerciseDataServiceImpl
 		for ( ExerciseDataImpl result : results )
 		{
 			Collections.sort( ( (You2MeExerciseData)result ).getDialog(), new Comparator< DialogEntry >() {
+				
 				@Override
 				public int compare( DialogEntry o1, DialogEntry o2 )
 				{
-					return o1.getOrderInDialog().compareTo( o2.getOrderInDialog() );
+					return compareHandlingNullValues(o1.getOrderInDialog(), o2.getOrderInDialog());
+				}
+
+				// compare function which handles null values
+				private < T extends Comparable< T >> int compareHandlingNullValues( T a, T b )
+				{
+					return a == null ? ( b == null ? 0 : Integer.MIN_VALUE ) : ( b == null ? Integer.MAX_VALUE : a.compareTo( b ) );
 				}
 			} );
 		}
