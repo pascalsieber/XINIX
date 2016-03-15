@@ -89,6 +89,11 @@ public class PewsConfig
 		return properties.getProperty( "IMAGE_DIR" );
 	}
 
+	public static String getExportDir()
+	{
+		return properties.getProperty( "EXPORT_DIR" );
+	}
+
 	public static String getServiceUrl()
 	{
 		return properties.getProperty( "EXPOSED_SERVICE_URL" );

@@ -310,8 +310,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			dir.mkdirs();
 
 		String filePath = dir.getAbsolutePath() + File.separator + "export.xlsx";
-		// TODO: make this configurable
-		String downloadPath = PewsConfig.getWebDirURL() + "/export/export.xlsx";
+		String downloadPath = PewsConfig.getExportDir() + "/export.xlsx";
 		Workbook workbook = new XSSFWorkbook();
 
 		// make sheet for every entry in exportableDataMap
