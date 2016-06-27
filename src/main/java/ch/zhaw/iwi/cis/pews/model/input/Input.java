@@ -19,6 +19,8 @@ public class Input
 	private boolean countable;
 	private Integer cardinality;
 
+	private String help;
+
 	public Input()
 	{
 		super();
@@ -38,6 +40,7 @@ public class Input
 		this.skippable = exercise.isSkippable();
 		this.countable = exercise.isCountable();
 		this.cardinality = exercise.getCardinality();
+		this.help = exercise.getDescription();
 	}
 
 	public String getExerciseID()
@@ -150,4 +153,13 @@ public class Input
 		this.cardinality = cardinality;
 	}
 
+	public String getHelp()
+	{
+		return help;
+	}
+
+	public void setHelp( String help )
+	{
+		this.help = help;	
+	}
 }
