@@ -258,7 +258,7 @@ public class ZhawEngine implements LifecycleObject
 		ServletHolder holder = new ServletHolder( new ServletContainer( resourceConfig ) );
 		holder.setInitParameter( "jersey.config.server.provider.classnames", LoggingFilter.class.getName() );
 		holder.setInitOrder( 1 );
-		holder.getRegistration().setMultipartConfig( new MultipartConfigElement( "data/tmp", 1048576, 1048576, 262144 ) );
+		holder.getRegistration().setMultipartConfig( new MultipartConfigElement( "data/tmp", 524288000, 524288000, 262144 ) );
 		ServletContextHandler handler = new ServletContextHandler();
 		handler.setContextPath( IdentifiableObjectRestService.SERVICES_BASE );
 		handler.addServlet( holder, "/*" );
