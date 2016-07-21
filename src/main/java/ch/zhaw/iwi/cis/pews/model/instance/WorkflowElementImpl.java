@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
+import javax.persistence.Column;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
@@ -25,7 +26,10 @@ public class WorkflowElementImpl extends WorkshopObject
 	private static final long serialVersionUID = 1L;
 
 	private String name;
+
+	@Column( length = 20000 )
 	private String description;
+
 	private double elapsedSeconds;
 
 	@OrderColumn( name = "idx_status" )
