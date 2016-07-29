@@ -9,6 +9,10 @@ public interface UserDao extends WorkshopObjectDao
 
 	public PrincipalImpl findByLoginName( String loginName );
 
+	public PrincipalImpl findByLoginNameForUserContext( String loginName );
+
 	public List< PrincipalImpl > finAllUsersForLoginService();
+
+	public PrincipalImpl findUserByID( String id );
 
 }

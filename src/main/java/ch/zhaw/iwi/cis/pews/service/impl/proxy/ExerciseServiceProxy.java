@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
@@ -31,6 +32,12 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	public void stop( String id )
 	{
 		getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+	}
+
+	@Override
+	public void renew( String id )
+	{
+		getServiceTarget().path( ExerciseRestService.RENEW ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
 	@Override
@@ -135,6 +142,31 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	public Participant findUserParticipant()
 	{
 		return getServiceTarget().path( ExerciseRestService.GET_USER_PARTICIPANT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( Participant.class );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseImpl > findAllExercises()
+	{
+		return getServiceTarget().path( ExerciseRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
+	}
+
+	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		return getServiceTarget().path( ExerciseRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( ExerciseImpl.class );
+	}
+
+	@Override
+	public String persistExercise( ExerciseImpl exercise )
+	{
+		return getServiceTarget().path( ExerciseRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exercise ) ).readEntity( String.class );
+	}
+
+	@Override
+	public String generateFromTemplate( ExerciseImpl obj )
+	{
+		return getServiceTarget().path( ExerciseRestService.GENERATE_FROM_TEMPLATE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
 	}
 
 }

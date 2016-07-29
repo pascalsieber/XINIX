@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+
 public class PinkLabsInput extends Input
 {
 	private String question;
@@ -9,9 +11,9 @@ public class PinkLabsInput extends Input
 		super();
 	}
 
-	public PinkLabsInput( String question )
+	public PinkLabsInput( ExerciseImpl exercise, String question )
 	{
-		super();
+		super( exercise );
 		this.question = question;
 	}
 

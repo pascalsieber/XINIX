@@ -2,9 +2,7 @@ package ch.zhaw.iwi.cis.pews.model.instance;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,11 +10,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
+import javax.persistence.Column;
 
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 
 @Entity
 @Inheritance( strategy = InheritanceType.JOINED )
@@ -26,36 +26,40 @@ public class WorkflowElementImpl extends WorkshopObject
 	private static final long serialVersionUID = 1L;
 
 	private String name;
+
+	@Column( length = 20000 )
 	private String description;
+
 	private double elapsedSeconds;
 
+	@OrderColumn( name = "idx_status" )
 	@OneToMany( cascade = CascadeType.ALL )
 	private List< WorkflowElementStatusHistoryElementImpl > statusHistory;
 
 	private String currentState;
 
 	@ManyToOne
-	private WorkflowElementDefinitionImpl definition;
+	private WorkflowElementTemplate derivedFrom;
 
-	@OneToMany( cascade = CascadeType.ALL )
-	private Set< WorkflowElementDataImpl > data;
+	@OneToMany( cascade = CascadeType.ALL, mappedBy = "workflowElement" )
+	private List< WorkflowElementDataImpl > data;
 
 	public WorkflowElementImpl()
 	{
 		super();
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
-		this.data = new HashSet< WorkflowElementDataImpl >();
+		this.data = new ArrayList< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 		this.elapsedSeconds = 0;
 	}
 
-	public WorkflowElementImpl( String name, String description, WorkflowElementDefinitionImpl definition )
+	public WorkflowElementImpl( String name, String description, WorkflowElementTemplate derivedFrom )
 	{
 		this.name = name;
 		this.description = description;
 		this.statusHistory = new ArrayList< WorkflowElementStatusHistoryElementImpl >();
-		this.definition = definition;
-		this.data = new HashSet< WorkflowElementDataImpl >();
+		this.derivedFrom = derivedFrom;
+		this.data = new ArrayList< WorkflowElementDataImpl >();
 		this.setCurrentState( WorkflowElementStatusImpl.NEW );
 		this.elapsedSeconds = 0;
 	}
@@ -101,22 +105,22 @@ public class WorkflowElementImpl extends WorkshopObject
 		this.currentState = currentState.toString();
 	}
 
-	public WorkflowElementDefinitionImpl getDefinition()
+	public WorkflowElementTemplate getDerivedFrom()
 	{
-		return definition;
+		return derivedFrom;
 	}
 
-	public void setDefinition( WorkflowElementDefinitionImpl definition )
+	public void setDerivedFrom( WorkflowElementTemplate derivedFrom )
 	{
-		this.definition = definition;
+		this.derivedFrom = derivedFrom;
 	}
 
-	public Set< WorkflowElementDataImpl > getData()
+	public List< WorkflowElementDataImpl > getData()
 	{
 		return data;
 	}
 
-	public void setData( Set< WorkflowElementDataImpl > data )
+	public void setData( List< WorkflowElementDataImpl > data )
 	{
 		this.data = data;
 	}

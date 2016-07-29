@@ -1,10 +1,13 @@
 package ch.zhaw.iwi.cis.pews.service;
 
+import java.util.List;
+
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 
 public interface SessionService extends WorkflowElementService
 {
@@ -30,5 +33,13 @@ public interface SessionService extends WorkflowElementService
 	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest );
 
 	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request );
+
+	public SessionImpl findSessionByID( String id );
+
+	public List< SessionImpl > findAllSessions();
+
+	public PollingWrapper getCurrentExericseIDWithOutput();
+
+	public String persistSession( SessionImpl obj );
 
 }

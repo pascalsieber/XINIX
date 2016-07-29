@@ -16,6 +16,7 @@
 	<!ENTITY jersey.revision "2.7">
 	<!ENTITY commons.lang.revision "2.6">
 	<!ENTITY commons.io.revision "2.4">
+	<!ENTITY apache.poi.revision "3.13">
 	<!ENTITY quartz.revision "2.2.1">
 ]>
 
@@ -52,6 +53,9 @@
 		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet-core" rev="&jersey.revision;" conf="default"/>
 		<dependency org="commons-lang" name="commons-lang" rev="&commons.lang.revision;" conf="default"/>
 		<dependency org="commons-io" name="commons-io" rev="&commons.io.revision;" conf="default"/>
+		<dependency org="org.apache.poi" name="poi" rev="&apache.poi.revision;" conf="default"/>
+		<dependency org="org.apache.poi" name="poi-ooxml" rev="&apache.poi.revision;" conf="default"/>
+		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="&apache.poi.revision;" conf="default"/>
 		<dependency org="org.quartz-scheduler" name="quartz" rev="&quartz.revision;" conf="default"/>
 		<exclude module="persistence-api"/>
 	</dependencies>

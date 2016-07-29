@@ -1,6 +1,9 @@
 package ch.zhaw.iwi.cis.pews.model.input;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 
 public class You2MeInput extends Input
 {
@@ -9,12 +12,12 @@ public class You2MeInput extends Input
 	public You2MeInput()
 	{
 		super();
-		// TODO Auto-generated constructor stub
+		this.questions = new ArrayList< String >();
 	}
 
-	public You2MeInput( List< String > questions )
+	public You2MeInput( ExerciseImpl exercise, List< String > questions )
 	{
-		super();
+		super( exercise );
 		this.questions = questions;
 	}
 

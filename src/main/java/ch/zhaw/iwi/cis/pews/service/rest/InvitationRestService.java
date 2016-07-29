@@ -22,6 +22,11 @@ public class InvitationRestService extends WorkshopObjectRestService
 	public static final String BASE = "/workshopService/session/invitation";
 
 	public static final String ACCEPT = "/accept";
+	public static final String FIND_BY_USER_ID = "/findByUserID";
+	public static final String FIND_BY_SESSION_ID = "/findBySessionID";
+	public static final String SEND_BY_ID = "/sendByID";
+	public static final String SEND_BY_SESSION_ID = "/sendBySessionID";
+	public static final String SEND_BY_WORKSHOP_ID = "/sendByWorkshopID";
 
 	private InvitationService invitationService;
 
@@ -43,7 +48,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public Invitation findByID( String id )
 	{
-		return super.findByID( id );
+		return invitationService.findInvitationByID( id );
 	}
 
 	@POST
@@ -58,7 +63,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< Invitation > findAll()
 	{
-		return super.findAll();
+		return invitationService.findAllInvitations();
 	}
 
 	@POST
@@ -66,6 +71,41 @@ public class InvitationRestService extends WorkshopObjectRestService
 	public void accept( String invitationID )
 	{
 		invitationService.accept( invitationID );
+	}
+
+	@POST
+	@Path( FIND_BY_USER_ID )
+	public List< Invitation > findByUserID( String userID )
+	{
+		return invitationService.findByUserID( userID );
+	}
+
+	@POST
+	@Path( FIND_BY_SESSION_ID )
+	public List< Invitation > findBySessionID( String sessionID )
+	{
+		return invitationService.findBySessionID( sessionID );
+	}
+
+	@POST
+	@Path( SEND_BY_ID )
+	public void sendInvitationByID( String invitationID )
+	{
+		invitationService.sendByID( invitationID );
+	}
+
+	@POST
+	@Path( SEND_BY_SESSION_ID )
+	public void sendInvitationsBySessionID( String sessionID )
+	{
+		invitationService.sendBySessionID( sessionID );
+	}
+
+	@POST
+	@Path( SEND_BY_WORKSHOP_ID )
+	public void sendInvitationsByWorkshopID( String workshopID )
+	{
+		invitationService.sendByWorkshopID( workshopID );
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
+import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
 @Entity
@@ -21,7 +22,7 @@ public class XinixData extends CompressableExerciseData
 	private Set< String > associations;
 
 	@ManyToOne
-	private XinixImage xinixImage;
+	private MediaObject xinixImage;
 
 	public XinixData()
 	{
@@ -29,7 +30,7 @@ public class XinixData extends CompressableExerciseData
 		this.associations = new HashSet<>();
 	}
 
-	public XinixData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Set< String > associations, XinixImage xinixImage )
+	public XinixData( PrincipalImpl owner, WorkflowElementImpl workflowElement, Set< String > associations, MediaObject xinixImage )
 	{
 		super( owner, workflowElement );
 		this.associations = associations;
@@ -46,12 +47,12 @@ public class XinixData extends CompressableExerciseData
 		this.associations = associations;
 	}
 
-	public XinixImage getXinixImage()
+	public MediaObject getXinixImage()
 	{
 		return xinixImage;
 	}
 
-	public void setXinixImage( XinixImage xinixImage )
+	public void setXinixImage( MediaObject xinixImage )
 	{
 		this.xinixImage = xinixImage;
 	}

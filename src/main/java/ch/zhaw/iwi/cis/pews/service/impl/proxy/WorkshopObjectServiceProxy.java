@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.rest.IdentifiableObjectRestService;
+import ch.zhaw.iwi.cis.pews.service.rest.WorkshopObjectRestService;
 
 public class WorkshopObjectServiceProxy extends ServiceProxy implements WorkshopObjectService
 {
@@ -41,6 +42,20 @@ public class WorkshopObjectServiceProxy extends ServiceProxy implements Workshop
 	public < T extends WorkshopObject > List< T > findAll()
 	{
 		return getServiceTarget().path( IdentifiableObjectRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( null ) ).readEntity( List.class );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public < T extends WorkshopObject > List< T > findAllByClientID( String clientID )
+	{
+		return getServiceTarget().path( WorkshopObjectRestService.FIND_ALL_BY_CLIENT_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( clientID ) ).readEntity( List.class );
+	}
+
+	@Override
+	public Object simplifyOwnerInObjectGraph( Object object )
+	{
+		// only to be used internally and not by proxy
+		throw new UnsupportedOperationException();
 	}
 
 }

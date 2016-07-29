@@ -13,11 +13,12 @@ public class DialogEntry extends WorkshopObject
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	
-	@Enumerated(EnumType.STRING)
+
+	@Enumerated( EnumType.STRING )
 	private DialogRole role;
-	
+
 	private String text;
+	private Integer orderInDialog = null;
 
 	public DialogEntry()
 	{
@@ -49,6 +50,16 @@ public class DialogEntry extends WorkshopObject
 	public void setText( String text )
 	{
 		this.text = text;
+	}
+
+	public Integer getOrderInDialog()
+	{
+		return orderInDialog;
+	}
+
+	public void setOrderInDialog( Integer orderInDialog )
+	{
+		this.orderInDialog = orderInDialog;
 	}
 
 }

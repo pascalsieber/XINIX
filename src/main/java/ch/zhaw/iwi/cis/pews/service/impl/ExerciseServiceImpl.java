@@ -1,6 +1,9 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,36 +22,38 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
+import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
+import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.CompressionExerciseService;
-import ch.zhaw.iwi.cis.pews.service.exercise.impl.EndWorkshopExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationExerciseService;
+import ch.zhaw.iwi.cis.pews.service.exercise.impl.EvaluationResultExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.P2POneExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.P2PTwoExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.PinkLabsExerciseService;
+import ch.zhaw.iwi.cis.pews.service.exercise.impl.PosterExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.SimplePrototypingExerciseService;
-import ch.zhaw.iwi.cis.pews.service.exercise.impl.StartWorkshopExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.XinixExerciseService;
 import ch.zhaw.iwi.cis.pews.service.exercise.impl.You2MeExerciseService;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.CompressionDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EndWorkshopDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.EvaluationDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2POneDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.P2PTwoDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.PinkLabsDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.SimplePrototypingDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.StartWorkshopDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.XinixDefinition;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.definition.You2MeDefinition;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -58,31 +63,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
 {
 	private ObjectMapper objectMapper;
+	private ExerciseDataService exerciseDataService;
+	private ExerciseTemplateService exerciseTemplateService;
 
 	private ExerciseDao exerciseDao;
 	private ExerciseDataDao exerciseDataDao;
 	private ParticipantDao participantDao;
 	private WorkshopDao workshopDao;
-	private static final Map< String, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseServiceImpl >>();
+	private static final Map< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl >>();
 
-	//TODO move this from manual entries to an automatic solution, preferably using annotation @ExerciseSpecificService (which is already implemented)
-	static
+	protected WorkshopDao getWorkshopDao()
 	{
-		EXERCISESPECIFICSERVICES.put( PinkLabsDefinition.class.getSimpleName(), PinkLabsExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( You2MeDefinition.class.getSimpleName(), You2MeExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( P2POneDefinition.class.getSimpleName(), P2POneExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( P2PTwoDefinition.class.getSimpleName(), P2PTwoExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( SimplePrototypingDefinition.class.getSimpleName(), SimplePrototypingExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( XinixDefinition.class.getSimpleName(), XinixExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( CompressionDefinition.class.getSimpleName(), CompressionExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( EvaluationDefinition.class.getSimpleName(), EvaluationExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( StartWorkshopDefinition.class.getSimpleName(), StartWorkshopExerciseService.class );
-		EXERCISESPECIFICSERVICES.put( EndWorkshopDefinition.class.getSimpleName(), EndWorkshopExerciseService.class );
+		return this.workshopDao;
 	}
 
-	private Class< ? > getExerciseSpecificService( String exerciseDefinitionClassName )
+	// TODO move this from manual entries to an automatic solution, preferably using annotation @ExerciseSpecificService (which is already implemented)
+	static
 	{
-		return EXERCISESPECIFICSERVICES.get( exerciseDefinitionClassName );
+		EXERCISESPECIFICSERVICES.put( PinkLabsExercise.class, PinkLabsExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( You2MeExercise.class, You2MeExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( P2POneExercise.class, P2POneExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( P2PTwoExercise.class, P2PTwoExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( SimplyPrototypingExercise.class, SimplePrototypingExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( XinixExercise.class, XinixExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( CompressionExercise.class, CompressionExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( EvaluationExercise.class, EvaluationExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( PosterExercise.class, PosterExerciseService.class );
+		EXERCISESPECIFICSERVICES.put( EvaluationResultExercise.class, EvaluationResultExerciseService.class );
+	}
+
+	private Class< ? > getExerciseSpecificService( Class< ? extends ExerciseImpl > exerciseClass )
+	{
+		return EXERCISESPECIFICSERVICES.get( exerciseClass );
 	}
 
 	public ExerciseServiceImpl()
@@ -92,6 +104,8 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 		objectMapper = new ObjectMapper();
+		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
+		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 	}
 
 	public ObjectMapper getObjectMapper()
@@ -104,28 +118,103 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	 * 
 	 * @see ch.zhaw.iwi.cis.pews.service.impl.WorkshopObjectServiceImpl#persist(ch.zhaw.iwi.cis.pews.model.WorkshopObject)
 	 * 
-	 * overriding this method to handle orderInWorkshop correctly.
+	 * specialized persist method for handling orderInWorkshop correctly.
 	 */
 	@Override
-	public < T extends WorkshopObject > String persist( T object )
+	public String persistExercise( ExerciseImpl exercise )
 	{
-		// assign orderInWorkshop field (back of the row, last exercise)
-		// but only on insert (i.e. persist of new exercise)
-
-		// check if object with ID is available (has been persisted)
-		if ( null == exerciseDao.findById( object.getID() ) )
+		WorkshopImpl workshop = workshopDao.findById( exercise.getWorkshop().getID() );
+		List< String > workshopExerciseIDs = new ArrayList< String >();
+		for ( ExerciseImpl e : workshop.getExercises() )
 		{
-			WorkshopImpl workshop = workshopDao.findById( ( (ExerciseImpl)object ).getWorkshop().getID() );
-			( (ExerciseImpl)object ).setOrderInWorkshop( workshop.getExercises().size() );
+			workshopExerciseIDs.add( e.getID() );
+		}
+
+		// if no argument for orderInWorkshop provided (i.e. null),
+		// place at the end of workshop's exercise queue
+		// else handle order of other exercises
+		if ( exercise.getOrderInWorkshop() == null )
+		{
+			// place at end of queue
+			exercise.setOrderInWorkshop( workshop.getExercises().size() );
+
+			// special case: if persisting / updating existing exercise and no
+			// argument for orderInWorkshop provided, exercise keeps existing orderInWorkshop
+			ExerciseImpl check = exerciseDao.findById( exercise.getID() );
+			if ( null != check )
+			{
+				exercise.setOrderInWorkshop( check.getOrderInWorkshop() );
+			}
 		}
 		else
 		{
-			// if not null, it means that persist operation is for update
-			// keep existing orderInWorkshop
-			( (ExerciseImpl)object ).setOrderInWorkshop( ( (ExerciseImpl)exerciseDao.findById( object.getID() ) ).getOrderInWorkshop() );
+			// handle order of exercises
+			for ( int i = exercise.getOrderInWorkshop(); i < workshopExerciseIDs.size(); i++ )
+			{
+				ExerciseImpl ex = exerciseDao.findById( workshopExerciseIDs.get( i ) );
+				ex.setOrderInWorkshop( i + 1 );
+				super.persist( ex );
+			}
 		}
 
-		return super.persist( object );
+		return super.persist( exercise );
+	}
+
+	@Override
+	public String generateFromTemplate( ExerciseImpl obj )
+	{
+		// TODO: discuss with John how to use deflector in this case
+		try
+		{
+			// check if obj in request references an existing exercise template and utilize accordingly
+			ExerciseTemplate template = exerciseTemplateService.findByID( obj.getDerivedFrom().getID() );
+			if ( template != null )
+			{
+				obj.setDerivedFrom( template );
+			}
+
+			// make exercise instance based on template / derivedFrom
+			// Constructor< ? > constructor = ClassWrapper.getConstructor( obj.getClass(), new Class[] { String.class, String.class, ExerciseImpl.class, WorkshopImpl.class } );
+			Constructor< ? > constructor = null;
+			Constructor< ? >[] constructors = obj.getClass().getConstructors();
+			for ( int i = 0; i < constructors.length; i++ )
+			{
+				if ( constructors[ i ].getParameterTypes().length > 0 )
+				{
+					constructor = constructors[ i ];
+				}
+			}
+
+			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), obj.getWorkshop() );
+
+			// if template not null, use default name and description from template
+			if ( template != null )
+			{
+				exercise.setName( template.getDefaultName() );
+				exercise.setDescription( template.getDefaultDescription() );
+			}
+
+			return persistExercise( exercise );
+		}
+		catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e )
+		{
+			throw new RuntimeException( e );
+		}
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseImpl > findAllExercises()
+	{
+		return (List< ExerciseImpl >)simplifyOwnerInObjectGraph( findAll() );
+	}
+
+	@Override
+	public ExerciseImpl findExerciseByID( String id )
+	{
+		ExerciseImpl result = ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( ( (ExerciseImpl)findByID( id ) ).getClass() ).getSimpleName() ) )
+			.findExerciseByID( id );
+		return (ExerciseImpl)simplifyOwnerInObjectGraph( result );
 	}
 
 	@Override
@@ -162,14 +251,14 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	public Input getInput()
 	{
 		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).getInput();
+			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getClass() ).getSimpleName() ) ).getInput();
 	}
 
 	@Override
 	public Input getInputByExerciseID( String exerciseID )
 	{
-		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( ( (ExerciseImpl)findByID( exerciseID ) ).getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).getInputByExerciseID( exerciseID );
+		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( ( (ExerciseImpl)findByID( exerciseID ) ).getClass() ).getSimpleName() ) )
+			.getInputByExerciseID( exerciseID );
 	}
 
 	@Override
@@ -204,7 +293,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	public void setOutput( String output )
 	{
 		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getDefinition().getClass().getSimpleName() ).getSimpleName() ) ).setOutput( output );
+			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getClass() ).getSimpleName() ) ).setOutput( output );
 	}
 
 	@Override
@@ -226,8 +315,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 				throw new RuntimeException( "error performing setOutputByExerciseID: exercise with ID " + exerciseID + " could not be found" );
 			}
 
-			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( exercise.getDefinition().getClass().getSimpleName() ).getSimpleName() ) )
-				.setOuputByExerciseID( outputRequestString );
+			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( exercise.getClass() ).getSimpleName() ) ).setOuputByExerciseID( outputRequestString );
 		}
 		catch ( IOException e )
 		{
@@ -238,13 +326,14 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public List< ExerciseDataImpl > getOutput()
 	{
-		return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+		// return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+		return exerciseDataService.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
 	@Override
 	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
 	{
-		return exerciseDataDao.findByExerciseID( exerciseID );
+		return exerciseDataService.findByExerciseID( exerciseID );
 	}
 
 	@Override
@@ -308,7 +397,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	@Override
 	public Participant findUserParticipant()
 	{
-		return participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
+		return (Participant)simplifyOwnerInObjectGraph( participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() ) );
 	}
 
 }

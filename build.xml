@@ -92,7 +92,7 @@
 			classpathref="libs.main"
 			debug="on"
 			debuglevel="lines,vars,source"
-			encoding="UTF8"/>
+			encoding="UTF-8"/>
 	</target>
 
 	<target name="package.main" depends="compile.main">
@@ -102,6 +102,7 @@
 			</zipfileset>
 			<zipfileset dir="${src.main.resources}/defaultConfig" prefix="META-INF">
 				<include name="persistence.xml"/>
+				<include name="pews.properties"/>
 			</zipfileset>
 		</jar>
 	</target>
@@ -114,7 +115,7 @@
 			classpathref="libs.test"
 			debug="on"
 			debuglevel="lines,vars,source"
-			encoding="UTF8"/>
+			encoding="UTF-8"/>
 	</target>
 
 	<target name="package.test" depends="compile.test, package.main">
@@ -140,6 +141,7 @@
 			<tarfileset dir="${src.main.resources}/defaultConfig" prefix="pews/conf">
 				<include name="*.*"/>
 				<exclude name="persistence.xml"/>
+				<exclude name="pews.properties"/>
 			</tarfileset>
 			<tarfileset file="${src.main.resources}/scripts/pews" filemode="755" username="*" group="*" prefix="pews/bin"/>
 			<tarfileset file="${src.main.resources}/scripts/pews.bat" filemode="755" username="*" group="*" prefix="pews/bin"/>
@@ -156,7 +158,7 @@
 		<mkdir dir="${target}/test-install/pews/db"/>
 		<mkdir dir="${target}/test-install/pews/log"/>
 		
-		<!-- copy existing web folder with xinix images and webclient into target -->
+		<!-- copy existing web folder with xinix images into target -->
 		<copy todir="${target}/test-install/pews/web">
 			<fileset dir="${src.main.resources}/web"/>
 		</copy>

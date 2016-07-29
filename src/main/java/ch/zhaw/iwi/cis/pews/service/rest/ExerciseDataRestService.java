@@ -21,6 +21,9 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 {
 	public final static String BASE = "/exerciseService/data";
 	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
+	public final static String REMOVE_BY_ID = "/removeByID";
+	public final static String EXPORT_BY_EXERCISE_ID = "/exportByExerciseID";
+	public final static String EXPORT_BY_WORKSHOP_ID = "/exportByWorkshopID";
 
 	private ExerciseDataService exerciseDataService;
 
@@ -34,7 +37,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	@Path( PERSIST )
 	public String persist( ExerciseDataImpl obj )
 	{
-		return super.persist( obj );
+		return exerciseDataService.persistExerciseData( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -42,7 +45,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public ExerciseDataImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return exerciseDataService.findExerciseDataByID( id );
 	}
 
 	@POST
@@ -57,7 +60,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< ExerciseDataImpl > findAll()
 	{
-		return super.findAll();
+		return exerciseDataService.findAllExerciseData();
 	}
 
 	@POST
@@ -65,6 +68,28 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
 		return exerciseDataService.findByExerciseID( exerciseID );
+	}
+
+	@POST
+	@Path( REMOVE_BY_ID )
+	public void removeExerciseDataByID( String id )
+	{
+		exerciseDataService.removeExerciseDataByID( id );
+	}
+
+	@POST
+	@Path( EXPORT_BY_EXERCISE_ID )
+	public String exportDataByExerciseID( String exerciseID )
+
+	{
+		return exerciseDataService.exportByExerciseID( exerciseID );
+	}
+
+	@POST
+	@Path( EXPORT_BY_WORKSHOP_ID )
+	public String exportDataByWorkshopID( String workshopID )
+	{
+		return exerciseDataService.exportByWorkshopID( workshopID );
 	}
 
 	@Override

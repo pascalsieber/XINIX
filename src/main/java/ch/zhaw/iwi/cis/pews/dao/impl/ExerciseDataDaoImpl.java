@@ -5,7 +5,6 @@ import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
@@ -23,21 +22,54 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 		return ExerciseDataImpl.class;
 	}
 
+	@Override
+	public String persistExerciseData( ExerciseDataImpl obj )
+	{
+		return persist( obj );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public ExerciseDataImpl findDataByID( String id )
+	{
+		List< ExerciseDataImpl > results = getEntityManager().createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.id = :_id" ).setParameter( "_id", id ).getResultList();
+
+		if ( results.size() > 0 )
+		{
+			return results.get( 0 );
+		}
+		else
+		{
+			return null;
+		}
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< ExerciseDataImpl > data = getEntityManager().createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id = '" + exerciseID + "'" ).getResultList();
+		List< ExerciseDataImpl > data = getEntityManager()
+			.createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
+			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( Class< ? > dataClass )
+	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	{
+		List< ExerciseDataImpl > data = getEntityManager()
+			.createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
+			.setParameter( "ids", exerciseIDs )
+			.getResultList();
+		return (List< ExerciseDataImpl >)cloneResult( data );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< ExerciseDataImpl > findByWorkshopAndExerciseDataClass( WorkshopImpl workshop, Class< ? > dataClass )
 	{
 		List< ExerciseDataImpl > result = new ArrayList<>();
-
-		WorkshopImpl workshop = getEntityManager().find( WorkshopImpl.class, UserContext.getCurrentUser().getSession().getWorkshop().getID() );
 
 		for ( ExerciseImpl ex : workshop.getExercises() )
 		{

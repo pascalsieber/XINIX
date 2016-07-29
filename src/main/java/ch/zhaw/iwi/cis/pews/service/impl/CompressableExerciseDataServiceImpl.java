@@ -4,9 +4,9 @@ import ch.zhaw.iwi.cis.pews.dao.CompressableExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressableExerciseDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.service.CompressableExerciseDataService;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )

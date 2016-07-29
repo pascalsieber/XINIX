@@ -21,6 +21,9 @@ public class UserRestService extends WorkshopObjectRestService
 	public static final String USER_BASE = "/userService/user";
 	public static final String FIND_BY_LOGIN_NAME = "/findByLogin";
 	public static final String REQUEST_PASSWORD = "/requestPassword";
+	public static final String SEND_PROFILE = "/sendProfile";
+
+	public static final String PERSIST_FOR_CLIENT = "persistForClient";
 
 	public UserRestService()
 	{
@@ -34,12 +37,19 @@ public class UserRestService extends WorkshopObjectRestService
 		return super.persist( principal );
 	}
 
+	@POST
+	@Path( PERSIST_FOR_CLIENT )
+	public String persistUserForClient( PrincipalImpl principal )
+	{
+		return getUserService().persistForClient( principal );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
 	public PrincipalImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return getUserService().findUserByID( id );
 	}
 
 	@POST
@@ -58,6 +68,13 @@ public class UserRestService extends WorkshopObjectRestService
 	}
 
 	@POST
+	@Path( FIND_ALL_BY_CLIENT_ID )
+	public List< UserImpl > findAllUsersByClientID( String clientID )
+	{
+		return super.findAllByClientID( clientID );
+	}
+
+	@POST
 	@Path( FIND_BY_LOGIN_NAME )
 	public PrincipalImpl findByLoginName( String loginName )
 	{
@@ -69,6 +86,13 @@ public class UserRestService extends WorkshopObjectRestService
 	public boolean requestNewPassword( String userID )
 	{
 		return getUserService().requestNewPassword( userID );
+	}
+
+	@POST
+	@Path( SEND_PROFILE )
+	public void sendUserProfile( String userID )
+	{
+		getUserService().sendProfile( userID );
 	}
 
 	@Override

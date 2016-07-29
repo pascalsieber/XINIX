@@ -8,12 +8,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.SessionServiceImpl;
@@ -25,6 +27,8 @@ public class SessionRestService extends WorkshopObjectRestService
 {
 
 	public static final String BASE = "/workshopService/session";
+
+	public static final String GET_CURRENT_EXERCISE_ID = "/getCurrentExerciseID";
 
 	public final static String GET_CURRENT_EXERCISE = "/getCurrentExercise";
 	public final static String SET_CURRENT_EXERCISE = "/setCurrentExercise";
@@ -38,12 +42,15 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
+	public final static String RENEW = "/renew";
 
 	public static final String JOIN = "/join";
 	public static final String LEAVE = "/leave";
 
 	public static final String ADD_EXECUTER = "/addExecuter";
 	public static final String REMOVE_EXECUTER = "/removeExecuter";
+
+	public final static String GET_CURRENT_EXERCISE_ID_WITH_OUTPUT = "/getCurrentExerciseIDWithOutput";
 
 	private SessionService sessionService;
 
@@ -57,7 +64,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	@Path( PERSIST )
 	public String persist( SessionImpl obj )
 	{
-		return super.persist( obj );
+		return sessionService.persistSession( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -65,7 +72,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public SessionImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return sessionService.findSessionByID( id );
 	}
 
 	@POST
@@ -80,7 +87,7 @@ public class SessionRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< SessionImpl > findAll()
 	{
-		return super.findAll();
+		return sessionService.findAllSessions();
 	}
 
 	@POST
@@ -88,6 +95,21 @@ public class SessionRestService extends WorkshopObjectRestService
 	public ExerciseImpl getCurrentExercise( String sessionID )
 	{
 		return sessionService.getCurrentExercise( sessionID );
+	}
+
+	@POST
+	@Path( GET_CURRENT_EXERCISE_ID )
+	public String getCurrentExerciseID()
+	{
+		// not delegating to service on purpose, in order to decrease response time since this request will be fired often (client polling)
+		return UserContext.getCurrentUser().getSession().getCurrentExercise().getID();
+	}
+
+	@POST
+	@Path( GET_CURRENT_EXERCISE_ID_WITH_OUTPUT )
+	public PollingWrapper getCurrentExerciseIDWithOutput()
+	{
+		return sessionService.getCurrentExericseIDWithOutput();
 	}
 
 	@POST
@@ -144,6 +166,13 @@ public class SessionRestService extends WorkshopObjectRestService
 	public void stop( String sessionID )
 	{
 		sessionService.stop( sessionID );
+	}
+
+	@POST
+	@Path( RENEW )
+	public void renewSession( String sessionID )
+	{
+		sessionService.renew( sessionID );
 	}
 
 	@POST

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class CompressionOutput extends Output
 {
-	private List< String > solutions;
+	private List< CompressionOutputElement > solutions;
 
 	public CompressionOutput()
 	{
@@ -13,18 +13,18 @@ public class CompressionOutput extends Output
 		this.solutions = new ArrayList<>();
 	}
 
-	public CompressionOutput( List< String > solutions )
+	public CompressionOutput( List< CompressionOutputElement > solutions )
 	{
 		super();
 		this.solutions = solutions;
 	}
 
-	public List< String > getSolutions()
+	public List< CompressionOutputElement > getSolutions()
 	{
 		return solutions;
 	}
 
-	public void setSolutions( List< String > solutions )
+	public void setSolutions( List< CompressionOutputElement > solutions )
 	{
 		this.solutions = solutions;
 	}

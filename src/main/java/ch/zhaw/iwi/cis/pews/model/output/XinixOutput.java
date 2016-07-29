@@ -2,20 +2,19 @@ package ch.zhaw.iwi.cis.pews.model.output;
 
 import java.util.Set;
 
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage;
+import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 
 public class XinixOutput extends Output
 {
 	private Set< String > answers;
-	private XinixImage chosenImage;
+	private MediaObject chosenImage;
 
 	public XinixOutput()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public XinixOutput( Set< String > answers, XinixImage chosenImage )
+	public XinixOutput( Set< String > answers, MediaObject chosenImage )
 	{
 		super();
 		this.answers = answers;
@@ -32,12 +31,12 @@ public class XinixOutput extends Output
 		this.answers = answers;
 	}
 
-	public XinixImage getChosenImage()
+	public MediaObject getChosenImage()
 	{
 		return chosenImage;
 	}
 
-	public void setChosenImage( XinixImage chosenImage )
+	public void setChosenImage( MediaObject chosenImage )
 	{
 		this.chosenImage = chosenImage;
 	}

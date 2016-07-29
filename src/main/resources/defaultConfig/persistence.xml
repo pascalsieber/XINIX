@@ -27,9 +27,9 @@
 		<class>ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.data.WorkshopDataImpl</class>
 		
-		<class>ch.zhaw.iwi.cis.pews.model.definition.ExerciseDefinitionImpl</class>
-		<class>ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl</class>
-		<class>ch.zhaw.iwi.cis.pews.model.definition.WorkshopDefinitionImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplateImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.template.WorkflowElemenTemplateImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplateImpl</class>
 		
 		<class>ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.instance.SessionImpl</class>
@@ -46,10 +46,15 @@
 		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/pewsDB;create=true" />
+			
+			<!-- for pews-test on skylla-->
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1529/pewsDB;create=true" />
+			<!-- for pews on skylla -->
+			<!-- <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1526/pewsDB;create=true" /> -->
+			
 			<property name="javax.persistence.jdbc.user" value="pews" />
 			<property name="javax.persistence.jdbc.password" value="pews" />
-			<property name="hibernate.hbm2ddl.auto" value="create" />
+			<property name="hibernate.hbm2ddl.auto" value="validate" />
 			<property name="hibernate.show_sql" value="false" />
 		</properties>
 	</persistence-unit>

@@ -1,5 +1,7 @@
 package ch.zhaw.iwi.cis.pews.service.impl.proxy;
 
+import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
@@ -8,6 +10,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
+import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.rest.SessionRestService;
 
@@ -29,6 +32,12 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public void stop( String id )
 	{
 		getServiceTarget().path( SessionRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+	}
+
+	@Override
+	public void renew( String id )
+	{
+		getServiceTarget().path( SessionRestService.RENEW ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
 	}
 
 	@Override
@@ -95,6 +104,31 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
 	{
 		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE_WITH_DELAY ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
+	}
+
+	@Override
+	public SessionImpl findSessionByID( String id )
+	{
+		return getServiceTarget().path( SessionRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( SessionImpl.class );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
+	public List< SessionImpl > findAllSessions()
+	{
+		return getServiceTarget().path( SessionRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
+	}
+
+	@Override
+	public PollingWrapper getCurrentExericseIDWithOutput()
+	{
+		return getServiceTarget().path( SessionRestService.GET_CURRENT_EXERCISE_ID_WITH_OUTPUT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( PollingWrapper.class );
+	}
+
+	@Override
+	public String persistSession( SessionImpl obj )
+	{
+		return getServiceTarget().path( SessionRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
 	}
 
 }

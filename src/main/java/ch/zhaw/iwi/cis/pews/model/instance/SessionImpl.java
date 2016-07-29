@@ -5,12 +5,14 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
@@ -19,6 +21,9 @@ public class SessionImpl extends WorkflowElementImpl
 {
 	@Transient
 	private static final long serialVersionUID = 1L;
+
+	@Enumerated( EnumType.STRING )
+	private SessionSynchronizationImpl synchronization;
 
 	@ManyToOne
 	private WorkshopImpl workshop;
@@ -48,15 +53,26 @@ public class SessionImpl extends WorkflowElementImpl
 		this.currentExercise = null;
 	}
 
-	public SessionImpl( String name, String description, WorkflowElementDefinitionImpl definition, WorkshopImpl workshop )
+	public SessionImpl(
+			String name,
+			String description,
+			WorkflowElementTemplate derivedFrom,
+			SessionSynchronizationImpl synchronization,
+			WorkshopImpl workshop,
+			ExerciseImpl currentExercise,
+			Set< Participant > participants,
+			Set< PrincipalImpl > acceptees,
+			Set< Invitation > invitations,
+			Set< PrincipalImpl > executers )
 	{
-		super( name, description, definition );
-		this.participants = new HashSet< Participant >();
-		this.acceptees = new HashSet< PrincipalImpl >();
-		this.invitations = new HashSet< Invitation >();
-		this.executers = new HashSet< PrincipalImpl >();
+		super( name, description, derivedFrom );
+		this.synchronization = synchronization;
 		this.workshop = workshop;
-		this.currentExercise = null;
+		this.currentExercise = currentExercise;
+		this.participants = participants;
+		this.acceptees = acceptees;
+		this.invitations = invitations;
+		this.executers = executers;
 	}
 
 	public WorkshopImpl getWorkshop()
@@ -74,10 +90,11 @@ public class SessionImpl extends WorkflowElementImpl
 		// need this in case we operate on a non-persisted session object
 		// for example in SessionServiceImpl.setCurrentExercise() an incomplete session object
 		// is used which is constructed as part of the REST service call
-		if (currentExercise != null) {
+		if ( currentExercise != null )
+		{
 			return currentExercise;
 		}
-		
+
 		// if session has no workshop, there can be no exercises
 		if ( workshop == null )
 		{
@@ -85,13 +102,13 @@ public class SessionImpl extends WorkflowElementImpl
 		}
 
 		// if no currentExercise is set, we assume that session has not kicked off,
-		// so we set the first exercise defined in the session's workshop as 
+		// so we set the first exercise defined in the session's workshop as
 		// the currentExercise
 		if ( currentExercise == null && workshop.getExercises().size() > 0 )
 		{
 			setCurrentExercise( getWorkshop().getExercises().get( 0 ) );
 		}
-		
+
 		return currentExercise;
 	}
 
@@ -138,6 +155,16 @@ public class SessionImpl extends WorkflowElementImpl
 	public void setExecuters( Set< PrincipalImpl > executers )
 	{
 		this.executers = executers;
+	}
+
+	public SessionSynchronizationImpl getSynchronization()
+	{
+		return synchronization;
+	}
+
+	public void setSynchronization( SessionSynchronizationImpl synchronization )
+	{
+		this.synchronization = synchronization;
 	}
 
 }

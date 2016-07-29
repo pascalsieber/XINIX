@@ -39,6 +39,12 @@ public class WorkflowElementServiceImpl extends WorkshopObjectServiceImpl implem
 		changeStatus( id, WorkflowElementStatusImpl.TERMINATED );
 	}
 
+	@Override
+	public void renew( String id )
+	{
+		changeStatus( id, WorkflowElementStatusImpl.NEW );
+	}
+
 	private void changeStatus( String id, WorkflowElementStatusImpl newStatus )
 	{
 		WorkflowElementImpl workflowElement = findByID( id );

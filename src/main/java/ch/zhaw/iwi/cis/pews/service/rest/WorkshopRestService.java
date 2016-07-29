@@ -24,6 +24,13 @@ public class WorkshopRestService extends WorkshopObjectRestService
 
 	public static final String START = "/start";
 	public static final String STOP = "/stop";
+	public static final String RENEW = "/renew";
+	public static final String RESET = "/resetByID";
+
+	public static final String UPDATE_EXERCISES_ORDER = "/updateOrderOfExercises";
+	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
+	public static final String EXPORT_DATA = "/exportData";
+	public static final String UPDATE_BASIC_INFO = "/updateBasicInformation";
 
 	private WorkshopService workshopService;
 
@@ -40,12 +47,19 @@ public class WorkshopRestService extends WorkshopObjectRestService
 		return super.persist( obj );
 	}
 
+	@POST
+	@Path( GENERATE_FROM_TEMPLATE )
+	public String generateFromTemplate( WorkshopImpl obj )
+	{
+		return workshopService.generateFromTemplate( obj );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
 	public WorkshopImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return workshopService.findWorkshopByID( id );
 	}
 
 	@POST
@@ -60,7 +74,7 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< WorkshopImpl > findAll()
 	{
-		return super.findAll();
+		return workshopService.findAllWorkshopsSimple();
 	}
 
 	@POST
@@ -75,6 +89,34 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public void stopWorkshop( String workshopID )
 	{
 		workshopService.stop( workshopID );
+	}
+
+	@POST
+	@Path( RENEW )
+	public void renewWorkshop( String workshopID )
+	{
+		workshopService.renew( workshopID );
+	}
+
+	@POST
+	@Path( RESET )
+	public void resetWorkshop( String workshopID )
+	{
+		workshopService.reset( workshopID );
+	}
+
+	@POST
+	@Path( UPDATE_EXERCISES_ORDER )
+	public void updateOrderOfExercises( WorkshopImpl wrapper )
+	{
+		workshopService.updateOrderOfExercises( wrapper );
+	}
+
+	@POST
+	@Path( UPDATE_BASIC_INFO )
+	public void updateWorkshopBasicInformation( WorkshopImpl workshop )
+	{
+		workshopService.updateBasicInformation(workshop);
 	}
 
 	@Override

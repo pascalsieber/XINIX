@@ -11,7 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import ch.zhaw.iwi.cis.pews.model.definition.WorkflowElementDefinitionImpl;
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
+import ch.zhaw.iwi.cis.pews.util.comparator.ExerciseImplComparator;
 
 @Entity
 public class WorkshopImpl extends WorkflowElementImpl
@@ -32,9 +33,9 @@ public class WorkshopImpl extends WorkflowElementImpl
 		this.exercises = new ArrayList< ExerciseImpl >();
 	}
 
-	public WorkshopImpl( String name, String description, WorkflowElementDefinitionImpl definition )
+	public WorkshopImpl( String name, String description, WorkflowElementTemplate derivedFrom )
 	{
-		super( name, description, definition );
+		super( name, description, derivedFrom );
 		this.sessions = new HashSet< SessionImpl >();
 		this.exercises = new ArrayList< ExerciseImpl >();
 	}

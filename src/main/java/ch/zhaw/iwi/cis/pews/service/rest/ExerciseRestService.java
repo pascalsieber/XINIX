@@ -29,6 +29,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
+	public final static String RENEW = "/renew";
 	public final static String SUSPEND = "/suspend";
 	public final static String RESUME = "/resume";
 
@@ -47,6 +48,8 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public final static String GETOUTPUT = "/getOutput";
 	public final static String GETOUTPUT_BY_EXERCISEID = "/getOutputByExerciseID";
 
+	public final static String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
+
 	// only for testing
 	public final static String GETINPUT_AS_STRING = "/getInputAsString";
 	public final static String GETINPUT_BY_EXERCISEID_AS_STRING = "/getInputByExerciseIDAsString";
@@ -63,7 +66,14 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	@Path( PERSIST )
 	public String persist( ExerciseImpl obj )
 	{
-		return super.persist( obj );
+		return exerciseService.persistExercise( obj );
+	}
+
+	@POST
+	@Path( GENERATE_FROM_TEMPLATE )
+	public String generateFromTemplate( ExerciseImpl obj )
+	{
+		return exerciseService.generateFromTemplate( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -71,7 +81,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	@Path( FIND_BY_ID )
 	public ExerciseImpl findByID( String id )
 	{
-		return super.findByID( id );
+		return exerciseService.findExerciseByID( id );
 	}
 
 	@POST
@@ -86,7 +96,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	@Path( FIND_ALL )
 	public List< ExerciseImpl > findAll()
 	{
-		return super.findAll();
+		return exerciseService.findAllExercises();
 	}
 
 	@POST
@@ -101,6 +111,13 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public void stopExercise( String exerciseID )
 	{
 		exerciseService.stop( exerciseID );
+	}
+
+	@POST
+	@Path( RENEW )
+	public void renewExercise( String exerciseID )
+	{
+		exerciseService.renew( exerciseID );
 	}
 
 	@POST
@@ -158,7 +175,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	{
 		exerciseService.setOuputByExerciseID( outputRequestString );
 	}
-	
+
 	@POST
 	@Path( GETOUTPUT )
 	public List< ExerciseDataImpl > getOutput()
@@ -172,7 +189,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	{
 		return exerciseService.getOutputByExerciseID( exerciseID );
 	}
-	
+
 	@POST
 	@Path( START_USER )
 	public void startUser()

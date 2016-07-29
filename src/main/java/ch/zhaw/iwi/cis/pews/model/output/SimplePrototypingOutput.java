@@ -2,28 +2,26 @@ package ch.zhaw.iwi.cis.pews.model.output;
 
 public class SimplePrototypingOutput extends Output
 {
-	private byte[] blob;
+	private String base64String;
 
 	public SimplePrototypingOutput()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public SimplePrototypingOutput( byte[] blob )
+	public SimplePrototypingOutput( String exerciseID )
 	{
-		super();
-		this.blob = blob;
+		super( exerciseID );
 	}
 
-	public byte[] getBlob()
+	public String getBase64String()
 	{
-		return blob;
+		return base64String;
 	}
 
-	public void setBlob( byte[] blob )
+	public void setBase64String( String base64String )
 	{
-		this.blob = blob;
+		this.base64String = base64String;
 	}
 
 }
