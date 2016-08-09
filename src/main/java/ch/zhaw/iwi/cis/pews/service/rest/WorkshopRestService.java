@@ -22,17 +22,10 @@ public class WorkshopRestService extends WorkshopObjectRestService
 
 	public static final String BASE = "/workshopService/workshop";
 
-    @Deprecated
-	public static final String START = "/start";
-    @Deprecated
-	public static final String STOP = "/stop";
-    @Deprecated
-	public static final String RENEW = "/renew";
 	public static final String RESET = "/resetByID";
 
 	public static final String UPDATE_EXERCISES_ORDER = "/updateOrderOfExercises";
 	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
-	public static final String EXPORT_DATA = "/exportData";
 	public static final String UPDATE_BASIC_INFO = "/updateBasicInformation";
 
 	private WorkshopService workshopService;
