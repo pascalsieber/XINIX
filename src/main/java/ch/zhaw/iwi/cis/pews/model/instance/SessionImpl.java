@@ -34,22 +34,14 @@ public class SessionImpl extends WorkflowElementImpl
 	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
 	private Set< Participant > participants;
 
-	@ManyToMany( mappedBy = "sessionAcceptances" )
-	private Set< PrincipalImpl > acceptees;
-
 	@OneToMany( cascade = CascadeType.ALL )
 	private Set< Invitation > invitations;
-
-	@ManyToMany( mappedBy = "sessionExecutions" )
-	private Set< PrincipalImpl > executers;
 
 	public SessionImpl()
 	{
 		super();
 		this.participants = new HashSet< Participant >();
-		this.acceptees = new HashSet< PrincipalImpl >();
 		this.invitations = new HashSet< Invitation >();
-		this.executers = new HashSet< PrincipalImpl >();
 		this.currentExercise = null;
 	}
 
@@ -70,9 +62,7 @@ public class SessionImpl extends WorkflowElementImpl
 		this.workshop = workshop;
 		this.currentExercise = currentExercise;
 		this.participants = participants;
-		this.acceptees = acceptees;
 		this.invitations = invitations;
-		this.executers = executers;
 	}
 
 	public WorkshopImpl getWorkshop()
@@ -127,16 +117,6 @@ public class SessionImpl extends WorkflowElementImpl
 		this.participants = participants;
 	}
 
-	public Set< PrincipalImpl > getAcceptees()
-	{
-		return acceptees;
-	}
-
-	public void setAcceptees( Set< PrincipalImpl > acceptees )
-	{
-		this.acceptees = acceptees;
-	}
-
 	public Set< Invitation > getInvitations()
 	{
 		return invitations;
@@ -145,16 +125,6 @@ public class SessionImpl extends WorkflowElementImpl
 	public void setInvitations( Set< Invitation > invitations )
 	{
 		this.invitations = invitations;
-	}
-
-	public Set< PrincipalImpl > getExecuters()
-	{
-		return executers;
-	}
-
-	public void setExecuters( Set< PrincipalImpl > executers )
-	{
-		this.executers = executers;
 	}
 
 	public SessionSynchronizationImpl getSynchronization()

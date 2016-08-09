@@ -122,15 +122,6 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 			part.getPrincipal().setSessionInvitations( null );
 		}
 
-		for ( PrincipalImpl principal : session.getAcceptees() )
-		{
-			principal.setCredential( null );
-			principal.setParticipation( null );
-			principal.setSessionAcceptances( null );
-			principal.setSessionExecutions( null );
-			principal.setSessionInvitations( null );
-		}
-
 		return session;
 	}
 
