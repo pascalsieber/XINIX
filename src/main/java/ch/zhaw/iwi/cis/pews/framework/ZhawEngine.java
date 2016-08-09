@@ -705,7 +705,7 @@ public class ZhawEngine implements LifecycleObject
 			null,
 			null,
 			null ) );
-		sessionService.addExecuter( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
+		invitationService.persist( new Invitation( null, (UserImpl)userService.findByID( rootUser.getID() ), (SessionImpl)sessionService.findByID( secondSessionID ) ) );
 
 		sessionService.start( sessionID );
 

@@ -46,8 +46,6 @@ import ch.zhaw.iwi.cis.pews.service.AuthenticationTokenService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
-import ch.zhaw.iwi.cis.pews.service.impl.timed.SetCurrentExerciseJob;
-import ch.zhaw.iwi.cis.pews.service.impl.timed.SetNextExerciseJob;
 import ch.zhaw.iwi.cis.pews.util.comparator.ExerciseImplComparator;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -188,15 +186,6 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 	}
 
 	@Override
-	public ExerciseImpl getCurrentExercise( String sessionID )
-	{
-		// simplify exercise object
-		ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( ( (SessionImpl)findByID( sessionID ) ).getCurrentExercise() );
-		ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
-		return ex;
-	}
-
-	@Override
 	public void setCurrentExercise( SessionImpl request )
 	{
 		SessionImpl session = sessionDao.findById( request.getID() );
@@ -213,38 +202,6 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		}
 	}
 
-	@Override
-	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
-	{
-		try
-		{
-			SessionImpl session = sessionDao.findById( request.getSession().getID() );
-			ExerciseImpl exercise = exerciseDao.findById( request.getSession().getCurrentExercise().getID() );
-
-			if ( session.getWorkshop().getID().equalsIgnoreCase( exercise.getWorkshop().getID() ) )
-			{
-				JobDetail job = JobBuilder.newJob( SetCurrentExerciseJob.class ).build();
-				Trigger trigger = TriggerBuilder.newTrigger().startAt( new Date( System.currentTimeMillis() + request.getDelayInMilliSeconds() ) ).build();
-
-				Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-				scheduler.start();
-
-				scheduler.getContext().put( "request", request );
-				scheduler.getContext().put( "currentUser", UserContext.getCurrentUser() );
-
-				scheduler.scheduleJob( job, trigger );
-			}
-			else
-			{
-				throw new RuntimeException( "the requested session and exercise are not part of the same workshop!" );
-			}
-		}
-		catch ( SchedulerException e )
-		{
-			throw new RuntimeException( "problem executing job for setCurrentExerciseWithDelay" );
-		}
-	}
-
 	private List< ExerciseImpl > getExercisesOfSession( SessionImpl session )
 	{
 		Set< ExerciseImpl > exercisesRaw = new HashSet<>( session.getWorkshop().getExercises() );
@@ -252,27 +209,6 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		Collections.sort( orderedExercises, new ExerciseImplComparator() );
 
 		return orderedExercises;
-	}
-
-	@Override
-	public ExerciseImpl getNextExercise( String sessionID )
-	{
-		SessionImpl session = sessionDao.findById( sessionID );
-		List< ExerciseImpl > exercises = getExercisesOfSession( session );
-		int current = exercises.indexOf( session.getCurrentExercise() );
-
-		if ( current < exercises.size() )
-		{
-			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current + 1 ) );
-			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
-			return ex;
-		}
-		else
-		{
-			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current ) );
-			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
-			return ex;
-		}
 	}
 
 	@Override
@@ -313,56 +249,6 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		{
 			return "FINAL_EXERCISE";
 		}
-	}
-
-	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest )
-	{
-		try
-		{
-			SessionImpl session = sessionDao.findById( offsetRequest.getWorkflowElementID() );
-			List< ExerciseImpl > exercises = getExercisesOfSession( session );
-			int current = exercises.indexOf( session.getCurrentExercise() );
-
-			if ( current + 1 < exercises.size() )
-			{
-				JobDetail job = JobBuilder.newJob( SetNextExerciseJob.class ).build();
-				Trigger trigger = TriggerBuilder.newTrigger().startAt( new Date( System.currentTimeMillis() + offsetRequest.getOffsetInMilliSeconds() ) ).build();
-
-				Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-				scheduler.start();
-
-				scheduler.getContext().put( "sessionID", offsetRequest.getWorkflowElementID() );
-				scheduler.getContext().put( "currentUser", UserContext.getCurrentUser() );
-
-				scheduler.scheduleJob( job, trigger );
-
-				return "WILL BE CHANGED IN " + offsetRequest.getOffsetInMilliSeconds() + "ms";
-			}
-			else
-			{
-				return "FINAL_EXERCISE";
-			}
-		}
-		catch ( SchedulerException e )
-		{
-			throw new RuntimeException( "problem executing job for setNextExerciseWithDelay" );
-		}
-	}
-
-	@Override
-	public void addExecuter( Invitation invitation )
-	{
-		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
-		principal.getSessionExecutions().add( (SessionImpl)findByID( invitation.getSession().getID() ) );
-		userDao.persist( principal );
-	}
-
-	@Override
-	public void removeExecuter( Invitation invitation )
-	{
-		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
-		principal.getSessionExecutions().remove( (SessionImpl)findByID( invitation.getSession().getID() ) );
-		userDao.persist( principal );
 	}
 
 	@Override

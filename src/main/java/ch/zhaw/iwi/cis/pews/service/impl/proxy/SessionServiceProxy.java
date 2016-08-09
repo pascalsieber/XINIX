@@ -41,18 +41,6 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	}
 
 	@Override
-	public ExerciseImpl getCurrentExercise( String sessionID )
-	{
-		return getServiceTarget().path( SessionRestService.GET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( ExerciseImpl.class );
-	}
-
-	@Override
-	public ExerciseImpl getNextExercise( String sessionID )
-	{
-		return getServiceTarget().path( SessionRestService.GET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( ExerciseImpl.class );
-	}
-
-	@Override
 	public ExerciseImpl getPreviousExercise( String sessionID )
 	{
 		return getServiceTarget().path( SessionRestService.GET_PREVIOUS_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( ExerciseImpl.class );
@@ -62,12 +50,6 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	public String setNextExercise( String sessionID )
 	{
 		return getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( sessionID ) ).readEntity( String.class );
-	}
-
-	@Override
-	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest )
-	{
-		return getServiceTarget().path( SessionRestService.SET_NEXT_EXERCISE_WITH_DELAY ).request( MediaType.APPLICATION_JSON ).post( Entity.json( offsetRequest ) ).readEntity( String.class );
 	}
 
 	@Override
@@ -83,27 +65,9 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	}
 
 	@Override
-	public void addExecuter( Invitation invitation )
-	{
-		getServiceTarget().path( SessionRestService.ADD_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitation ) );
-	}
-
-	@Override
-	public void removeExecuter( Invitation invitation )
-	{
-		getServiceTarget().path( SessionRestService.REMOVE_EXECUTER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( invitation ) );
-	}
-
-	@Override
 	public void setCurrentExercise( SessionImpl request )
 	{
 		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
-	}
-
-	@Override
-	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
-	{
-		getServiceTarget().path( SessionRestService.SET_CURRENT_EXERCISE_WITH_DELAY ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
 	}
 
 	@Override

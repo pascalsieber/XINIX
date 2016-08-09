@@ -20,7 +20,6 @@ import ch.zhaw.iwi.cis.pews.service.xinix.impl.XinixImageMatrixServiceImpl;
 public class XinixImageMatrixRestService extends WorkshopObjectRestService
 {
 	public static final String BASE = "/xinixService/imageMatrix";
-	public static final String SIMPLIFIED = "/simplified";
 
 	private XinixImageMatrixService xinixImageMatrixService;
 

@@ -28,17 +28,11 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	public static final String BASE = "/workshopService/session";
 
-	public static final String GET_CURRENT_EXERCISE_ID = "/getCurrentExerciseID";
-
-	public final static String GET_CURRENT_EXERCISE = "/getCurrentExercise";
 	public final static String SET_CURRENT_EXERCISE = "/setCurrentExercise";
-	public final static String SET_CURRENT_EXERCISE_WITH_DELAY = "/setCurrentExerciseWithDelay";
 
-	public final static String GET_NEXT_EXERCISE = "/getNextExercise";
 	public final static String GET_PREVIOUS_EXERCISE = "/getPreviousExercise";
 
 	public final static String SET_NEXT_EXERCISE = "/setNextExercise";
-	public final static String SET_NEXT_EXERCISE_WITH_DELAY = "/setNextExerciseWithDelay";
 
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
@@ -46,9 +40,6 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	public static final String JOIN = "/join";
 	public static final String LEAVE = "/leave";
-
-	public static final String ADD_EXECUTER = "/addExecuter";
-	public static final String REMOVE_EXECUTER = "/removeExecuter";
 
 	public final static String GET_CURRENT_EXERCISE_ID_WITH_OUTPUT = "/getCurrentExerciseIDWithOutput";
 
@@ -91,21 +82,6 @@ public class SessionRestService extends WorkshopObjectRestService
 	}
 
 	@POST
-	@Path( GET_CURRENT_EXERCISE )
-	public ExerciseImpl getCurrentExercise( String sessionID )
-	{
-		return sessionService.getCurrentExercise( sessionID );
-	}
-
-	@POST
-	@Path( GET_CURRENT_EXERCISE_ID )
-	public String getCurrentExerciseID()
-	{
-		// not delegating to service on purpose, in order to decrease response time since this request will be fired often (client polling)
-		return UserContext.getCurrentUser().getSession().getCurrentExercise().getID();
-	}
-
-	@POST
 	@Path( GET_CURRENT_EXERCISE_ID_WITH_OUTPUT )
 	public PollingWrapper getCurrentExerciseIDWithOutput()
 	{
@@ -120,20 +96,6 @@ public class SessionRestService extends WorkshopObjectRestService
 	}
 
 	@POST
-	@Path( SET_CURRENT_EXERCISE_WITH_DELAY )
-	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
-	{
-		sessionService.setCurrentExerciseWithDelay( request );
-	}
-
-	@POST
-	@Path( GET_NEXT_EXERCISE )
-	public ExerciseImpl getNextExercise( String sessionID )
-	{
-		return sessionService.getNextExercise( sessionID );
-	}
-
-	@POST
 	@Path( GET_PREVIOUS_EXERCISE )
 	public ExerciseImpl getPreviousExercise( String sessionID )
 	{
@@ -145,13 +107,6 @@ public class SessionRestService extends WorkshopObjectRestService
 	public String setNextExercise( String sessionID )
 	{
 		return sessionService.setNextExercise( sessionID );
-	}
-
-	@POST
-	@Path( SET_NEXT_EXERCISE_WITH_DELAY )
-	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest )
-	{
-		return sessionService.setNextExerciseWithDelay( offsetRequest );
 	}
 
 	@POST
@@ -187,20 +142,6 @@ public class SessionRestService extends WorkshopObjectRestService
 	public void leave( Invitation invitation )
 	{
 		sessionService.leave( invitation );
-	}
-
-	@POST
-	@Path( ADD_EXECUTER )
-	public void addExecuter( Invitation invitation )
-	{
-		sessionService.addExecuter( invitation );
-	}
-
-	@POST
-	@Path( REMOVE_EXECUTER )
-	public void removeExecuter( Invitation invitation )
-	{
-		sessionService.removeExecuter( invitation );
 	}
 
 	@Override

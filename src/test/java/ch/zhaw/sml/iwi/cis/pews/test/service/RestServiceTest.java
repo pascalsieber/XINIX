@@ -60,7 +60,6 @@ import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
-import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
@@ -932,7 +931,7 @@ public class RestServiceTest
 
 	@SuppressWarnings( "unchecked" )
 	@Test
-	public void getInputSetOutputgetOutputgetOutputByExerciseID() throws IOException
+	public void getInputSetOutputgetOutput() throws IOException
 	{
 		Output output = null;
 		List< String > p2pOneKeywordStrings = new ArrayList<>();
@@ -972,7 +971,7 @@ public class RestServiceTest
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( data ), makeCollectionType( ExerciseDataImpl.class ) ),
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( pinklabsExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseDataService.findByExerciseID( pinklabsExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// p2pone
 		setExerciseOnDefaultSession( p2pOneExerciseStub );
@@ -1015,7 +1014,7 @@ public class RestServiceTest
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( p2pOneData ), makeCollectionType( ExerciseDataImpl.class ) ),
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( p2pOneExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseDataService.findByExerciseID( p2pOneExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// you2me
 		setExerciseOnDefaultSession( you2meExerciseStub );
@@ -1066,7 +1065,7 @@ public class RestServiceTest
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( you2meData ), makeCollectionType( ExerciseDataImpl.class ) ),
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( you2meExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseDataService.findByExerciseID( you2meExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// p2ptwo
 		setExerciseOnDefaultSession( p2pTwoExerciseStub );
@@ -1126,7 +1125,7 @@ public class RestServiceTest
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( p2ptwoData ), makeCollectionType( ExerciseDataImpl.class ) ),
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( p2pTwoExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseDataService.findByExerciseID( p2pTwoExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// simple prototyping
 		/*
@@ -1203,7 +1202,7 @@ public class RestServiceTest
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutput() ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( xinixData ), makeCollectionType( ExerciseDataImpl.class ) ),
-			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseService.getOutputByExerciseID( xinixExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
+			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( exerciseDataService.findByExerciseID( xinixExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// compression
 		setExerciseOnDefaultSession( compressionExerciseStub );
@@ -1252,7 +1251,7 @@ public class RestServiceTest
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( compressionData ), makeCollectionType( ExerciseDataImpl.class ) ),
 			(List< ExerciseDataImpl >)mapper.readValue(
-				mapper.writeValueAsString( exerciseService.getOutputByExerciseID( compressionExerciseStub.getID() ) ),
+				mapper.writeValueAsString( exerciseDataService.findByExerciseID( compressionExerciseStub.getID() ) ),
 				makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// evaluation
@@ -1317,7 +1316,7 @@ public class RestServiceTest
 		assertTrue( checkOutput(
 			(List< ExerciseDataImpl >)mapper.readValue( mapper.writeValueAsString( evaluationData ), makeCollectionType( ExerciseDataImpl.class ) ),
 			(List< ExerciseDataImpl >)mapper.readValue(
-				mapper.writeValueAsString( exerciseService.getOutputByExerciseID( evaluationExerciseStub.getID() ) ),
+				mapper.writeValueAsString( exerciseDataService.findByExerciseID( evaluationExerciseStub.getID() ) ),
 				makeCollectionType( ExerciseDataImpl.class ) ) ) );
 
 		// evaluation result -> only testing getInput, as setOutput and getOutput operations are not supported for this kind of exercise
@@ -1418,16 +1417,11 @@ public class RestServiceTest
 
 		// getCurrentExercise
 		setExerciseOnDefaultSession( pinklabsExerciseStub );
-		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
-
-		// getNextExercise
-		@SuppressWarnings( "unused" )
-		String nexExID = sessionService.getNextExercise( defaultSessionStub.getID() ).getID();
-		assertTrue( sessionService.getNextExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
+        assertTrue( sessionService.getCurrentExericseIDWithOutput().getCurrentExerciseID().equals( pinklabsExerciseStub.getID() ) );
 
 		// setNextExercise
 		sessionService.setNextExercise( defaultSessionStub.getID() );
-		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( p2pOneExerciseStub.getID() ) );
+		assertTrue( sessionService.getCurrentExericseIDWithOutput().getCurrentExerciseID().equals( p2pOneExerciseStub.getID() ) );
 
 		// getPreviousExercise
 		assertTrue( sessionService.getPreviousExercise( defaultSessionStub.getID() ).getID().equals( pinklabsExerciseStub.getID() ) );
@@ -1437,7 +1431,7 @@ public class RestServiceTest
 		sessionRequestWrapper.setID( defaultSessionStub.getID() );
 		sessionRequestWrapper.setCurrentExercise( compressionExerciseStub );
 		sessionService.setCurrentExercise( sessionRequestWrapper );
-		assertTrue( sessionService.getCurrentExercise( defaultSessionStub.getID() ).getID().equals( compressionExerciseStub.getID() ) );
+		assertTrue( sessionService.getCurrentExericseIDWithOutput().getCurrentExerciseID().equals( compressionExerciseStub.getID() ) );
 
 		// join Session
 		Invitation wrappedJoinRequest = new Invitation();
@@ -1454,14 +1448,6 @@ public class RestServiceTest
 		// accept invitation
 		invitationService.accept( defaultInvitationStub.getID() );
 		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getInvitations(), defaultInvitationStub.getID(), true ) );
-
-		// add executer
-		sessionService.addExecuter( wrappedJoinRequest );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), false ) );
-
-		// remove executer
-		sessionService.removeExecuter( wrappedJoinRequest );
-		assertTrue( checkSetOperation( ( (SessionImpl)sessionService.findByID( defaultSessionStub.getID() ) ).getExecuters(), defaultUserStub.getID(), true ) );
 	}
 
 	@Test
@@ -1472,18 +1458,6 @@ public class RestServiceTest
 		ExerciseImpl ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
 		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
 
-		// suspend exercise
-		exerciseService.suspend( new SuspensionRequest( pinklabsExerciseStub.getID(), 12.5 ) );
-		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
-		assertTrue( ex.getCurrentState().equalsIgnoreCase( "suspended" ) );
-		assertTrue( ex.getElapsedSeconds() == 12.5 );
-
-		// resume exercise
-		assertTrue( exerciseService.resume( pinklabsExerciseStub.getID() ) == 12.5 );
-		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
-		assertTrue( ex.getCurrentState().equalsIgnoreCase( "running" ) );
-		assertTrue( ex.getElapsedSeconds() == 0.0 );
-
 		// stop exercise
 		exerciseService.stop( pinklabsExerciseStub.getID() );
 		ex = exerciseService.findByID( pinklabsExerciseStub.getID() );
@@ -1491,40 +1465,10 @@ public class RestServiceTest
 
 		// find data by exercise ID
 		// not testing here as already tested in depth in getInputSetOutput();
-
-		// start exercise for user
-		exerciseService.startUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
-
-		// stop exercise for user
-		exerciseService.stopUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
-
-		// suspend exercise for user
-		exerciseService.suspendUser( new TimerRequest( TimeUnit.SECONDS, 22 ) );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "suspended" ) );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == TimeUnit.SECONDS );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 22 );
-
-		// resume exercise for user
-		TimerRequest timer = exerciseService.resumeUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "running" ) );
-		assertTrue( timer.getTimeUnit() == TimeUnit.SECONDS );
-		assertTrue( timer.getValue() == 22 );
-
-		// cancel
-		exerciseService.cancelUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "terminated" ) );
-
-		// reset exercise for user
-		exerciseService.resetUser();
-		assertTrue( exerciseService.findUserParticipant().getTimer().getStatus().toString().equalsIgnoreCase( "new" ) );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == null );
-		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 0 );
 	}
 
 	/**
-	 * helper method for checking result of getOutput and getOutputByExerciseID
+	 * helper method for checking result of getOutput
 	 * 
 	 * @param data
 	 * @param output

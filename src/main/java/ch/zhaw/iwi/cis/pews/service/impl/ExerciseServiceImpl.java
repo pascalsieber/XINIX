@@ -30,7 +30,6 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
-import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
@@ -218,30 +217,6 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	}
 
 	@Override
-	public void suspend( SuspensionRequest suspensionRequest )
-	{
-		ExerciseImpl exercise = findByID( suspensionRequest.getSuspendedElementid() );
-		exercise.setCurrentState( WorkflowElementStatusImpl.SUSPENDED );
-
-		exercise.setElapsedSeconds( suspensionRequest.getElapsedSeconds() );
-		persist( exercise );
-	}
-
-	@Override
-	public double resume( String exerciseID )
-	{
-		ExerciseImpl exercise = findByID( exerciseID );
-		exercise.setCurrentState( WorkflowElementStatusImpl.RUNNING );
-
-		double ellapsedSeconds = exercise.getElapsedSeconds();
-
-		exercise.setElapsedSeconds( 0 );
-		persist( exercise );
-
-		return ellapsedSeconds;
-	}
-
-	@Override
 	protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return exerciseDao;
@@ -330,74 +305,8 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		return exerciseDataService.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
 	}
 
-	@Override
-	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
-	{
-		return exerciseDataService.findByExerciseID( exerciseID );
-	}
-
-	@Override
-	public void startUser()
-	{
-		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
-		participant.getTimer().setStatus( WorkflowElementStatusImpl.RUNNING );
-		participantDao.persist( participant );
-	}
-
-	@Override
-	public void stopUser()
-	{
-		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
-		participant.getTimer().setStatus( WorkflowElementStatusImpl.TERMINATED );
-		participantDao.persist( participant );
-	}
-
-	@Override
-	public void resetUser()
-	{
-		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
-		participant.getTimer().setStatus( WorkflowElementStatusImpl.NEW );
-		participant.getTimer().setTimeUnit( null );
-		participant.getTimer().setValue( 0 );
-		participantDao.persist( participant );
-	}
-
-	@Override
-	public void suspendUser( TimerRequest request )
-	{
-		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
-		participant.getTimer().setStatus( WorkflowElementStatusImpl.SUSPENDED );
-		participant.getTimer().setTimeUnit( request.getTimeUnit() );
-		participant.getTimer().setValue( request.getValue() );
-		participantDao.persist( participant );
-	}
-
-	@Override
-	public TimerRequest resumeUser()
-	{
-		Participant participant = participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() );
-		participant.getTimer().setStatus( WorkflowElementStatusImpl.RUNNING );
-		participantDao.persist( participant );
-
-		return new TimerRequest( participant.getTimer().getTimeUnit(), participant.getTimer().getValue() );
-	}
-
-	@Override
-	public void cancelUser()
-	{
-		// same operation as stopUser();
-		stopUser();
-	}
-
 	public ExerciseDataDao getExerciseDataDao()
 	{
 		return exerciseDataDao;
 	}
-
-	@Override
-	public Participant findUserParticipant()
-	{
-		return (Participant)simplifyOwnerInObjectGraph( participantDao.findByPrincipalIDandSessionID( UserContext.getCurrentUser().getID(), UserContext.getCurrentUser().getSession().getID() ) );
-	}
-
 }

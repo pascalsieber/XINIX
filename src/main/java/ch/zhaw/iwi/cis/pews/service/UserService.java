@@ -11,8 +11,6 @@ public interface UserService extends WorkshopObjectService
 
 	public PrincipalImpl findByLoginNameForUserContext( String loginName );
 
-	public boolean requestNewPassword( String userID );
-
 	public List< PrincipalImpl > findAllUsersForLoginService();
 
 	public PrincipalImpl findUserByID( String id );

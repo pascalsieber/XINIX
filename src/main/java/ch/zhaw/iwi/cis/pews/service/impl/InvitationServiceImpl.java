@@ -74,12 +74,6 @@ public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements 
 	}
 
 	@Override
-	public List< Invitation > findByUserID( String userID )
-	{
-		return invitationDao.findByUserID( userID );
-	}
-
-	@Override
 	public List< Invitation > findBySessionID( String sessionID )
 	{
 		return invitationDao.findBySessionID( sessionID );

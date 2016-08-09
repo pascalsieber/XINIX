@@ -10,7 +10,6 @@ import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
-import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.rest.ExerciseRestService;
 
@@ -20,36 +19,6 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	protected ExerciseServiceProxy( String hostName, int port, String userName, String password )
 	{
 		super( hostName, port, userName, password, ExerciseRestService.BASE );
-	}
-
-	@Override
-	public void start( String id )
-	{
-		getServiceTarget().path( ExerciseRestService.START ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
-	}
-
-	@Override
-	public void stop( String id )
-	{
-		getServiceTarget().path( ExerciseRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
-	}
-
-	@Override
-	public void renew( String id )
-	{
-		getServiceTarget().path( ExerciseRestService.RENEW ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
-	}
-
-	@Override
-	public void suspend( SuspensionRequest suspensionRequest )
-	{
-		getServiceTarget().path( ExerciseRestService.SUSPEND ).request( MediaType.APPLICATION_JSON ).post( Entity.json( suspensionRequest ) );
-	}
-
-	@Override
-	public double resume( String exerciseID )
-	{
-		return getServiceTarget().path( ExerciseRestService.RESUME ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( double.class );
 	}
 
 	@Override
@@ -97,55 +66,6 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 
 	@SuppressWarnings( "unchecked" )
 	@Override
-	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
-	{
-		return getServiceTarget().path( ExerciseRestService.GETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( List.class );
-	}
-
-	@Override
-	public void startUser()
-	{
-		getServiceTarget().path( ExerciseRestService.START_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
-	}
-
-	@Override
-	public void stopUser()
-	{
-		getServiceTarget().path( ExerciseRestService.STOP_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
-	}
-
-	@Override
-	public void resetUser()
-	{
-		getServiceTarget().path( ExerciseRestService.RESET_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
-	}
-
-	@Override
-	public void suspendUser( TimerRequest request )
-	{
-		getServiceTarget().path( ExerciseRestService.SUSPEND_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( request ) );
-	}
-
-	@Override
-	public TimerRequest resumeUser()
-	{
-		return getServiceTarget().path( ExerciseRestService.RESUME_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( TimerRequest.class );
-	}
-
-	@Override
-	public void cancelUser()
-	{
-		getServiceTarget().path( ExerciseRestService.CANCEL_USER ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) );
-	}
-
-	@Override
-	public Participant findUserParticipant()
-	{
-		return getServiceTarget().path( ExerciseRestService.GET_USER_PARTICIPANT ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( Participant.class );
-	}
-
-	@SuppressWarnings( "unchecked" )
-	@Override
 	public List< ExerciseImpl > findAllExercises()
 	{
 		return getServiceTarget().path( ExerciseRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
@@ -169,4 +89,21 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 		return getServiceTarget().path( ExerciseRestService.GENERATE_FROM_TEMPLATE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
 	}
 
+	@Override
+	public void start(String id)
+	{
+	    throw new UnsupportedOperationException("method not supported");
+	}
+
+	@Override
+	public void stop(String id)
+	{
+		throw new UnsupportedOperationException("method not supported");
+	}
+
+	@Override
+	public void renew(String id)
+	{
+		throw new UnsupportedOperationException("method not supported");
+	}
 }

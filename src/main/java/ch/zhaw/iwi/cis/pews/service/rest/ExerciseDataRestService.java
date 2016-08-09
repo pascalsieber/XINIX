@@ -20,6 +20,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 public class ExerciseDataRestService extends WorkshopObjectRestService
 {
 	public final static String BASE = "/exerciseService/data";
+    // TODO: remove if surface not using this
 	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
 	public final static String REMOVE_BY_ID = "/removeByID";
 	public final static String EXPORT_BY_EXERCISE_ID = "/exportByExerciseID";

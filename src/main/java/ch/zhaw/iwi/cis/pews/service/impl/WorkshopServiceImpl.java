@@ -104,31 +104,6 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		return workshopDao;
 	}
 
-	@Override
-	public void stop( String id )
-	{
-		super.stop( id );
-		// remove authentication tokens on all sessions
-		this.removeAuthenticationTokens( id );
-	}
-
-	@Override
-	public void renew( String id )
-	{
-		super.renew( id );
-		// remove authentication tokens on all sessions
-		this.removeAuthenticationTokens( id );
-	}
-
-	private void removeAuthenticationTokens( String workshopID )
-	{
-		WorkshopImpl workshop = findWorkshopByID( workshopID );
-		for ( SessionImpl session : workshop.getSessions() )
-		{
-			authenticationTokenService.removeBySessionID( session.getID() );
-		}
-	}
-
 	// TODO: find more elegant way to remove duplicates caused by sql query than putting through HashMap
 	@SuppressWarnings( "unchecked" )
 	@Override

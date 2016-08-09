@@ -20,9 +20,7 @@ public class UserRestService extends WorkshopObjectRestService
 
 	public static final String USER_BASE = "/userService/user";
 	public static final String FIND_BY_LOGIN_NAME = "/findByLogin";
-	public static final String REQUEST_PASSWORD = "/requestPassword";
 	public static final String SEND_PROFILE = "/sendProfile";
-
 	public static final String PERSIST_FOR_CLIENT = "persistForClient";
 
 	public UserRestService()
@@ -79,13 +77,6 @@ public class UserRestService extends WorkshopObjectRestService
 	public PrincipalImpl findByLoginName( String loginName )
 	{
 		return getUserService().findByLoginName( loginName );
-	}
-
-	@POST
-	@Path( REQUEST_PASSWORD )
-	public boolean requestNewPassword( String userID )
-	{
-		return getUserService().requestNewPassword( userID );
 	}
 
 	@POST

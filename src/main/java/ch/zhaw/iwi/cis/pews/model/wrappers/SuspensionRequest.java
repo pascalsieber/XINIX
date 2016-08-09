@@ -1,5 +1,6 @@
 package ch.zhaw.iwi.cis.pews.model.wrappers;
 
+@Deprecated
 public class SuspensionRequest
 {
 	private String suspendedElementid;

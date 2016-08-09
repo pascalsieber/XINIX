@@ -72,49 +72,6 @@ public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserSe
 	}
 
 	@Override
-	public boolean requestNewPassword( String userID )
-	{
-		PrincipalImpl user = findByID( userID );
-		user.setCredential( new PasswordCredentialImpl( new BigInteger( 130, new SecureRandom() ).toString( 32 ) ) );
-		persist( user );
-		return sendPasswordEmail( (UserImpl)user );
-	}
-
-	private boolean sendPasswordEmail( UserImpl user )
-	{
-		Properties props = new Properties();
-		props.put( "mail.smtp.host", "smtp.zhaw.ch" );
-		props.put( "mail.smtp.socketFactory.port", "25" );
-		props.put( "mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory" );
-		props.put( "mail.smtp.auth", "true" );
-		props.put( "mail.smtp.port", "25" );
-
-		Session mailSession = Session.getDefaultInstance( props, new Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication()
-			{
-				return new PasswordAuthentication( "fueg@zhaw.ch", "Sschrei3" );
-			}
-		} );
-
-		try
-		{
-			Message message = new MimeMessage( mailSession );
-			message.setFrom( new InternetAddress( "passwordHelp@pews.ch" ) );
-			message.setRecipients( Message.RecipientType.TO, InternetAddress.parse( user.getLoginNameEmailPart() ) );
-			message.setSubject( "PEWS Password Reset" );
-			message.setText( "Dear " + user.getFirstName() + ", \n\n Your password has been successfully reset. \n Your new password is: " + user.getCredential().getPassword() );
-
-			Transport.send( message );
-			return true;
-		}
-		catch ( MessagingException e )
-		{
-			throw new RuntimeException( e );
-		}
-
-	}
-
-	@Override
 	public void sendProfile( String userID )
 	{
 		UserImpl user = (UserImpl)findUserByID( userID );

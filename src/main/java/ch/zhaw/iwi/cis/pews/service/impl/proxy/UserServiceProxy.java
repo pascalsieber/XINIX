@@ -31,12 +31,6 @@ public class UserServiceProxy extends WorkshopObjectServiceProxy implements User
 	}
 
 	@Override
-	public boolean requestNewPassword( String userID )
-	{
-		return getServiceTarget().path( UserRestService.REQUEST_PASSWORD ).request( MediaType.APPLICATION_JSON ).post( Entity.json( userID ) ).readEntity( boolean.class );
-	}
-
-	@Override
 	public List< PrincipalImpl > findAllUsersForLoginService()
 	{
 		// method not to be exposed. used internally to find all users to be able to authenticate

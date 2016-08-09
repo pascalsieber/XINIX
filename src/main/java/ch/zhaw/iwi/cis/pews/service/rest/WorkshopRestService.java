@@ -22,8 +22,11 @@ public class WorkshopRestService extends WorkshopObjectRestService
 
 	public static final String BASE = "/workshopService/workshop";
 
+    @Deprecated
 	public static final String START = "/start";
+    @Deprecated
 	public static final String STOP = "/stop";
+    @Deprecated
 	public static final String RENEW = "/renew";
 	public static final String RESET = "/resetByID";
 
@@ -75,27 +78,6 @@ public class WorkshopRestService extends WorkshopObjectRestService
 	public List< WorkshopImpl > findAll()
 	{
 		return workshopService.findAllWorkshopsSimple();
-	}
-
-	@POST
-	@Path( START )
-	public void statWorkshop( String workshopID )
-	{
-		workshopService.start( workshopID );
-	}
-
-	@POST
-	@Path( STOP )
-	public void stopWorkshop( String workshopID )
-	{
-		workshopService.stop( workshopID );
-	}
-
-	@POST
-	@Path( RENEW )
-	public void renewWorkshop( String workshopID )
-	{
-		workshopService.renew( workshopID );
 	}
 
 	@POST
