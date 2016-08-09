@@ -24,13 +24,9 @@ public class UserImpl extends PrincipalImpl
 	private String lastName;
 	private String loginName;
 
-	@ManyToMany
-	private Set< GroupImpl > groups;
-
 	public UserImpl()
 	{
 		super();
-		this.groups = new HashSet< GroupImpl >();
 	}
 
 	public UserImpl( PasswordCredentialImpl credential, RoleImpl role, Participant participation, String firstName, String lastName, String loginName )
@@ -39,7 +35,6 @@ public class UserImpl extends PrincipalImpl
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.loginName = loginName;
-		this.groups = new HashSet< GroupImpl >();
 	}
 
 	public String getFirstName()
@@ -105,15 +100,4 @@ public class UserImpl extends PrincipalImpl
 		return PewsConfig.getWebClientAuthenticationUrl() + PewsConfig.getWebClientAuthenticationUserParam() + encodedLoginName + PewsConfig.getWebClientAuthenticationPasswordParam()
 				+ encodedPassword + PewsConfig.getWebClientAuthenticationProfileTarget();
 	}
-
-	public Set< GroupImpl > getGroups()
-	{
-		return groups;
-	}
-
-	public void setGroups( Set< GroupImpl > groups )
-	{
-		this.groups = groups;
-	}
-
 }

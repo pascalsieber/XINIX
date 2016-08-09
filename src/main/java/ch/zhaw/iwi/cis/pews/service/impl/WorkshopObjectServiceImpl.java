@@ -224,11 +224,6 @@ public abstract class WorkshopObjectServiceImpl extends ServiceImpl implements W
 					( (OwnableObject)obj ).getOwner().setSessionAcceptances( null );
 					( (OwnableObject)obj ).getOwner().setSessionExecutions( null );
 					( (OwnableObject)obj ).getOwner().setSessionInvitations( null );
-
-					if ( ( (OwnableObject)obj ).getOwner() instanceof UserImpl )
-					{
-						( (UserImpl)( (OwnableObject)obj ).getOwner() ).setGroups( null );
-					}
 				}
 			}
 
@@ -242,11 +237,6 @@ public abstract class WorkshopObjectServiceImpl extends ServiceImpl implements W
 					( (Invitation)obj ).getInviter().setSessionAcceptances( null );
 					( (Invitation)obj ).getInviter().setSessionExecutions( null );
 					( (Invitation)obj ).getInviter().setSessionInvitations( null );
-
-					if ( ( (Invitation)obj ).getInviter() instanceof UserImpl )
-					{
-						( (UserImpl)( (Invitation)obj ).getInviter() ).setGroups( null );
-					}
 				}
 
 				if ( null != ( (Invitation)obj ).getInvitee() )
@@ -257,11 +247,6 @@ public abstract class WorkshopObjectServiceImpl extends ServiceImpl implements W
 					( (Invitation)obj ).getInvitee().setSessionAcceptances( null );
 					( (Invitation)obj ).getInvitee().setSessionExecutions( null );
 					( (Invitation)obj ).getInvitee().setSessionInvitations( null );
-
-					if ( ( (Invitation)obj ).getInvitee() instanceof UserImpl )
-					{
-						( (UserImpl)( (Invitation)obj ).getInvitee() ).setGroups( null );
-					}
 				}
 			}
 

@@ -546,11 +546,6 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 					( (OwnableObject)obj ).getOwner().setSessionAcceptances( null );
 					( (OwnableObject)obj ).getOwner().setSessionExecutions( null );
 					( (OwnableObject)obj ).getOwner().setSessionInvitations( null );
-
-					if ( ( (OwnableObject)obj ).getOwner() instanceof UserImpl )
-					{
-						( (UserImpl)( (OwnableObject)obj ).getOwner() ).setGroups( null );
-					}
 				}
 
 				// simplify workflowElement (i.e. exercise) by excluding template and workshop

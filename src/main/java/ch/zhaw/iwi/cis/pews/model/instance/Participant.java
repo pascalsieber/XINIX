@@ -21,20 +21,16 @@ public class Participant extends WorkshopObject
 	@ManyToOne
 	private SessionImpl session;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Timer timer;
-
 	public Participant()
 	{
 		super();
 	}
 
-	public Participant( PrincipalImpl principal, SessionImpl session, Timer timer )
+	public Participant( PrincipalImpl principal, SessionImpl session )
 	{
 		super();
 		this.principal = principal;
 		this.session = session;
-		this.timer = timer;
 	}
 
 	public PrincipalImpl getPrincipal()
@@ -56,15 +52,4 @@ public class Participant extends WorkshopObject
 	{
 		this.session = session;
 	}
-
-	public Timer getTimer()
-	{
-		return timer;
-	}
-
-	public void setTimer( Timer timer )
-	{
-		this.timer = timer;
-	}
-
 }
