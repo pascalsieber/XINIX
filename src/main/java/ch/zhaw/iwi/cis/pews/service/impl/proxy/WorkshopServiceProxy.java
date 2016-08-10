@@ -20,19 +20,19 @@ public class WorkshopServiceProxy extends WorkshopObjectServiceProxy implements 
 	@Override
 	public void start( String id )
 	{
-		getServiceTarget().path( WorkshopRestService.START ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+		throw new UnsupportedOperationException("internal method. not available via REST");
 	}
 
 	@Override
 	public void stop( String id )
 	{
-		getServiceTarget().path( WorkshopRestService.STOP ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+		throw new UnsupportedOperationException("internal method. not available via REST");
 	}
 
 	@Override
 	public void renew( String id )
 	{
-		getServiceTarget().path( WorkshopRestService.RENEW ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) );
+		throw new UnsupportedOperationException("internal method. not available via REST");
 	}
 
 	@SuppressWarnings( "unchecked" )

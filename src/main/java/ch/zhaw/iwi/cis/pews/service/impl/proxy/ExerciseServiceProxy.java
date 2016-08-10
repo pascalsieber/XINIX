@@ -86,24 +86,24 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 	@Override
 	public String generateFromTemplate( ExerciseImpl obj )
 	{
-		return getServiceTarget().path( ExerciseRestService.GENERATE_FROM_TEMPLATE ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
+		throw new UnsupportedOperationException( "internal method. not available via REST" );
 	}
 
 	@Override
 	public void start(String id)
 	{
-	    throw new UnsupportedOperationException("method not supported");
+		throw new UnsupportedOperationException( "internal method. not available via REST" );
 	}
 
 	@Override
 	public void stop(String id)
 	{
-		throw new UnsupportedOperationException("method not supported");
+		throw new UnsupportedOperationException( "internal method. not available via REST" );
 	}
 
 	@Override
 	public void renew(String id)
 	{
-		throw new UnsupportedOperationException("method not supported");
+		throw new UnsupportedOperationException("internal method. not available via REST");
 	}
 }
