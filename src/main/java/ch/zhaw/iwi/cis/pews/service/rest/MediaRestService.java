@@ -31,9 +31,6 @@ public class MediaRestService extends WorkshopObjectRestService
 	public static final String FIND_BY_TYPE = "/findByType";
 	public static final String GET_CONTENT_BY_ID = "/getContentByID";
 
-	public static final String UPDATE_POSTER_IMAGES = "/updatePosterImages";
-	public static final String UPDATE_POSTER_VIDEOS = "/updatePosterVideos";
-
 	private MediaService mediaService;
 
 	public MediaRestService()
@@ -90,20 +87,6 @@ public class MediaRestService extends WorkshopObjectRestService
 	public void removeMedia( MediaObject object )
 	{
 		mediaService.remove( object );
-	}
-
-	@POST
-	@Path( UPDATE_POSTER_IMAGES )
-	public void updatePosterImages( PosterExercise exercise )
-	{
-		mediaService.updatePosterImages( exercise );
-	}
-
-	@POST
-	@Path( UPDATE_POSTER_VIDEOS )
-	public void updatePosterVideos( PosterExercise exercise )
-	{
-		mediaService.updatePosterVideos( exercise );
 	}
 
 	@Override
