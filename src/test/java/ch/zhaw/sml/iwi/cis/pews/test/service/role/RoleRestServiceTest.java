@@ -25,7 +25,7 @@ public class RoleRestServiceTest
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
 
-	private RoleImpl role;
+	private RoleImpl role = new RoleImpl();
 
 	@BeforeClass public void setup()
 	{
