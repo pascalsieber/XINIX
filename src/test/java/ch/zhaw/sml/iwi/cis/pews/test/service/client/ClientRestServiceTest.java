@@ -4,6 +4,7 @@ import ch.zhaw.iwi.cis.pews.model.Client;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ClientServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -20,11 +21,16 @@ import static org.junit.Assert.assertTrue;
 public class ClientRestServiceTest
 {
 
-	private static ClientService clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
+	private static ClientService clientService;
 
 	private static String NAME = "name";
 
 	private Client client;
+
+	@BeforeClass public void setup()
+	{
+		clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
+	}
 
 	@Test public void testPersist()
 	{

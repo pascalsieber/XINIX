@@ -6,6 +6,7 @@ import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -19,12 +20,17 @@ import org.junit.Test;
  */
 public class RoleRestServiceTest
 {
-	private static RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+	private static RoleService roleService;
 
-	private static String NAME = "name";
+	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
 
 	private RoleImpl role;
+
+	@BeforeClass public void setup()
+	{
+		roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+	}
 
 	@Test public void testPersist()
 	{
@@ -41,6 +47,7 @@ public class RoleRestServiceTest
 		assertTrue( found.getName().equals( NAME ) );
 		assertTrue( found.getDescription().equals( DESCRIPTION ) );
 	}
+
 	@Test public void testFindAll()
 	{
 		RoleImpl findable = roleService.findByID( role.getID() );
