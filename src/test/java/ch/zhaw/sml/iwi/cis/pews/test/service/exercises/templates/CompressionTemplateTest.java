@@ -27,16 +27,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class CompressionTemplateTest
 {
-	private static ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
-			ExerciseTemplateServiceProxy.class );
-	private static WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
-			WorkshopTemplateServiceProxy.class );
+	private ExerciseTemplateService exerciseTemplateService;
+	private WorkshopTemplateService workshopTemplateService;
 
-	private static String QUESTIONTEMPLATE = "questiontemplate";
-	private static String NAME             = "name";
-	private static String DESCRIPTION      = "description";
-	private static int NUMBER              = 4;
-	private static TimeUnit TIMEUNIT       = TimeUnit.MINUTES;
+	private static String   QUESTIONTEMPLATE = "questiontemplate";
+	private static String   NAME             = "name";
+	private static String   DESCRIPTION      = "description";
+	private static int      NUMBER           = 4;
+	private static TimeUnit TIMEUNIT         = TimeUnit.MINUTES;
 
 	private static String CRITERION_ONE = "criterionone";
 	private static String CRITERION_TWO = "criteriontwo";
@@ -47,14 +45,18 @@ public class CompressionTemplateTest
 
 	@BeforeClass public void setup()
 	{
-		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null,
-				"",
-				"" ) ) );
+		// services
+		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
+		workshopTemplateService = ServiceProxyManager.createServiceProxy( WorkshopTemplateServiceProxy.class );
+
+		// workshop template
+		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null, "", "" ) ) );
 	}
 
 	@Test public void testPersist()
 	{
-		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new CompressionTemplate( null,
+		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new CompressionTemplate(
+				null,
 				true,
 				TIMEUNIT,
 				NUMBER,

@@ -28,10 +28,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class You2MeTemplateTest
 {
-	private static ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
-			ExerciseTemplateServiceProxy.class );
-	private static WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
-			WorkshopTemplateServiceProxy.class );
+	private ExerciseTemplateService exerciseTemplateService;
+	private WorkshopTemplateService workshopTemplateService;
 
 	private static String   QUESTIONTEMPLATE = "questiontemplate";
 	private static String   NAME             = "name";
@@ -48,6 +46,11 @@ public class You2MeTemplateTest
 
 	@BeforeClass public void setup()
 	{
+		// services
+		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
+		workshopTemplateService = ServiceProxyManager.createServiceProxy( WorkshopTemplateServiceProxy.class );
+
+		// workshop template
 		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null, "", "" ) ) );
 	}
 
