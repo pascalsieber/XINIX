@@ -1,20 +1,20 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.workshop.templates;
 
-import static org.junit.Assert.assertTrue;
-
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
+import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
+import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
-import ch.zhaw.sml.iwi.cis.pews.test.service.RestServiceTest;
-import org.apache.derby.client.am.UpdateSensitiveBlobLocatorInputStream;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by fueg on 12.08.2016.
@@ -28,7 +28,8 @@ import java.util.Arrays;
  */
 public class PinkElefantWorkshopTemplateTest
 {
-	private static WorkshopTemplateService workshopTemplateService = RestServiceTest.workshopTemplateService;
+	private WorkshopTemplateService workshopTemplateService;
+	private ExerciseTemplateService exerciseTemplateService;
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -39,6 +40,12 @@ public class PinkElefantWorkshopTemplateTest
 	private ExerciseTemplate exerciseTemplateOne = new PinkLabsTemplate();
 	private ExerciseTemplate exerciseTemplateTwo = new PinkLabsTemplate();
 
+	@BeforeClass public void setup()
+	{
+		workshopTemplateService = ServiceProxyManager.createServiceProxy( WorkshopTemplateServiceProxy.class );
+		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
+	}
+
 	@Test public void testPersist()
 	{
 		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( null,
@@ -47,7 +54,7 @@ public class PinkElefantWorkshopTemplateTest
 				PROBLEM,
 				EMAIL ) ) );
 
-		exerciseTemplateOne.setID( RestServiceTest.exerciseTemplateService.persistExerciseTemplate( new PinkLabsTemplate( null,
+		exerciseTemplateOne.setID( exerciseTemplateService.persistExerciseTemplate( new PinkLabsTemplate( null,
 				false,
 				null,
 				0,
@@ -60,7 +67,7 @@ public class PinkElefantWorkshopTemplateTest
 				"",
 				"" ) ) );
 
-		exerciseTemplateTwo.setID( RestServiceTest.exerciseTemplateService.persistExerciseTemplate( new PinkLabsTemplate( null,
+		exerciseTemplateTwo.setID( exerciseTemplateService.persistExerciseTemplate( new PinkLabsTemplate( null,
 				false,
 				null,
 				0,
