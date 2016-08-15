@@ -36,7 +36,7 @@ public class XinixTemplateTest
 	private static WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 			WorkshopTemplateServiceProxy.class );
 	private static XinixImageMatrixService xinixImageMatrixService = ServiceProxyManager.createServiceProxy(
-			XinixImageMatrixServiceProxy.class )
+			XinixImageMatrixServiceProxy.class );
 
 	private static String QUESTIONTEMPLATE = "questiontemplate";
 	private static String NAME             = "name";
