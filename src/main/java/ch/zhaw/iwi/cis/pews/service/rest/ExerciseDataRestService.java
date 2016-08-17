@@ -41,6 +41,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 		return exerciseDataService.persistExerciseData( obj );
 	}
 
+	// TODO: remove if surface not using this
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )
@@ -49,6 +50,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 		return exerciseDataService.findExerciseDataByID( id );
 	}
 
+	// TODO: check if surface client uses this API method. if not, remove
 	@POST
 	@Path( REMOVE )
 	public void remove( ExerciseDataImpl obj )
@@ -64,6 +66,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 		return exerciseDataService.findAllExerciseData();
 	}
 
+	// TODO: check if surface client uses this API method. if not, remove
 	@POST
 	@Path( FIND_BY_EXERCISE_ID )
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )

@@ -6,26 +6,25 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
 
 public class You2MeOutput extends Output
 {
-	private List< DialogEntry > dialog;
+	private List<DialogEntry> dialog;
 
 	public You2MeOutput()
 	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public You2MeOutput( List< DialogEntry > dialog )
+	public You2MeOutput( String exerciseID, List<DialogEntry> dialog )
 	{
-		super();
+		super( exerciseID );
 		this.dialog = dialog;
 	}
 
-	public List< DialogEntry > getDialog()
+	public List<DialogEntry> getDialog()
 	{
 		return dialog;
 	}
 
-	public void setDialog( List< DialogEntry > dialog )
+	public void setDialog( List<DialogEntry> dialog )
 	{
 		this.dialog = dialog;
 	}

@@ -9,9 +9,10 @@ public class SimplePrototypingOutput extends Output
 		super();
 	}
 
-	public SimplePrototypingOutput( String exerciseID )
+	public SimplePrototypingOutput( String exerciseID, String base64String )
 	{
 		super( exerciseID );
+		this.base64String = base64String;
 	}
 
 	public String getBase64String()

@@ -30,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by fueg on 12.08.2016.
  * <p>
- * tests {@link ch.zhaw.iwi.cis.pews.service.rest.ExerciseRestService} with {}
+ * tests {@link ch.zhaw.iwi.cis.pews.service.rest.ExerciseRestService} with {@link PinkLabsExercise}
  * - PERSIST
  * - FIND_BY_ID
  * - GETINPUT_BY_EXERCISEID

@@ -14,9 +14,9 @@ public class XinixOutput extends Output
 		super();
 	}
 
-	public XinixOutput( Set< String > answers, MediaObject chosenImage )
+	public XinixOutput( String exerciseID, Set<String> answers, MediaObject chosenImage )
 	{
-		super();
+		super( exerciseID );
 		this.answers = answers;
 		this.chosenImage = chosenImage;
 	}

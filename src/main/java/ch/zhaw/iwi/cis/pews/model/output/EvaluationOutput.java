@@ -5,7 +5,7 @@ import java.util.List;
 
 public class EvaluationOutput extends Output
 {
-	private List< EvaluationOutputElement > evaluations;
+	private List<EvaluationOutputElement> evaluations;
 
 	public EvaluationOutput()
 	{
@@ -13,18 +13,18 @@ public class EvaluationOutput extends Output
 		this.evaluations = new ArrayList<>();
 	}
 
-	public EvaluationOutput( List< EvaluationOutputElement > evaluations )
+	public EvaluationOutput( String exerciseID, List<EvaluationOutputElement> evaluations )
 	{
-		super();
+		super( exerciseID );
 		this.evaluations = evaluations;
 	}
 
-	public List< EvaluationOutputElement > getEvaluations()
+	public List<EvaluationOutputElement> getEvaluations()
 	{
 		return evaluations;
 	}
 
-	public void setEvaluations( List< EvaluationOutputElement > evaluations )
+	public void setEvaluations( List<EvaluationOutputElement> evaluations )
 	{
 		this.evaluations = evaluations;
 	}

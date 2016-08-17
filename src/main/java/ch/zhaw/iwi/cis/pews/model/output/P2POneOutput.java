@@ -5,7 +5,7 @@ import java.util.List;
 
 public class P2POneOutput extends Output
 {
-	private List< String > answers;
+	private List<String> answers;
 
 	public P2POneOutput()
 	{
@@ -13,18 +13,18 @@ public class P2POneOutput extends Output
 		this.answers = new ArrayList<>();
 	}
 
-	public P2POneOutput( List< String > answers )
+	public P2POneOutput( String exerciseID, List<String> answers )
 	{
-		super();
+		super( exerciseID );
 		this.answers = answers;
 	}
 
-	public List< String > getAnswers()
+	public List<String> getAnswers()
 	{
 		return answers;
 	}
 
-	public void setAnswers( List< String > answers )
+	public void setAnswers( List<String> answers )
 	{
 		this.answers = answers;
 	}
