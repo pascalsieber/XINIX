@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class P2PTwoOutput extends Output
 {
-	private Set< String > chosenKeywords;
-	private List< String > answers;
+	private Set<String>  chosenKeywords;
+	private List<String> answers;
 
 	public P2PTwoOutput()
 	{
@@ -17,29 +17,29 @@ public class P2PTwoOutput extends Output
 		this.answers = new ArrayList<>();
 	}
 
-	public P2PTwoOutput( Set< String > chosenKeywords, List< String > answers )
+	public P2PTwoOutput( String exerciseID, Set<String> chosenKeywords, List<String> answers )
 	{
-		super();
+		super( exerciseID );
 		this.chosenKeywords = chosenKeywords;
 		this.answers = answers;
 	}
 
-	public Set< String > getChosenKeywords()
+	public Set<String> getChosenKeywords()
 	{
 		return chosenKeywords;
 	}
 
-	public void setChosenKeywords( Set< String > chosenKeywords )
+	public void setChosenKeywords( Set<String> chosenKeywords )
 	{
 		this.chosenKeywords = chosenKeywords;
 	}
 
-	public List< String > getAnswers()
+	public List<String> getAnswers()
 	{
 		return answers;
 	}
 
-	public void setAnswers( List< String > answers )
+	public void setAnswers( List<String> answers )
 	{
 		this.answers = answers;
 	}
