@@ -3,18 +3,16 @@ package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.data;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
-import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -32,16 +30,16 @@ import static org.junit.Assert.assertTrue;
  */
 public class PinkLabsExerciseDataTest
 {
-	private ExerciseDataService exerciseDataService;
+	private static ExerciseDataService exerciseDataService;
 
-	private ExerciseDataImpl exerciseData = new PinkLabsExerciseData();
-	private WorkshopImpl     workshop     = new WorkshopImpl();
-	private ExerciseImpl     exercise     = new ExerciseImpl();
+	private static ExerciseDataImpl exerciseData = new PinkLabsExerciseData();
+	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static ExerciseImpl     exercise     = new ExerciseImpl();
 
 	private static String ANSWER_ONE = "one";
 	private static String ANSWER_TWO = "two";
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
@@ -51,7 +49,6 @@ public class PinkLabsExerciseDataTest
 		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
 				ExerciseTemplateServiceProxy.class );
 		ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
-		MediaService mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 
 		// workshop
 		WorkshopTemplate workshopTemplate = workshopTemplateService.findByID( workshopTemplateService.persist( new WorkshopTemplate( null,
@@ -61,7 +58,7 @@ public class PinkLabsExerciseDataTest
 
 		// exercise
 		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
-				new ExerciseTemplate( null,
+				new PinkLabsTemplate( null,
 						true,
 						TimeUnit.SECONDS,
 						0,
@@ -87,7 +84,7 @@ public class PinkLabsExerciseDataTest
 
 	@Test public void testFind()
 	{
-		PinkLabsExerciseData found = exerciseDataService.findByID( exerciseData.getID() );
+		PinkLabsExerciseData found = (PinkLabsExerciseData)exerciseDataService.findExerciseDataByID( exerciseData.getID() );
 		assertTrue( found != null );
 		assertTrue( found.getID().equals( exerciseData.getID() ) );
 		assertTrue( found.getWorkflowElement().getID().equals( exercise.getID() ) );
@@ -109,17 +106,17 @@ public class PinkLabsExerciseDataTest
 
 	@Test public void testFindAll()
 	{
-		PinkLabsExerciseData findable = exerciseDataService.findByID( exerciseData.getID() );
+		PinkLabsExerciseData findable = (PinkLabsExerciseData)exerciseDataService.findExerciseDataByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
 	}
 
 	@Test public void testRemoveByID()
 	{
-		PinkLabsExerciseData removable = exerciseDataService.findByID( exerciseData.getID() );
+		PinkLabsExerciseData removable = (PinkLabsExerciseData)exerciseDataService.findExerciseDataByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );
 
 		exerciseDataService.removeExerciseDataByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findByID( exerciseData.getID() ) == null );
+		assertTrue( exerciseDataService.findExerciseDataByID( exerciseData.getID() ) == null );
 		assertTrue( !exerciseDataService.findAllExerciseData().contains( removable ) );
 	}
 }

@@ -28,19 +28,19 @@ import static org.junit.Assert.assertTrue;
  */
 public class PinkElefantWorkshopTemplateTest
 {
-	private WorkshopTemplateService workshopTemplateService;
-	private ExerciseTemplateService exerciseTemplateService;
+	private static WorkshopTemplateService workshopTemplateService;
+	private static ExerciseTemplateService exerciseTemplateService;
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
 	private static String PROBLEM     = "problem";
 	private static String EMAIL       = "email";
 
-	private WorkshopTemplate workshopTemplate    = new PinkElefantTemplate();
-	private ExerciseTemplate exerciseTemplateOne = new PinkLabsTemplate();
-	private ExerciseTemplate exerciseTemplateTwo = new PinkLabsTemplate();
+	private static WorkshopTemplate workshopTemplate    = new PinkElefantTemplate();
+	private static ExerciseTemplate exerciseTemplateOne = new PinkLabsTemplate();
+	private static ExerciseTemplate exerciseTemplateTwo = new PinkLabsTemplate();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		workshopTemplateService = ServiceProxyManager.createServiceProxy( WorkshopTemplateServiceProxy.class );
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );

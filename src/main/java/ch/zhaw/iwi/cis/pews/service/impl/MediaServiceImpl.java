@@ -1,17 +1,5 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-
-import org.apache.commons.io.IOUtils;
-
 import ch.zhaw.iwi.cis.pews.dao.MediaDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.dao.impl.MediaDaoImpl;
@@ -23,22 +11,31 @@ import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
+import org.apache.commons.io.IOUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class MediaServiceImpl extends WorkshopObjectServiceImpl implements MediaService
 {
-	private MediaDao mediaDao;
+	private MediaDao        mediaDao;
 	private ExerciseService exerciseService;
 
 	public MediaServiceImpl()
 	{
 		mediaDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( MediaDaoImpl.class.getSimpleName() );
-		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
+		exerciseService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 	}
 
-	@Override
-	public String persistMediaObject( HttpServletRequest request )
+	@Override public String persistMediaObject( HttpServletRequest request )
 	{
 		try
 		{
@@ -84,40 +81,12 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 		}
 	}
 
-	@Override
-	public List< MediaObject > findByType( MediaObjectType type )
+	@Override public List<MediaObject> findByType( MediaObjectType type )
 	{
 		return mediaDao.findByType( type );
 	}
 
-	@Override
-	public void updatePosterImages( PosterExercise exercise )
-	{
-		PosterExercise orig = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
-		orig.getPosterImages().clear();
-		for ( String image : exercise.getPosterImages() )
-		{
-			orig.getPosterImages().add( image );
-		}
-
-		exerciseService.persist( orig );
-	}
-
-	@Override
-	public void updatePosterVideos( PosterExercise exercise )
-	{
-		PosterExercise orig = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
-		orig.getPosterVideos().clear();
-		for ( String video : exercise.getPosterVideos() )
-		{
-			orig.getPosterVideos().add( video );
-		}
-
-		exerciseService.persist( orig );
-	}
-
-	@Override
-	protected WorkshopObjectDao getWorkshopObjectDao()
+	@Override protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return mediaDao;
 	}

@@ -1,8 +1,5 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.templates;
 
-import static org.junit.Assert.assertTrue;
-
-import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
@@ -14,9 +11,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by fueg on 12.08.2016.
@@ -29,8 +28,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class PosterTemplateTest
 {
-	private ExerciseTemplateService exerciseTemplateService;
-	private WorkshopTemplateService workshopTemplateService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static WorkshopTemplateService workshopTemplateService;
 
 	private static String   QUESTIONTEMPLATE = "questiontemplate";
 	private static String   NAME             = "name";
@@ -43,11 +42,11 @@ public class PosterTemplateTest
 	private static String IMAGE              = "image";
 	private static String VIDEO              = "video";
 
-	private ExerciseTemplate exerciseTemplate = new PosterTemplate();
+	private static ExerciseTemplate exerciseTemplate = new PosterTemplate();
 
-	private WorkshopTemplate workshopTemplate = new WorkshopTemplate();
+	private static WorkshopTemplate workshopTemplate = new WorkshopTemplate();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
@@ -59,7 +58,8 @@ public class PosterTemplateTest
 
 	@Test public void testPersist()
 	{
-		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new PosterTemplate( null,
+		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new PosterTemplate(
+				null,
 				true,
 				TIMEUNIT,
 				NUMBER,
@@ -73,8 +73,8 @@ public class PosterTemplateTest
 				DESCRIPTION,
 				POSTER_TITLE,
 				POSTER_DESCRIPTION,
-				new HashSet<String>( Arrays.asList( IMAGE ) ),
-				new HashSet<String>( Arrays.asList( VIDEO ) ) ) ) );
+				new HashSet<String>( Collections.singletonList( IMAGE ) ),
+				new HashSet<String>( Collections.singletonList( VIDEO ) ) ) ) );
 
 		assertTrue( exerciseTemplate.getID() != null );
 		assertTrue( !exerciseTemplate.getID().equals( "" ) );

@@ -5,11 +5,12 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
-import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -30,14 +31,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class SimplyPrototypingExerciseDataTest
 {
-	private ExerciseDataService exerciseDataService;
+	private static ExerciseDataService exerciseDataService;
 
-	private ExerciseDataImpl exerciseData = new SimplePrototypingData();
-	private MediaObject      mediaObject  = new MediaObject();
-	private WorkshopImpl     workshop     = new WorkshopImpl();
-	private ExerciseImpl     exercise     = new ExerciseImpl();
+	private static ExerciseDataImpl exerciseData = new SimplePrototypingData();
+	private static MediaObject      mediaObject  = new MediaObject();
+	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static ExerciseImpl     exercise     = new ExerciseImpl();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
@@ -56,8 +57,8 @@ public class SimplyPrototypingExerciseDataTest
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// exercise
-		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
-				new ExerciseTemplate( null,
+		SimplyPrototypingTemplate exerciseTemplate = (SimplyPrototypingTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new SimplyPrototypingTemplate( null,
 						true,
 						TimeUnit.SECONDS,
 						0,
@@ -68,8 +69,13 @@ public class SimplyPrototypingExerciseDataTest
 						workshopTemplate,
 						"",
 						"",
+						"",
 						"" ) ) );
-		exercise.setID( exerciseService.persistExercise( new ExerciseImpl( "", "", exerciseTemplate, workshop ) ) );
+		exercise.setID( exerciseService.persistExercise( new SimplyPrototypingExercise(
+				"",
+				"",
+				exerciseTemplate,
+				workshop ) ) );
 
 		// media object
 		mediaObject.setID( mediaService.persist( new MediaObject( "",

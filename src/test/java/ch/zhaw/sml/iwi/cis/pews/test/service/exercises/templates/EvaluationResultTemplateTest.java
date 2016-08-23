@@ -1,7 +1,5 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.templates;
 
-import static org.junit.Assert.assertTrue;
-
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
@@ -15,6 +13,8 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by fueg on 12.08.2016.
  * <p>
@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class EvaluationResultTemplateTest
 {
-	private ExerciseTemplateService exerciseTemplateService;
-	private WorkshopTemplateService workshopTemplateService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static WorkshopTemplateService workshopTemplateService;
 
 	private static String   QUESTIONTEMPLATE = "questiontemplate";
 	private static String   NAME             = "name";
@@ -35,11 +35,11 @@ public class EvaluationResultTemplateTest
 	private static int      NUMBER           = 4;
 	private static TimeUnit TIMEUNIT         = TimeUnit.MINUTES;
 
-	private ExerciseTemplate exerciseTemplate = new EvaluationResultTemplate();
+	private static ExerciseTemplate exerciseTemplate = new EvaluationResultTemplate();
 
-	private WorkshopTemplate workshopTemplate = new WorkshopTemplate();
+	private static WorkshopTemplate workshopTemplate = new WorkshopTemplate();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
@@ -51,7 +51,8 @@ public class EvaluationResultTemplateTest
 
 	@Test public void testPersist()
 	{
-		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new EvaluationResultTemplate( null,
+		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new EvaluationResultTemplate(
+				null,
 				true,
 				TIMEUNIT,
 				NUMBER,
@@ -70,7 +71,8 @@ public class EvaluationResultTemplateTest
 
 	@Test public void testFind()
 	{
-		EvaluationResultTemplate found = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
+		EvaluationResultTemplate found = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplate.getID() );
 		assertTrue( found != null );
 		assertTrue( found.getID().equals( exerciseTemplate.getID() ) );
 		assertTrue( found.getDefaultName().equals( NAME ) );
@@ -89,8 +91,8 @@ public class EvaluationResultTemplateTest
 
 	@Test public void testFindAll()
 	{
-		EvaluationResultTemplate findable = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate
-				.getID() );
+		EvaluationResultTemplate findable = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( findable ) );
 	}
 

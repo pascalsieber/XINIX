@@ -39,7 +39,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class PinkElefantWorkshopTest
 {
-	private WorkshopService workshopService;
+	private static WorkshopService workshopService;
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -52,15 +52,15 @@ public class PinkElefantWorkshopTest
 	private static boolean EXERCISE_TEMPLATE_BOOL         = true;
 	private static int     EXERCISE_TEMPLATE_NUMBER_PARAM = 4;
 
-	private WorkshopImpl workshop = new PinkElefantWorkshop();
+	private static WorkshopImpl workshop = new PinkElefantWorkshop();
 
-	private WorkshopTemplate workshopTemplate = new PinkElefantTemplate();
-	private ExerciseTemplate exerciseTemplate = new PinkLabsTemplate();
-	private ExerciseImpl     exerciseOne      = new PinkLabsExercise();
-	private ExerciseImpl     exerciseTwo      = new PinkLabsExercise();
-	private SessionImpl      session          = new SessionImpl();
+	private static WorkshopTemplate workshopTemplate = new PinkElefantTemplate();
+	private static ExerciseTemplate exerciseTemplate = new PinkLabsTemplate();
+	private static ExerciseImpl     exerciseOne      = new PinkLabsExercise();
+	private static ExerciseImpl     exerciseTwo      = new PinkLabsExercise();
+	private static SessionImpl      session          = new SessionImpl();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
@@ -109,7 +109,7 @@ public class PinkElefantWorkshopTest
 		assertTrue( found.getProblem().equals( PROBLEM ) );
 		assertTrue( found.getEmailText().equals( EMAIL ) );
 		assertTrue( found.getDerivedFrom().getID().equals( workshopTemplate.getID() ) );
-		assertTrue( found.getCurrentState().equals( WorkflowElementStatusImpl.NEW ) );
+		assertTrue( found.getCurrentState().equals( WorkflowElementStatusImpl.NEW.toString() ) );
 		assertTrue( found.getExercises().isEmpty() );
 		assertTrue( found.getSessions().isEmpty() );
 	}

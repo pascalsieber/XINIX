@@ -3,11 +3,12 @@ package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.data;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -29,16 +30,16 @@ import static org.junit.Assert.assertTrue;
  */
 public class P2POneExerciseDataTest
 {
-	private ExerciseDataService exerciseDataService;
+	private static ExerciseDataService exerciseDataService;
 
-	private ExerciseDataImpl exerciseData = new P2POneData();
-	private WorkshopImpl     workshop     = new WorkshopImpl();
-	private ExerciseImpl     exercise     = new ExerciseImpl();
+	private static ExerciseDataImpl exerciseData = new P2POneData();
+	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static ExerciseImpl     exercise     = new ExerciseImpl();
 
 	private static String ANSWER_ONE = "one";
 	private static String ANSWER_TWO = "two";
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
@@ -56,8 +57,8 @@ public class P2POneExerciseDataTest
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// exercise
-		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
-				new ExerciseTemplate( null,
+		P2POneTemplate exerciseTemplate = (P2POneTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new P2POneTemplate( null,
 						true,
 						TimeUnit.SECONDS,
 						0,
@@ -68,8 +69,9 @@ public class P2POneExerciseDataTest
 						workshopTemplate,
 						"",
 						"",
+						"",
 						"" ) ) );
-		exercise.setID( exerciseService.persistExercise( new ExerciseImpl( "", "", exerciseTemplate, workshop ) ) );
+		exercise.setID( exerciseService.persistExercise( new P2POneExercise( "", "", exerciseTemplate, workshop ) ) );
 	}
 
 	@Test public void testPersist()

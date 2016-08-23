@@ -12,6 +12,8 @@ import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TokenAuthenticationResponse;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import org.junit.BeforeClass;
@@ -34,14 +36,14 @@ public class AuthenticationTokenRestServiceTest
 	private static String PASSWORD = "password";
 	private static String LOGIN    = "login";
 
-	private AuthenticationTokenService authenticationTokenService;
+	private static AuthenticationTokenService authenticationTokenService;
 
-	private UserImpl    user    = new UserImpl();
-	private SessionImpl session = new SessionImpl();
+	private static UserImpl    user    = new UserImpl();
+	private static SessionImpl session = new SessionImpl();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
-		// setup session for user
+		// setup workshop for session
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 				WorkshopTemplateServiceProxy.class );
 		WorkshopTemplate workshopTemplate = workshopTemplateService.findWorkshopTemplateByID( workshopTemplateService.persist(
@@ -52,6 +54,26 @@ public class AuthenticationTokenRestServiceTest
 				"",
 				(PinkElefantTemplate)workshopTemplate ) ) );
 
+		// workshop needs exercise, in order to assign currentExercise to session
+		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
+				ExerciseTemplateServiceProxy.class );
+		PinkLabsTemplate pinkLabsTemplate = (PinkLabsTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new PinkLabsTemplate( null,
+						false,
+						null,
+						0,
+						false,
+						false,
+						false,
+						0,
+						workshopTemplate,
+						"",
+						"",
+						"" ) ) );
+		ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
+		exerciseService.persistExercise( new PinkLabsExercise( "", "", pinkLabsTemplate, workshop ) );
+
+		// setup session
 		SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
 		session.setID( sessionService.persistSession( new SessionImpl( "",
 				"",
@@ -64,7 +86,7 @@ public class AuthenticationTokenRestServiceTest
 				new HashSet<Invitation>(),
 				new HashSet<PrincipalImpl>() ) ) );
 
-		// setup user
+		// setup user and join session
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		user.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( PASSWORD ),
 				null,

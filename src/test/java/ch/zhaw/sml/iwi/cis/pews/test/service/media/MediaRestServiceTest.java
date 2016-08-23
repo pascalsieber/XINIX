@@ -33,17 +33,17 @@ import static org.junit.Assert.assertTrue;
  */
 public class MediaRestServiceTest
 {
-	private MediaService mediaService;
+	private static MediaService mediaService;
 
-	private MediaObject mediaObject      = new MediaObject();
-	private MediaObject otherMediaObject = new MediaObject();
+	private static MediaObject mediaObject      = new MediaObject();
+	private static MediaObject otherMediaObject = new MediaObject();
 
-	private String          MIME;
-	private byte[]          BLOB;
-	private MediaObjectType TYPE;
-	private MediaObjectType OTHER_TYPE;
+	private static String          MIME;
+	private static byte[]          BLOB;
+	private static MediaObjectType TYPE;
+	private static MediaObjectType OTHER_TYPE;
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// setup elements for mediaObject
 		try

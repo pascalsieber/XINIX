@@ -37,16 +37,16 @@ import static org.junit.Assert.assertTrue;
 public class InvitationRestServiceTest
 {
 
-	private InvitationService invitationService;
-	private SessionService    sessionService;
-	private UserService       userService;
+	private static InvitationService invitationService;
+	private static SessionService    sessionService;
+	private static UserService       userService;
 
-	private Invitation invitation = new Invitation();
-	private UserImpl user         = new UserImpl();
-	private WorkshopImpl workshop = new PinkElefantWorkshop();
-	private SessionImpl session   = new SessionImpl();
+	private static Invitation invitation = new Invitation();
+	private static UserImpl user         = new UserImpl();
+	private static WorkshopImpl workshop = new PinkElefantWorkshop();
+	private static SessionImpl session   = new SessionImpl();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(

@@ -1,20 +1,20 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.templates;
 
-import static org.junit.Assert.assertTrue;
-
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
-import ch.zhaw.iwi.cis.pews.service.WorkshopService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by fueg on 12.08.2016.
@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class PinkLabsTemplateTest
 {
-	private ExerciseTemplateService exerciseTemplateService;
-	private WorkshopTemplateService workshopTemplateService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static WorkshopTemplateService workshopTemplateService;
 
 	private static String QUESTIONTEMPLATE = "questiontemplate";
 	private static String NAME             = "name";
@@ -36,18 +36,22 @@ public class PinkLabsTemplateTest
 	private static int NUMBER              = 4;
 	private static TimeUnit TIMEUNIT       = TimeUnit.MINUTES;
 
-	private ExerciseTemplate exerciseTemplate = new PinkLabsTemplate();
+	private static ExerciseTemplate exerciseTemplate = new PinkLabsTemplate();
 
-	private WorkshopTemplate workshopTemplate = new WorkshopTemplate();
+	private static WorkshopTemplate workshopTemplate = new WorkshopTemplate();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
 		workshopTemplateService = ServiceProxyManager.createServiceProxy( WorkshopTemplateServiceProxy.class );
 
 		// workshop template
-		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null, "", "" ) ) );
+		workshopTemplate.setID( workshopTemplateService.persistWorkshopTemplate( new PinkElefantTemplate( null,
+				"",
+				"",
+				"",
+				"" ) ) );
 	}
 
 	@Test public void testPersist()

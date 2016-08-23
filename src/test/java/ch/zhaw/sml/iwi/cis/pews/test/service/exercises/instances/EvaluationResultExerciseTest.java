@@ -38,12 +38,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class EvaluationResultExerciseTest
 {
-	private ExerciseService exerciseService;
-	private WorkshopService workshopService;
+	private static ExerciseService exerciseService;
+	private static WorkshopService workshopService;
 
-	private ExerciseImpl     exercise         = new EvaluationResultExercise();
-	private ExerciseTemplate exerciseTemplate = new EvaluationResultTemplate();
-	private WorkshopImpl     workshop         = new WorkshopImpl();
+	private static ExerciseImpl     exercise         = new EvaluationResultExercise();
+	private static ExerciseTemplate exerciseTemplate = new EvaluationResultTemplate();
+	private static WorkshopImpl     workshop         = new WorkshopImpl();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";

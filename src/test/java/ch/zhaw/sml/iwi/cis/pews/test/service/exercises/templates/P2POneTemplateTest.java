@@ -1,7 +1,5 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.templates;
 
-import static org.junit.Assert.assertTrue;
-
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
@@ -15,6 +13,8 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by fueg on 12.08.2016.
  * <p>
@@ -26,22 +26,22 @@ import java.util.concurrent.TimeUnit;
  */
 public class P2POneTemplateTest
 {
-	private ExerciseTemplateService exerciseTemplateService;
-	private WorkshopTemplateService workshopTemplateService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static WorkshopTemplateService workshopTemplateService;
 
-	private static String QUESTIONTEMPLATE = "questiontemplate";
-	private static String NAME             = "name";
-	private static String DESCRIPTION      = "description";
-	private static int NUMBER              = 4;
-	private static TimeUnit TIMEUNIT       = TimeUnit.MINUTES;
+	private static String   QUESTIONTEMPLATE = "questiontemplate";
+	private static String   NAME             = "name";
+	private static String   DESCRIPTION      = "description";
+	private static int      NUMBER           = 4;
+	private static TimeUnit TIMEUNIT         = TimeUnit.MINUTES;
 
 	private static String PICTURE = "picture";
 
-	private ExerciseTemplate exerciseTemplate = new P2POneTemplate();
+	private static ExerciseTemplate exerciseTemplate = new P2POneTemplate();
 
-	private WorkshopTemplate workshopTemplate = new WorkshopTemplate();
+	private static WorkshopTemplate workshopTemplate = new WorkshopTemplate();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
@@ -53,7 +53,8 @@ public class P2POneTemplateTest
 
 	@Test public void testPersist()
 	{
-		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new P2POneTemplate( null,
+		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new P2POneTemplate(
+				null,
 				true,
 				TIMEUNIT,
 				NUMBER,

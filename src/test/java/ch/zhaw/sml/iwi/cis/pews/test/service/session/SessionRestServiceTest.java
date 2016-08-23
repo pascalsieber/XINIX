@@ -43,22 +43,22 @@ import static org.junit.Assert.assertTrue;
  */
 public class SessionRestServiceTest
 {
-	private SessionService sessionService;
-	private UserService userService;
-	private ExerciseDataService exerciseDataService;
+	private static SessionService sessionService;
+	private static UserService userService;
+	private static ExerciseDataService exerciseDataService;
 
-	private WorkshopTemplate workshopTemplate = new PinkElefantTemplate();
-	private WorkshopImpl     workshop         = new PinkElefantWorkshop();
+	private static WorkshopTemplate workshopTemplate = new PinkElefantTemplate();
+	private static WorkshopImpl     workshop         = new PinkElefantWorkshop();
 
-	private ExerciseTemplate exerciseTemplate = new PinkLabsTemplate();
-	private ExerciseImpl     exerciseOne      = new PinkLabsExercise();
-	private ExerciseImpl     exerciseTwo      = new PinkLabsExercise();
+	private static ExerciseTemplate exerciseTemplate = new PinkLabsTemplate();
+	private static ExerciseImpl     exerciseOne      = new PinkLabsExercise();
+	private static ExerciseImpl     exerciseTwo      = new PinkLabsExercise();
 
-	private UserImpl user = new UserImpl();
+	private static UserImpl user = new UserImpl();
 
-	private SessionImpl session = new SessionImpl();
+	private static SessionImpl session = new SessionImpl();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// service
 		sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
@@ -136,9 +136,7 @@ public class SessionRestServiceTest
 				.getID()
 				.equals( exerciseOne.getID() ) );
 		assertTrue( sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getAcceptees().isEmpty() );
 		assertTrue( sessionService.findSessionByID( session.getID() ).getInvitations().isEmpty() );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getExecuters().isEmpty() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getCurrentState()
 				.equals( WorkflowElementStatusImpl.NEW.toString() ) );

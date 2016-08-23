@@ -3,15 +3,16 @@ package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.data;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.*;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -29,16 +30,16 @@ import static org.junit.Assert.assertTrue;
  */
 public class EvaluationExerciseDataTest
 {
-	private ExerciseDataService exerciseDataService;
+	private static ExerciseDataService exerciseDataService;
 
-	private ExerciseDataImpl exerciseData = new EvaluationExerciseData();
-	private WorkshopImpl     workshop     = new WorkshopImpl();
-	private ExerciseImpl     exercise     = new ExerciseImpl();
+	private static ExerciseDataImpl exerciseData = new EvaluationExerciseData();
+	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static ExerciseImpl     exercise     = new ExerciseImpl();
 
-	private CompressionExerciseDataElement solution = new CompressionExerciseDataElement();
-	private static int                     SCORE    = 5;
+	private static CompressionExerciseDataElement solution = new CompressionExerciseDataElement();
+	private static int                            SCORE    = 5;
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
@@ -56,8 +57,8 @@ public class EvaluationExerciseDataTest
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// exercise
-		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
-				new ExerciseTemplate( null,
+		EvaluationTemplate exerciseTemplate = (EvaluationTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new EvaluationTemplate( null,
 						true,
 						TimeUnit.SECONDS,
 						0,
@@ -68,13 +69,17 @@ public class EvaluationExerciseDataTest
 						workshopTemplate,
 						"",
 						"",
-						"" ) ) );
-		exercise.setID( exerciseService.persistExercise( new ExerciseImpl( "", "", exerciseTemplate, workshop ) ) );
+						"",
+						0 ) ) );
+		exercise.setID( exerciseService.persistExercise( new EvaluationExercise( "",
+				"",
+				exerciseTemplate,
+				workshop ) ) );
 
 		// solution
 		CompressionExerciseData compressionExerciseData = exerciseDataService.findByID( exerciseDataService.persist( new CompressionExerciseData( null,
 				null,
-				Arrays.asList( new CompressionExerciseDataElement( "", "" ) ) ) ) );
+				Collections.singletonList( new CompressionExerciseDataElement( "", "" ) ) ) ) );
 		solution.setID( compressionExerciseData.getSolutions().get( 0 ).getID() );
 	}
 

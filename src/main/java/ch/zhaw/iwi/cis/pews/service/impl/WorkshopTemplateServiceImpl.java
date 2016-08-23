@@ -49,6 +49,11 @@ public class WorkshopTemplateServiceImpl extends WorkshopObjectServiceImpl imple
 		}
 	}
 
+	@Override public String persistWorkshopTemplate( WorkshopTemplate workshopTemplate )
+	{
+		return super.persist( workshopTemplate );
+	}
+
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< WorkshopTemplate > findAllWorkshopTemplates()

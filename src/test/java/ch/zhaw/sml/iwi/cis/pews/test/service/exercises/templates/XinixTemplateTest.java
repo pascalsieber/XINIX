@@ -29,8 +29,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class XinixTemplateTest
 {
-	private ExerciseTemplateService exerciseTemplateService;
-	private WorkshopTemplateService workshopTemplateService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static WorkshopTemplateService workshopTemplateService;
 
 	private static String   QUESTIONTEMPLATE = "questiontemplate";
 	private static String   NAME             = "name";
@@ -38,12 +38,12 @@ public class XinixTemplateTest
 	private static int      NUMBER           = 4;
 	private static TimeUnit TIMEUNIT         = TimeUnit.MINUTES;
 
-	private ExerciseTemplate exerciseTemplate = new XinixTemplate();
-	private XinixImageMatrix xinixImageMatrix = new XinixImageMatrix();
+	private static ExerciseTemplate exerciseTemplate = new XinixTemplate();
+	private static XinixImageMatrix xinixImageMatrix = new XinixImageMatrix();
 
-	private WorkshopTemplate workshopTemplate = new WorkshopTemplate();
+	private static WorkshopTemplate workshopTemplate = new WorkshopTemplate();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );

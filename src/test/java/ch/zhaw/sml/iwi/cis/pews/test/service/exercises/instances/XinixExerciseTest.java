@@ -47,18 +47,18 @@ import static org.junit.Assert.assertTrue;
  */
 public class XinixExerciseTest
 {
-	private ExerciseService     exerciseService;
-	private ExerciseDataService exerciseDataService;
-	private SessionService      sessionService;
-	private WorkshopService     workshopService;
+	private static ExerciseService     exerciseService;
+	private static ExerciseDataService exerciseDataService;
+	private static SessionService      sessionService;
+	private static WorkshopService     workshopService;
 
-	private ExerciseImpl     exercise         = new XinixExercise();
-	private ExerciseTemplate exerciseTemplate = new XinixTemplate();
-	private WorkshopImpl     workshop         = new WorkshopImpl();
-	private SessionImpl      session          = new SessionImpl();
-	private UserImpl         owner            = new UserImpl();
-	private XinixImageMatrix xinixImageMatrix = new XinixImageMatrix();
-	private MediaObject      mediaObject      = new MediaObject();
+	private static ExerciseImpl     exercise         = new XinixExercise();
+	private static ExerciseTemplate exerciseTemplate = new XinixTemplate();
+	private static WorkshopImpl     workshop         = new WorkshopImpl();
+	private static SessionImpl      session          = new SessionImpl();
+	private static UserImpl         owner            = new UserImpl();
+	private static XinixImageMatrix xinixImageMatrix = new XinixImageMatrix();
+	private static MediaObject      mediaObject      = new MediaObject();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -74,7 +74,7 @@ public class XinixExerciseTest
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// owner
 		String password = "password";

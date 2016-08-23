@@ -18,6 +18,12 @@ public class WorkshopTemplateServiceProxy extends WorkshopObjectServiceProxy imp
 	}
 
 	@Override
+	public String persistWorkshopTemplate( WorkshopTemplate obj )
+	{
+		return getServiceTarget().path( WorkshopTemplateRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( obj ) ).readEntity( String.class );
+	}
+
+	@Override
 	public WorkshopTemplate findWorkshopTemplateByID( String id )
 	{
 		return getServiceTarget().path( WorkshopTemplateRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( id ) ).readEntity( WorkshopTemplate.class );

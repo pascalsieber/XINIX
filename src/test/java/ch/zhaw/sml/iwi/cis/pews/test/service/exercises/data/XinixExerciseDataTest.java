@@ -5,11 +5,12 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
-import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -32,17 +33,17 @@ import static org.junit.Assert.assertTrue;
  */
 public class XinixExerciseDataTest
 {
-	private ExerciseDataService exerciseDataService;
+	private static ExerciseDataService exerciseDataService;
 
-	private ExerciseDataImpl exerciseData = new XinixData();
-	private WorkshopImpl     workshop     = new WorkshopImpl();
-	private ExerciseImpl     exercise     = new ExerciseImpl();
-	private MediaObject      xinixImage   = new MediaObject();
+	private static ExerciseDataImpl exerciseData = new XinixData();
+	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static ExerciseImpl     exercise     = new ExerciseImpl();
+	private static MediaObject      xinixImage   = new MediaObject();
 
 	private static String XINIX_ASSOCIATION_ONE = "one";
 	private static String XINIX_ASSOCIATION_TWO = "two";
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
@@ -61,8 +62,8 @@ public class XinixExerciseDataTest
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// exercise
-		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
-				new ExerciseTemplate( null,
+		XinixTemplate exerciseTemplate = (XinixTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new XinixTemplate( null,
 						true,
 						TimeUnit.SECONDS,
 						0,
@@ -73,8 +74,9 @@ public class XinixExerciseDataTest
 						workshopTemplate,
 						"",
 						"",
-						"" ) ) );
-		exercise.setID( exerciseService.persistExercise( new ExerciseImpl( "", "", exerciseTemplate, workshop ) ) );
+						"",
+						null ) ) );
+		exercise.setID( exerciseService.persistExercise( new XinixExercise( "", "", exerciseTemplate, workshop ) ) );
 
 		// xinix image
 		xinixImage.setID( mediaService.persist( new MediaObject( "", "".getBytes(), MediaObjectType.XINIX ) ) );

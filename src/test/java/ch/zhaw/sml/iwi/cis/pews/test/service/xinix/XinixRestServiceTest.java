@@ -25,14 +25,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class XinixRestServiceTest
 {
-	private XinixImageMatrixService xinixImageMatrixService;
-	private MediaService            mediaService;
+	private static XinixImageMatrixService xinixImageMatrixService;
+	private static MediaService            mediaService;
 
-	private XinixImageMatrix xinixImageMatrix = new XinixImageMatrix();
-	private MediaObject      imageone         = new MediaObject();
-	private MediaObject      imagetwo         = new MediaObject();
+	private static XinixImageMatrix xinixImageMatrix = new XinixImageMatrix();
+	private static MediaObject      imageone         = new MediaObject();
+	private static MediaObject      imagetwo         = new MediaObject();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		xinixImageMatrixService = ServiceProxyManager.createServiceProxy( XinixImageMatrixServiceProxy.class );
 		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );

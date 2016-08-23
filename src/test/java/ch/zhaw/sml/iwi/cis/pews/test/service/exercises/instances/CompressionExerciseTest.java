@@ -46,23 +46,23 @@ import static org.junit.Assert.assertTrue;
  */
 public class CompressionExerciseTest
 {
-	private ExerciseService     exerciseService;
-	private ExerciseDataService exerciseDataService;
-	private SessionService      sessionService;
-	private WorkshopService     workshopService;
+	private static ExerciseService     exerciseService;
+	private static ExerciseDataService exerciseDataService;
+	private static SessionService      sessionService;
+	private static WorkshopService     workshopService;
 
-	private ExerciseImpl     exercise         = new CompressionExercise();
-	private ExerciseTemplate exerciseTemplate = new CompressionTemplate();
-	private WorkshopImpl     workshop         = new WorkshopImpl();
-	private SessionImpl      session          = new SessionImpl();
-	private UserImpl         owner            = new UserImpl();
+	private static ExerciseImpl     exercise         = new CompressionExercise();
+	private static ExerciseTemplate exerciseTemplate = new CompressionTemplate();
+	private static WorkshopImpl     workshop         = new WorkshopImpl();
+	private static SessionImpl      session          = new SessionImpl();
+	private static UserImpl         owner            = new UserImpl();
 
-	private PinkLabsExerciseData  pinkLabsExerciseData  = new PinkLabsExerciseData();
-	private P2POneData            p2pOneData            = new P2POneData();
-	private P2PTwoData            p2pTwoData            = new P2PTwoData();
-	private XinixData             xinixData             = new XinixData();
-	private SimplePrototypingData simplePrototypingData = new SimplePrototypingData();
-	private You2MeExerciseData    you2MeExerciseData    = new You2MeExerciseData();
+	private static PinkLabsExerciseData  pinkLabsExerciseData  = new PinkLabsExerciseData();
+	private static P2POneData            p2pOneData            = new P2POneData();
+	private static P2PTwoData            p2pTwoData            = new P2PTwoData();
+	private static XinixData             xinixData             = new XinixData();
+	private static SimplePrototypingData simplePrototypingData = new SimplePrototypingData();
+	private static You2MeExerciseData    you2MeExerciseData    = new You2MeExerciseData();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -81,7 +81,7 @@ public class CompressionExerciseTest
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// owner
 		String password = "password";

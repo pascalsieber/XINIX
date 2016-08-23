@@ -176,7 +176,7 @@ public class ZhawEngine implements LifecycleObject
 
 		setupEntityManager();
 		startWebServer();
-//		configureRootUser();
+		configureRootUser();
 //		configureSampleWorkshop();
 //		configureDemoWorkshop();
 //		configurePostWorkshop();

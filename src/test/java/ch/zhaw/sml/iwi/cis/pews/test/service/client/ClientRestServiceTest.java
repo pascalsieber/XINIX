@@ -25,9 +25,9 @@ public class ClientRestServiceTest
 
 	private static String NAME = "name";
 
-	private Client client;
+	private Client client = new Client();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
 	}

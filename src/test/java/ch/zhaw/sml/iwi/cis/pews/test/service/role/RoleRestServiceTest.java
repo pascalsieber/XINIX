@@ -1,13 +1,13 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.role;
 
-import static org.junit.Assert.assertTrue;
-
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by fueg on 09.08.2016.
@@ -27,7 +27,7 @@ public class RoleRestServiceTest
 
 	private RoleImpl role = new RoleImpl();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
 	}

@@ -1,22 +1,24 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.data;
 
-import static org.junit.Assert.assertTrue;
-
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
-import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by fueg on 15.08.2016.
@@ -31,13 +33,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class You2MeExerciseDataTest
 {
-	private ExerciseDataService exerciseDataService;
+	private static ExerciseDataService exerciseDataService;
 
-	private ExerciseDataImpl exerciseData = new You2MeExerciseData();
-	private WorkshopImpl     workshop     = new WorkshopImpl();
-	private ExerciseImpl     exercise     = new ExerciseImpl();
+	private static ExerciseDataImpl exerciseData = new You2MeExerciseData();
+	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static ExerciseImpl     exercise     = new ExerciseImpl();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
@@ -55,8 +57,8 @@ public class You2MeExerciseDataTest
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// exercise
-		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
-				new ExerciseTemplate( null,
+		You2MeTemplate exerciseTemplate = (You2MeTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new You2MeTemplate( null,
 						true,
 						TimeUnit.SECONDS,
 						0,
@@ -67,8 +69,9 @@ public class You2MeExerciseDataTest
 						workshopTemplate,
 						"",
 						"",
-						"" ) ) );
-		exercise.setID( exerciseService.persistExercise( new ExerciseImpl( "", "", exerciseTemplate, workshop ) ) );
+						"",
+						new HashSet<String>() ) ) );
+		exercise.setID( exerciseService.persistExercise( new You2MeExercise( "", "", exerciseTemplate, workshop ) ) );
 	}
 
 	@Test public void testPersist()

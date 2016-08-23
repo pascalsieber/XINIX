@@ -31,20 +31,20 @@ import static org.junit.Assert.assertTrue;
  */
 public class UserRestServiceTest
 {
-	private UserService userService;
+	private static UserService userService;
 
-	private UserImpl user       = new UserImpl();
-	private UserImpl clientUser = new UserImpl();
+	private static UserImpl user       = new UserImpl();
+	private static UserImpl clientUser = new UserImpl();
 
-	private Client   client = new Client();
-	private RoleImpl role   = new RoleImpl();
+	private static Client   client = new Client();
+	private static RoleImpl role   = new RoleImpl();
 
 	private static String PASSWORD   = "password";
 	private static String FIRST_NAME = "firstname";
 	private static String LAST_NAME  = "lastname";
 	private static String LOGIN      = "login";
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );

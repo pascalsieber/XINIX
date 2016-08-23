@@ -36,12 +36,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class PosterExerciseTest
 {
-	private ExerciseService exerciseService;
-	private WorkshopService workshopService;
+	private static ExerciseService exerciseService;
+	private static WorkshopService workshopService;
 
-	private ExerciseImpl     exercise         = new PosterExercise();
-	private ExerciseTemplate exerciseTemplate = new PosterTemplate();
-	private WorkshopImpl     workshop         = new WorkshopImpl();
+	private static ExerciseImpl     exercise         = new PosterExercise();
+	private static ExerciseTemplate exerciseTemplate = new PosterTemplate();
+	private static WorkshopImpl     workshop         = new WorkshopImpl();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -60,7 +60,7 @@ public class PosterExerciseTest
 	private static String POSTER_IMAGE       = "posterimage";
 	private static String POSTER_VIDEO       = "postervideo";
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );

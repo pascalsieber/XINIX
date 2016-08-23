@@ -45,17 +45,17 @@ import static org.junit.Assert.assertTrue;
  */
 public class P2PTwoExerciseTest
 {
-	private ExerciseService     exerciseService;
-	private ExerciseDataService exerciseDataService;
-	private SessionService      sessionService;
-	private WorkshopService     workshopService;
+	private static ExerciseService     exerciseService;
+	private static ExerciseDataService exerciseDataService;
+	private static SessionService      sessionService;
+	private static WorkshopService     workshopService;
 
-	private ExerciseImpl     exercise         = new P2PTwoExercise();
-	private ExerciseTemplate exerciseTemplate = new P2PTwoTemplate();
-	private WorkshopImpl     workshop         = new WorkshopImpl();
-	private SessionImpl      session          = new SessionImpl();
-	private UserImpl         owner            = new UserImpl();
-	private P2POneData       p2POneData       = new P2POneData();
+	private static ExerciseImpl     exercise         = new P2PTwoExercise();
+	private static ExerciseTemplate exerciseTemplate = new P2PTwoTemplate();
+	private static WorkshopImpl     workshop         = new WorkshopImpl();
+	private static SessionImpl      session          = new SessionImpl();
+	private static UserImpl         owner            = new UserImpl();
+	private static P2POneData       p2POneData       = new P2POneData();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -74,7 +74,7 @@ public class P2PTwoExerciseTest
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// owner
 		String password = "password";

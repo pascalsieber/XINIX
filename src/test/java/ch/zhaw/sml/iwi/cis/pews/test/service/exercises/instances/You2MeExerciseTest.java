@@ -43,16 +43,16 @@ import static org.junit.Assert.assertTrue;
  */
 public class You2MeExerciseTest
 {
-	private ExerciseService     exerciseService;
-	private ExerciseDataService exerciseDataService;
-	private SessionService      sessionService;
-	private WorkshopService     workshopService;
+	private static ExerciseService     exerciseService;
+	private static ExerciseDataService exerciseDataService;
+	private static SessionService      sessionService;
+	private static WorkshopService     workshopService;
 
-	private ExerciseImpl     exercise         = new You2MeExercise();
-	private ExerciseTemplate exerciseTemplate = new You2MeTemplate();
-	private WorkshopImpl     workshop         = new WorkshopImpl();
-	private SessionImpl      session          = new SessionImpl();
-	private UserImpl         owner            = new UserImpl();
+	private static ExerciseImpl     exercise         = new You2MeExercise();
+	private static ExerciseTemplate exerciseTemplate = new You2MeTemplate();
+	private static WorkshopImpl     workshop         = new WorkshopImpl();
+	private static SessionImpl      session          = new SessionImpl();
+	private static UserImpl         owner            = new UserImpl();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -71,7 +71,7 @@ public class You2MeExerciseTest
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// owner
 		String password = "password";

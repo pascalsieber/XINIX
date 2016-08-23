@@ -3,12 +3,13 @@ package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.data;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -31,18 +32,18 @@ import static org.junit.Assert.assertTrue;
  */
 public class P2PTwoExerciseDataTest
 {
-	private ExerciseDataService exerciseDataService;
+	private static ExerciseDataService exerciseDataService;
 
-	private ExerciseDataImpl exerciseData = new P2PTwoData();
-	private WorkshopImpl     workshop     = new WorkshopImpl();
-	private ExerciseImpl     exercise     = new ExerciseImpl();
+	private static ExerciseDataImpl exerciseData = new P2PTwoData();
+	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static ExerciseImpl     exercise     = new ExerciseImpl();
 
-	private P2POneKeyword p2POneKeyword = new P2POneKeyword();
+	private static P2POneKeyword p2POneKeyword = new P2POneKeyword();
 
 	private static String ANSWER_ONE = "one";
 	private static String ANSWER_TWO = "two";
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
@@ -60,8 +61,8 @@ public class P2PTwoExerciseDataTest
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// exercise
-		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
-				new ExerciseTemplate( null,
+		P2PTwoTemplate exerciseTemplate = (P2PTwoTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new P2PTwoTemplate( null,
 						true,
 						TimeUnit.SECONDS,
 						0,
@@ -73,7 +74,7 @@ public class P2PTwoExerciseDataTest
 						"",
 						"",
 						"" ) ) );
-		exercise.setID( exerciseService.persistExercise( new ExerciseImpl( "", "", exerciseTemplate, workshop ) ) );
+		exercise.setID( exerciseService.persistExercise( new P2PTwoExercise( "", "", exerciseTemplate, workshop ) ) );
 
 		p2POneKeyword.setID( exerciseDataService.persist( new P2POneKeyword( null, "" ) ) );
 	}

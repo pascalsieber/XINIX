@@ -35,7 +35,7 @@ public class WorkshopTemplateRestService extends WorkshopObjectRestService
 	@Path( PERSIST )
 	public String persist( WorkshopTemplate obj )
 	{
-		return super.persist( obj );
+		return workshopTemplateService.persistWorkshopTemplate( obj );
 	}
 
 	@SuppressWarnings( "unchecked" )
