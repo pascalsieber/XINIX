@@ -8,8 +8,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.MediaServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
 import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
@@ -23,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  * - FIND_BY_ID
  * - FIND_ALL
  */
-public class XinixRestServiceTest
+@RunWith( OrderedRunner.class ) public class XinixRestServiceTest
 {
 	private static XinixImageMatrixService xinixImageMatrixService;
 	private static MediaService            mediaService;
@@ -41,7 +44,7 @@ public class XinixRestServiceTest
 		imagetwo.setID( mediaService.persist( new MediaObject( "", "".getBytes(), MediaObjectType.XINIX ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		xinixImageMatrix.setID( xinixImageMatrixService.persistImageMatrix( new XinixImageMatrix( Arrays.asList( imageone,
 				imagetwo ) ) ) );
@@ -49,7 +52,7 @@ public class XinixRestServiceTest
 		assertTrue( !xinixImageMatrix.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		XinixImageMatrix found = xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrix.getID() );
 		assertTrue( found != null );
@@ -59,7 +62,7 @@ public class XinixRestServiceTest
 						mediaService.findByID( imagetwo.getID() ) ) ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		XinixImageMatrix removable = xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrix.getID() );
 		assertTrue( xinixImageMatrixService.findAllXinixImageMatrices().contains( removable ) );

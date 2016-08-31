@@ -10,8 +10,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +33,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE_BY_ID
  * - FIND_ALL
  */
-public class CompressionExerciseDataTest
+@RunWith( OrderedRunner.class ) public class CompressionExerciseDataTest
 {
 	private static ExerciseDataService exerciseDataService;
 
@@ -75,14 +78,13 @@ public class CompressionExerciseDataTest
 						"",
 						"",
 						new ArrayList<String>() ) ) );
-		exercise.setID( exerciseService.persistExercise( new CompressionExercise(
-				"",
+		exercise.setID( exerciseService.persistExercise( new CompressionExercise( "",
 				"",
 				exerciseTemplate,
 				workshop ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseData.setID( exerciseDataService.persist( new CompressionExerciseData( null,
 				exercise,
@@ -92,7 +94,7 @@ public class CompressionExerciseDataTest
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		CompressionExerciseData found = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( found != null );
@@ -110,25 +112,25 @@ public class CompressionExerciseDataTest
 		assertTrue( found.getSolutions().get( 1 ).getDescription().equals( DESCRIPTION_TWO ) );
 	}
 
-	@Test public void testExportByExerciseID()
+	@TestOrder( order = 3 ) @Test public void testExportByExerciseID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByExerciseID( exercise.getID() );
 	}
 
-	@Test public void testExportByWorkshopID()
+	@TestOrder( order = 4 ) @Test public void testExportByWorkshopID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByWorkshopID( workshop.getID() );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		CompressionExerciseData findable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
 	}
 
-	@Test public void testRemoveByID()
+	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		CompressionExerciseData removable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );

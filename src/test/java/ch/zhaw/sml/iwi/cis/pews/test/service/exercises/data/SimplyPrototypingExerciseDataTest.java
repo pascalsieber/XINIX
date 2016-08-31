@@ -11,8 +11,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +32,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE_BY_ID
  * - FIND_ALL
  */
-public class SimplyPrototypingExerciseDataTest
+@RunWith( OrderedRunner.class ) public class SimplyPrototypingExerciseDataTest
 {
 	private static ExerciseDataService exerciseDataService;
 
@@ -71,8 +74,7 @@ public class SimplyPrototypingExerciseDataTest
 						"",
 						"",
 						"" ) ) );
-		exercise.setID( exerciseService.persistExercise( new SimplyPrototypingExercise(
-				"",
+		exercise.setID( exerciseService.persistExercise( new SimplyPrototypingExercise( "",
 				"",
 				exerciseTemplate,
 				workshop ) ) );
@@ -83,14 +85,14 @@ public class SimplyPrototypingExerciseDataTest
 				MediaObjectType.SIMPLYPROTOTYPING ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseData.setID( exerciseDataService.persist( new SimplePrototypingData( null, exercise, mediaObject ) ) );
 		assertTrue( exerciseData.getID() != null );
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		SimplePrototypingData found = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( found != null );
@@ -99,25 +101,25 @@ public class SimplyPrototypingExerciseDataTest
 		assertTrue( found.getMediaObject().getID().equals( mediaObject.getID() ) );
 	}
 
-	@Test public void testExportByExerciseID()
+	@TestOrder( order = 3 ) @Test public void testExportByExerciseID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByExerciseID( exercise.getID() );
 	}
 
-	@Test public void testExportByWorkshopID()
+	@TestOrder( order = 4 ) @Test public void testExportByWorkshopID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByWorkshopID( workshop.getID() );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		SimplePrototypingData findable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
 	}
 
-	@Test public void testRemoveByID()
+	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		SimplePrototypingData removable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );

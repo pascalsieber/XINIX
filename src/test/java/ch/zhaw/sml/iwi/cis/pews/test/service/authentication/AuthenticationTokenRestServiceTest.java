@@ -5,10 +5,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
-import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.model.user.*;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TokenAuthenticationResponse;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -16,8 +13,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
@@ -31,10 +31,10 @@ import static org.junit.Assert.assertTrue;
  * - AUTHENTICATE_WITH_TOKEN
  */
 
-public class AuthenticationTokenRestServiceTest
+@RunWith( OrderedRunner.class ) public class AuthenticationTokenRestServiceTest
 {
 	private static String PASSWORD = "password";
-	private static String LOGIN    = "login";
+	private static String LOGIN    = "authenticationtokentestuser";
 
 	private static AuthenticationTokenService authenticationTokenService;
 
@@ -87,9 +87,12 @@ public class AuthenticationTokenRestServiceTest
 				new HashSet<PrincipalImpl>() ) ) );
 
 		// setup user and join session
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "authservicetestrole",
+				"authservicetestrole" ) ) );
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		user.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( PASSWORD ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -102,20 +105,22 @@ public class AuthenticationTokenRestServiceTest
 				PASSWORD );
 	}
 
-	@Test public void testGenerateToken()
+	@TestOrder( order = 1 ) @Test public void testGenerateToken()
 	{
 		String token = authenticationTokenService.generateAuthenticationToken( "target" );
 		assertTrue( token != null );
+		assertTrue( !token.contains( "html" ) );
 		assertTrue( !token.equals( "" ) );
 
 		// verify token is replaced
 		String resetToken = authenticationTokenService.generateAuthenticationToken( "target" );
 		assertTrue( resetToken != null );
+		assertTrue( !token.contains( "html" ) );
 		assertTrue( !resetToken.equals( "" ) );
 		assertTrue( !resetToken.equals( token ) );
 	}
 
-	@Test public void testAuthenticateWithToken()
+	@TestOrder( order = 2 ) @Test public void testAuthenticateWithToken()
 	{
 		String token = authenticationTokenService.generateAuthenticationToken( "target" );
 		TokenAuthenticationResponse response = authenticationTokenService.authenticateWithToken( token );

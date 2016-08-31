@@ -8,8 +8,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,7 +29,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class PosterTemplateTest
+@RunWith( OrderedRunner.class ) public class PosterTemplateTest
 {
 	private static ExerciseTemplateService exerciseTemplateService;
 	private static WorkshopTemplateService workshopTemplateService;
@@ -56,7 +59,7 @@ public class PosterTemplateTest
 		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null, "", "" ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new PosterTemplate(
 				null,
@@ -80,7 +83,7 @@ public class PosterTemplateTest
 		assertTrue( !exerciseTemplate.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		PosterTemplate found = (PosterTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( found != null );
@@ -104,13 +107,13 @@ public class PosterTemplateTest
 		assertTrue( found.getPosterVideos().contains( VIDEO ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		PosterTemplate findable = (PosterTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		PosterTemplate removable = (PosterTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( removable ) );

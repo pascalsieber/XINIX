@@ -9,8 +9,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +28,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class PinkLabsTemplateTest
+@RunWith( OrderedRunner.class ) public class PinkLabsTemplateTest
 {
 	private static ExerciseTemplateService exerciseTemplateService;
 	private static WorkshopTemplateService workshopTemplateService;
@@ -54,7 +57,7 @@ public class PinkLabsTemplateTest
 				"" ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new PinkLabsTemplate( null,
 				true,
@@ -73,7 +76,7 @@ public class PinkLabsTemplateTest
 		assertTrue( !exerciseTemplate.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		PinkLabsTemplate found = (PinkLabsTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( found != null );
@@ -92,14 +95,14 @@ public class PinkLabsTemplateTest
 		assertTrue( found.getWorkshopTemplate().getID().equals( workshopTemplate.getID() ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		PinkLabsTemplate findable = (PinkLabsTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate
 				.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		PinkLabsTemplate removable = (PinkLabsTemplate)exerciseTemplateService.findExerciseTemplateByID(
 				exerciseTemplate.getID() );

@@ -8,8 +8,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,7 +29,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class You2MeTemplateTest
+@RunWith( OrderedRunner.class ) public class You2MeTemplateTest
 {
 	private static ExerciseTemplateService exerciseTemplateService;
 	private static WorkshopTemplateService workshopTemplateService;
@@ -54,7 +57,7 @@ public class You2MeTemplateTest
 		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null, "", "" ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new You2MeTemplate(
 				null,
@@ -75,7 +78,7 @@ public class You2MeTemplateTest
 		assertTrue( !exerciseTemplate.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		You2MeTemplate found = (You2MeTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( found != null );
@@ -96,13 +99,13 @@ public class You2MeTemplateTest
 		assertTrue( found.getQuestions().containsAll( Arrays.asList( QUESTION_ONE, QUESTION_TWO ) ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		You2MeTemplate findable = (You2MeTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		You2MeTemplate removable = (You2MeTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( removable ) );

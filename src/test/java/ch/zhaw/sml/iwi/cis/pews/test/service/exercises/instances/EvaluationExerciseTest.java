@@ -20,10 +20,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +48,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class EvaluationExerciseTest
+@RunWith( OrderedRunner.class ) public class EvaluationExerciseTest
 {
 	private static ExerciseService     exerciseService;
 	private static ExerciseDataService exerciseDataService;
@@ -168,7 +171,7 @@ public class EvaluationExerciseTest
 				VOTES ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exercise.setID( exerciseService.persistExercise( new EvaluationExercise( NAME,
 				DESCRIPTION,
@@ -178,7 +181,7 @@ public class EvaluationExerciseTest
 		assertTrue( !exercise.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		EvaluationExercise found = (EvaluationExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( found != null );
@@ -210,7 +213,7 @@ public class EvaluationExerciseTest
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput()
 	{
 		EvaluationExercise base = (EvaluationExercise)exerciseService.findExerciseByID( exercise.getID() );
 		EvaluationInput input = (EvaluationInput)exerciseService.getInputByExerciseID( exercise.getID() );
@@ -236,7 +239,7 @@ public class EvaluationExerciseTest
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
 	{
 		int score = 5;
 		EvaluationOutput output = new EvaluationOutput( exercise.getID(),
@@ -260,7 +263,7 @@ public class EvaluationExerciseTest
 				.equals( voted.getSolutions().get( 0 ).getID() ) );
 	}
 
-	@Test public void testGetOutput()
+	@TestOrder( order = 5 ) @Test public void testGetOutput()
 	{
 		// set current exercise on owner's session, as exercise to get output for
 		// is determined based on the current exercise of the session of user
@@ -274,13 +277,13 @@ public class EvaluationExerciseTest
 		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
 		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( removable ) );

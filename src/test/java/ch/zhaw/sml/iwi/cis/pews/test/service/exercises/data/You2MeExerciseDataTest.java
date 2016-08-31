@@ -11,8 +11,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,7 +34,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE_BY_ID
  * - FIND_ALL
  */
-public class You2MeExerciseDataTest
+@RunWith( OrderedRunner.class ) public class You2MeExerciseDataTest
 {
 	private static ExerciseDataService exerciseDataService;
 
@@ -74,7 +77,7 @@ public class You2MeExerciseDataTest
 		exercise.setID( exerciseService.persistExercise( new You2MeExercise( "", "", exerciseTemplate, workshop ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseData.setID( exerciseDataService.persist( new You2MeExerciseData( null,
 				exercise,
@@ -84,7 +87,7 @@ public class You2MeExerciseDataTest
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		You2MeExerciseData found = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( found != null );
@@ -99,25 +102,25 @@ public class You2MeExerciseDataTest
 		assertTrue( found.getDialog().get( 1 ).getOrderInDialog() == 1 );
 	}
 
-	@Test public void testExportByExerciseID()
+	@TestOrder( order = 3 ) @Test public void testExportByExerciseID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByExerciseID( exercise.getID() );
 	}
 
-	@Test public void testExportByWorkshopID()
+	@TestOrder( order = 4 ) @Test public void testExportByWorkshopID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByWorkshopID( workshop.getID() );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		You2MeExerciseData findable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
 	}
 
-	@Test public void testRemoveByID()
+	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		You2MeExerciseData removable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );

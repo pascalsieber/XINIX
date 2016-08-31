@@ -15,8 +15,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,7 +39,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class EvaluationResultExerciseTest
+@RunWith( OrderedRunner.class ) public class EvaluationResultExerciseTest
 {
 	private static ExerciseService exerciseService;
 	private static WorkshopService workshopService;
@@ -152,7 +155,7 @@ public class EvaluationResultExerciseTest
 				new Evaluation( null, evaluated.getSolutions().get( 0 ), new Score( null, SCORE_TWO ) ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exercise.setID( exerciseService.persistExercise( new EvaluationResultExercise( NAME,
 				DESCRIPTION,
@@ -162,7 +165,7 @@ public class EvaluationResultExerciseTest
 		assertTrue( !exercise.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		EvaluationResultExercise found = (EvaluationResultExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( found != null );
@@ -192,7 +195,7 @@ public class EvaluationResultExerciseTest
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput()
 	{
 		EvaluationResultExercise base = (EvaluationResultExercise)exerciseService.findExerciseByID( exercise.getID() );
 		EvaluationResultInput input = (EvaluationResultInput)exerciseService.getInputByExerciseID( exercise.getID() );
@@ -223,23 +226,23 @@ public class EvaluationResultExerciseTest
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@Test public void testSetOutput()
+	@TestOrder( order = 4 ) @Test public void testSetOutput()
 	{
 		// not used. evaluation result exercise does not generate any output
 	}
 
-	@Test public void testGetOutput()
+	@TestOrder( order = 5 ) @Test public void testGetOutput()
 	{
 		// not used. evaluation result exercise does not generate any output
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
 		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( removable ) );

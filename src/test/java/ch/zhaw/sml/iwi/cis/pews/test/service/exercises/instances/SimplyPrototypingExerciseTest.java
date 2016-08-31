@@ -16,11 +16,14 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,7 +44,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class SimplyPrototypingExerciseTest
+@RunWith( OrderedRunner.class ) public class SimplyPrototypingExerciseTest
 {
 	private static ExerciseService     exerciseService;
 	private static ExerciseDataService exerciseDataService;
@@ -133,7 +136,7 @@ public class SimplyPrototypingExerciseTest
 				MIME ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exercise.setID( exerciseService.persistExercise( new SimplyPrototypingExercise( NAME,
 				DESCRIPTION,
@@ -143,7 +146,7 @@ public class SimplyPrototypingExerciseTest
 		assertTrue( !exercise.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		SimplyPrototypingExercise found = (SimplyPrototypingExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( found != null );
@@ -174,7 +177,7 @@ public class SimplyPrototypingExerciseTest
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput()
 	{
 		SimplyPrototypingExercise base = (SimplyPrototypingExercise)exerciseService.findExerciseByID( exercise.getID() );
 		SimplyPrototypingInput input = (SimplyPrototypingInput)exerciseService.getInputByExerciseID( exercise.getID() );
@@ -199,7 +202,7 @@ public class SimplyPrototypingExerciseTest
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
 	{
 		String type = "image/gif";
 		String image = "randomimagestring";
@@ -220,7 +223,7 @@ public class SimplyPrototypingExerciseTest
 				.equals( MediaObjectType.SIMPLYPROTOTYPING ) );
 	}
 
-	@Test public void testGetOutput()
+	@TestOrder( order = 5 ) @Test public void testGetOutput()
 	{
 		// set current exercise on owner's session, as exercise to get output for
 		// is determined based on the current exercise of the session of user
@@ -234,13 +237,13 @@ public class SimplyPrototypingExerciseTest
 		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
 		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( removable ) );

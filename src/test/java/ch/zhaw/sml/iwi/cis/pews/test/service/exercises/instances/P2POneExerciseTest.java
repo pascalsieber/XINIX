@@ -15,10 +15,13 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -39,7 +42,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class P2POneExerciseTest
+@RunWith( OrderedRunner.class ) public class P2POneExerciseTest
 {
 	private static ExerciseService     exerciseService;
 	private static ExerciseDataService exerciseDataService;
@@ -131,7 +134,7 @@ public class P2POneExerciseTest
 				PICTURE ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exercise.setID( exerciseService.persistExercise( new P2POneExercise( NAME,
 				DESCRIPTION,
@@ -141,7 +144,7 @@ public class P2POneExerciseTest
 		assertTrue( !exercise.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		P2POneExercise found = (P2POneExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( found != null );
@@ -172,7 +175,7 @@ public class P2POneExerciseTest
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput()
 	{
 		P2POneExercise base = (P2POneExercise)exerciseService.findExerciseByID( exercise.getID() );
 		P2POneInput input = (P2POneInput)exerciseService.getInputByExerciseID( exercise.getID() );
@@ -197,7 +200,7 @@ public class P2POneExerciseTest
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
 	{
 		String outputOne = "outputone";
 		String outputTwo = "outputtwo";
@@ -214,7 +217,7 @@ public class P2POneExerciseTest
 		assertTrue( ( (P2POneData)stored.get( 0 ) ).getKeywords().get( 1 ).getKeyword().equals( outputTwo ) );
 	}
 
-	@Test public void testGetOutput()
+	@TestOrder( order = 5 ) @Test public void testGetOutput()
 	{
 		// set current exercise on owner's session, as exercise to get output for
 		// is determined based on the current exercise of the session of user
@@ -228,13 +231,13 @@ public class P2POneExerciseTest
 		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
 		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( removable ) );

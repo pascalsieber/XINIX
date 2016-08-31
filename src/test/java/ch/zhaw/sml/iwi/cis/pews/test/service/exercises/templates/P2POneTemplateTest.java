@@ -8,8 +8,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class P2POneTemplateTest
+@RunWith( OrderedRunner.class ) public class P2POneTemplateTest
 {
 	private static ExerciseTemplateService exerciseTemplateService;
 	private static WorkshopTemplateService workshopTemplateService;
@@ -51,7 +54,7 @@ public class P2POneTemplateTest
 		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null, "", "" ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new P2POneTemplate(
 				null,
@@ -72,7 +75,7 @@ public class P2POneTemplateTest
 		assertTrue( !exerciseTemplate.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		P2POneTemplate found = (P2POneTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( found != null );
@@ -93,13 +96,13 @@ public class P2POneTemplateTest
 		assertTrue( found.getPicture().equals( PICTURE ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		P2POneTemplate findable = (P2POneTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		P2POneTemplate removable = (P2POneTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( removable ) );

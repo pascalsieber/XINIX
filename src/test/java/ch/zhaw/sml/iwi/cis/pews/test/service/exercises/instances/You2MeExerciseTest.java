@@ -17,10 +17,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,7 +44,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class You2MeExerciseTest
+@RunWith( OrderedRunner.class ) public class You2MeExerciseTest
 {
 	private static ExerciseService     exerciseService;
 	private static ExerciseDataService exerciseDataService;
@@ -134,7 +137,7 @@ public class You2MeExerciseTest
 				new HashSet<String>( Arrays.asList( QUESTION_ONE, QUESTION_TWO ) ) ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exercise.setID( exerciseService.persistExercise( new You2MeExercise( NAME,
 				DESCRIPTION,
@@ -144,7 +147,7 @@ public class You2MeExerciseTest
 		assertTrue( !exercise.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		You2MeExercise found = (You2MeExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( found != null );
@@ -175,7 +178,7 @@ public class You2MeExerciseTest
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput()
 	{
 		You2MeExercise base = (You2MeExercise)exerciseService.findExerciseByID( exercise.getID() );
 		You2MeInput input = (You2MeInput)exerciseService.getInputByExerciseID( exercise.getID() );
@@ -199,7 +202,7 @@ public class You2MeExerciseTest
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
 	{
 		String outputOne = "outputone";
 		String outputTwo = "outputtwo";
@@ -221,7 +224,7 @@ public class You2MeExerciseTest
 		assertTrue( ( (You2MeExerciseData)stored.get( 0 ) ).getDialog().get( 1 ).getRole().equals( DialogRole.RoleB ) );
 	}
 
-	@Test public void testGetOutput()
+	@TestOrder( order = 5 ) @Test public void testGetOutput()
 	{
 		// set current exercise on owner's session, as exercise to get output for
 		// is determined based on the current exercise of the session of user
@@ -235,13 +238,13 @@ public class You2MeExerciseTest
 		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
 		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( removable ) );

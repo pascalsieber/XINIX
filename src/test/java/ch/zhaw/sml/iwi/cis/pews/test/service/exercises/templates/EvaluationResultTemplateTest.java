@@ -8,8 +8,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class EvaluationResultTemplateTest
+@RunWith( OrderedRunner.class ) public class EvaluationResultTemplateTest
 {
 	private static ExerciseTemplateService exerciseTemplateService;
 	private static WorkshopTemplateService workshopTemplateService;
@@ -49,7 +52,7 @@ public class EvaluationResultTemplateTest
 		workshopTemplate.setID( workshopTemplateService.persist( new WorkshopTemplate( null, "", "" ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new EvaluationResultTemplate(
 				null,
@@ -69,7 +72,7 @@ public class EvaluationResultTemplateTest
 		assertTrue( !exerciseTemplate.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		EvaluationResultTemplate found = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
 				exerciseTemplate.getID() );
@@ -89,14 +92,14 @@ public class EvaluationResultTemplateTest
 		assertTrue( found.getWorkshopTemplate().getID().equals( workshopTemplate.getID() ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		EvaluationResultTemplate findable = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
 				exerciseTemplate.getID() );
 		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		EvaluationResultTemplate removable = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
 				exerciseTemplate.getID() );

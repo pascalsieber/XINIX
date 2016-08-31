@@ -13,8 +13,11 @@ import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,7 +37,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class PosterExerciseTest
+@RunWith( OrderedRunner.class ) public class PosterExerciseTest
 {
 	private static ExerciseService exerciseService;
 	private static WorkshopService workshopService;
@@ -94,7 +97,7 @@ public class PosterExerciseTest
 				new HashSet<String>( Collections.singletonList( POSTER_VIDEO ) ) ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exercise.setID( exerciseService.persistExercise( new PosterExercise( NAME,
 				DESCRIPTION,
@@ -104,7 +107,7 @@ public class PosterExerciseTest
 		assertTrue( !exercise.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		PosterExercise found = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( found != null );
@@ -138,7 +141,7 @@ public class PosterExerciseTest
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput()
 	{
 		PosterExercise base = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
 		PosterInput input = (PosterInput)exerciseService.getInputByExerciseID( exercise.getID() );
@@ -165,23 +168,23 @@ public class PosterExerciseTest
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@Test public void testSetOutput()
+	@TestOrder( order = 4 ) @Test public void testSetOutput()
 	{
 		// not used. poster exercise does not generate any output
 	}
 
-	@Test public void testGetOutput()
+	@TestOrder( order = 5 ) @Test public void testGetOutput()
 	{
 		// not used. poster exercise does not generate any output
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
 		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( removable ) );

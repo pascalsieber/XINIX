@@ -11,8 +11,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,7 +34,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE_BY_ID
  * - FIND_ALL
  */
-public class XinixExerciseDataTest
+@RunWith( OrderedRunner.class ) public class XinixExerciseDataTest
 {
 	private static ExerciseDataService exerciseDataService;
 
@@ -82,7 +85,7 @@ public class XinixExerciseDataTest
 		xinixImage.setID( mediaService.persist( new MediaObject( "", "".getBytes(), MediaObjectType.XINIX ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseData.setID( exerciseDataService.persist( new XinixData( null,
 				exercise,
@@ -92,7 +95,7 @@ public class XinixExerciseDataTest
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		XinixData found = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( found != null );
@@ -104,25 +107,25 @@ public class XinixExerciseDataTest
 				.containsAll( Arrays.asList( XINIX_ASSOCIATION_ONE, XINIX_ASSOCIATION_TWO ) ) );
 	}
 
-	@Test public void testExportByExerciseID()
+	@TestOrder( order = 3 ) @Test public void testExportByExerciseID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByExerciseID( exercise.getID() );
 	}
 
-	@Test public void testExportByWorkshopID()
+	@TestOrder( order = 4 ) @Test public void testExportByWorkshopID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByWorkshopID( workshop.getID() );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		XinixData findable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
 	}
 
-	@Test public void testRemoveByID()
+	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		XinixData removable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );

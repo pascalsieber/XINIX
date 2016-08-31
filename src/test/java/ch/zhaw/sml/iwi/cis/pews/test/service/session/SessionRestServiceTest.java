@@ -14,8 +14,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,7 +44,7 @@ import static org.junit.Assert.assertTrue;
  * - GET_PREVIOUS_EXERCISE
  * - GET_CURRENT_EXERCISE_ID_WITH_OUTPUT
  */
-public class SessionRestServiceTest
+@RunWith( OrderedRunner.class ) public class SessionRestServiceTest
 {
 	private static SessionService sessionService;
 	private static UserService userService;
@@ -107,7 +110,7 @@ public class SessionRestServiceTest
 				"login" ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		session.setID( sessionService.persist( new SessionImpl( "sessionname",
 				"sessiondescription",
@@ -142,7 +145,7 @@ public class SessionRestServiceTest
 				.equals( WorkflowElementStatusImpl.NEW.toString() ) );
 	}
 
-	@Test public void testStart()
+	@TestOrder( order = 2 ) @Test public void testStart()
 	{
 		sessionService.start( session.getID() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
@@ -150,7 +153,7 @@ public class SessionRestServiceTest
 				.equals( WorkflowElementStatusImpl.RUNNING.toString() ) );
 	}
 
-	@Test public void testStop()
+	@TestOrder( order = 3 ) @Test public void testStop()
 	{
 		sessionService.stop( session.getID() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
@@ -158,7 +161,7 @@ public class SessionRestServiceTest
 				.equals( WorkflowElementStatusImpl.TERMINATED.toString() ) );
 	}
 
-	@Test public void testRenew()
+	@TestOrder( order = 4 ) @Test public void testRenew()
 	{
 		sessionService.renew( session.getID() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
@@ -166,7 +169,7 @@ public class SessionRestServiceTest
 				.equals( WorkflowElementStatusImpl.NEW.toString() ) );
 	}
 
-	@Test public void testJoin()
+	@TestOrder( order = 5 ) @Test public void testJoin()
 	{
 		sessionService.join( new Invitation( null, user, session ) );
 		assertTrue( !sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
@@ -175,13 +178,13 @@ public class SessionRestServiceTest
 				.contains( userService.findUserByID( user.getID() ).getParticipation() ) );
 	}
 
-	@Test public void testLeave()
+	@TestOrder( order = 6 ) @Test public void testLeave()
 	{
 		sessionService.leave( new Invitation( null, user, session ) );
 		assertTrue( sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
 	}
 
-	@Test public void testSetNextExercise()
+	@TestOrder( order = 7 ) @Test public void testSetNextExercise()
 	{
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getCurrentExercise()
@@ -194,7 +197,7 @@ public class SessionRestServiceTest
 				.equals( exerciseTwo.getID() ) );
 	}
 
-	@Test public void testGetPreviousExercise()
+	@TestOrder( order = 8 ) @Test public void testGetPreviousExercise()
 	{
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getCurrentExercise()
@@ -203,7 +206,7 @@ public class SessionRestServiceTest
 		assertTrue( sessionService.getPreviousExercise( session.getID() ).getID().equals( exerciseOne.getID() ) );
 	}
 
-	@Test public void testSetCurrentExercise()
+	@TestOrder( order = 9 ) @Test public void testSetCurrentExercise()
 	{
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getCurrentExercise()
@@ -221,7 +224,7 @@ public class SessionRestServiceTest
 				.equals( exerciseOne.getID() ) );
 	}
 
-	@Test public void testGetCurrentExerciseIDWithOutput()
+	@TestOrder( order = 10 ) @Test public void testGetCurrentExerciseIDWithOutput()
 	{
 		// NOTE: test for output is simple, as getOutput / setOutput is tested in-depth separately
 
@@ -254,14 +257,14 @@ public class SessionRestServiceTest
 
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 11 ) @Test public void testFindAll()
 	{
 		SessionImpl result = sessionService.findSessionByID( session.getID() );
 		assertTrue( result != null );
 		assertTrue( sessionService.findAllSessions().contains( result ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 12 ) @Test public void testRemove()
 	{
 		// ensure that not already removed
 		SessionImpl result = sessionService.findSessionByID( session.getID() );

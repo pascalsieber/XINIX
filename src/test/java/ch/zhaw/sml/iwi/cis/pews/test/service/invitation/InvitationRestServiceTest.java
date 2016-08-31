@@ -13,8 +13,11 @@ import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
@@ -34,6 +37,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
+@RunWith( OrderedRunner.class )
 public class InvitationRestServiceTest
 {
 
@@ -79,6 +83,7 @@ public class InvitationRestServiceTest
 		user.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "" ), null, null, "", "", "" ) ) );
 	}
 
+	@TestOrder( order = 1)
 	@Test public void testPersist()
 	{
 		invitation.setID( invitationService.persist( new Invitation( user, user, session ) ) );
@@ -86,6 +91,7 @@ public class InvitationRestServiceTest
 		assertTrue( !invitation.getID().equals( "" ) );
 	}
 
+	@TestOrder( order = 2)
 	@Test public void testFind()
 	{
 		Invitation found = invitationService.findInvitationByID( invitation.getID() );
@@ -96,6 +102,7 @@ public class InvitationRestServiceTest
 		assertTrue( found.getSession().getID().equals( session.getID() ) );
 	}
 
+	@TestOrder( order = 3)
 	@Test public void testAccept()
 	{
 		assertTrue( userService.findUserByID( user.getID() ).getParticipation() == null );
@@ -108,6 +115,7 @@ public class InvitationRestServiceTest
 		assertTrue( sessionService.findSessionByID( session.getID() ).getParticipants().contains( participant ) );
 	}
 
+	@TestOrder( order = 4)
 	@Test public void testFindBySessionID()
 	{
 		Invitation findable = invitationService.findInvitationByID( invitation.getID() );
@@ -115,30 +123,35 @@ public class InvitationRestServiceTest
 		assertTrue( invitationService.findBySessionID( session.getID() ).contains( findable ) );
 	}
 
+	@TestOrder( order = 5)
 	@Test public void testSendByID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendByID( invitation.getID() );
 	}
 
+	@TestOrder( order = 6)
 	@Test public void testSendBySessionID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendBySessionID( session.getID() );
 	}
 
+	@TestOrder( order = 7)
 	@Test public void testSendByWorkshopID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendByWorkshopID( workshop.getID() );
 	}
 
+	@TestOrder( order = 8)
 	@Test public void testFindAll()
 	{
 		Invitation findable = invitationService.findInvitationByID( invitation.getID() );
 		assertTrue( invitationService.findAllInvitations().contains( findable ) );
 	}
 
+	@TestOrder( order = 9)
 	@Test public void testRemove()
 	{
 		Invitation removable = invitationService.findInvitationByID( invitation.getID() );

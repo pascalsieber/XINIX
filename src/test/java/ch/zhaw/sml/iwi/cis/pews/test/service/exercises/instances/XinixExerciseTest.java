@@ -20,10 +20,13 @@ import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,7 +48,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class XinixExerciseTest
+@RunWith( OrderedRunner.class ) public class XinixExerciseTest
 {
 	private static ExerciseService     exerciseService;
 	private static ExerciseDataService exerciseDataService;
@@ -148,7 +151,7 @@ public class XinixExerciseTest
 				xinixImageMatrix ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exercise.setID( exerciseService.persistExercise( new XinixExercise( NAME,
 				DESCRIPTION,
@@ -158,7 +161,7 @@ public class XinixExerciseTest
 		assertTrue( !exercise.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		XinixExercise found = (XinixExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( found != null );
@@ -189,7 +192,7 @@ public class XinixExerciseTest
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput()
 	{
 		XinixExercise base = (XinixExercise)exerciseService.findExerciseByID( exercise.getID() );
 		XinixInput input = (XinixInput)exerciseService.getInputByExerciseID( exercise.getID() );
@@ -214,7 +217,7 @@ public class XinixExerciseTest
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
 	{
 		String outputOne = "outputone";
 		String outputTwo = "outputtwo";
@@ -233,7 +236,7 @@ public class XinixExerciseTest
 				.containsAll( Arrays.asList( outputOne, outputTwo ) ) );
 	}
 
-	@Test public void testGetOutput()
+	@TestOrder( order = 5 ) @Test public void testGetOutput()
 	{
 		// set current exercise on owner's session, as exercise to get output for
 		// is determined based on the current exercise of the session of user
@@ -247,13 +250,13 @@ public class XinixExerciseTest
 		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
 		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findAllExercises().contains( removable ) );

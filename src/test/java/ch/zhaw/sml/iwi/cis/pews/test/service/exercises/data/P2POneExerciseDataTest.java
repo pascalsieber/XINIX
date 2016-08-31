@@ -9,8 +9,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +31,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE_BY_ID
  * - FIND_ALL
  */
-public class P2POneExerciseDataTest
+@RunWith( OrderedRunner.class ) public class P2POneExerciseDataTest
 {
 	private static ExerciseDataService exerciseDataService;
 
@@ -74,7 +77,7 @@ public class P2POneExerciseDataTest
 		exercise.setID( exerciseService.persistExercise( new P2POneExercise( "", "", exerciseTemplate, workshop ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseData.setID( exerciseDataService.persist( new P2POneData( null,
 				exercise,
@@ -83,7 +86,7 @@ public class P2POneExerciseDataTest
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		P2POneData found = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( found != null );
@@ -93,25 +96,25 @@ public class P2POneExerciseDataTest
 		assertTrue( found.getKeywords().containsAll( Arrays.asList( ANSWER_ONE, ANSWER_TWO ) ) );
 	}
 
-	@Test public void testExportByExerciseID()
+	@TestOrder( order = 3 ) @Test public void testExportByExerciseID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByExerciseID( exercise.getID() );
 	}
 
-	@Test public void testExportByWorkshopID()
+	@TestOrder( order = 4 ) @Test public void testExportByWorkshopID()
 	{
 		// not checking excel, just if API call runs through
 		exerciseDataService.exportByWorkshopID( workshop.getID() );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		P2POneData findable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
 	}
 
-	@Test public void testRemoveByID()
+	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		P2POneData removable = exerciseDataService.findByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );

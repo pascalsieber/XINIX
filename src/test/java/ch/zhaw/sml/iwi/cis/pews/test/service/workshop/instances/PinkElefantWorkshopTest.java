@@ -17,8 +17,11 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +40,7 @@ import static org.junit.Assert.assertTrue;
  * - GENERATE_FROM_TEMPLATE
  * - UPDATE_BASIC_INFO
  */
-public class PinkElefantWorkshopTest
+@RunWith( OrderedRunner.class ) public class PinkElefantWorkshopTest
 {
 	private static WorkshopService workshopService;
 
@@ -90,7 +93,7 @@ public class PinkElefantWorkshopTest
 				EXERCISE_TEMPLATE_DESCRIPTION ) ) );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		workshop.setID( workshopService.persist( new PinkElefantWorkshop( NAME,
 				DESCRIPTION,
@@ -99,7 +102,7 @@ public class PinkElefantWorkshopTest
 		assertTrue( !workshop.getID().equals( "" ) );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		PinkElefantWorkshop found = (PinkElefantWorkshop)workshopService.findWorkshopByID( workshop.getID() );
 		assertTrue( found != null );
@@ -114,29 +117,29 @@ public class PinkElefantWorkshopTest
 		assertTrue( found.getSessions().isEmpty() );
 	}
 
-	@Test public void testReset()
+	@TestOrder( order = 3 ) @Test public void testReset()
 	{
 	}
 
-	@Test public void testUpdateExerciseOrder()
+	@TestOrder( order = 4 ) @Test public void testUpdateExerciseOrder()
 	{
 	}
 
-	@Test public void testGenerateFromTemplate()
+	@TestOrder( order = 5 ) @Test public void testGenerateFromTemplate()
 	{
 	}
 
-	@Test public void testUpdateBasicInfo()
+	@TestOrder( order = 6 ) @Test public void testUpdateBasicInfo()
 	{
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 7 ) @Test public void testFindAll()
 	{
 		PinkElefantWorkshop findable = (PinkElefantWorkshop)workshopService.findWorkshopByID( workshop.getID() );
 		assertTrue( workshopService.findAll().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 8 ) @Test public void testRemove()
 	{
 		PinkElefantWorkshop removable = (PinkElefantWorkshop)workshopService.findWorkshopByID( workshopTemplate.getID() );
 		assertTrue( workshopService.findAll().contains( removable ) );

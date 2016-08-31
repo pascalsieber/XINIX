@@ -5,10 +5,13 @@ import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.MediaServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +34,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
+@RunWith( OrderedRunner.class )
 public class MediaRestServiceTest
 {
 	private static MediaService mediaService;
@@ -72,6 +76,7 @@ public class MediaRestServiceTest
 		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 	}
 
+	@TestOrder( order = 1)
 	@Test public void testPersist()
 	{
 		// not replicating exact REST method using HttpServletRequest
@@ -81,6 +86,7 @@ public class MediaRestServiceTest
 		assertTrue( !mediaObject.getID().equals( "" ) );
 	}
 
+	@TestOrder( order = 2)
 	@Test public void testFind()
 	{
 		MediaObject found = mediaService.findByID( mediaObject.getID() );
@@ -91,6 +97,7 @@ public class MediaRestServiceTest
 		assertTrue( found.getMediaObjectType().equals( TYPE ) );
 	}
 
+	@TestOrder( order = 3)
 	@Test public void testFindByType()
 	{
 		MediaObject findable = mediaService.findByID( mediaObject.getID() );
@@ -102,17 +109,20 @@ public class MediaRestServiceTest
 		assertTrue( !mediaService.findByType( TYPE ).contains( excludable ) );
 	}
 
+	@TestOrder( order = 4)
 	@Test public void testGetContentByID()
 	{
 		// not tested, as not exposed via proxy
 	}
 
+	@TestOrder( order = 5)
 	@Test public void testFindAll()
 	{
 		MediaObject findable = mediaService.findByID( mediaObject.getID() );
 		assertTrue( mediaService.findAll().contains( findable ) );
 	}
 
+	@TestOrder( order = 6)
 	@Test public void testRemove()
 	{
 		MediaObject removable = mediaService.findByID( mediaObject.getID() );

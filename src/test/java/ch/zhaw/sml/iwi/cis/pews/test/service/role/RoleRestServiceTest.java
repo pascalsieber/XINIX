@@ -4,8 +4,11 @@ import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.service.RoleService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertTrue;
 
@@ -18,6 +21,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
+@RunWith( OrderedRunner.class )
 public class RoleRestServiceTest
 {
 	private static RoleService roleService;
@@ -32,6 +36,7 @@ public class RoleRestServiceTest
 		roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
 	}
 
+	@TestOrder( order = 1)
 	@Test public void testPersist()
 	{
 		role.setID( roleService.persist( new RoleImpl( NAME, DESCRIPTION ) ) );
@@ -39,6 +44,7 @@ public class RoleRestServiceTest
 		assertTrue( !role.getID().equals( "" ) );
 	}
 
+	@TestOrder( order = 2)
 	@Test public void testFind()
 	{
 		RoleImpl found = roleService.findByID( role.getID() );
@@ -48,12 +54,14 @@ public class RoleRestServiceTest
 		assertTrue( found.getDescription().equals( DESCRIPTION ) );
 	}
 
+	@TestOrder( order = 3)
 	@Test public void testFindAll()
 	{
 		RoleImpl findable = roleService.findByID( role.getID() );
 		assertTrue( roleService.findAll().contains( findable ) );
 	}
 
+	@TestOrder( order = 4)
 	@Test public void testRemove()
 	{
 		RoleImpl removable = roleService.findByID( role.getID() );

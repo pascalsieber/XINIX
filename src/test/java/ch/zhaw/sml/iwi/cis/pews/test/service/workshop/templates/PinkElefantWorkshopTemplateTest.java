@@ -9,8 +9,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
+import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
@@ -26,7 +29,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-public class PinkElefantWorkshopTemplateTest
+@RunWith( OrderedRunner.class ) public class PinkElefantWorkshopTemplateTest
 {
 	private static WorkshopTemplateService workshopTemplateService;
 	private static ExerciseTemplateService exerciseTemplateService;
@@ -46,7 +49,7 @@ public class PinkElefantWorkshopTemplateTest
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
 	}
 
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( null,
 				NAME,
@@ -83,7 +86,7 @@ public class PinkElefantWorkshopTemplateTest
 		assertTrue( workshopTemplateService.findWorkshopTemplateByID( workshopTemplate.getID() ) != null );
 	}
 
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		PinkElefantTemplate found = (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID(
 				workshopTemplate.getID() );
@@ -98,7 +101,7 @@ public class PinkElefantWorkshopTemplateTest
 		assertTrue( found.getExerciseTemplates().get( 1 ).getID().equals( exerciseTemplateTwo.getID() ) );
 	}
 
-	@Test public void testUpdateExerciseTemplateOrder()
+	@TestOrder( order = 3 ) @Test public void testUpdateExerciseTemplateOrder()
 	{
 		WorkshopTemplate updateable = new WorkshopTemplate();
 		updateable.setID( workshopTemplate.getID() );
@@ -113,14 +116,14 @@ public class PinkElefantWorkshopTemplateTest
 		assertTrue( updated.getExerciseTemplates().get( 1 ).getID().equals( exerciseTemplateOne.getID() ) );
 	}
 
-	@Test public void testFindAll()
+	@TestOrder( order = 4 ) @Test public void testFindAll()
 	{
 		PinkElefantTemplate findable = (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID(
 				workshopTemplate.getID() );
 		assertTrue( workshopTemplateService.findAllWorkshopTemplates().contains( findable ) );
 	}
 
-	@Test public void testRemove()
+	@TestOrder( order = 5 ) @Test public void testRemove()
 	{
 		PinkElefantTemplate removable = (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID(
 				workshopTemplate.getID() );
