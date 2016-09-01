@@ -80,11 +80,16 @@ public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements 
 	{
 		List<Invitation> results = invitationDao.findBySessionID( sessionID );
 
-		// simplify session, invitee and inviter objects
+		// simplify invitee and inviter objects
 		for ( Invitation invitation : results )
 		{
+			PinkElefantWorkshop workshop = new PinkElefantWorkshop();
+			workshop.setID( invitation.getSession().getWorkshop().getID() );
+			workshop.setEmailText( ( (PinkElefantWorkshop)invitation.getSession().getWorkshop() ).getEmailText() );
+
 			SessionImpl session = new SessionImpl();
 			session.setID( invitation.getSession().getID() );
+			session.setWorkshop( workshop );
 			invitation.setSession( session );
 
 			UserImpl inviter = new UserImpl();
@@ -95,6 +100,7 @@ public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements 
 			UserImpl invitee = new UserImpl();
 			invitee.setID( invitation.getInvitee().getID() );
 			invitee.setLoginName( ( (UserImpl)invitation.getInvitee() ).getLoginName() );
+			invitee.setCredential( invitation.getInvitee().getCredential() );
 			invitation.setInvitee( invitee );
 		}
 
