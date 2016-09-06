@@ -6,6 +6,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ClientServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +22,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-@RunWith( OrderedRunner.class)
-public class ClientRestServiceTest
+@RunWith( OrderedRunner.class ) public class ClientRestServiceTest
 {
 
 	private static ClientService clientService;
@@ -36,16 +36,14 @@ public class ClientRestServiceTest
 		clientService = ServiceProxyManager.createServiceProxy( ClientServiceProxy.class );
 	}
 
-	@TestOrder( order = 1)
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		client.setID( clientService.persist( new Client( NAME ) ) );
 		assertTrue( client.getID() != null );
 		assertTrue( !client.getID().equals( "" ) );
 	}
 
-	@TestOrder( order = 2)
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		Client found = clientService.findByID( client.getID() );
 		assertTrue( found != null );
@@ -53,21 +51,20 @@ public class ClientRestServiceTest
 		assertTrue( found.getName().equals( NAME ) );
 	}
 
-	@TestOrder( order = 3)
-	@Test public void testFindAll()
+	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		Client findable = clientService.findByID( client.getID() );
-		assertTrue( clientService.findAll().contains( findable ) );
+		assertTrue( findable != null );
+		assertTrue( TestUtil.extractIds( clientService.findAll() ).contains( findable.getID() ) );
 	}
 
-	@TestOrder( order = 4)
-	@Test public void testRemove()
+	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		Client removable = clientService.findByID( client.getID() );
-		assertTrue( clientService.findAll().contains( removable ) );
+		assertTrue( TestUtil.extractIds( clientService.findAll() ).contains( removable.getID() ) );
 
 		clientService.remove( client );
 		assertTrue( clientService.findByID( client.getID() ) == null );
-		assertTrue( !clientService.findAll().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( clientService.findAll() ).contains( removable.getID() ) );
 	}
 }

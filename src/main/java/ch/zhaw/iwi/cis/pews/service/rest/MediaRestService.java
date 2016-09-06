@@ -31,12 +31,25 @@ public class MediaRestService extends WorkshopObjectRestService
 	public static final String FIND_BY_TYPE = "/findByType";
 	public static final String GET_CONTENT_BY_ID = "/getContentByID";
 
+	public static final String PERSIST_JSON = "/persistJson";
+
 	private MediaService mediaService;
 
 	public MediaRestService()
 	{
 		super();
 		mediaService = ZhawEngine.getManagedObjectRegistry().getManagedObject( MediaServiceImpl.class.getSimpleName() );
+	}
+
+	/**
+	 * endpoint used in testing for persisting mediaObject directly,
+	 * not wrapped in multi part form data
+	 */
+	@POST
+	@Path( PERSIST_JSON )
+	public String persistJsonMediaObject( MediaObject mediaObject )
+	{
+		return mediaService.persistJsonMediaObject( mediaObject );
 	}
 
 	@POST
@@ -56,7 +69,7 @@ public class MediaRestService extends WorkshopObjectRestService
 
 	/**
 	 * returns blob of requested mediaObject. used to enable dynamic urls to media content
-	 * 
+	 *
 	 * @param id
 	 * @return blob of mediaObject
 	 */

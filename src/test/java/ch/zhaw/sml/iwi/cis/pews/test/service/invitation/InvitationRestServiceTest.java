@@ -15,6 +15,7 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,10 +38,8 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-@RunWith( OrderedRunner.class )
-public class InvitationRestServiceTest
+@RunWith( OrderedRunner.class ) public class InvitationRestServiceTest
 {
-
 	private static InvitationService invitationService;
 	private static SessionService    sessionService;
 	private static UserService       userService;
@@ -83,16 +82,14 @@ public class InvitationRestServiceTest
 		user.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "" ), null, null, "", "", "" ) ) );
 	}
 
-	@TestOrder( order = 1)
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		invitation.setID( invitationService.persist( new Invitation( user, user, session ) ) );
 		assertTrue( invitation.getID() != null );
 		assertTrue( !invitation.getID().equals( "" ) );
 	}
 
-	@TestOrder( order = 2)
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		Invitation found = invitationService.findInvitationByID( invitation.getID() );
 		assertTrue( found != null );
@@ -102,8 +99,7 @@ public class InvitationRestServiceTest
 		assertTrue( found.getSession().getID().equals( session.getID() ) );
 	}
 
-	@TestOrder( order = 3)
-	@Test public void testAccept()
+	@TestOrder( order = 3 ) @Test public void testAccept()
 	{
 		assertTrue( userService.findUserByID( user.getID() ).getParticipation() == null );
 		invitationService.accept( invitation.getID() );
@@ -115,50 +111,44 @@ public class InvitationRestServiceTest
 		assertTrue( sessionService.findSessionByID( session.getID() ).getParticipants().contains( participant ) );
 	}
 
-	@TestOrder( order = 4)
-	@Test public void testFindBySessionID()
+	@TestOrder( order = 4 ) @Test public void testFindBySessionID()
 	{
 		Invitation findable = invitationService.findInvitationByID( invitation.getID() );
 		assertTrue( findable != null );
 		assertTrue( invitationService.findBySessionID( session.getID() ).contains( findable ) );
 	}
 
-	@TestOrder( order = 5)
-	@Test public void testSendByID()
+	@TestOrder( order = 5 ) @Test public void testSendByID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendByID( invitation.getID() );
 	}
 
-	@TestOrder( order = 6)
-	@Test public void testSendBySessionID()
+	@TestOrder( order = 6 ) @Test public void testSendBySessionID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendBySessionID( session.getID() );
 	}
 
-	@TestOrder( order = 7)
-	@Test public void testSendByWorkshopID()
+	@TestOrder( order = 7 ) @Test public void testSendByWorkshopID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendByWorkshopID( workshop.getID() );
 	}
 
-	@TestOrder( order = 8)
-	@Test public void testFindAll()
+	@TestOrder( order = 8 ) @Test public void testFindAll()
 	{
 		Invitation findable = invitationService.findInvitationByID( invitation.getID() );
-		assertTrue( invitationService.findAllInvitations().contains( findable ) );
+		assertTrue( TestUtil.extractIds( invitationService.findAllInvitations() ).contains( findable ) );
 	}
 
-	@TestOrder( order = 9)
-	@Test public void testRemove()
+	@TestOrder( order = 9 ) @Test public void testRemove()
 	{
 		Invitation removable = invitationService.findInvitationByID( invitation.getID() );
-		assertTrue( invitationService.findAllInvitations().contains( removable ) );
+		assertTrue( TestUtil.extractIds( invitationService.findAllInvitations() ).contains( removable ) );
 
 		invitationService.remove( removable );
 		assertTrue( invitationService.findInvitationByID( invitation.getID() ) == null );
-		assertTrue( !invitationService.findAllInvitations().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( invitationService.findAllInvitations() ).contains( removable ) );
 	}
 }

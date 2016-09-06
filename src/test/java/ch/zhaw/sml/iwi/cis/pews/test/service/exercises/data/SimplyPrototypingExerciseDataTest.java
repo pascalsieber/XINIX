@@ -13,6 +13,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,7 +81,7 @@ import static org.junit.Assert.assertTrue;
 				workshop ) ) );
 
 		// media object
-		mediaObject.setID( mediaService.persist( new MediaObject( "",
+		mediaObject.setID( mediaService.persistJsonMediaObject( new MediaObject( "",
 				"".getBytes(),
 				MediaObjectType.SIMPLYPROTOTYPING ) ) );
 	}
@@ -116,17 +117,17 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		SimplePrototypingData findable = exerciseDataService.findByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		SimplePrototypingData removable = exerciseDataService.findByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 
 		exerciseDataService.removeExerciseDataByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findByID( exerciseData.getID() ) == null );
-		assertTrue( !exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 	}
 }
 

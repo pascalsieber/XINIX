@@ -34,8 +34,7 @@ import static org.junit.Assert.assertTrue;
  * - REMOVE
  * - FIND_ALL
  */
-@RunWith( OrderedRunner.class )
-public class MediaRestServiceTest
+@RunWith( OrderedRunner.class ) public class MediaRestServiceTest
 {
 	private static MediaService mediaService;
 
@@ -49,6 +48,9 @@ public class MediaRestServiceTest
 
 	@BeforeClass public static void setup()
 	{
+		// services
+		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
+
 		// setup elements for mediaObject
 		try
 		{
@@ -71,13 +73,9 @@ public class MediaRestServiceTest
 
 		// other media object
 		otherMediaObject.setID( mediaService.persist( new MediaObject( MIME, BLOB, OTHER_TYPE ) ) );
-
-		// services
-		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 	}
 
-	@TestOrder( order = 1)
-	@Test public void testPersist()
+	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		// not replicating exact REST method using HttpServletRequest
 		// testing with persist method instead
@@ -86,8 +84,7 @@ public class MediaRestServiceTest
 		assertTrue( !mediaObject.getID().equals( "" ) );
 	}
 
-	@TestOrder( order = 2)
-	@Test public void testFind()
+	@TestOrder( order = 2 ) @Test public void testFind()
 	{
 		MediaObject found = mediaService.findByID( mediaObject.getID() );
 		assertTrue( found != null );
@@ -97,8 +94,7 @@ public class MediaRestServiceTest
 		assertTrue( found.getMediaObjectType().equals( TYPE ) );
 	}
 
-	@TestOrder( order = 3)
-	@Test public void testFindByType()
+	@TestOrder( order = 3 ) @Test public void testFindByType()
 	{
 		MediaObject findable = mediaService.findByID( mediaObject.getID() );
 		assertTrue( mediaService.findByType( TYPE ).contains( findable ) );
@@ -109,21 +105,18 @@ public class MediaRestServiceTest
 		assertTrue( !mediaService.findByType( TYPE ).contains( excludable ) );
 	}
 
-	@TestOrder( order = 4)
-	@Test public void testGetContentByID()
+	@TestOrder( order = 4 ) @Test public void testGetContentByID()
 	{
 		// not tested, as not exposed via proxy
 	}
 
-	@TestOrder( order = 5)
-	@Test public void testFindAll()
+	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		MediaObject findable = mediaService.findByID( mediaObject.getID() );
 		assertTrue( mediaService.findAll().contains( findable ) );
 	}
 
-	@TestOrder( order = 6)
-	@Test public void testRemove()
+	@TestOrder( order = 6 ) @Test public void testRemove()
 	{
 		MediaObject removable = mediaService.findByID( mediaObject.getID() );
 		assertTrue( mediaService.findAll().contains( removable ) );

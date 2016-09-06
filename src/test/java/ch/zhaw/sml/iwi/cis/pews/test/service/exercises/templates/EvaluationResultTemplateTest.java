@@ -10,6 +10,7 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,24 +97,21 @@ import static org.junit.Assert.assertTrue;
 	{
 		EvaluationResultTemplate findable = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
 				exerciseTemplate.getID() );
-		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( findable ) );
+		assertTrue( findable != null );
+		assertTrue( TestUtil.extractIds( exerciseTemplateService.findAllExerciseTemplates() )
+				.contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		EvaluationResultTemplate removable = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
 				exerciseTemplate.getID() );
-		assertTrue( exerciseTemplateService.findAllExerciseTemplates().contains( removable ) );
-		assertTrue( workshopTemplateService.findWorkshopTemplateByID( workshopTemplate.getID() )
-				.getExerciseTemplates()
-				.contains( removable ) );
+		assertTrue( TestUtil.extractIds( exerciseTemplateService.findAllExerciseTemplates() )
+				.contains( removable.getID() ) );
 
 		exerciseTemplateService.remove( exerciseTemplate );
-		assertTrue( exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() ) == null );
-		assertTrue( !exerciseTemplateService.findAllExerciseTemplates().contains( removable ) );
-		assertTrue( !workshopTemplateService.findWorkshopTemplateByID( workshopTemplate.getID() )
-				.getExerciseTemplates()
-				.contains( removable ) );
+		assertTrue( !TestUtil.extractIds( exerciseTemplateService.findAllExerciseTemplates() )
+				.contains( removable.getID() ) );
 	}
 }
 

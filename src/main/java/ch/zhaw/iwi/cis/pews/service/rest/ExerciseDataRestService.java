@@ -41,7 +41,7 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 		return exerciseDataService.persistExerciseData( obj );
 	}
 
-	// TODO: remove if surface not using this
+	// TODO: remove if surface not using this, but check if tests use this method.
 	@SuppressWarnings( "unchecked" )
 	@POST
 	@Path( FIND_BY_ID )

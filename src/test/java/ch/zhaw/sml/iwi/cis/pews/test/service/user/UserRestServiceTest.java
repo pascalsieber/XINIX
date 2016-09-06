@@ -1,7 +1,6 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.user;
 
 import ch.zhaw.iwi.cis.pews.model.Client;
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
@@ -15,15 +14,11 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -128,46 +123,24 @@ import static org.junit.Assert.assertTrue;
 	{
 		UserImpl findable = (UserImpl)userService.findUserByID( user.getID() );
 		assertTrue( findable != null );
-		assertTrue( extractIds( userService.findAll() ).contains( findable.getID() ) );
+		assertTrue( TestUtil.extractIds( userService.findAll() ).contains( findable.getID() ) );
 	}
 
 	@Test @TestOrder( order = 7 ) public void testFindAllByClientID()
 	{
 		UserImpl findable = (UserImpl)userService.findUserByID( clientUser.getID() );
 		assertTrue( findable != null );
-		assertTrue( extractIds( userService.findAllByClientID( client.getID() ) ).contains( findable.getID() ) );
+		assertTrue( TestUtil.extractIds( userService.findAllByClientID( client.getID() ) )
+				.contains( findable.getID() ) );
 	}
 
 	@Test @TestOrder( order = 8 ) public void testRemove()
 	{
 		UserImpl removable = (UserImpl)userService.findUserByID( user.getID() );
-		assertTrue( extractIds( userService.findAll() ).contains( removable.getID() ) );
+		assertTrue( TestUtil.extractIds( userService.findAll() ).contains( removable.getID() ) );
 
 		userService.remove( removable );
 		assertTrue( userService.findUserByID( user.getID() ) == null );
-		assertTrue( !extractIds( userService.findAll() ).contains( removable.getID() ) );
-	}
-
-	private List<String> extractIds( List<? extends IdentifiableObject> identifiableObjects )
-	{
-		List<String> ids = new ArrayList<>();
-		List<IdentifiableObject> objects = new ArrayList<>();
-
-		try
-		{
-			objects = objectMapper.readValue( objectMapper.writeValueAsString( identifiableObjects ),
-					TypeFactory.defaultInstance()
-							.constructCollectionType( ArrayList.class, IdentifiableObject.class ) );
-		}
-		catch ( IOException e )
-		{
-			e.printStackTrace();
-		}
-
-		for ( IdentifiableObject identifiableObject : objects )
-		{
-			ids.add( identifiableObject.getID() );
-		}
-		return ids;
+		assertTrue( !TestUtil.extractIds( userService.findAll() ).contains( removable.getID() ) );
 	}
 }

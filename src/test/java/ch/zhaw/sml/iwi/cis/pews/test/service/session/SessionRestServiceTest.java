@@ -122,7 +122,12 @@ import static org.junit.Assert.assertTrue;
 				new HashSet<PrincipalImpl>(),
 				new HashSet<Invitation>(),
 				new HashSet<PrincipalImpl>() ) ) );
+		assertTrue( session.getID() != null );
+		assertTrue( !session.getID().equals( "" ) );
+	}
 
+	@TestOrder( order = 2 ) @Test public void testFind()
+	{
 		assertTrue( sessionService.findSessionByID( session.getID() ) != null );
 		assertTrue( sessionService.findSessionByID( session.getID() ).getName().equals( "sessionname" ) );
 		assertTrue( sessionService.findSessionByID( session.getID() ).getDescription().equals( "sessiondescription" ) );
@@ -145,7 +150,7 @@ import static org.junit.Assert.assertTrue;
 				.equals( WorkflowElementStatusImpl.NEW.toString() ) );
 	}
 
-	@TestOrder( order = 2 ) @Test public void testStart()
+	@TestOrder( order = 3 ) @Test public void testStart()
 	{
 		sessionService.start( session.getID() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
@@ -153,7 +158,7 @@ import static org.junit.Assert.assertTrue;
 				.equals( WorkflowElementStatusImpl.RUNNING.toString() ) );
 	}
 
-	@TestOrder( order = 3 ) @Test public void testStop()
+	@TestOrder( order = 4 ) @Test public void testStop()
 	{
 		sessionService.stop( session.getID() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
@@ -161,7 +166,7 @@ import static org.junit.Assert.assertTrue;
 				.equals( WorkflowElementStatusImpl.TERMINATED.toString() ) );
 	}
 
-	@TestOrder( order = 4 ) @Test public void testRenew()
+	@TestOrder( order = 5 ) @Test public void testRenew()
 	{
 		sessionService.renew( session.getID() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
@@ -169,7 +174,7 @@ import static org.junit.Assert.assertTrue;
 				.equals( WorkflowElementStatusImpl.NEW.toString() ) );
 	}
 
-	@TestOrder( order = 5 ) @Test public void testJoin()
+	@TestOrder( order = 6 ) @Test public void testJoin()
 	{
 		sessionService.join( new Invitation( null, user, session ) );
 		assertTrue( !sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
@@ -178,13 +183,13 @@ import static org.junit.Assert.assertTrue;
 				.contains( userService.findUserByID( user.getID() ).getParticipation() ) );
 	}
 
-	@TestOrder( order = 6 ) @Test public void testLeave()
+	@TestOrder( order = 7 ) @Test public void testLeave()
 	{
 		sessionService.leave( new Invitation( null, user, session ) );
 		assertTrue( sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
 	}
 
-	@TestOrder( order = 7 ) @Test public void testSetNextExercise()
+	@TestOrder( order = 8 ) @Test public void testSetNextExercise()
 	{
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getCurrentExercise()
@@ -197,7 +202,7 @@ import static org.junit.Assert.assertTrue;
 				.equals( exerciseTwo.getID() ) );
 	}
 
-	@TestOrder( order = 8 ) @Test public void testGetPreviousExercise()
+	@TestOrder( order = 9 ) @Test public void testGetPreviousExercise()
 	{
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getCurrentExercise()
@@ -206,7 +211,7 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( sessionService.getPreviousExercise( session.getID() ).getID().equals( exerciseOne.getID() ) );
 	}
 
-	@TestOrder( order = 9 ) @Test public void testSetCurrentExercise()
+	@TestOrder( order = 10 ) @Test public void testSetCurrentExercise()
 	{
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getCurrentExercise()
@@ -224,7 +229,7 @@ import static org.junit.Assert.assertTrue;
 				.equals( exerciseOne.getID() ) );
 	}
 
-	@TestOrder( order = 10 ) @Test public void testGetCurrentExerciseIDWithOutput()
+	@TestOrder( order = 11 ) @Test public void testGetCurrentExerciseIDWithOutput()
 	{
 		// NOTE: test for output is simple, as getOutput / setOutput is tested in-depth separately
 
@@ -257,14 +262,14 @@ import static org.junit.Assert.assertTrue;
 
 	}
 
-	@TestOrder( order = 11 ) @Test public void testFindAll()
+	@TestOrder( order = 12 ) @Test public void testFindAll()
 	{
 		SessionImpl result = sessionService.findSessionByID( session.getID() );
 		assertTrue( result != null );
 		assertTrue( sessionService.findAllSessions().contains( result ) );
 	}
 
-	@TestOrder( order = 12 ) @Test public void testRemove()
+	@TestOrder( order = 13 ) @Test public void testRemove()
 	{
 		// ensure that not already removed
 		SessionImpl result = sessionService.findSessionByID( session.getID() );

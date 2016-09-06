@@ -26,6 +26,14 @@ public class MediaServiceProxy extends WorkshopObjectServiceProxy implements Med
 				.readEntity( List.class );
 	}
 
+	@Override public String persistJsonMediaObject( MediaObject mediaObject )
+	{
+		return getServiceTarget().path( MediaRestService.PERSIST_JSON )
+				.request( MediaType.APPLICATION_JSON )
+				.post( Entity.json( mediaObject ) )
+				.readEntity( String.class );
+	}
+
 	@Override public String persistMediaObject( HttpServletRequest request )
 	{
 		throw new UnsupportedOperationException( "persisting of MediaObject not to be used in proxy service" );

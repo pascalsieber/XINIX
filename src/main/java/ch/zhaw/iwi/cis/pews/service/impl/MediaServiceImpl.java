@@ -35,6 +35,11 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 				.getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 	}
 
+	@Override public String persistJsonMediaObject( MediaObject mediaObject )
+	{
+		return persist( mediaObject );
+	}
+
 	@Override public String persistMediaObject( HttpServletRequest request )
 	{
 		try

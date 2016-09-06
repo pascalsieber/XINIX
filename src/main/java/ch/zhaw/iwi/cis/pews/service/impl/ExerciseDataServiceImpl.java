@@ -1,41 +1,5 @@
 package ch.zhaw.iwi.cis.pews.service.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnitUtil;
-
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hibernate.collection.internal.PersistentBag;
-import org.hibernate.collection.internal.PersistentIdentifierBag;
-import org.hibernate.collection.internal.PersistentList;
-import org.hibernate.collection.internal.PersistentMap;
-import org.hibernate.collection.internal.PersistentSet;
-import org.hibernate.collection.internal.PersistentSortedMap;
-import org.hibernate.collection.internal.PersistentSortedSet;
-import org.hibernate.collection.spi.PersistentCollection;
-
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
@@ -56,50 +20,32 @@ import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
 import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.CompressionExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.EvaluationResultExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.P2POneExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.P2PTwoExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PinkLabsExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.PosterExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.SimplePrototypingExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.XinixExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.You2MeExerciseDataService;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
-import ch.zhaw.sml.iwi.cis.exwrapper.java.io.CloseableWrapper;
-import ch.zhaw.sml.iwi.cis.exwrapper.java.io.IOExceptionWrapper;
-import ch.zhaw.sml.iwi.cis.exwrapper.java.io.ObjectInputStreamWrapper;
-import ch.zhaw.sml.iwi.cis.exwrapper.java.io.ObjectOutputStreamWrapper;
-import ch.zhaw.sml.iwi.cis.exwrapper.java.io.OutputStreamWrapper;
+import ch.zhaw.iwi.cis.pews.service.exercise.data.impl.*;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.*;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.*;
+import ch.zhaw.sml.iwi.cis.exwrapper.java.io.*;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.lang.ClassWrapper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.collection.internal.*;
+import org.hibernate.collection.spi.PersistentCollection;
+
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnitUtil;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implements ExerciseDataService
 {
 	private ExerciseDataDao exerciseDataDao;
-	private ExerciseDao exerciseDao;
-	private WorkshopDao workshopDao;
+	private ExerciseDao     exerciseDao;
+	private WorkshopDao     workshopDao;
 
 	protected WorkshopDao getWorkshopDao()
 	{
@@ -108,68 +54,90 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 
 	public ExerciseDataServiceImpl()
 	{
-		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
+		exerciseDataDao = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 	}
 
 	// TODO move this from manual entries to an automatic solution (e.g. with an annotation)
-	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISEDATACLASSSPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl > >();
+	private static final Map<String, Class<? extends ExerciseDataServiceImpl>> EXERCISEDATACLASSSPECIFICSERVICES = new HashMap<String, Class<? extends ExerciseDataServiceImpl>>();
+
 	static
 	{
-		EXERCISEDATACLASSSPECIFICSERVICES.put( PinkLabsExerciseData.class.getSimpleName(), PinkLabsExerciseDataService.class );
-		EXERCISEDATACLASSSPECIFICSERVICES.put( You2MeExerciseData.class.getSimpleName(), You2MeExerciseDataService.class );
+		EXERCISEDATACLASSSPECIFICSERVICES.put( PinkLabsExerciseData.class.getSimpleName(),
+				PinkLabsExerciseDataService.class );
+		EXERCISEDATACLASSSPECIFICSERVICES.put( You2MeExerciseData.class.getSimpleName(),
+				You2MeExerciseDataService.class );
 		EXERCISEDATACLASSSPECIFICSERVICES.put( P2POneData.class.getSimpleName(), P2POneExerciseDataService.class );
 		EXERCISEDATACLASSSPECIFICSERVICES.put( P2PTwoData.class.getSimpleName(), P2PTwoExerciseDataService.class );
-		EXERCISEDATACLASSSPECIFICSERVICES.put( SimplePrototypingData.class.getSimpleName(), SimplePrototypingExerciseDataService.class );
+		EXERCISEDATACLASSSPECIFICSERVICES.put( SimplePrototypingData.class.getSimpleName(),
+				SimplePrototypingExerciseDataService.class );
 		EXERCISEDATACLASSSPECIFICSERVICES.put( XinixData.class.getSimpleName(), XinixExerciseDataService.class );
-		EXERCISEDATACLASSSPECIFICSERVICES.put( CompressionExerciseData.class.getSimpleName(), CompressionExerciseDataService.class );
-		EXERCISEDATACLASSSPECIFICSERVICES.put( EvaluationExerciseData.class.getSimpleName(), EvaluationExerciseDataService.class );
+		EXERCISEDATACLASSSPECIFICSERVICES.put( CompressionExerciseData.class.getSimpleName(),
+				CompressionExerciseDataService.class );
+		EXERCISEDATACLASSSPECIFICSERVICES.put( EvaluationExerciseData.class.getSimpleName(),
+				EvaluationExerciseDataService.class );
 	}
 
-	private Class< ? > getExerciseDataClassSpecificService( String exerciseDataClassName )
+	private Class<?> getExerciseDataClassSpecificService( String exerciseDataClassName )
 	{
 		return EXERCISEDATACLASSSPECIFICSERVICES.get( exerciseDataClassName );
 	}
 
-	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISECLASSSPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl >>();
+	private static final Map<String, Class<? extends ExerciseDataServiceImpl>> EXERCISECLASSSPECIFICSERVICES = new HashMap<String, Class<? extends ExerciseDataServiceImpl>>();
+
 	static
 	{
 		EXERCISECLASSSPECIFICSERVICES.put( PinkLabsExercise.class.getSimpleName(), PinkLabsExerciseDataService.class );
 		EXERCISECLASSSPECIFICSERVICES.put( You2MeExercise.class.getSimpleName(), You2MeExerciseDataService.class );
 		EXERCISECLASSSPECIFICSERVICES.put( P2POneExercise.class.getSimpleName(), P2POneExerciseDataService.class );
 		EXERCISECLASSSPECIFICSERVICES.put( P2PTwoExercise.class.getSimpleName(), P2PTwoExerciseDataService.class );
-		EXERCISECLASSSPECIFICSERVICES.put( SimplyPrototypingExercise.class.getSimpleName(), SimplePrototypingExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( SimplyPrototypingExercise.class.getSimpleName(),
+				SimplePrototypingExerciseDataService.class );
 		EXERCISECLASSSPECIFICSERVICES.put( XinixExercise.class.getSimpleName(), XinixExerciseDataService.class );
-		EXERCISECLASSSPECIFICSERVICES.put( CompressionExercise.class.getSimpleName(), CompressionExerciseDataService.class );
-		EXERCISECLASSSPECIFICSERVICES.put( EvaluationExercise.class.getSimpleName(), EvaluationExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( CompressionExercise.class.getSimpleName(),
+				CompressionExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( EvaluationExercise.class.getSimpleName(),
+				EvaluationExerciseDataService.class );
 		EXERCISECLASSSPECIFICSERVICES.put( PosterExercise.class.getSimpleName(), PosterExerciseDataService.class );
-		EXERCISECLASSSPECIFICSERVICES.put( EvaluationResultExercise.class.getSimpleName(), EvaluationResultExerciseDataService.class );
+		EXERCISECLASSSPECIFICSERVICES.put( EvaluationResultExercise.class.getSimpleName(),
+				EvaluationResultExerciseDataService.class );
 	}
 
-	private Class< ? > getExerciseClassSpecificService( String exerciseClassName )
+	private Class<?> getExerciseClassSpecificService( String exerciseClassName )
 	{
 		return EXERCISECLASSSPECIFICSERVICES.get( exerciseClassName );
 	}
 
-	@Override
-	public String persistExerciseData( ExerciseDataImpl obj )
+	@Override public String persistExerciseData( ExerciseDataImpl obj )
 	{
-		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseDataClassSpecificService( obj.getClass().getSimpleName() ).getSimpleName() );
+		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( getExerciseDataClassSpecificService( obj.getClass()
+						.getSimpleName() ).getSimpleName() );
 		return service.persistExerciseData( obj );
 	}
 
-	@Override
-	protected WorkshopObjectDao getWorkshopObjectDao()
+	@Override protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return exerciseDataDao;
 	}
 
-	@Override
-	public ExerciseDataImpl findExerciseDataByID( String id )
+	@Override public ExerciseDataImpl findExerciseDataByID( String id )
 	{
-		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseDataClassSpecificService( findByID( id ).getClass().getSimpleName() ).getSimpleName() );
-		return (ExerciseDataImpl)cleanObjectGraph( service.findExerciseDataByID( id ) );
+		ExerciseDataImpl searchable = findByID( id );
+		if ( searchable == null )
+		{
+			return null;
+		}
+		else
+		{
+			ExerciseDataService service = ZhawEngine.getManagedObjectRegistry()
+					.getManagedObject( getExerciseDataClassSpecificService( findByID( id ).getClass()
+							.getSimpleName() ).getSimpleName() );
+			return (ExerciseDataImpl)cleanObjectGraph( service.findExerciseDataByID( id ) );
+		}
+
 	}
 
 	public ExerciseDataImpl genericFindDataByID( String id )
@@ -177,64 +145,57 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return (ExerciseDataImpl)cleanObjectGraph( exerciseDataDao.findDataByID( id ) );
 	}
 
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public List< ExerciseDataImpl > findAllExerciseData()
+	@SuppressWarnings( "unchecked" ) @Override public List<ExerciseDataImpl> findAllExerciseData()
 	{
-		return (List< ExerciseDataImpl >)cleanObjectGraph( findAll() );
+		return (List<ExerciseDataImpl>)cleanObjectGraph( findAll() );
 	}
 
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
+	@SuppressWarnings( "unchecked" ) @Override public List<ExerciseDataImpl> findByExerciseID( String exerciseID )
 	{
 		ExerciseImpl ex = exerciseDao.findById( exerciseID );
-		Class< ? > serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
-		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
-		return (List< ExerciseDataImpl >)cleanseData( service.findByExerciseID( exerciseID ) );
+		Class<?> serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
+		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( serviceClass.getSimpleName() );
+		return (List<ExerciseDataImpl>)cleanseData( service.findByExerciseID( exerciseID ) );
 	}
 
-	@Override
-	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
+	@Override public List<ExerciseDataImpl> findByExerciseIDs( List<String> exerciseIDs )
 	{
 		throw new UnsupportedOperationException( "no suitable Service class found for handling" );
 	}
 
-	@SuppressWarnings( "unchecked" )
-	public List< ExerciseDataImpl > genericFindByExerciseID( String exerciseID )
+	@SuppressWarnings( "unchecked" ) public List<ExerciseDataImpl> genericFindByExerciseID( String exerciseID )
 	{
-		return (List< ExerciseDataImpl >)cleanseData( exerciseDataDao.findByExerciseID( exerciseID ) );
+		return (List<ExerciseDataImpl>)cleanseData( exerciseDataDao.findByExerciseID( exerciseID ) );
 	}
 
-	public List< ExerciseDataImpl > genericFindByExerciseIDs( List< String > exerciseIDs )
+	public List<ExerciseDataImpl> genericFindByExerciseIDs( List<String> exerciseIDs )
 	{
 		return exerciseDataDao.findByExerciseIDs( exerciseIDs );
 	}
 
-	@Override
-	public void removeExerciseDataByID( String id )
+	@Override public void removeExerciseDataByID( String id )
 	{
 		remove( findByID( id ) );
 	}
 
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public List< CompressableExerciseData > getCompressableExerciseDataByWorkshop( WorkshopImpl workshop )
+	@SuppressWarnings( "unchecked" ) @Override
+	public List<CompressableExerciseData> getCompressableExerciseDataByWorkshop( WorkshopImpl workshop )
 	{
-		List< ExerciseDataImpl > data = new ArrayList< ExerciseDataImpl >();
+		List<ExerciseDataImpl> data = new ArrayList<ExerciseDataImpl>();
 
-		Map< Class< ? extends ExerciseImpl >, List< String > > compressableExercises = new HashMap< Class< ? extends ExerciseImpl >, List< String >>();
-		compressableExercises.put( PinkLabsExercise.class, new ArrayList< String >() );
-		compressableExercises.put( P2POneExercise.class, new ArrayList< String >() );
-		compressableExercises.put( P2PTwoExercise.class, new ArrayList< String >() );
-		compressableExercises.put( XinixExercise.class, new ArrayList< String >() );
-		compressableExercises.put( You2MeExercise.class, new ArrayList< String >() );
-		compressableExercises.put( SimplyPrototypingExercise.class, new ArrayList< String >() );
+		Map<Class<? extends ExerciseImpl>, List<String>> compressableExercises = new HashMap<Class<? extends ExerciseImpl>, List<String>>();
+		compressableExercises.put( PinkLabsExercise.class, new ArrayList<String>() );
+		compressableExercises.put( P2POneExercise.class, new ArrayList<String>() );
+		compressableExercises.put( P2PTwoExercise.class, new ArrayList<String>() );
+		compressableExercises.put( XinixExercise.class, new ArrayList<String>() );
+		compressableExercises.put( You2MeExercise.class, new ArrayList<String>() );
+		compressableExercises.put( SimplyPrototypingExercise.class, new ArrayList<String>() );
 
 		// assign workshop's exercise IDs to map
 		for ( ExerciseImpl ex : workshop.getExercises() )
 		{
-			List< String > ids = compressableExercises.get( ex.getClass() );
+			List<String> ids = compressableExercises.get( ex.getClass() );
 			if ( ids != null )
 			{
 				ids.add( ex.getID() );
@@ -242,57 +203,58 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		}
 
 		// get data for assigned exercise IDs
-		for ( Entry< Class< ? extends ExerciseImpl >, List< String >> entry : compressableExercises.entrySet() )
+		for ( Entry<Class<? extends ExerciseImpl>, List<String>> entry : compressableExercises.entrySet() )
 		{
 			if ( !entry.getValue().isEmpty() )
 			{
-				Class< ? > serviceClass = getExerciseClassSpecificService( entry.getKey().getSimpleName() );
-				ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
+				Class<?> serviceClass = getExerciseClassSpecificService( entry.getKey().getSimpleName() );
+				ExerciseDataService service = ZhawEngine.getManagedObjectRegistry()
+						.getManagedObject( serviceClass.getSimpleName() );
 				data.addAll( service.findByExerciseIDs( entry.getValue() ) );
 			}
 		}
 
-		return (List< CompressableExerciseData >)cleanseCompressableData( data );
+		return (List<CompressableExerciseData>)cleanseCompressableData( data );
 	}
 
-	@Override
-	public String exportByExerciseID( String exerciseID )
+	@Override public String exportByExerciseID( String exerciseID )
 	{
 		ExerciseImpl ex = exerciseDao.findById( exerciseID );
-		Class< ? > serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
-		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
+		Class<?> serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
+		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( serviceClass.getSimpleName() );
 
-		List< ExerciseDataViewObject > data = service.getExportableDataByExerciseID( ex );
-		Map< ExerciseImpl, List< ExerciseDataViewObject > > exportableDataMap = new HashMap< ExerciseImpl, List< ExerciseDataViewObject > >();
+		List<ExerciseDataViewObject> data = service.getExportableDataByExerciseID( ex );
+		Map<ExerciseImpl, List<ExerciseDataViewObject>> exportableDataMap = new HashMap<ExerciseImpl, List<ExerciseDataViewObject>>();
 		exportableDataMap.put( ex, data );
 		return exportDataToFile( exportableDataMap );
 	}
 
-	@Override
-	public < T extends ExerciseDataViewObject > List< T > getExportableDataByExerciseID( ExerciseImpl exercise )
+	@Override public <T extends ExerciseDataViewObject> List<T> getExportableDataByExerciseID( ExerciseImpl exercise )
 	{
 		throw new UnsupportedOperationException( "no suitable Service class found for handling" );
 	}
 
-	@Override
-	public String exportByWorkshopID( String workshopID )
+	@Override public String exportByWorkshopID( String workshopID )
 	{
 		WorkshopImpl workshop = workshopDao.findWorkshopByID( workshopID );
-		Map< ExerciseImpl, List< ExerciseDataViewObject > > exportableDataMap = new TreeMap< ExerciseImpl, List< ExerciseDataViewObject >>( new Comparator< ExerciseImpl >() {
-			@Override
-			public int compare( ExerciseImpl o1, ExerciseImpl o2 )
-			{
-				return o1.getOrderInWorkshop().compareTo( o2.getOrderInWorkshop() );
-			}
-		} );
+		Map<ExerciseImpl, List<ExerciseDataViewObject>> exportableDataMap = new TreeMap<ExerciseImpl, List<ExerciseDataViewObject>>(
+				new Comparator<ExerciseImpl>()
+				{
+					@Override public int compare( ExerciseImpl o1, ExerciseImpl o2 )
+					{
+						return o1.getOrderInWorkshop().compareTo( o2.getOrderInWorkshop() );
+					}
+				} );
 
 		for ( ExerciseImpl exercise : workshop.getExercises() )
 		{
 			ExerciseImpl ex = exerciseDao.findById( exercise.getID() );
-			Class< ? > serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
-			ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( serviceClass.getSimpleName() );
+			Class<?> serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
+			ExerciseDataService service = ZhawEngine.getManagedObjectRegistry()
+					.getManagedObject( serviceClass.getSimpleName() );
 
-			List< ExerciseDataViewObject > data = service.getExportableDataByExerciseID( ex );
+			List<ExerciseDataViewObject> data = service.getExportableDataByExerciseID( ex );
 			exportableDataMap.put( ex, data );
 		}
 
@@ -300,7 +262,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	}
 
 	@SuppressWarnings( "resource" )
-	private String exportDataToFile( Map< ExerciseImpl, List< ExerciseDataViewObject >> exportableDataMap )
+	private String exportDataToFile( Map<ExerciseImpl, List<ExerciseDataViewObject>> exportableDataMap )
 	{
 		String exportDirLocation = PewsConfig.getWebDir() + File.separator + "export";
 
@@ -314,7 +276,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		Workbook workbook = new XSSFWorkbook();
 
 		// make sheet for every entry in exportableDataMap
-		for ( Entry< ExerciseImpl, List< ExerciseDataViewObject >> entry : exportableDataMap.entrySet() )
+		for ( Entry<ExerciseImpl, List<ExerciseDataViewObject>> entry : exportableDataMap.entrySet() )
 		{
 			// generate sheet with headers
 			int rowIndex = 0;
@@ -342,7 +304,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			else
 			{
 				// get fields of data objects
-				List< Field > fields = getAllFields( new ArrayList< Field >(), entry.getValue().get( 0 ).getClass() );
+				List<Field> fields = getAllFields( new ArrayList<Field>(), entry.getValue().get( 0 ).getClass() );
 
 				// headers
 				int colIndex = 0;
@@ -405,7 +367,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	/**
 	 * helper method to get all fields (including declared fields of super classes) of an object recursively
 	 */
-	private List< Field > getAllFields( List< Field > fields, Class< ? > type )
+	private List<Field> getAllFields( List<Field> fields, Class<?> type )
 	{
 		Field[] declaredFields = type.getDeclaredFields();
 		for ( int i = 0; i < declaredFields.length; i++ )
@@ -421,8 +383,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		return fields;
 	}
 
-	@SuppressWarnings( { "resource" } )
-	private Object cleanseData( List< ExerciseDataImpl > data )
+	@SuppressWarnings( { "resource" } ) private Object cleanseData( List<ExerciseDataImpl> data )
 	{
 		try
 		{
@@ -442,8 +403,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		}
 	}
 
-	@SuppressWarnings( "resource" )
-	private Object cleanseCompressableData( List< ExerciseDataImpl > data )
+	@SuppressWarnings( "resource" ) private Object cleanseCompressableData( List<ExerciseDataImpl> data )
 	{
 		try
 		{
@@ -465,10 +425,17 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 
 	private Object cleanObjectGraph( Object object )
 	{
-		byte[] byteArray = serialize( object );
-		Object newObject = deserialize( byteArray );
+		if ( object == null )
+		{
+			return null;
+		}
+		else
+		{
+			byte[] byteArray = serialize( object );
+			Object newObject = deserialize( byteArray );
 
-		return newObject;
+			return newObject;
+		}
 	}
 
 	private byte[] serialize( Object object )
@@ -499,7 +466,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	private static class DataCleaningInputStream extends ObjectInputStream
 	{
 		private PersistenceUnitUtil puu;
-		private static final Map< Class< ? >, Class< ? > > PERSISTENT_TO_TRANSIENT_COLLECTION_MAP = new HashMap< Class< ? >, Class< ? > >();
+		private static final Map<Class<?>, Class<?>> PERSISTENT_TO_TRANSIENT_COLLECTION_MAP = new HashMap<Class<?>, Class<?>>();
 
 		static
 		{
@@ -532,8 +499,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			puu = emf.getPersistenceUnitUtil();
 		}
 
-		@Override
-		protected Object resolveObject( Object obj ) throws IOException
+		@Override protected Object resolveObject( Object obj ) throws IOException
 		{
 			if ( obj instanceof ExerciseDataImpl )
 			{
@@ -574,16 +540,17 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			return isTerminalCollection;
 		}
 
-		private Collection< ? > replacePersistentCollection( PersistentCollection pCollection )
+		private Collection<?> replacePersistentCollection( PersistentCollection pCollection )
 		{
-			Collection< ? > collection = null;
+			Collection<?> collection = null;
 
-			Class< ? > transientCollectionClass = PERSISTENT_TO_TRANSIENT_COLLECTION_MAP.get( pCollection.getClass() );
+			Class<?> transientCollectionClass = PERSISTENT_TO_TRANSIENT_COLLECTION_MAP.get( pCollection.getClass() );
 
 			if ( transientCollectionClass == null )
-				throw new IllegalStateException( "Unexpected type for pCollection: " + pCollection.getClass().getName() );
+				throw new IllegalStateException(
+						"Unexpected type for pCollection: " + pCollection.getClass().getName() );
 
-			collection = (Collection< ? >)ClassWrapper.newInstance( transientCollectionClass );
+			collection = (Collection<?>)ClassWrapper.newInstance( transientCollectionClass );
 
 			return collection;
 		}

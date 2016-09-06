@@ -5,7 +5,8 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
-import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
+import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.*;
@@ -15,8 +16,10 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +50,7 @@ import static org.junit.Assert.assertTrue;
 	private static ExerciseImpl     exercise         = new EvaluationResultExercise();
 	private static ExerciseTemplate exerciseTemplate = new EvaluationResultTemplate();
 	private static WorkshopImpl     workshop         = new WorkshopImpl();
+	private static UserImpl         owner            = new UserImpl();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -70,6 +74,17 @@ import static org.junit.Assert.assertTrue;
 
 	@BeforeClass public void setup()
 	{
+		// owner
+		String password = "password";
+		String login = "evaluationresultexercisetestlogin";
+		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
+		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
+				null,
+				null,
+				"",
+				"",
+				login ) ) );
+
 		// services
 		exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
@@ -80,8 +95,8 @@ import static org.junit.Assert.assertTrue;
 		ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 
 		// workshop
-		WorkshopTemplate workshopTemplate = workshopTemplateService.findWorkshopTemplateByID( workshopTemplateService.persist(
-				new WorkshopTemplate( null, "", "" ) ) );
+		PinkElefantTemplate workshopTemplate = new PinkElefantTemplate();
+		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( owner, "", "", "", "" ) ) );
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// exercise template
@@ -239,18 +254,19 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
-		assertTrue( exerciseService.findAllExercises().contains( findable ) );
+		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
-		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
-		assertTrue( exerciseService.findAllExercises().contains( removable ) );
+		EvaluationResultExercise removable = (EvaluationResultExercise)exerciseService.findExerciseByID( exercise.getID() );
+		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( removable.getID() ) );
 
 		exerciseService.remove( removable );
 		assertTrue( exerciseService.findExerciseByID( exercise.getID() ) == null );
-		assertTrue( !exerciseService.findAllExercises().contains( removable ) );
-		assertTrue( !workshopService.findWorkshopByID( workshop.getID() ).getExercises().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( exerciseService.findAllExercises() ).contains( removable.getID() ) );
+		assertTrue( !TestUtil.extractIds( workshopService.findWorkshopByID( workshop.getID() ).getExercises() )
+				.contains( removable.getID() ) );
 	}
 }
 

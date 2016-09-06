@@ -11,6 +11,7 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -110,17 +111,17 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		PinkLabsExerciseData findable = (PinkLabsExerciseData)exerciseDataService.findExerciseDataByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		PinkLabsExerciseData removable = (PinkLabsExerciseData)exerciseDataService.findExerciseDataByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 
 		exerciseDataService.removeExerciseDataByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findExerciseDataByID( exerciseData.getID() ) == null );
-		assertTrue( !exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 	}
 }
 

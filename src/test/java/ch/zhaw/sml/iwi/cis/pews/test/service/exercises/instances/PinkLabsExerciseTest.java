@@ -5,7 +5,6 @@ import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
 import ch.zhaw.iwi.cis.pews.model.instance.*;
 import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
-import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
@@ -15,8 +14,10 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
@@ -73,7 +74,7 @@ import static org.junit.Assert.assertTrue;
 	{
 		// owner
 		String password = "password";
-		String login = "login";
+		String login = "pinlabsexercisetestlogin";
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
 				null,
@@ -96,8 +97,8 @@ import static org.junit.Assert.assertTrue;
 				password );
 
 		// workshop
-		WorkshopTemplate workshopTemplate = workshopTemplateService.findWorkshopTemplateByID( workshopTemplateService.persist(
-				new WorkshopTemplate( null, "", "" ) ) );
+		PinkElefantTemplate workshopTemplate = new PinkElefantTemplate();
+		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( owner, "", "", "", "" ) ) );
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// session
@@ -228,17 +229,18 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
-		assertTrue( exerciseService.findAllExercises().contains( findable ) );
+		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 7 ) @Test public void testRemove()
 	{
-		ExerciseImpl removable = exerciseService.findExerciseByID( exercise.getID() );
-		assertTrue( exerciseService.findAllExercises().contains( removable ) );
+		PinkLabsExercise removable = (PinkLabsExercise)exerciseService.findExerciseByID( exercise.getID() );
+		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( removable.getID() ) );
 
 		exerciseService.remove( removable );
 		assertTrue( exerciseService.findExerciseByID( exercise.getID() ) == null );
-		assertTrue( !exerciseService.findAllExercises().contains( removable ) );
-		assertTrue( !workshopService.findWorkshopByID( workshop.getID() ).getExercises().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( exerciseService.findAllExercises() ).contains( removable.getID() ) );
+		assertTrue( !TestUtil.extractIds( workshopService.findWorkshopByID( workshop.getID() ).getExercises() )
+				.contains( removable.getID() ) );
 	}
 }

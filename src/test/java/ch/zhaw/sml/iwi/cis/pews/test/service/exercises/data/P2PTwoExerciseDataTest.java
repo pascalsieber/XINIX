@@ -6,17 +6,20 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
@@ -79,7 +82,11 @@ import static org.junit.Assert.assertTrue;
 						"" ) ) );
 		exercise.setID( exerciseService.persistExercise( new P2PTwoExercise( "", "", exerciseTemplate, workshop ) ) );
 
-		p2POneKeyword.setID( exerciseDataService.persist( new P2POneKeyword( null, "" ) ) );
+		// p2pOneData to generate p2pOneKeyword
+		P2POneData p2POneData = (P2POneData)exerciseDataService.findExerciseDataByID( exerciseDataService.persist( new P2POneData( null,
+				null,
+				Collections.singletonList( "keyword" ) ) ) );
+		p2POneKeyword.setID( p2POneData.getKeywords().get( 0 ).getID() );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
@@ -121,17 +128,17 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		P2PTwoData findable = exerciseDataService.findByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		P2PTwoData removable = exerciseDataService.findByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 
 		exerciseDataService.removeExerciseDataByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findByID( exerciseData.getID() ) == null );
-		assertTrue( !exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 	}
 }
 

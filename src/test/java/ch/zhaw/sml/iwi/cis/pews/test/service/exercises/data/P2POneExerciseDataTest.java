@@ -7,15 +7,19 @@ import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -93,7 +97,14 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( found.getID().equals( exerciseData.getID() ) );
 		assertTrue( found.getWorkflowElement().getID().equals( exercise.getID() ) );
 		assertTrue( found.getKeywords().size() == 2 );
-		assertTrue( found.getKeywords().containsAll( Arrays.asList( ANSWER_ONE, ANSWER_TWO ) ) );
+
+		// extract keyword strings from keywords and check
+		List<String> keywordStrings = new ArrayList<String>();
+		for ( P2POneKeyword p2POneKeyword : found.getKeywords() )
+		{
+			keywordStrings.add( p2POneKeyword.getKeyword() );
+		}
+		assertTrue( keywordStrings.containsAll( Arrays.asList( ANSWER_ONE, ANSWER_TWO ) ) );
 	}
 
 	@TestOrder( order = 3 ) @Test public void testExportByExerciseID()
@@ -111,17 +122,17 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		P2POneData findable = exerciseDataService.findByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( findable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testRemoveByID()
 	{
 		P2POneData removable = exerciseDataService.findByID( exerciseData.getID() );
-		assertTrue( exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 
 		exerciseDataService.removeExerciseDataByID( exerciseData.getID() );
 		assertTrue( exerciseDataService.findByID( exerciseData.getID() ) == null );
-		assertTrue( !exerciseDataService.findAllExerciseData().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( exerciseDataService.findAllExerciseData() ).contains( removable.getID() ) );
 	}
 }
 

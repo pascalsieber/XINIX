@@ -11,5 +11,10 @@ public interface MediaService extends WorkshopObjectService
 
 	public List<MediaObject> findByType( MediaObjectType type );
 
+	/**
+	 * method used for testing
+	 */
+	public String persistJsonMediaObject( MediaObject mediaObject );
+
 	public String persistMediaObject( HttpServletRequest request );
 }
