@@ -17,6 +17,7 @@ import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -113,7 +114,7 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( userService.findByLoginName( LOGIN ).getID().equals( user.getID() ) );
 	}
 
-	@Test @TestOrder( order = 5 ) public void testSendProfile()
+	@Ignore( "minimize e-mail traffic on mail server" ) @Test @TestOrder( order = 5 ) public void testSendProfile()
 	{
 		// not checking email, just if API call runs through
 		userService.sendProfile( user.getID() );

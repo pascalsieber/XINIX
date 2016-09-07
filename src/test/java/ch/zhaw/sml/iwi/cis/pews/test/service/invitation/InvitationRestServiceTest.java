@@ -17,6 +17,7 @@ import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -118,19 +119,19 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( invitationService.findBySessionID( session.getID() ).contains( findable ) );
 	}
 
-	@TestOrder( order = 5 ) @Test public void testSendByID()
+	@Ignore( "minimize e-mail traffic on mail server" ) @TestOrder( order = 5 ) @Test public void testSendByID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendByID( invitation.getID() );
 	}
 
-	@TestOrder( order = 6 ) @Test public void testSendBySessionID()
+	@Ignore( "minimize e-mail traffic on mail server" ) @TestOrder( order = 6 ) @Test public void testSendBySessionID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendBySessionID( session.getID() );
 	}
 
-	@TestOrder( order = 7 ) @Test public void testSendByWorkshopID()
+	@Ignore( "minimize e-mail traffic on mail server" ) @TestOrder( order = 7 ) @Test public void testSendByWorkshopID()
 	{
 		// not checking email, just if API call runs through
 		invitationService.sendByWorkshopID( workshop.getID() );
