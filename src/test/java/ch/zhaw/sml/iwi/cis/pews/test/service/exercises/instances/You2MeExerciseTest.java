@@ -114,10 +114,8 @@ import static org.junit.Assert.assertTrue;
 				SessionSynchronizationImpl.SYNCHRONOUS,
 				workshop,
 				null,
-				new HashSet<Participant>(),
-				new HashSet<PrincipalImpl>(),
-				new HashSet<Invitation>(),
-				new HashSet<PrincipalImpl>() ) ) );
+				null,
+				null ) ) );
 
 		// owner joing session
 		sessionService.join( new Invitation( null, owner, session ) );

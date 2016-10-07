@@ -2,8 +2,11 @@ package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.data;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
+import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
@@ -45,7 +48,7 @@ import static org.junit.Assert.assertTrue;
 
 	private static CompressionExerciseDataElement solution = new CompressionExerciseDataElement();
 	private static int                            SCORE    = 5;
-	private static UserImpl owner;
+	private static UserImpl                       owner    = new UserImpl();
 
 	@BeforeClass public static void setup()
 	{
@@ -59,6 +62,7 @@ import static org.junit.Assert.assertTrue;
 		ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
 
 		// owner
 		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "", "" ) ) );
@@ -74,6 +78,19 @@ import static org.junit.Assert.assertTrue;
 				"",
 				"" ) ) );
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
+
+		// session
+		SessionImpl session = sessionService.findSessionByID( sessionService.persistSession( new SessionImpl( "",
+				"",
+				null,
+				SessionSynchronizationImpl.SYNCHRONOUS,
+				workshop,
+				null,
+				null,
+				null ) ) );
+
+		// owner joins session -> needed as evaluation exercise service checks session's exercises
+		sessionService.join( new Invitation( null, owner, session ) );
 
 		// exercise
 		EvaluationTemplate exerciseTemplate = (EvaluationTemplate)exerciseTemplateService.findExerciseTemplateByID(
@@ -104,7 +121,7 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
-		exerciseData.setID( exerciseDataService.persist( new EvaluationExerciseData( owner,
+		exerciseData.setID( exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
 				exercise,
 				new Evaluation( null, solution, new Score( null, SCORE ) ) ) ) );
 		assertTrue( exerciseData.getID() != null );

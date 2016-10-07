@@ -1,11 +1,13 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.authentication;
 
-import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.*;
+import ch.zhaw.iwi.cis.pews.model.user.Invitation;
+import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
+import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TokenAuthenticationResponse;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -18,8 +20,6 @@ import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.HashSet;
 
 import static org.junit.Assert.assertTrue;
 
@@ -81,10 +81,8 @@ import static org.junit.Assert.assertTrue;
 				SessionSynchronizationImpl.SYNCHRONOUS,
 				workshop,
 				null,
-				new HashSet<Participant>(),
-				new HashSet<PrincipalImpl>(),
-				new HashSet<Invitation>(),
-				new HashSet<PrincipalImpl>() ) ) );
+				null,
+				null ) ) );
 
 		// setup user and join session
 		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );

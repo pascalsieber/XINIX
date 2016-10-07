@@ -269,8 +269,6 @@ public class LoadTest
 				(WorkshopImpl)workshopService.findByID( workshopID ),
 				eval,
 				null,
-				null,
-				null,
 				null ) ) );
 			sessionID = session.getID();
 

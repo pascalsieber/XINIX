@@ -17,6 +17,7 @@
 	<!ENTITY commons.lang.revision "2.6">
 	<!ENTITY commons.io.revision "2.4">
 	<!ENTITY apache.poi.revision "3.13">
+    <!ENTITY apache.httpcomponents.revision "4.3.1">
 	<!ENTITY quartz.revision "2.2.1">
 ]>
 
@@ -56,6 +57,8 @@
 		<dependency org="org.apache.poi" name="poi" rev="&apache.poi.revision;" conf="default"/>
 		<dependency org="org.apache.poi" name="poi-ooxml" rev="&apache.poi.revision;" conf="default"/>
 		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="&apache.poi.revision;" conf="default"/>
+		<dependency org="org.apache.httpcomponents" name="httpclient" rev="&apache.httpcomponents.revision;" conf="default"/>
+		<dependency org="org.apache.httpcomponents" name="httpmime" rev="&apache.httpcomponents.revision;" conf="default"/>
 		<dependency org="org.quartz-scheduler" name="quartz" rev="&quartz.revision;" conf="default"/>
 		<exclude module="persistence-api"/>
 	</dependencies>

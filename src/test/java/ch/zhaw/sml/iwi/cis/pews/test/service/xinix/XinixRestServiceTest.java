@@ -1,5 +1,6 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.xinix;
 
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
@@ -10,10 +11,14 @@ import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
 import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
@@ -40,14 +45,33 @@ import static org.junit.Assert.assertTrue;
 		xinixImageMatrixService = ServiceProxyManager.createServiceProxy( XinixImageMatrixServiceProxy.class );
 		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 
-		imageone.setID( mediaService.persist( new MediaObject( "", "".getBytes(), MediaObjectType.XINIX ) ) );
-		imagetwo.setID( mediaService.persist( new MediaObject( "", "".getBytes(), MediaObjectType.XINIX ) ) );
+		try
+		{
+			File temp = new File( "tempxinixrestservicetest.jpg" );
+			FileUtils.copyURLToFile( new URL( "http://images.freeimages.com/images/previews/1da/lotus-1377828.jpg" ),
+					temp );
+
+			imageone.setID( mediaService.persistMediaObjectFormData( temp,
+					MediaObjectType.XINIX,
+					ZhawEngine.ROOT_USER_LOGIN_NAME,
+					"root" ) );
+			imagetwo.setID( mediaService.persistMediaObjectFormData( temp,
+					MediaObjectType.XINIX,
+					ZhawEngine.ROOT_USER_LOGIN_NAME,
+					"root" ) );
+
+			temp.delete();
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "error in persisting media object" );
+		}
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
-		xinixImageMatrix.setID( xinixImageMatrixService.persistImageMatrix( new XinixImageMatrix( Arrays.asList( imageone,
-				imagetwo ) ) ) );
+		xinixImageMatrix.setID( xinixImageMatrixService.persistImageMatrix( new XinixImageMatrix( Arrays.asList( (MediaObject)mediaService
+				.findByID( imageone.getID() ), (MediaObject)mediaService.findByID( imagetwo.getID() ) ) ) ) );
 		assertTrue( xinixImageMatrix.getID() != null );
 		assertTrue( !xinixImageMatrix.getID().equals( "" ) );
 	}

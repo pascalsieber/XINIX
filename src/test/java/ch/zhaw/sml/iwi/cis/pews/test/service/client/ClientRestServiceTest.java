@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 
 	private static String NAME = "name";
 
-	private Client client = new Client();
+	private static Client client = new Client();
 
 	@BeforeClass public static void setup()
 	{

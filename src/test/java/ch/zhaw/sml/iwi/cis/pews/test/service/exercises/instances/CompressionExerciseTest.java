@@ -11,7 +11,6 @@ import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.*;
@@ -125,10 +124,8 @@ import static org.junit.Assert.assertTrue;
 				SessionSynchronizationImpl.SYNCHRONOUS,
 				workshop,
 				null,
-				new HashSet<Participant>(),
-				new HashSet<PrincipalImpl>(),
-				new HashSet<Invitation>(),
-				new HashSet<PrincipalImpl>() ) ) );
+				null,
+				null ) ) );
 
 		// owner joing session
 		sessionService.join( new Invitation( null, owner, session ) );

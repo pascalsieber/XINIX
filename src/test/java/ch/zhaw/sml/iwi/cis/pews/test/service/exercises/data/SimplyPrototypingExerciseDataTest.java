@@ -36,6 +36,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith( OrderedRunner.class ) public class SimplyPrototypingExerciseDataTest
 {
 	private static ExerciseDataService exerciseDataService;
+	private static MediaService        mediaService;
 
 	private static ExerciseDataImpl exerciseData = new SimplePrototypingData();
 	private static MediaObject      mediaObject  = new MediaObject();
@@ -46,13 +47,13 @@ import static org.junit.Assert.assertTrue;
 	{
 		// services
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
+		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 				WorkshopTemplateServiceProxy.class );
 		WorkshopService workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
 		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
 				ExerciseTemplateServiceProxy.class );
 		ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
-		MediaService mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 
 		// workshop
 		WorkshopTemplate workshopTemplate = workshopTemplateService.findByID( workshopTemplateService.persist( new WorkshopTemplate( null,
@@ -81,14 +82,16 @@ import static org.junit.Assert.assertTrue;
 				workshop ) ) );
 
 		// media object
-		mediaObject.setID( mediaService.persistJsonMediaObject( new MediaObject( "",
+		mediaObject.setID( mediaService.persist( new MediaObject( "image/png",
 				"".getBytes(),
 				MediaObjectType.SIMPLYPROTOTYPING ) ) );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
-		exerciseData.setID( exerciseDataService.persist( new SimplePrototypingData( null, exercise, mediaObject ) ) );
+		exerciseData.setID( exerciseDataService.persistExerciseData( new SimplePrototypingData( null,
+				exercise,
+				(MediaObject)mediaService.findByID( mediaObject.getID() ) ) ) );
 		assertTrue( exerciseData.getID() != null );
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}

@@ -21,6 +21,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 {
 	public static final String BASE = "/workshopService/session/invitation";
 
+	// TODO: remove this endpoint
 	public static final String ACCEPT = "/accept";
 	public static final String FIND_BY_SESSION_ID = "/findBySessionID";
 	public static final String SEND_BY_ID = "/sendByID";
@@ -65,6 +66,7 @@ public class InvitationRestService extends WorkshopObjectRestService
 		return invitationService.findAllInvitations();
 	}
 
+	// TODO: remove this!
 	@POST
 	@Path( ACCEPT )
 	public void accept( String invitationID )

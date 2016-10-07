@@ -1,34 +1,26 @@
 package ch.zhaw.iwi.cis.pews.service.rest;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.impl.MediaServiceImpl;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
+import ch.zhaw.iwi.cis.pews.service.wrapper.MediaObjectFormData;
 
-@Path( MediaRestService.BASE )
-@Consumes( { MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA } )
-@Produces( { MediaType.APPLICATION_JSON } )
-public class MediaRestService extends WorkshopObjectRestService
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
+
+@Path( MediaRestService.BASE ) @Consumes( { MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA } )
+@Produces( { MediaType.APPLICATION_JSON } ) public class MediaRestService extends WorkshopObjectRestService
 {
 	public static final String BASE = "/mediaService";
 
-	public static final String FIND_BY_TYPE = "/findByType";
+	public static final String FIND_BY_TYPE      = "/findByType";
 	public static final String GET_CONTENT_BY_ID = "/getContentByID";
 
 	public static final String PERSIST_JSON = "/persistJson";
@@ -41,28 +33,13 @@ public class MediaRestService extends WorkshopObjectRestService
 		mediaService = ZhawEngine.getManagedObjectRegistry().getManagedObject( MediaServiceImpl.class.getSimpleName() );
 	}
 
-	/**
-	 * endpoint used in testing for persisting mediaObject directly,
-	 * not wrapped in multi part form data
-	 */
-	@POST
-	@Path( PERSIST_JSON )
-	public String persistJsonMediaObject( MediaObject mediaObject )
-	{
-		return mediaService.persistJsonMediaObject( mediaObject );
-	}
-
-	@POST
-	@Consumes( MediaType.MULTIPART_FORM_DATA )
-	@Path( PERSIST )
+	@POST @Consumes( MediaType.MULTIPART_FORM_DATA ) @Path( PERSIST )
 	public String persistMediaObject( @Context HttpServletRequest request )
 	{
 		return mediaService.persistMediaObject( request );
 	}
 
-	@POST
-	@Path( FIND_BY_TYPE )
-	public List< MediaObject > findMediaByType( String type )
+	@POST @Path( FIND_BY_TYPE ) public List<MediaObject> findMediaByType( String type )
 	{
 		return mediaService.findByType( MediaObjectType.valueOf( type ) );
 	}
@@ -73,37 +50,29 @@ public class MediaRestService extends WorkshopObjectRestService
 	 * @param id
 	 * @return blob of mediaObject
 	 */
-	@GET
-	@Path( GET_CONTENT_BY_ID + "/{mediaobjectid}.{extension}" )
-	public Response getMediaContentByID( @PathParam( "mediaobjectid" ) String id )
+	@GET @Path( GET_CONTENT_BY_ID + "/{mediaobjectid}.{extension}" ) public Response getMediaContentByID(
+			@PathParam( "mediaobjectid" ) String id )
 	{
 		MediaObject obj = mediaService.findByID( id );
 		return Response.ok( obj.getBlob(), obj.getMimeType() ).build();
 	}
 
-	@POST
-	@Path( FIND_BY_ID )
-	public MediaObject findMediaByID( String id )
+	@POST @Path( FIND_BY_ID ) public MediaObject findMediaByID( String id )
 	{
 		return mediaService.findByID( id );
 	}
 
-	@POST
-	@Path( FIND_ALL )
-	public List< MediaObject > findAllMediaObjects()
+	@POST @Path( FIND_ALL ) public List<MediaObject> findAllMediaObjects()
 	{
 		return mediaService.findAll();
 	}
 
-	@POST
-	@Path( REMOVE )
-	public void removeMedia( MediaObject object )
+	@POST @Path( REMOVE ) public void removeMedia( MediaObject object )
 	{
 		mediaService.remove( object );
 	}
 
-	@Override
-	protected WorkshopObjectService getWorkshopObjectService()
+	@Override protected WorkshopObjectService getWorkshopObjectService()
 	{
 		return mediaService;
 	}

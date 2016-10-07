@@ -5,7 +5,6 @@ import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -16,12 +15,12 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
-import java.util.HashSet;
 
 import static org.junit.Assert.assertTrue;
 
@@ -76,10 +75,6 @@ import static org.junit.Assert.assertTrue;
 
 		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( null, "", "", "", "" ) ) );
 
-		workshop.setID( workshopService.persist( new PinkElefantWorkshop( "",
-				"",
-				(PinkElefantTemplate)workshopTemplate ) ) );
-
 		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new PinkLabsTemplate( null,
 				false,
 				null,
@@ -92,6 +87,10 @@ import static org.junit.Assert.assertTrue;
 				"",
 				"",
 				"" ) ) );
+
+		workshop.setID( workshopService.persist( new PinkElefantWorkshop( "",
+				"",
+				(PinkElefantTemplate)workshopTemplate ) ) );
 
 		exerciseOne.setID( exerciseService.persistExercise( new PinkLabsExercise( "",
 				"",
@@ -118,36 +117,25 @@ import static org.junit.Assert.assertTrue;
 				SessionSynchronizationImpl.SYNCHRONOUS,
 				workshop,
 				null,
-				new HashSet<Participant>(),
-				new HashSet<PrincipalImpl>(),
-				new HashSet<Invitation>(),
-				new HashSet<PrincipalImpl>() ) ) );
+				null,
+				null ) ) );
 		assertTrue( session.getID() != null );
 		assertTrue( !session.getID().equals( "" ) );
 	}
 
 	@TestOrder( order = 2 ) @Test public void testFind()
 	{
-		assertTrue( sessionService.findSessionByID( session.getID() ) != null );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getName().equals( "sessionname" ) );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getDescription().equals( "sessiondescription" ) );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getDerivedFrom() == null );
-		assertTrue( sessionService.findSessionByID( session.getID() )
-				.getSynchronization()
-				.equals( SessionSynchronizationImpl.SYNCHRONOUS ) );
-		assertTrue( sessionService.findSessionByID( session.getID() )
-				.getWorkshop()
-				.getID()
-				.equals( workshop.getID() ) );
-		assertTrue( sessionService.findSessionByID( session.getID() )
-				.getCurrentExercise()
-				.getID()
-				.equals( exerciseOne.getID() ) );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getInvitations().isEmpty() );
-		assertTrue( sessionService.findSessionByID( session.getID() )
-				.getCurrentState()
-				.equals( WorkflowElementStatusImpl.NEW.toString() ) );
+		SessionImpl findable = sessionService.findSessionByID( session.getID() );
+		assertTrue( findable != null );
+		assertTrue( findable.getName().equals( "sessionname" ) );
+		assertTrue( findable.getDescription().equals( "sessiondescription" ) );
+		assertTrue( findable.getDerivedFrom() == null );
+		assertTrue( findable.getSynchronization().equals( SessionSynchronizationImpl.SYNCHRONOUS ) );
+		assertTrue( findable.getWorkshop().getID().equals( workshop.getID() ) );
+		assertTrue( findable.getCurrentExercise().getID().equals( exerciseOne.getID() ) );
+		assertTrue( findable.getParticipants().isEmpty() );
+		assertTrue( findable.getInvitations().isEmpty() );
+		assertTrue( findable.getCurrentState().equals( WorkflowElementStatusImpl.NEW ) );
 	}
 
 	@TestOrder( order = 3 ) @Test public void testStart()
@@ -264,22 +252,20 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 12 ) @Test public void testFindAll()
 	{
-		SessionImpl result = sessionService.findSessionByID( session.getID() );
-		assertTrue( result != null );
-		assertTrue( sessionService.findAllSessions().contains( result ) );
+		SessionImpl findable = sessionService.findSessionByID( session.getID() );
+		assertTrue( findable != null );
+		assertTrue( TestUtil.extractIds( sessionService.findAllSessions() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 13 ) @Test public void testRemove()
 	{
 		// ensure that not already removed
-		SessionImpl result = sessionService.findSessionByID( session.getID() );
-		assertTrue( result != null );
-		assertTrue( sessionService.findAllSessions().contains( result ) );
+		SessionImpl removable = sessionService.findSessionByID( session.getID() );
+		assertTrue( TestUtil.extractIds( sessionService.findAllSessions() ).contains( removable.getID() ) );
 
 		// remove and check
-		sessionService.remove( session );
-		SessionImpl removed = sessionService.findSessionByID( session.getID() );
-		assertTrue( removed == null );
-		assertTrue( !sessionService.findAllSessions().contains( result ) );
+		sessionService.remove( removable );
+		assertTrue( sessionService.findSessionByID( session.getID() ) == null );
+		assertTrue( !TestUtil.extractIds( sessionService.findAllSessions() ).contains( removable.getID() ) );
 	}
 }

@@ -142,11 +142,11 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 8 ) @Test public void testRemove()
 	{
-		PinkElefantWorkshop removable = (PinkElefantWorkshop)workshopService.findWorkshopByID( workshopTemplate.getID() );
+		PinkElefantWorkshop removable = (PinkElefantWorkshop)workshopService.findWorkshopByID( workshop.getID() );
 		assertTrue( TestUtil.extractIds( workshopService.findAll() ).contains( removable.getID() ) );
 
-		workshopService.remove( workshopTemplate );
-		assertTrue( workshopService.findWorkshopByID( workshopTemplate.getID() ) == null );
+		workshopService.remove( workshop );
+		assertTrue( workshopService.findWorkshopByID( workshop.getID() ) == null );
 		assertTrue( !TestUtil.extractIds( workshopService.findAll() ).contains( removable.getID() ) );
 	}
 }

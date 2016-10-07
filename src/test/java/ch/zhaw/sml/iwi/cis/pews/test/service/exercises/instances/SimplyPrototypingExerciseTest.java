@@ -8,7 +8,6 @@ import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -27,7 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -113,10 +111,8 @@ import static org.junit.Assert.assertTrue;
 				SessionSynchronizationImpl.SYNCHRONOUS,
 				workshop,
 				null,
-				new HashSet<Participant>(),
-				new HashSet<PrincipalImpl>(),
-				new HashSet<Invitation>(),
-				new HashSet<PrincipalImpl>() ) ) );
+				null,
+				null ) ) );
 
 		// owner joing session
 		sessionService.join( new Invitation( null, owner, session ) );

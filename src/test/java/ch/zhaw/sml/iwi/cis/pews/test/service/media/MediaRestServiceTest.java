@@ -1,5 +1,6 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.media;
 
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
@@ -7,17 +8,16 @@ import ch.zhaw.iwi.cis.pews.service.impl.proxy.MediaServiceProxy;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
 
@@ -41,45 +41,54 @@ import static org.junit.Assert.assertTrue;
 	private static MediaObject mediaObject      = new MediaObject();
 	private static MediaObject otherMediaObject = new MediaObject();
 
-	private static String          MIME;
-	private static byte[]          BLOB;
-	private static MediaObjectType TYPE;
-	private static MediaObjectType OTHER_TYPE;
+	private static String MIME;
+	private static byte[] BLOB;
+	private static MediaObjectType TYPE       = MediaObjectType.POSTERIMAGE;
+	private static MediaObjectType OTHER_TYPE = MediaObjectType.P2PONE;
 
 	@BeforeClass public static void setup()
 	{
 		// services
 		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 
-		// setup elements for mediaObject
 		try
 		{
-			MIME = "image/png";
-			TYPE = MediaObjectType.POSTERIMAGE;
-			OTHER_TYPE = MediaObjectType.POSTERVIDEO;
+			File temp = new File( "tempfilemediarestservicetest.jpg" );
+			FileUtils.copyURLToFile( new URL( "http://images.freeimages.com/images/previews/1da/lotus-1377828.jpg" ),
+					temp );
 
-			File tempFile = new File( "tempFile" );
-			FileUtils.copyURLToFile( new URL(
-					"http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ), tempFile );
-			FileInputStream inputStream = new FileInputStream( tempFile );
-			BLOB = IOUtils.toByteArray( inputStream );
-			inputStream.close();
-			tempFile.delete();
+			MIME = new MimetypesFileTypeMap().getContentType( temp );
+			BLOB = FileUtils.readFileToByteArray( temp );
+
+			otherMediaObject.setID( mediaService.persistMediaObjectFormData( temp,
+					OTHER_TYPE,
+					ZhawEngine.ROOT_USER_LOGIN_NAME,
+					"root" ) );
+			temp.delete();
 		}
 		catch ( IOException e )
 		{
-			e.printStackTrace();
+			throw new RuntimeException( "error in persisting media object" );
 		}
-
-		// other media object
-		otherMediaObject.setID( mediaService.persist( new MediaObject( MIME, BLOB, OTHER_TYPE ) ) );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
-		// not replicating exact REST method using HttpServletRequest
-		// testing with persist method instead
-		mediaObject.setID( mediaService.persist( new MediaObject( MIME, BLOB, TYPE ) ) );
+		try
+		{
+			File temp = new File( "tempfilemediarestservicetest2.jpg" );
+			FileUtils.copyURLToFile( new URL( "http://images.freeimages.com/images/previews/1da/lotus-1377828.jpg" ),
+					temp );
+			mediaObject.setID( mediaService.persistMediaObjectFormData( temp,
+					TYPE,
+					ZhawEngine.ROOT_USER_LOGIN_NAME,
+					"root" ) );
+			temp.delete();
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "error in persisting media object" );
+		}
 		assertTrue( mediaObject.getID() != null );
 		assertTrue( !mediaObject.getID().equals( "" ) );
 	}
@@ -90,8 +99,9 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( found != null );
 		assertTrue( found.getID().equals( mediaObject.getID() ) );
 		assertTrue( found.getMimeType().equals( MIME ) );
-		assertTrue( Arrays.equals( BLOB, found.getBlob() ) );
 		assertTrue( found.getMediaObjectType().equals( TYPE ) );
+
+		// note that the correct persistance of blob is tested with testGetContentByID
 	}
 
 	@TestOrder( order = 3 ) @Test public void testFindByType()
@@ -107,22 +117,22 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 4 ) @Test public void testGetContentByID()
 	{
-		// not tested, as not exposed via proxy
+		// TODO:implement
 	}
 
 	@TestOrder( order = 5 ) @Test public void testFindAll()
 	{
 		MediaObject findable = mediaService.findByID( mediaObject.getID() );
-		assertTrue( mediaService.findAll().contains( findable ) );
+		assertTrue( TestUtil.extractIds( mediaService.findAll() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testRemove()
 	{
 		MediaObject removable = mediaService.findByID( mediaObject.getID() );
-		assertTrue( mediaService.findAll().contains( removable ) );
+		assertTrue( TestUtil.extractIds( mediaService.findAll() ).contains( removable.getID() ) );
 
 		mediaService.remove( mediaObject );
 		assertTrue( mediaService.findByID( mediaObject.getID() ) == null );
-		assertTrue( !mediaService.findAll().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( mediaService.findAll() ).contains( removable.getID() ) );
 	}
 }

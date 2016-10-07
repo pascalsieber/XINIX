@@ -16,10 +16,7 @@ import org.apache.commons.io.IOUtils;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
@@ -35,9 +32,10 @@ public class MediaServiceImpl extends WorkshopObjectServiceImpl implements Media
 				.getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 	}
 
-	@Override public String persistJsonMediaObject( MediaObject mediaObject )
+	@Override public String persistMediaObjectFormData( File file, MediaObjectType mediaObjectType, String username,
+			String password )
 	{
-		return persist( mediaObject );
+		throw new UnsupportedOperationException( "method only used by service proxy for testing" );
 	}
 
 	@Override public String persistMediaObject( HttpServletRequest request )

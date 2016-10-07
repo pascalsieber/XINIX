@@ -1,30 +1,23 @@
 package ch.zhaw.iwi.cis.pews.model.media;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Lob;
-import javax.persistence.Transient;
-
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.service.rest.MediaRestService;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
-public class MediaObject extends WorkshopObject
+import javax.persistence.*;
+
+@Entity public class MediaObject extends WorkshopObject
 {
-	@Transient
-	private static final long serialVersionUID = 1L;
+	@Transient private static final long serialVersionUID = 1L;
 	private String mimeType;
 
-	@JsonIgnore
-	@Lob
-	private byte[] blob;
+	@JsonIgnore @Lob private byte[] blob;
 
-	@Enumerated( EnumType.STRING )
-	private MediaObjectType mediaObjectType;
+	@Enumerated( EnumType.STRING ) private MediaObjectType mediaObjectType;
+
+	@Transient @JsonIgnore private String url;
 
 	public MediaObject()
 	{
@@ -71,11 +64,17 @@ public class MediaObject extends WorkshopObject
 
 	/**
 	 * provides dynamic url to service endpoint providing object's blob
-	 * 
+	 *
 	 * @return url to retrieve object's blob
 	 */
-	public String getUrl()
+	@JsonProperty public String getUrl()
 	{
-		return PewsConfig.getServiceUrl() + MediaRestService.BASE + MediaRestService.GET_CONTENT_BY_ID + "/" + this.getID() + "." + mimeType.substring( mimeType.indexOf( "/" ) + 1 );
+		return PewsConfig.getServiceUrl() + MediaRestService.BASE + MediaRestService.GET_CONTENT_BY_ID + "/"
+				+ this.getID() + "." + mimeType.substring( mimeType.indexOf( "/" ) + 1 );
+	}
+
+	@JsonIgnore public void setUrl( String url )
+	{
+		// do nothing
 	}
 }

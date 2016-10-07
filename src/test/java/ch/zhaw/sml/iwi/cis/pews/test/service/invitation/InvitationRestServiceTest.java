@@ -4,13 +4,15 @@ import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
@@ -20,8 +22,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.HashSet;
 
 import static org.junit.Assert.assertTrue;
 
@@ -64,9 +64,17 @@ import static org.junit.Assert.assertTrue;
 		WorkshopTemplate workshopTemplate = workshopTemplateService.findWorkshopTemplateByID( workshopTemplateService.persist(
 				new PinkElefantTemplate( null, "", "", "", "" ) ) );
 
+		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
+				ExerciseTemplateServiceProxy.class );
+		ExerciseTemplate exerciseTemplate = exerciseTemplateService.findExerciseTemplateByID( exerciseTemplateService.persistExerciseTemplate(
+				new PinkLabsTemplate( null, false, null, 0, false, false, false, 0, workshopTemplate, "", "", "" ) ) );
+
 		workshop.setID( workshopService.persist( new PinkElefantWorkshop( "",
 				"",
 				(PinkElefantTemplate)workshopTemplate ) ) );
+
+		ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
+		exerciseService.persistExercise( new PinkLabsExercise( "", "", (PinkLabsTemplate)exerciseTemplate, workshop ) );
 
 		session.setID( sessionService.persistSession( new SessionImpl( "",
 				"",
@@ -74,10 +82,8 @@ import static org.junit.Assert.assertTrue;
 				SessionSynchronizationImpl.SYNCHRONOUS,
 				workshop,
 				null,
-				new HashSet<Participant>(),
-				new HashSet<PrincipalImpl>(),
-				new HashSet<Invitation>(),
-				new HashSet<PrincipalImpl>() ) ) );
+				null,
+				null ) ) );
 
 		// setup user
 		user.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "" ), null, null, "", "", "" ) ) );
@@ -100,23 +106,12 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( found.getSession().getID().equals( session.getID() ) );
 	}
 
-	@TestOrder( order = 3 ) @Test public void testAccept()
-	{
-		assertTrue( userService.findUserByID( user.getID() ).getParticipation() == null );
-		invitationService.accept( invitation.getID() );
-
-		Participant participant = userService.findUserByID( user.getID() ).getParticipation();
-		assertTrue( participant != null );
-		assertTrue( participant.getPrincipal().getID().equals( user.getID() ) );
-		assertTrue( participant.getSession().getID().equals( session.getID() ) );
-		assertTrue( sessionService.findSessionByID( session.getID() ).getParticipants().contains( participant ) );
-	}
-
 	@TestOrder( order = 4 ) @Test public void testFindBySessionID()
 	{
 		Invitation findable = invitationService.findInvitationByID( invitation.getID() );
 		assertTrue( findable != null );
-		assertTrue( invitationService.findBySessionID( session.getID() ).contains( findable ) );
+		assertTrue( TestUtil.extractIds( invitationService.findBySessionID( session.getID() ) )
+				.contains( findable.getID() ) );
 	}
 
 	@Ignore( "minimize e-mail traffic on mail server" ) @TestOrder( order = 5 ) @Test public void testSendByID()
@@ -140,16 +135,16 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 8 ) @Test public void testFindAll()
 	{
 		Invitation findable = invitationService.findInvitationByID( invitation.getID() );
-		assertTrue( TestUtil.extractIds( invitationService.findAllInvitations() ).contains( findable ) );
+		assertTrue( TestUtil.extractIds( invitationService.findAllInvitations() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 9 ) @Test public void testRemove()
 	{
 		Invitation removable = invitationService.findInvitationByID( invitation.getID() );
-		assertTrue( TestUtil.extractIds( invitationService.findAllInvitations() ).contains( removable ) );
+		assertTrue( TestUtil.extractIds( invitationService.findAllInvitations() ).contains( removable.getID() ) );
 
 		invitationService.remove( removable );
 		assertTrue( invitationService.findInvitationByID( invitation.getID() ) == null );
-		assertTrue( !TestUtil.extractIds( invitationService.findAllInvitations() ).contains( removable ) );
+		assertTrue( !TestUtil.extractIds( invitationService.findAllInvitations() ).contains( removable.getID() ) );
 	}
 }

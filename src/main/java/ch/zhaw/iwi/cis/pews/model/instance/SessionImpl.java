@@ -1,61 +1,37 @@
 package ch.zhaw.iwi.cis.pews.model.instance;
 
+import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
+import ch.zhaw.iwi.cis.pews.model.user.Invitation;
+
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-
-import ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
-
-@Entity
-public class SessionImpl extends WorkflowElementImpl
+@Entity public class SessionImpl extends WorkflowElementImpl
 {
-	@Transient
-	private static final long serialVersionUID = 1L;
+	@Transient private static final long serialVersionUID = 1L;
 
-	@Enumerated( EnumType.STRING )
-	private SessionSynchronizationImpl synchronization;
+	@Enumerated( EnumType.STRING ) private SessionSynchronizationImpl synchronization;
 
-	@ManyToOne
-	private WorkshopImpl workshop;
+	@ManyToOne private WorkshopImpl workshop;
 
-	@ManyToOne
-	private ExerciseImpl currentExercise;
+	@ManyToOne private ExerciseImpl currentExercise;
 
-	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
-	private Set< Participant > participants;
+	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true ) private Set<Participant> participants;
 
-	@OneToMany( cascade = CascadeType.ALL )
-	private Set< Invitation > invitations;
+	@OneToMany( cascade = CascadeType.ALL ) private Set<Invitation> invitations;
 
 	public SessionImpl()
 	{
 		super();
-		this.participants = new HashSet< Participant >();
-		this.invitations = new HashSet< Invitation >();
+		this.participants = new HashSet<Participant>();
+		this.invitations = new HashSet<Invitation>();
 		this.currentExercise = null;
 	}
 
-	public SessionImpl(
-			String name,
-			String description,
-			WorkflowElementTemplate derivedFrom,
-			SessionSynchronizationImpl synchronization,
-			WorkshopImpl workshop,
-			ExerciseImpl currentExercise,
-			Set< Participant > participants,
-			Set< PrincipalImpl > acceptees,
-			Set< Invitation > invitations,
-			Set< PrincipalImpl > executers )
+	public SessionImpl( String name, String description, WorkflowElementTemplate derivedFrom,
+			SessionSynchronizationImpl synchronization, WorkshopImpl workshop, ExerciseImpl currentExercise,
+			Set<Participant> participants, Set<Invitation> invitations )
 	{
 		super( name, description, derivedFrom );
 		this.synchronization = synchronization;
@@ -107,22 +83,22 @@ public class SessionImpl extends WorkflowElementImpl
 		this.currentExercise = currentExercise;
 	}
 
-	public Set< Participant > getParticipants()
+	public Set<Participant> getParticipants()
 	{
 		return participants;
 	}
 
-	public void setParticipants( Set< Participant > participants )
+	public void setParticipants( Set<Participant> participants )
 	{
 		this.participants = participants;
 	}
 
-	public Set< Invitation > getInvitations()
+	public Set<Invitation> getInvitations()
 	{
 		return invitations;
 	}
 
-	public void setInvitations( Set< Invitation > invitations )
+	public void setInvitations( Set<Invitation> invitations )
 	{
 		this.invitations = invitations;
 	}

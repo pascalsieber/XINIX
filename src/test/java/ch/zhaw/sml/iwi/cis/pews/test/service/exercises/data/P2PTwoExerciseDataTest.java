@@ -106,7 +106,6 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( found.getID().equals( exerciseData.getID() ) );
 		assertTrue( found.getWorkflowElement().getID().equals( exercise.getID() ) );
 		assertTrue( found.getAnswers().containsAll( Arrays.asList( ANSWER_ONE, ANSWER_TWO ) ) );
-		assertTrue( found.getSelectedKeywords().size() == 2 );
 		for ( P2POneKeyword keyword : found.getSelectedKeywords() )
 		{
 			assertTrue( keyword.getID().equals( p2POneKeyword.getID() ) );

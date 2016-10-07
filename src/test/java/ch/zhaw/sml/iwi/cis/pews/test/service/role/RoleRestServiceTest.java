@@ -61,7 +61,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 4 ) @Test public void testRemove()
 	{
 		RoleImpl removable = roleService.findByID( role.getID() );
-		assertTrue( TestUtil.extractIds( roleService.findAll() ).contains( removable ) );
+		assertTrue( TestUtil.extractIds( roleService.findAll() ).contains( removable.getID() ) );
 
 		roleService.remove( role );
 		assertTrue( roleService.findByID( role.getID() ) == null );

@@ -1,5 +1,6 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.data;
 
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
@@ -14,10 +15,14 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
+import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -83,10 +88,22 @@ import static org.junit.Assert.assertTrue;
 		exercise.setID( exerciseService.persistExercise( new XinixExercise( "", "", exerciseTemplate, workshop ) ) );
 
 		// xinix image
-		xinixImage.setID( mediaService.persistJsonMediaObject( new MediaObject(
-				"",
-				"".getBytes(),
-				MediaObjectType.XINIX ) ) );
+		try
+		{
+			File temp = new File( "tempxinixexercisedatatest.jpg" );
+			FileUtils.copyURLToFile( new URL( "http://images.freeimages.com/images/previews/1da/lotus-1377828.jpg" ),
+					temp );
+
+			xinixImage.setID( mediaService.persistMediaObjectFormData( temp,
+					MediaObjectType.XINIX,
+					ZhawEngine.ROOT_USER_LOGIN_NAME,
+					"root" ) );
+			temp.delete();
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "error in persisting media object" );
+		}
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
