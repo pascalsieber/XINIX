@@ -63,7 +63,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	@Path( REMOVE )
 	public void remove( ExerciseImpl exercise )
 	{
-		super.remove( exercise );
+		exerciseService.remove(exercise);
 	}
 
 	@SuppressWarnings( "unchecked" )

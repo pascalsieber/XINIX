@@ -22,6 +22,7 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
+import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.Input;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
@@ -322,5 +323,16 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	public ExerciseDataDao getExerciseDataDao()
 	{
 		return exerciseDataDao;
+	}
+
+	// overriding this to remove exercise data first
+	@Override public <T extends WorkshopObject> void remove( T object )
+	{
+		List<ExerciseDataImpl> exerciseData = exerciseDataService.findByExerciseID( ( (ExerciseImpl)object ).getID() );
+		for ( ExerciseDataImpl d : exerciseData )
+		{
+			exerciseDataService.removeExerciseDataByID( d.getID() );
+		}
+		super.remove( object );
 	}
 }
