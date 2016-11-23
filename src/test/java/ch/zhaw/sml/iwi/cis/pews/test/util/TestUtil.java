@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class TestUtil
 {
-	private static ObjectMapper objectMapper = new ObjectMapper();
+	public static ObjectMapper objectMapper = new ObjectMapper();
 
 	public static List<String> extractIds( List<? extends IdentifiableObject> identifiableObjects )
 	{

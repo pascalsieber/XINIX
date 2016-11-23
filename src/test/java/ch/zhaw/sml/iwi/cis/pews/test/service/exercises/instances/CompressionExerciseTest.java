@@ -1,6 +1,8 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.instances;
 
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
 import ch.zhaw.iwi.cis.pews.model.instance.*;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
@@ -11,6 +13,7 @@ import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
 import ch.zhaw.iwi.cis.pews.service.*;
@@ -26,10 +29,14 @@ import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -49,10 +56,11 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith( OrderedRunner.class ) public class CompressionExerciseTest
 {
-	private static ExerciseService     exerciseService;
-	private static ExerciseDataService exerciseDataService;
-	private static SessionService      sessionService;
-	private static WorkshopService     workshopService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static ExerciseService         exerciseService;
+	private static ExerciseDataService     exerciseDataService;
+	private static SessionService          sessionService;
+	private static WorkshopService         workshopService;
 
 	private static ExerciseImpl     exercise         = new CompressionExercise();
 	private static ExerciseTemplate exerciseTemplate = new CompressionTemplate();
@@ -60,12 +68,13 @@ import static org.junit.Assert.assertTrue;
 	private static SessionImpl      session          = new SessionImpl();
 	private static UserImpl         owner            = new UserImpl();
 
-	private static PinkLabsExerciseData  pinkLabsExerciseData  = new PinkLabsExerciseData();
-	private static P2POneData            p2pOneData            = new P2POneData();
-	private static P2PTwoData            p2pTwoData            = new P2PTwoData();
-	private static XinixData             xinixData             = new XinixData();
-	private static SimplePrototypingData simplePrototypingData = new SimplePrototypingData();
-	private static You2MeExerciseData    you2MeExerciseData    = new You2MeExerciseData();
+	private static PinkLabsExerciseData  pinkLabsExerciseData   = new PinkLabsExerciseData();
+	private static P2POneData            p2pOneData             = new P2POneData();
+	private static P2PTwoData            p2pTwoData             = new P2PTwoData();
+	private static XinixData             xinixData              = new XinixData();
+	private static MediaObject           simplePrototypingImage = new MediaObject();
+	private static SimplePrototypingData simplePrototypingData  = new SimplePrototypingData();
+	private static You2MeExerciseData    you2MeExerciseData     = new You2MeExerciseData();
 
 	private static String NAME        = "name";
 	private static String DESCRIPTION = "description";
@@ -89,9 +98,13 @@ import static org.junit.Assert.assertTrue;
 		// owner
 		String password = "password";
 		String login = "compressionexercisetestlogin";
+
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
+
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -106,7 +119,7 @@ import static org.junit.Assert.assertTrue;
 				login,
 				password );
 		workshopService = ServiceProxyManager.createServiceProxyWithUser( WorkshopServiceProxy.class, login, password );
-		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
+		exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
 				login,
 				password );
 		MediaService mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
@@ -264,13 +277,27 @@ import static org.junit.Assert.assertTrue;
 						simplyPrototypingTemplate,
 						workshop ) ) );
 
-		MediaObject mediaObject = mediaService.findByID( mediaService.persist( new MediaObject( "",
-				"".getBytes(),
-				MediaObjectType.SIMPLYPROTOTYPING ) ) );
+		try
+		{
+			File temp = new File( "tempsimpleprotoimagetest.jpg" );
+			FileUtils.copyURLToFile( new URL( "http://images.freeimages.com/images/previews/1da/lotus-1377828.jpg" ),
+					temp );
+
+			simplePrototypingImage.setID( mediaService.persistMediaObjectFormData( temp,
+					MediaObjectType.SIMPLYPROTOTYPING,
+					ZhawEngine.ROOT_USER_LOGIN_NAME,
+					"root" ) );
+
+			temp.delete();
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "error in persisting media object" );
+		}
 
 		simplePrototypingData.setID( exerciseDataService.persistExerciseData( new SimplePrototypingData( null,
 				simplyPrototypingExercise,
-				mediaObject ) ) );
+				(MediaObject)mediaService.findByID( simplePrototypingImage.getID() ) ) ) );
 
 		// you2me exercise with data
 		You2MeTemplate you2MeTemplate = (You2MeTemplate)exerciseTemplateService.findExerciseTemplateByID(
@@ -296,9 +323,11 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
+		CompressionTemplate template = (CompressionTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplate.getID() );
 		exercise.setID( exerciseService.persistExercise( new CompressionExercise( NAME,
 				DESCRIPTION,
-				(CompressionTemplate)exerciseTemplate,
+				template,
 				workshop ) ) );
 		assertTrue( exercise.getID() != null );
 		assertTrue( !exercise.getID().equals( "" ) );
@@ -335,10 +364,11 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@TestOrder( order = 3 ) @Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		CompressionExercise base = (CompressionExercise)exerciseService.findExerciseByID( exercise.getID() );
-		CompressionInput input = (CompressionInput)exerciseService.getInputByExerciseID( exercise.getID() );
+		CompressionInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise
+				.getID() ), CompressionInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
 		assertTrue( input.getExerciseType().equals( base.getClass().getSimpleName() ) );
@@ -431,6 +461,12 @@ import static org.junit.Assert.assertTrue;
 	{
 		CompressionExercise removable = (CompressionExercise)exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( removable.getID() ) );
+
+		// remove exercise data first
+		for ( WorkflowElementDataImpl d : removable.getData() )
+		{
+			exerciseDataService.removeExerciseDataByID( d.getID() );
+		}
 
 		exerciseService.remove( removable );
 		assertTrue( exerciseService.findExerciseByID( exercise.getID() ) == null );

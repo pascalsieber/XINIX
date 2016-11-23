@@ -6,10 +6,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.*;
 import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
 import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
-import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
+import ch.zhaw.iwi.cis.pews.model.user.*;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
@@ -26,6 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -47,10 +45,11 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith( OrderedRunner.class ) public class You2MeExerciseTest
 {
-	private static ExerciseService     exerciseService;
-	private static ExerciseDataService exerciseDataService;
-	private static SessionService      sessionService;
-	private static WorkshopService     workshopService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static ExerciseService         exerciseService;
+	private static ExerciseDataService     exerciseDataService;
+	private static SessionService          sessionService;
+	private static WorkshopService         workshopService;
 
 	private static ExerciseImpl     exercise         = new You2MeExercise();
 	private static ExerciseTemplate exerciseTemplate = new You2MeTemplate();
@@ -80,9 +79,13 @@ import static org.junit.Assert.assertTrue;
 		// owner
 		String password = "password";
 		String login = "you2meexercisetestlogin";
+
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
+
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -97,7 +100,7 @@ import static org.junit.Assert.assertTrue;
 				login,
 				password );
 		workshopService = ServiceProxyManager.createServiceProxyWithUser( WorkshopServiceProxy.class, login, password );
-		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
+		exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
 				login,
 				password );
 
@@ -138,9 +141,10 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
+		You2MeTemplate template = (You2MeTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		exercise.setID( exerciseService.persistExercise( new You2MeExercise( NAME,
 				DESCRIPTION,
-				(You2MeTemplate)exerciseTemplate,
+				template,
 				workshop ) ) );
 		assertTrue( exercise.getID() != null );
 		assertTrue( !exercise.getID().equals( "" ) );
@@ -177,10 +181,12 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@TestOrder( order = 3 ) @Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		You2MeExercise base = (You2MeExercise)exerciseService.findExerciseByID( exercise.getID() );
-		You2MeInput input = (You2MeInput)exerciseService.getInputByExerciseID( exercise.getID() );
+		You2MeInput input = TestUtil.objectMapper.readValue(
+				exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+				You2MeInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
 		assertTrue( input.getExerciseType().equals( base.getClass().getSimpleName() ) );
@@ -196,7 +202,7 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( input.getCardinality() == base.getCardinality() );
 		assertTrue( input.getHelp().equals( base.getDescription() ) );
 
-		assertTrue( input.getQuestions().equals( base.getQuestions() ) );
+		assertTrue( input.getQuestions().containsAll( base.getQuestions() ) );
 	}
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'

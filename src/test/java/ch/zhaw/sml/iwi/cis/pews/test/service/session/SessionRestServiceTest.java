@@ -135,7 +135,7 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( findable.getCurrentExercise().getID().equals( exerciseOne.getID() ) );
 		assertTrue( findable.getParticipants().isEmpty() );
 		assertTrue( findable.getInvitations().isEmpty() );
-		assertTrue( findable.getCurrentState().equals( WorkflowElementStatusImpl.NEW ) );
+		assertTrue( findable.getCurrentState().equals( WorkflowElementStatusImpl.NEW.toString() ) );
 	}
 
 	@TestOrder( order = 3 ) @Test public void testStart()
@@ -166,6 +166,7 @@ import static org.junit.Assert.assertTrue;
 	{
 		sessionService.join( new Invitation( null, user, session ) );
 		assertTrue( !sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
+		SessionImpl joined = sessionService.findSessionByID( session.getID() );
 		assertTrue( sessionService.findSessionByID( session.getID() )
 				.getParticipants()
 				.contains( userService.findUserByID( user.getID() ).getParticipation() ) );

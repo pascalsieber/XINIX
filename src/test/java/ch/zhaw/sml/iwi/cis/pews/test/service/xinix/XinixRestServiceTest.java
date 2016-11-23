@@ -11,6 +11,7 @@ import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
 import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
+import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -81,18 +82,23 @@ import static org.junit.Assert.assertTrue;
 		XinixImageMatrix found = xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrix.getID() );
 		assertTrue( found != null );
 		assertTrue( found.getID().equals( xinixImageMatrix.getID() ) );
-		assertTrue( found.getXinixImages()
-				.containsAll( Arrays.asList( mediaService.findByID( imageone.getID() ),
-						mediaService.findByID( imagetwo.getID() ) ) ) );
+		assertTrue( found.getXinixImages().size() == 2 );
+		for ( MediaObject img : found.getXinixImages() )
+		{
+			assertTrue( img.getID().equals( imageone.getID() ) || img.getID().equals( imagetwo.getID() ) );
+		}
 	}
 
 	@TestOrder( order = 3 ) @Test public void testFindAll()
 	{
 		XinixImageMatrix removable = xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrix.getID() );
-		assertTrue( xinixImageMatrixService.findAllXinixImageMatrices().contains( removable ) );
+		assertTrue( removable != null );
+		assertTrue( TestUtil.extractIds( xinixImageMatrixService.findAllXinixImageMatrices() )
+				.contains( removable.getID() ) );
 
 		xinixImageMatrixService.remove( xinixImageMatrix );
 		assertTrue( xinixImageMatrixService.findXinixImageMatrixByID( xinixImageMatrix.getID() ) == null );
-		assertTrue( xinixImageMatrixService.findAllXinixImageMatrices().contains( removable ) );
+		assertTrue( !TestUtil.extractIds( xinixImageMatrixService.findAllXinixImageMatrices() )
+				.contains( removable.getID() ) );
 	}
 }

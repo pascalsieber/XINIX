@@ -8,6 +8,7 @@ import ch.zhaw.iwi.cis.pews.model.output.SimplePrototypingOutput;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -25,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -45,10 +47,11 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith( OrderedRunner.class ) public class SimplyPrototypingExerciseTest
 {
-	private static ExerciseService     exerciseService;
-	private static ExerciseDataService exerciseDataService;
-	private static SessionService      sessionService;
-	private static WorkshopService     workshopService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static ExerciseService         exerciseService;
+	private static ExerciseDataService     exerciseDataService;
+	private static SessionService          sessionService;
+	private static WorkshopService         workshopService;
 
 	private static ExerciseImpl     exercise         = new SimplyPrototypingExercise();
 	private static ExerciseTemplate exerciseTemplate = new SimplyPrototypingTemplate();
@@ -77,9 +80,13 @@ import static org.junit.Assert.assertTrue;
 		// owner
 		String password = "password";
 		String login = "simplyprototestlogin";
+
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
+
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -94,7 +101,7 @@ import static org.junit.Assert.assertTrue;
 				login,
 				password );
 		workshopService = ServiceProxyManager.createServiceProxyWithUser( WorkshopServiceProxy.class, login, password );
-		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
+		exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
 				login,
 				password );
 
@@ -135,9 +142,11 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
+		SimplyPrototypingTemplate template = (SimplyPrototypingTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplate.getID() );
 		exercise.setID( exerciseService.persistExercise( new SimplyPrototypingExercise( NAME,
 				DESCRIPTION,
-				(SimplyPrototypingTemplate)exerciseTemplate,
+				template,
 				workshop ) ) );
 		assertTrue( exercise.getID() != null );
 		assertTrue( !exercise.getID().equals( "" ) );
@@ -174,10 +183,11 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@TestOrder( order = 3 ) @Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		SimplyPrototypingExercise base = (SimplyPrototypingExercise)exerciseService.findExerciseByID( exercise.getID() );
-		SimplyPrototypingInput input = (SimplyPrototypingInput)exerciseService.getInputByExerciseID( exercise.getID() );
+		SimplyPrototypingInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString(
+				exercise.getID() ), SimplyPrototypingInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
 		assertTrue( input.getExerciseType().equals( base.getClass().getSimpleName() ) );

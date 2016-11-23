@@ -5,14 +5,17 @@ import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
 import ch.zhaw.iwi.cis.pews.model.instance.*;
 import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
+import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
@@ -23,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,14 +47,17 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith( OrderedRunner.class ) public class P2POneExerciseTest
 {
-	private static ExerciseService     exerciseService;
-	private static ExerciseDataService exerciseDataService;
-	private static SessionService      sessionService;
-	private static WorkshopService     workshopService;
+	private static ExerciseService         exerciseService;
+	private static ExerciseDataService     exerciseDataService;
+	private static SessionService          sessionService;
+	private static WorkshopService         workshopService;
+	private static WorkshopTemplateService workshopTemplateService;
+	private static ExerciseTemplateService exerciseTemplateService;
 
 	private static ExerciseImpl     exercise         = new P2POneExercise();
 	private static ExerciseTemplate exerciseTemplate = new P2POneTemplate();
-	private static WorkshopImpl     workshop         = new WorkshopImpl();
+	private static WorkshopTemplate workshopTemplate = new PinkElefantTemplate();
+	private static WorkshopImpl     workshop         = new PinkElefantWorkshop();
 	private static SessionImpl      session          = new SessionImpl();
 	private static UserImpl         owner            = new UserImpl();
 
@@ -75,9 +82,13 @@ import static org.junit.Assert.assertTrue;
 		// owner
 		String password = "password";
 		String login = "p2poneexercisetestlogin";
+
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
+
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -88,16 +99,15 @@ import static org.junit.Assert.assertTrue;
 		exerciseDataService = ServiceProxyManager.createServiceProxyWithUser( ExerciseDataServiceProxy.class,
 				login,
 				password );
-		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxyWithUser( WorkshopTemplateServiceProxy.class,
+		workshopTemplateService = ServiceProxyManager.createServiceProxyWithUser( WorkshopTemplateServiceProxy.class,
 				login,
 				password );
 		workshopService = ServiceProxyManager.createServiceProxyWithUser( WorkshopServiceProxy.class, login, password );
-		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
+		exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
 				login,
 				password );
 
 		// workshop
-		PinkElefantTemplate workshopTemplate = new PinkElefantTemplate();
 		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( owner, "", "", "", "" ) ) );
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
@@ -133,9 +143,10 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
+		P2POneTemplate template = (P2POneTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		exercise.setID( exerciseService.persistExercise( new P2POneExercise( NAME,
 				DESCRIPTION,
-				(P2POneTemplate)exerciseTemplate,
+				template,
 				workshop ) ) );
 		assertTrue( exercise.getID() != null );
 		assertTrue( !exercise.getID().equals( "" ) );
@@ -172,10 +183,11 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@TestOrder( order = 3 ) @Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		P2POneExercise base = (P2POneExercise)exerciseService.findExerciseByID( exercise.getID() );
-		P2POneInput input = (P2POneInput)exerciseService.getInputByExerciseID( exercise.getID() );
+		P2POneInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+				P2POneInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
 		assertTrue( input.getExerciseType().equals( base.getClass().getSimpleName() ) );

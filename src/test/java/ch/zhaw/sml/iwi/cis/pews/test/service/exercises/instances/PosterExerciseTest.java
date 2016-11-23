@@ -6,6 +6,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -19,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -39,8 +41,9 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith( OrderedRunner.class ) public class PosterExerciseTest
 {
-	private static ExerciseService exerciseService;
-	private static WorkshopService workshopService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static ExerciseService         exerciseService;
+	private static WorkshopService         workshopService;
 
 	private static ExerciseImpl     exercise         = new PosterExercise();
 	private static ExerciseTemplate exerciseTemplate = new PosterTemplate();
@@ -69,9 +72,13 @@ import static org.junit.Assert.assertTrue;
 		// owner
 		String password = "password";
 		String login = "posterexercisetestlogin";
+
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
+
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -82,8 +89,7 @@ import static org.junit.Assert.assertTrue;
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 				WorkshopTemplateServiceProxy.class );
 		workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
-		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
-				ExerciseTemplateServiceProxy.class );
+		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
 
 		// workshop
 		PinkElefantTemplate workshopTemplate = new PinkElefantTemplate();
@@ -111,9 +117,10 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
+		PosterTemplate template = (PosterTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		exercise.setID( exerciseService.persistExercise( new PosterExercise( NAME,
 				DESCRIPTION,
-				(PosterTemplate)exerciseTemplate,
+				template,
 				workshop ) ) );
 		assertTrue( exercise.getID() != null );
 		assertTrue( !exercise.getID().equals( "" ) );
@@ -153,10 +160,11 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@TestOrder( order = 3 ) @Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		PosterExercise base = (PosterExercise)exerciseService.findExerciseByID( exercise.getID() );
-		PosterInput input = (PosterInput)exerciseService.getInputByExerciseID( exercise.getID() );
+		PosterInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+				PosterInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
 		assertTrue( input.getExerciseType().equals( base.getClass().getSimpleName() ) );
@@ -202,6 +210,7 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( removable.getID() ) );
 
 		exerciseService.remove( removable );
+		ExerciseImpl test = exerciseService.findExerciseByID( exercise.getID() );
 		assertTrue( exerciseService.findExerciseByID( exercise.getID() ) == null );
 		assertTrue( !TestUtil.extractIds( exerciseService.findAllExercises() ).contains( removable.getID() ) );
 		assertTrue( !TestUtil.extractIds( workshopService.findWorkshopByID( workshop.getID() ).getExercises() )

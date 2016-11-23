@@ -7,6 +7,7 @@ import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -27,6 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -48,10 +50,11 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith( OrderedRunner.class ) public class P2PTwoExerciseTest
 {
-	private static ExerciseService     exerciseService;
-	private static ExerciseDataService exerciseDataService;
-	private static SessionService      sessionService;
-	private static WorkshopService     workshopService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static ExerciseService         exerciseService;
+	private static ExerciseDataService     exerciseDataService;
+	private static SessionService          sessionService;
+	private static WorkshopService         workshopService;
 
 	private static ExerciseImpl     exercise         = new P2PTwoExercise();
 	private static ExerciseTemplate exerciseTemplate = new P2PTwoTemplate();
@@ -82,9 +85,13 @@ import static org.junit.Assert.assertTrue;
 		// owner
 		String password = "password";
 		String login = "p2ptwoexercisetestlogin";
+
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
+
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -99,7 +106,7 @@ import static org.junit.Assert.assertTrue;
 				login,
 				password );
 		workshopService = ServiceProxyManager.createServiceProxyWithUser( WorkshopServiceProxy.class, login, password );
-		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
+		exerciseTemplateService = ServiceProxyManager.createServiceProxyWithUser( ExerciseTemplateServiceProxy.class,
 				login,
 				password );
 
@@ -162,9 +169,10 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
+		P2PTwoTemplate template = (P2PTwoTemplate)exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() );
 		exercise.setID( exerciseService.persistExercise( new P2PTwoExercise( NAME,
 				DESCRIPTION,
-				(P2PTwoTemplate)exerciseTemplate,
+				template,
 				workshop ) ) );
 		assertTrue( exercise.getID() != null );
 		assertTrue( !exercise.getID().equals( "" ) );
@@ -200,10 +208,12 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@TestOrder( order = 3 ) @Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		P2PTwoExercise base = (P2PTwoExercise)exerciseService.findExerciseByID( exercise.getID() );
-		P2PTwoInput input = (P2PTwoInput)exerciseService.getInputByExerciseID( exercise.getID() );
+		P2PTwoInput input = TestUtil.objectMapper.readValue(
+				exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+				P2PTwoInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
 		assertTrue( input.getExerciseType().equals( base.getClass().getSimpleName() ) );

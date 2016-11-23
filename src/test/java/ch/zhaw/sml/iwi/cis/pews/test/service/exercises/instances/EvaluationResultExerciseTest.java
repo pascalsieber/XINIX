@@ -6,6 +6,7 @@ import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -24,6 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -44,8 +46,9 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith( OrderedRunner.class ) public class EvaluationResultExerciseTest
 {
-	private static ExerciseService exerciseService;
-	private static WorkshopService workshopService;
+	private static ExerciseTemplateService exerciseTemplateService;
+	private static ExerciseService         exerciseService;
+	private static WorkshopService         workshopService;
 
 	private static ExerciseImpl     exercise         = new EvaluationResultExercise();
 	private static ExerciseTemplate exerciseTemplate = new EvaluationResultTemplate();
@@ -72,14 +75,18 @@ import static org.junit.Assert.assertTrue;
 	private static int SCORE_ONE = 4;
 	private static int SCORE_TWO = 5;
 
-	@BeforeClass public void setup()
+	@BeforeClass public static void setup()
 	{
 		// owner
 		String password = "password";
 		String login = "evaluationresultexercisetestlogin";
+
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
+
 		UserService userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -90,8 +97,7 @@ import static org.junit.Assert.assertTrue;
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 				WorkshopTemplateServiceProxy.class );
 		workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
-		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
-				ExerciseTemplateServiceProxy.class );
+		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
 		ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 
 		// workshop
@@ -172,9 +178,11 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
+		EvaluationResultTemplate template = (EvaluationResultTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplate.getID() );
 		exercise.setID( exerciseService.persistExercise( new EvaluationResultExercise( NAME,
 				DESCRIPTION,
-				(EvaluationResultTemplate)exerciseTemplate,
+				template,
 				workshop ) ) );
 		assertTrue( exercise.getID() != null );
 		assertTrue( !exercise.getID().equals( "" ) );
@@ -191,7 +199,6 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( found.getData().isEmpty() );
 
 		assertTrue( found.getWorkshop().getID().equals( workshop.getID() ) );
-		assertTrue( found.getOrderInWorkshop() == 0 );
 		assertTrue( found.getDerivedFrom().getID().equals( exerciseTemplate.getID() ) );
 
 		assertTrue( found.getName().equals( NAME ) );
@@ -210,10 +217,11 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
 	// which ends up calling getInputByExerciseID
-	@TestOrder( order = 3 ) @Test public void testGetInput()
+	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		EvaluationResultExercise base = (EvaluationResultExercise)exerciseService.findExerciseByID( exercise.getID() );
-		EvaluationResultInput input = (EvaluationResultInput)exerciseService.getInputByExerciseID( exercise.getID() );
+		EvaluationResultInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString(
+				exercise.getID() ), EvaluationResultInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
 		assertTrue( input.getExerciseType().equals( base.getClass().getSimpleName() ) );

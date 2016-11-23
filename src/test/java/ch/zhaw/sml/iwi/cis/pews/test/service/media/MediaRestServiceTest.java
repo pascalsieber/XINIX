@@ -18,6 +18,7 @@ import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -107,6 +108,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 3 ) @Test public void testFindByType()
 	{
 		MediaObject findable = mediaService.findByID( mediaObject.getID() );
+		List<MediaObject> mediaObjects = mediaService.findByType( TYPE );
 		assertTrue( mediaService.findByType( TYPE ).contains( findable ) );
 
 		MediaObject excludable = mediaService.findByID( otherMediaObject.getID() );
@@ -129,6 +131,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 6 ) @Test public void testRemove()
 	{
 		MediaObject removable = mediaService.findByID( mediaObject.getID() );
+		List<MediaObject> all = mediaService.findAll();
 		assertTrue( TestUtil.extractIds( mediaService.findAll() ).contains( removable.getID() ) );
 
 		mediaService.remove( mediaObject );

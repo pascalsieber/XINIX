@@ -58,15 +58,15 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements WorkshopService
 {
-	private WorkshopDao workshopDao;
-	private ExerciseDataService exerciseDataService;
-	private SessionService sessionService;
-	private WorkshopTemplateService workshopTemplateService;
-	private ExerciseService exerciseService;
-	private ExerciseTemplateService exerciseTemplateService;
+	private WorkshopDao                workshopDao;
+	private ExerciseDataService        exerciseDataService;
+	private SessionService             sessionService;
+	private WorkshopTemplateService    workshopTemplateService;
+	private ExerciseService            exerciseService;
+	private ExerciseTemplateService    exerciseTemplateService;
 	private AuthenticationTokenService authenticationTokenService;
 
-	private static final Map< String, Class< ? extends ExerciseImpl > > EXERCISETEMPLATESUBCLASSESMAP = new HashMap< String, Class< ? extends ExerciseImpl >>();
+	private static final Map<String, Class<? extends ExerciseImpl>> EXERCISETEMPLATESUBCLASSESMAP = new HashMap<String, Class<? extends ExerciseImpl>>();
 
 	static
 	{
@@ -74,15 +74,19 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		EXERCISETEMPLATESUBCLASSESMAP.put( You2MeTemplate.class.getSimpleName(), You2MeExercise.class );
 		EXERCISETEMPLATESUBCLASSESMAP.put( P2POneTemplate.class.getSimpleName(), P2POneExercise.class );
 		EXERCISETEMPLATESUBCLASSESMAP.put( P2PTwoTemplate.class.getSimpleName(), P2PTwoExercise.class );
-		EXERCISETEMPLATESUBCLASSESMAP.put( SimplyPrototypingTemplate.class.getSimpleName(), SimplyPrototypingExercise.class );
+		EXERCISETEMPLATESUBCLASSESMAP.put(
+				SimplyPrototypingTemplate.class.getSimpleName(),
+				SimplyPrototypingExercise.class );
 		EXERCISETEMPLATESUBCLASSESMAP.put( XinixTemplate.class.getSimpleName(), XinixExercise.class );
 		EXERCISETEMPLATESUBCLASSESMAP.put( CompressionTemplate.class.getSimpleName(), CompressionExercise.class );
 		EXERCISETEMPLATESUBCLASSESMAP.put( EvaluationTemplate.class.getSimpleName(), EvaluationExercise.class );
 		EXERCISETEMPLATESUBCLASSESMAP.put( PosterTemplate.class.getSimpleName(), PosterExercise.class );
-		EXERCISETEMPLATESUBCLASSESMAP.put( EvaluationResultTemplate.class.getSimpleName(), EvaluationResultExercise.class );
+		EXERCISETEMPLATESUBCLASSESMAP.put(
+				EvaluationResultTemplate.class.getSimpleName(),
+				EvaluationResultExercise.class );
 	}
 
-	private Class< ? > getExerciseSubClass( String exerciseTemplateClassName )
+	private Class<?> getExerciseSubClass( String exerciseTemplateClassName )
 	{
 		return EXERCISETEMPLATESUBCLASSESMAP.get( exerciseTemplateClassName );
 	}
@@ -90,53 +94,58 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 	public WorkshopServiceImpl()
 	{
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
-		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-		sessionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-		workshopTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
-		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
-		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
-		authenticationTokenService = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
+		exerciseDataService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
+		sessionService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( SessionServiceImpl.class.getSimpleName() );
+		workshopTemplateService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
+		exerciseService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
+		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
+		authenticationTokenService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
 	}
 
-	@Override
-	protected WorkshopObjectDao getWorkshopObjectDao()
+	@Override protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return workshopDao;
 	}
 
 	// TODO: find more elegant way to remove duplicates caused by sql query than putting through HashMap
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public List< WorkshopImpl > findAllWorkshopsSimple()
+	@SuppressWarnings( "unchecked" ) @Override public List<WorkshopImpl> findAllWorkshopsSimple()
 	{
-		List< WorkshopImpl > workshops = workshopDao.findByAllSimple( UserContext.getCurrentUser().getClient().getID() );
+		List<WorkshopImpl> workshops = workshopDao.findByAllSimple( UserContext.getCurrentUser().getClient().getID() );
 
 		( (EntityManager)ZhawEngine.getManagedObjectRegistry().getManagedObject( "pews" ) ).clear();
 		for ( WorkshopImpl ws : workshops )
 		{
-			ws.setExercises( new ArrayList< ExerciseImpl >( new HashSet< ExerciseImpl >( ws.getExercises() ) ) );
+			ws.setExercises( new ArrayList<ExerciseImpl>( new HashSet<ExerciseImpl>( ws.getExercises() ) ) );
 		}
 
-		return (List< WorkshopImpl >)simplifyOwnerInObjectGraph( workshops );
+		return (List<WorkshopImpl>)simplifyOwnerInObjectGraph( workshops );
 	}
 
 	// TODO: find more elegant way to remove duplicates caused by sql query than putting through HashMap
-	@Override
-	public WorkshopImpl findWorkshopByID( String id )
+	@Override public WorkshopImpl findWorkshopByID( String id )
 	{
 		WorkshopImpl ws = workshopDao.findWorkshopByID( id );
+		if ( ws == null )
+		{
+			return null;
+		}
 
 		( (EntityManager)ZhawEngine.getManagedObjectRegistry().getManagedObject( "pews" ) ).clear();
-		ws.setExercises( new ArrayList< ExerciseImpl >( new HashSet< ExerciseImpl >( ws.getExercises() ) ) );
+		ws.setExercises( new ArrayList<ExerciseImpl>( new HashSet<ExerciseImpl>( ws.getExercises() ) ) );
 
 		return (WorkshopImpl)simplifyOwnerInObjectGraph( ws );
 	}
 
-	@Override
-	public void reset( String workshopID )
+	@Override public void reset( String workshopID )
 	{
 		WorkshopImpl ws = workshopDao.findById( workshopID );
-		List< ExerciseImpl > exercises = ws.getExercises();
+		List<ExerciseImpl> exercises = ws.getExercises();
 		Collections.reverse( exercises );
 		for ( ExerciseImpl ex : exercises )
 		{
@@ -155,8 +164,7 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		}
 	}
 
-	@Override
-	public String generateFromTemplate( WorkshopImpl obj )
+	@Override public String generateFromTemplate( WorkshopImpl obj )
 	{
 		// object to be persisted, init with null
 		PinkElefantWorkshop workshop = null;
@@ -203,8 +211,9 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		{
 			for ( ExerciseTemplate exerciseTemplate : ( (WorkshopTemplate)persistedWorkshop.getDerivedFrom() ).getExerciseTemplates() )
 			{
-				Constructor< ? > constructor = null;
-				Constructor< ? >[] constructors = getExerciseSubClass( exerciseTemplate.getClass().getSimpleName() ).getConstructors();
+				Constructor<?> constructor = null;
+				Constructor<?>[] constructors = getExerciseSubClass( exerciseTemplate.getClass()
+						.getSimpleName() ).getConstructors();
 
 				for ( int i = 0; i < constructors.length; i++ )
 				{
@@ -217,10 +226,10 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 				try
 				{
 					exerciseService.generateFromTemplate( (ExerciseImpl)constructor.newInstance(
-						"generated for workshop " + persistedWorkshop.getID(),
-						"generated from template " + exerciseTemplate.getID(),
-						exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() ),
-						persistedWorkshop ) );
+							"generated for workshop " + persistedWorkshop.getID(),
+							"generated from template " + exerciseTemplate.getID(),
+							exerciseTemplateService.findExerciseTemplateByID( exerciseTemplate.getID() ),
+							persistedWorkshop ) );
 				}
 				catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e )
 				{
@@ -232,8 +241,7 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		return persistedWorkshop.getID();
 	}
 
-	@Override
-	public void updateOrderOfExercises( WorkshopImpl wrapper )
+	@Override public void updateOrderOfExercises( WorkshopImpl wrapper )
 	{
 		for ( int i = 0; i < wrapper.getExercises().size(); i++ )
 		{
@@ -243,8 +251,7 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 		}
 	}
 
-	@Override
-	public void updateBasicInformation( WorkshopImpl workshop )
+	@Override public void updateBasicInformation( WorkshopImpl workshop )
 	{
 		PinkElefantWorkshop mergeable = (PinkElefantWorkshop)workshopDao.findWorkshopByIDForBasicUpdate( workshop.getID() );
 		mergeable.setDescription( workshop.getDescription() );

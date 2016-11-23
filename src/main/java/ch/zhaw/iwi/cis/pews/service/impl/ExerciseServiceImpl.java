@@ -61,15 +61,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
 {
-	private ObjectMapper objectMapper;
-	private ExerciseDataService exerciseDataService;
+	private ObjectMapper            objectMapper;
+	private ExerciseDataService     exerciseDataService;
 	private ExerciseTemplateService exerciseTemplateService;
 
-	private ExerciseDao exerciseDao;
+	private ExerciseDao     exerciseDao;
 	private ExerciseDataDao exerciseDataDao;
-	private ParticipantDao participantDao;
-	private WorkshopDao workshopDao;
-	private static final Map< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl >>();
+	private ParticipantDao  participantDao;
+	private WorkshopDao     workshopDao;
+	private static final Map<Class<? extends ExerciseImpl>, Class<? extends ExerciseServiceImpl>> EXERCISESPECIFICSERVICES = new HashMap<Class<? extends ExerciseImpl>, Class<? extends ExerciseServiceImpl>>();
 
 	protected WorkshopDao getWorkshopDao()
 	{
@@ -91,7 +91,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		EXERCISESPECIFICSERVICES.put( EvaluationResultExercise.class, EvaluationResultExerciseService.class );
 	}
 
-	private Class< ? > getExerciseSpecificService( Class< ? extends ExerciseImpl > exerciseClass )
+	private Class<?> getExerciseSpecificService( Class<? extends ExerciseImpl> exerciseClass )
 	{
 		return EXERCISESPECIFICSERVICES.get( exerciseClass );
 	}
@@ -99,12 +99,16 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	public ExerciseServiceImpl()
 	{
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
-		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
-		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
+		exerciseDataDao = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
+		participantDao = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 		objectMapper = new ObjectMapper();
-		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
+		exerciseDataService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
+		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 	}
 
 	public ObjectMapper getObjectMapper()
@@ -119,11 +123,10 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	 * 
 	 * specialized persist method for handling orderInWorkshop correctly.
 	 */
-	@Override
-	public String persistExercise( ExerciseImpl exercise )
+	@Override public String persistExercise( ExerciseImpl exercise )
 	{
 		WorkshopImpl workshop = workshopDao.findById( exercise.getWorkshop().getID() );
-		List< String > workshopExerciseIDs = new ArrayList< String >();
+		List<String> workshopExerciseIDs = new ArrayList<String>();
 		for ( ExerciseImpl e : workshop.getExercises() )
 		{
 			workshopExerciseIDs.add( e.getID() );
@@ -159,8 +162,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		return super.persist( exercise );
 	}
 
-	@Override
-	public String generateFromTemplate( ExerciseImpl obj )
+	@Override public String generateFromTemplate( ExerciseImpl obj )
 	{
 		// TODO: discuss with John how to use deflector in this case
 		try
@@ -174,8 +176,8 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 
 			// make exercise instance based on template / derivedFrom
 			// Constructor< ? > constructor = ClassWrapper.getConstructor( obj.getClass(), new Class[] { String.class, String.class, ExerciseImpl.class, WorkshopImpl.class } );
-			Constructor< ? > constructor = null;
-			Constructor< ? >[] constructors = obj.getClass().getConstructors();
+			Constructor<?> constructor = null;
+			Constructor<?>[] constructors = obj.getClass().getConstructors();
 			for ( int i = 0; i < constructors.length; i++ )
 			{
 				if ( constructors[ i ].getParameterTypes().length > 0 )
@@ -184,7 +186,10 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 				}
 			}
 
-			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(), obj.getDescription(), obj.getDerivedFrom(), obj.getWorkshop() );
+			ExerciseImpl exercise = (ExerciseImpl)constructor.newInstance( obj.getName(),
+					obj.getDescription(),
+					obj.getDerivedFrom(),
+					obj.getWorkshop() );
 
 			// if template not null, use default name and description from template
 			if ( template != null )
@@ -201,43 +206,46 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		}
 	}
 
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public List< ExerciseImpl > findAllExercises()
+	@SuppressWarnings( "unchecked" ) @Override public List<ExerciseImpl> findAllExercises()
 	{
-		return (List< ExerciseImpl >)simplifyOwnerInObjectGraph( findAll() );
+		return (List<ExerciseImpl>)simplifyOwnerInObjectGraph( findAll() );
 	}
 
-	@Override
-	public ExerciseImpl findExerciseByID( String id )
+	@Override public ExerciseImpl findExerciseByID( String id )
 	{
-		ExerciseImpl result = ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( ( (ExerciseImpl)findByID( id ) ).getClass() ).getSimpleName() ) )
-			.findExerciseByID( id );
+		ExerciseImpl check = findByID( id );
+		if ( check == null )
+		{
+			return null;
+		}
+		ExerciseImpl result = ( (ExerciseService)ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( getExerciseSpecificService( ( (ExerciseImpl)check ).getClass() ).getSimpleName() ) ).findExerciseByID(
+				id );
 		return (ExerciseImpl)simplifyOwnerInObjectGraph( result );
 	}
 
-	@Override
-	protected WorkshopObjectDao getWorkshopObjectDao()
+	@Override protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return exerciseDao;
 	}
 
-	@Override
-	public Input getInput()
+	@Override public Input getInput()
 	{
-		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getClass() ).getSimpleName() ) ).getInput();
+		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( getExerciseSpecificService( UserContext.getCurrentUser()
+						.getSession()
+						.getCurrentExercise()
+						.getClass() ).getSimpleName() ) ).getInput();
 	}
 
-	@Override
-	public Input getInputByExerciseID( String exerciseID )
+	@Override public Input getInputByExerciseID( String exerciseID )
 	{
-		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( ( (ExerciseImpl)findByID( exerciseID ) ).getClass() ).getSimpleName() ) )
-			.getInputByExerciseID( exerciseID );
+		return ( (ExerciseService)ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( getExerciseSpecificService( ( (ExerciseImpl)findByID( exerciseID ) ).getClass() ).getSimpleName() ) )
+				.getInputByExerciseID( exerciseID );
 	}
 
-	@Override
-	public String getInputAsString()
+	@Override public String getInputAsString()
 	{
 		try
 		{
@@ -250,8 +258,7 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		}
 	}
 
-	@Override
-	public String getInputByExerciseIDAsString( String exerciseID )
+	@Override public String getInputByExerciseIDAsString( String exerciseID )
 	{
 		try
 		{
@@ -264,15 +271,16 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		}
 	}
 
-	@Override
-	public void setOutput( String output )
+	@Override public void setOutput( String output )
 	{
-		( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject(
-			getExerciseSpecificService( UserContext.getCurrentUser().getSession().getCurrentExercise().getClass() ).getSimpleName() ) ).setOutput( output );
+		( (ExerciseService)ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( getExerciseSpecificService( UserContext.getCurrentUser()
+						.getSession()
+						.getCurrentExercise()
+						.getClass() ).getSimpleName() ) ).setOutput( output );
 	}
 
-	@Override
-	public void setOuputByExerciseID( String outputRequestString )
+	@Override public void setOuputByExerciseID( String outputRequestString )
 	{
 		try
 		{
@@ -281,16 +289,20 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 
 			if ( exerciseID.equalsIgnoreCase( "" ) )
 			{
-				throw new RuntimeException( "error performing setOutputByExerciseID: please provide a valid argument for exerciseID" );
+				throw new RuntimeException(
+						"error performing setOutputByExerciseID: please provide a valid argument for exerciseID" );
 			}
 
 			ExerciseImpl exercise = findByID( exerciseID );
 			if ( exercise == null )
 			{
-				throw new RuntimeException( "error performing setOutputByExerciseID: exercise with ID " + exerciseID + " could not be found" );
+				throw new RuntimeException( "error performing setOutputByExerciseID: exercise with ID " + exerciseID
+						+ " could not be found" );
 			}
 
-			( (ExerciseService)ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseSpecificService( exercise.getClass() ).getSimpleName() ) ).setOuputByExerciseID( outputRequestString );
+			( (ExerciseService)ZhawEngine.getManagedObjectRegistry()
+					.getManagedObject( getExerciseSpecificService( exercise.getClass() ).getSimpleName() ) ).setOuputByExerciseID(
+					outputRequestString );
 		}
 		catch ( IOException e )
 		{
@@ -298,11 +310,13 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 		}
 	}
 
-	@Override
-	public List< ExerciseDataImpl > getOutput()
+	@Override public List<ExerciseDataImpl> getOutput()
 	{
 		// return exerciseDataDao.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
-		return exerciseDataService.findByExerciseID( UserContext.getCurrentUser().getSession().getCurrentExercise().getID() );
+		return exerciseDataService.findByExerciseID( UserContext.getCurrentUser()
+				.getSession()
+				.getCurrentExercise()
+				.getID() );
 	}
 
 	public ExerciseDataDao getExerciseDataDao()

@@ -43,6 +43,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith( OrderedRunner.class ) public class XinixExerciseDataTest
 {
 	private static ExerciseDataService exerciseDataService;
+	private static MediaService        mediaService;
 
 	private static ExerciseDataImpl exerciseData = new XinixData();
 	private static WorkshopImpl     workshop     = new WorkshopImpl();
@@ -62,7 +63,7 @@ import static org.junit.Assert.assertTrue;
 		ExerciseTemplateService exerciseTemplateService = ServiceProxyManager.createServiceProxy(
 				ExerciseTemplateServiceProxy.class );
 		ExerciseService exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
-		MediaService mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
+		mediaService = ServiceProxyManager.createServiceProxy( MediaServiceProxy.class );
 
 		// workshop
 		WorkshopTemplate workshopTemplate = workshopTemplateService.findByID( workshopTemplateService.persist( new WorkshopTemplate( null,
@@ -111,7 +112,7 @@ import static org.junit.Assert.assertTrue;
 		exerciseData.setID( exerciseDataService.persist( new XinixData( null,
 				exercise,
 				new HashSet<String>( Arrays.asList( XINIX_ASSOCIATION_ONE, XINIX_ASSOCIATION_TWO ) ),
-				xinixImage ) ) );
+				(MediaObject)mediaService.findByID( xinixImage.getID() ) ) ) );
 		assertTrue( exerciseData.getID() != null );
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}

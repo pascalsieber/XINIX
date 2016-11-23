@@ -44,6 +44,7 @@ import static org.junit.Assert.assertTrue;
 
 	private static ExerciseDataImpl exerciseData = new EvaluationExerciseData();
 	private static WorkshopImpl     workshop     = new WorkshopImpl();
+	private static SessionImpl      session      = new SessionImpl();
 	private static ExerciseImpl     exercise     = new ExerciseImpl();
 
 	private static CompressionExerciseDataElement solution = new CompressionExerciseDataElement();
@@ -65,7 +66,7 @@ import static org.junit.Assert.assertTrue;
 		SessionService sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
 
 		// owner
-		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "", "" ) ) );
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
 		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "password" ),
 				role,
 				null,
@@ -80,7 +81,7 @@ import static org.junit.Assert.assertTrue;
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
 		// session
-		SessionImpl session = sessionService.findSessionByID( sessionService.persistSession( new SessionImpl( "",
+		session.setID( sessionService.persistSession( new SessionImpl( "",
 				"",
 				null,
 				SessionSynchronizationImpl.SYNCHRONOUS,
@@ -115,15 +116,16 @@ import static org.junit.Assert.assertTrue;
 		// solution
 		CompressionExerciseData compressionExerciseData = exerciseDataService.findByID( exerciseDataService.persist( new CompressionExerciseData( null,
 				null,
-				Collections.singletonList( new CompressionExerciseDataElement( "", "" ) ) ) ) );
-		solution.setID( compressionExerciseData.getSolutions().get( 0 ).getID() );
+				Collections.singletonList( new CompressionExerciseDataElement( "compressiondata",
+						"compressiondata" ) ) ) ) );
+		solution = compressionExerciseData.getSolutions().get( 0 );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
 	{
 		exerciseData.setID( exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
 				exercise,
-				new Evaluation( null, solution, new Score( null, SCORE ) ) ) ) );
+				new Evaluation( owner, solution, new Score( null, SCORE ) ) ) ) );
 		assertTrue( exerciseData.getID() != null );
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}
