@@ -320,6 +320,11 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 				.getID() );
 	}
 
+	@Override public List<ExerciseDataImpl> getOutputByExerciseID( String exerciseID )
+	{
+		return exerciseDataService.findByExerciseID( exerciseID );
+	}
+
 	public ExerciseDataDao getExerciseDataDao()
 	{
 		return exerciseDataDao;

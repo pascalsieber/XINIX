@@ -66,6 +66,13 @@ public class ExerciseServiceProxy extends WorkshopObjectServiceProxy implements 
 
 	@SuppressWarnings( "unchecked" )
 	@Override
+	public List< ExerciseDataImpl > getOutputByExerciseID( String exerciseID )
+	{
+		return getServiceTarget().path( ExerciseRestService.GETOUTPUT_BY_EXERCISEID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( List.class );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	@Override
 	public List< ExerciseImpl > findAllExercises()
 	{
 		return getServiceTarget().path( ExerciseRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );

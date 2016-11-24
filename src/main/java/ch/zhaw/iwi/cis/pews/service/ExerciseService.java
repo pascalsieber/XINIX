@@ -27,6 +27,8 @@ public interface ExerciseService extends WorkflowElementService
 
 	public List< ExerciseDataImpl > getOutput();
 
+	public List<ExerciseDataImpl> getOutputByExerciseID( String exerciseID );
+
 	public List< ExerciseImpl > findAllExercises();
 
 	public ExerciseImpl findExerciseByID( String id );

@@ -35,6 +35,7 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	// only for testing
 	public final static String GETINPUT_AS_STRING = "/getInputAsString";
 	public final static String GETINPUT_BY_EXERCISEID_AS_STRING = "/getInputByExerciseIDAsString";
+	public final static String GETOUTPUT_BY_EXERCISEID = "/getOutputByExerciseID";
 
 	private ExerciseService exerciseService;
 
@@ -121,6 +122,13 @@ public class ExerciseRestService extends WorkshopObjectRestService
 	public List< ExerciseDataImpl > getOutput()
 	{
 		return exerciseService.getOutput();
+	}
+
+	@POST
+	@Path( GETOUTPUT_BY_EXERCISEID )
+	public List<ExerciseDataImpl> getOutputByExerciseID( String exerciseID )
+	{
+		return exerciseService.getOutputByExerciseID( exerciseID );
 	}
 
 	@Override
