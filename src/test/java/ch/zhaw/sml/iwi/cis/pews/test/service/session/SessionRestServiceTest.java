@@ -5,6 +5,7 @@ import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
 import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
+import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
@@ -20,7 +21,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -64,6 +67,7 @@ import static org.junit.Assert.assertTrue;
 	{
 		// service
 		sessionService = ServiceProxyManager.createServiceProxy( SessionServiceProxy.class );
+		RoleService roleService = ServiceProxyManager.createServiceProxy( RoleServiceProxy.class );
 		userService = ServiceProxyManager.createServiceProxy( UserServiceProxy.class );
 		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
@@ -101,8 +105,9 @@ import static org.junit.Assert.assertTrue;
 				(PinkLabsTemplate)exerciseTemplate,
 				workshop ) ) );
 
+		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
 		user.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "password" ),
-				null,
+				role,
 				null,
 				"",
 				"",
@@ -167,9 +172,13 @@ import static org.junit.Assert.assertTrue;
 		sessionService.join( new Invitation( null, user, session ) );
 		assertTrue( !sessionService.findSessionByID( session.getID() ).getParticipants().isEmpty() );
 		SessionImpl joined = sessionService.findSessionByID( session.getID() );
-		assertTrue( sessionService.findSessionByID( session.getID() )
-				.getParticipants()
-				.contains( userService.findUserByID( user.getID() ).getParticipation() ) );
+		assertTrue( joined.getParticipants().size() == 1 );
+
+		for ( Participant participant : joined.getParticipants() )
+		{
+			assertTrue( participant.getID()
+					.equals( userService.findUserByID( user.getID() ).getParticipation().getID() ) );
+		}
 	}
 
 	@TestOrder( order = 7 ) @Test public void testLeave()
@@ -245,10 +254,9 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( proxy.getCurrentExericseIDWithOutput().getOutput().isEmpty() );
 
 		// fourth iteration (exercise two, some data)
-		exerciseDataService.persist( new PinkLabsExerciseData( user, exerciseOne, Arrays.asList( "", "" ) ) );
+		exerciseDataService.persist( new PinkLabsExerciseData( user, exerciseTwo, Arrays.asList( "", "" ) ) );
 		assertTrue( proxy.getCurrentExericseIDWithOutput().getCurrentExerciseID().equals( exerciseTwo.getID() ) );
 		assertTrue( !proxy.getCurrentExericseIDWithOutput().getOutput().isEmpty() );
-
 	}
 
 	@TestOrder( order = 12 ) @Test public void testFindAll()

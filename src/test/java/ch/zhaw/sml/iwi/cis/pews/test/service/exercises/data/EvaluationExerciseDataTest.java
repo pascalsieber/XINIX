@@ -114,7 +114,7 @@ import static org.junit.Assert.assertTrue;
 				workshop ) ) );
 
 		// solution
-		CompressionExerciseData compressionExerciseData = exerciseDataService.findByID( exerciseDataService.persist( new CompressionExerciseData( null,
+		CompressionExerciseData compressionExerciseData = exerciseDataService.findByID( exerciseDataService.persist( new CompressionExerciseData( owner,
 				null,
 				Collections.singletonList( new CompressionExerciseDataElement( "compressiondata",
 						"compressiondata" ) ) ) ) );
@@ -125,7 +125,7 @@ import static org.junit.Assert.assertTrue;
 	{
 		exerciseData.setID( exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
 				exercise,
-				new Evaluation( owner, solution, new Score( null, SCORE ) ) ) ) );
+				new Evaluation( owner, solution, new Score( owner, SCORE ) ) ) ) );
 		assertTrue( exerciseData.getID() != null );
 		assertTrue( !exerciseData.getID().equals( "" ) );
 	}

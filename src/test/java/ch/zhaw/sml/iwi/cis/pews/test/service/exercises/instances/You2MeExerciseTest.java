@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -184,8 +185,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		You2MeExercise base = (You2MeExercise)exerciseService.findExerciseByID( exercise.getID() );
-		You2MeInput input = TestUtil.objectMapper.readValue(
-				exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+		You2MeInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
 				You2MeInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
@@ -207,46 +207,93 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws IOException
 	{
 		String outputOne = "outputone";
 		String outputTwo = "outputtwo";
+		DialogEntry entry0 = new DialogEntry( DialogRole.RoleA, outputOne );
+		entry0.setOrderInDialog( 0 );
+		DialogEntry entry1 = new DialogEntry( DialogRole.RoleA, outputOne );
+		entry1.setOrderInDialog( 1 );
 
-		You2MeOutput output = new You2MeOutput( exercise.getID(),
-				Arrays.asList( new DialogEntry( DialogRole.RoleA, outputOne ),
-						new DialogEntry( DialogRole.RoleB, outputTwo ) ) );
+		You2MeOutput output = new You2MeOutput( exercise.getID(), Arrays.asList( entry0, entry1 ) );
 		exerciseService.setOuputByExerciseID( objectMapper.writeValueAsString( output ) );
 
-		List<ExerciseDataImpl> stored = exerciseDataService.findByExerciseID( exercise.getID() );
-		assertTrue( stored.size() == 1 );
-		assertTrue( stored.get( 0 ).getOwner().getID().equals( owner.getID() ) );
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<You2MeExerciseData> stored = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( You2MeExerciseData.class ) );
 
-		assertTrue( ( (You2MeExerciseData)stored.get( 0 ) ).getDialog().get( 0 ).getOrderInDialog() == 0 );
-		assertTrue( ( (You2MeExerciseData)stored.get( 0 ) ).getDialog().get( 0 ).getText().equals( outputOne ) );
-		assertTrue( ( (You2MeExerciseData)stored.get( 0 ) ).getDialog().get( 0 ).getRole().equals( DialogRole.RoleA ) );
-		assertTrue( ( (You2MeExerciseData)stored.get( 0 ) ).getDialog().get( 1 ).getOrderInDialog() == 1 );
-		assertTrue( ( (You2MeExerciseData)stored.get( 0 ) ).getDialog().get( 1 ).getText().equals( outputTwo ) );
-		assertTrue( ( (You2MeExerciseData)stored.get( 0 ) ).getDialog().get( 1 ).getRole().equals( DialogRole.RoleB ) );
+		assertTrue( stored.size() == 1 );
+		for ( You2MeExerciseData d : stored )
+		{
+			assertTrue( d.getOwner().getID().equals( owner.getID() ) );
+			assertTrue( d.getDialog().size() == 2 );
+			for ( DialogEntry dialogEntry : d.getDialog() )
+			{
+				assertTrue( dialogEntry.getOrderInDialog() == 0 || dialogEntry.getOrderInDialog() == 1 );
+				if ( dialogEntry.getOrderInDialog() == 0 )
+				{
+					dialogEntry.getText().equals( outputOne );
+					dialogEntry.getRole().equals( DialogRole.RoleA );
+				}
+				else
+				{
+					dialogEntry.getText().equals( outputTwo );
+					dialogEntry.getRole().equals( DialogRole.RoleB );
+				}
+			}
+		}
 	}
 
-	@TestOrder( order = 5 ) @Test public void testGetOutput()
+	// only testing getOutputByExerciseID. this ends up doing the same as getOutput, except that
+	// the exerciseID is explicitly provided as argument and not deduced from the user's session
+	@TestOrder( order = 5 ) @Test public void testGetOutput() throws IOException
 	{
-		// set current exercise on owner's session, as exercise to get output for
-		// is determined based on the current exercise of the session of user
-		// making request
-		SessionImpl dummy = new SessionImpl();
-		dummy.setID( session.getID() );
-		dummy.setCurrentExercise( exercise );
-		sessionService.setCurrentExercise( dummy );
+		// get data from exerciseDataService for exercise
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableData = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
 
-		// get output and compare to data of exercise (exerciseDataService)
-		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
+		// get output from exerciseService for exercise
+		List<ExerciseDataImpl> output = exerciseService.getOutputByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableOutput = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				output ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
+
+		// ensure output and data are not empty and compare ids
+		assertTrue( comparableData.size() == 1 && comparableOutput.size() == 1 );
+		assertTrue( TestUtil.extractIds( comparableData ).containsAll( TestUtil.extractIds( comparableOutput ) ) );
+		assertTrue( TestUtil.extractIds( comparableOutput ).containsAll( TestUtil.extractIds( comparableData ) ) );
+
+		// check specifics
+		List<String> dataDialogEntryIds = new ArrayList<>();
+		for ( ExerciseDataImpl d : comparableData )
+		{
+			for ( DialogEntry dialogEntry : ( (You2MeExerciseData)d ).getDialog() )
+			{
+				dataDialogEntryIds.add( dialogEntry.getID() );
+			}
+		}
+
+		List<String> outputDialogEntryIds = new ArrayList<String>();
+		for ( ExerciseDataImpl d : comparableOutput )
+		{
+			for ( DialogEntry dialogEntry : ( (You2MeExerciseData)d ).getDialog() )
+			{
+				outputDialogEntryIds.add( dialogEntry.getID() );
+			}
+		}
+
+		assertTrue( dataDialogEntryIds.containsAll( outputDialogEntryIds ) && outputDialogEntryIds.containsAll(
+				dataDialogEntryIds ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
 		ExerciseImpl findable = exerciseService.findExerciseByID( exercise.getID() );
-		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( findable ) );
+		assertTrue( TestUtil.extractIds( exerciseService.findAllExercises() ).contains( findable.getID() ) );
 	}
 
 	@TestOrder( order = 7 ) @Test public void testRemove()

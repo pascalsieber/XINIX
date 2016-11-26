@@ -134,7 +134,7 @@ import static org.junit.Assert.assertTrue;
 		List<MediaObject> all = mediaService.findAll();
 		assertTrue( TestUtil.extractIds( mediaService.findAll() ).contains( removable.getID() ) );
 
-		mediaService.remove( mediaObject );
+		mediaService.remove( mediaService.findByID( mediaObject.getID() ) );
 		assertTrue( mediaService.findByID( mediaObject.getID() ) == null );
 		assertTrue( !TestUtil.extractIds( mediaService.findAll() ).contains( removable.getID() ) );
 	}

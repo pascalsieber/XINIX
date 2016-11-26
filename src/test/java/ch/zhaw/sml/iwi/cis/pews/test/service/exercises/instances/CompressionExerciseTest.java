@@ -27,7 +27,6 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
@@ -359,7 +358,8 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( found.getCardinality() == CARDINALITY );
 
 		assertTrue( found.getQuestion().equals( QUESTION_TEMPLATE ) );
-		assertTrue( found.getSolutionCriteria().containsAll( Arrays.asList( CRITERION_ONE, CRITERION_TWO ) ) );
+		// note that solutionCriteria not returned when calling exerciseService.findExerciseByID
+		// therefore, not tested here, but as part of getInput (see testGetInput)
 	}
 
 	// only testing getInputByExerciseID. getInput API method is 'syntactic sugar'
@@ -403,7 +403,7 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws IOException
 	{
 		String solutionOne = "solutionone";
 		String descriptionOne = "descriptionone";
@@ -415,40 +415,67 @@ import static org.junit.Assert.assertTrue;
 						new CompressionOutputElement( solutionTwo, descriptionTwo ) ) );
 		exerciseService.setOuputByExerciseID( objectMapper.writeValueAsString( output ) );
 
-		List<ExerciseDataImpl> stored = exerciseDataService.findByExerciseID( exercise.getID() );
-		assertTrue( stored.size() == 1 );
-		assertTrue( stored.get( 0 ).getOwner().getID().equals( owner.getID() ) );
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<CompressionExerciseData> stored = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( CompressionExerciseData.class ) );
 
-		assertTrue( ( (CompressionExerciseData)stored.get( 0 ) ).getSolutions()
-				.get( 0 )
-				.getSolution()
-				.equals( solutionOne ) );
-		assertTrue( ( (CompressionExerciseData)stored.get( 0 ) ).getSolutions()
-				.get( 0 )
-				.getDescription()
-				.equals( descriptionOne ) );
-		assertTrue( ( (CompressionExerciseData)stored.get( 0 ) ).getSolutions()
-				.get( 1 )
-				.getSolution()
-				.equals( solutionTwo ) );
-		assertTrue( ( (CompressionExerciseData)stored.get( 0 ) ).getSolutions()
-				.get( 1 )
-				.getDescription()
-				.equals( descriptionTwo ) );
+		assertTrue( stored.size() == 1 );
+		for ( CompressionExerciseData d : stored )
+		{
+			assertTrue( d.getOwner().getID().equals( owner.getID() ) );
+			for ( CompressionExerciseDataElement solution : d.getSolutions() )
+			{
+				assertTrue(
+						solution.getSolution().equals( solutionOne ) || solution.getSolution().equals( solutionTwo ) );
+				if ( solution.getSolution().equals( solutionOne ) )
+				{
+					assertTrue( solution.getDescription().equals( descriptionOne ) );
+				}
+				else
+				{
+					assertTrue( solution.getDescription().equals( descriptionTwo ) );
+				}
+			}
+		}
 	}
 
-	@TestOrder( order = 5 ) @Test public void testGetOutput()
+	// only testing getOutputByExerciseID. this ends up doing the same as getOutput, except that
+	// the exerciseID is explicitly provided as argument and not deduced from the user's session
+	@TestOrder( order = 5 ) @Test public void testGetOutput() throws IOException
 	{
-		// set current exercise on owner's session, as exercise to get output for
-		// is determined based on the current exercise of the session of user
-		// making request
-		SessionImpl dummy = new SessionImpl();
-		dummy.setID( session.getID() );
-		dummy.setCurrentExercise( exercise );
-		sessionService.setCurrentExercise( dummy );
+		// get data from exerciseDataService for exercise
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableData = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
 
-		// get output and compare to data of exercise (exerciseDataService)
-		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
+		// get output from exerciseService for exercise
+		List<ExerciseDataImpl> output = exerciseService.getOutputByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableOutput = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				output ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
+
+		// ensure output and data are not empty and compare ids
+		assertTrue( comparableData.size() == 1 && comparableOutput.size() == 1 );
+		assertTrue( TestUtil.extractIds( comparableData ).containsAll( TestUtil.extractIds( comparableOutput ) ) );
+		assertTrue( TestUtil.extractIds( comparableOutput ).containsAll( TestUtil.extractIds( comparableData ) ) );
+
+		// check specifics
+		List<String> dataSolutionIds = new ArrayList<String>();
+		for ( ExerciseDataImpl d : comparableData )
+		{
+			dataSolutionIds.addAll( TestUtil.extractIds( ( (CompressionExerciseData)d ).getSolutions() ) );
+		}
+
+		List<String> outputSolutionIds = new ArrayList<String>();
+		for ( ExerciseDataImpl o : comparableOutput )
+		{
+			outputSolutionIds.addAll( TestUtil.extractIds( ( (CompressionExerciseData)o ).getSolutions() ) );
+		}
+
+		assertTrue(
+				dataSolutionIds.containsAll( outputSolutionIds ) && outputSolutionIds.containsAll( dataSolutionIds ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testFindAll()

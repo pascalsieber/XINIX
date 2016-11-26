@@ -107,6 +107,8 @@ import static org.junit.Assert.assertTrue;
 
 	@TestOrder( order = 3 ) @Test public void testUpdateExerciseTemplateOrder()
 	{
+		exerciseTemplateOne.setOrderInWorkshopTemplate( 0 );
+		exerciseTemplateTwo.setOrderInWorkshopTemplate( 1 );
 		PinkElefantTemplate updateable = (PinkElefantTemplate)workshopTemplateService.findWorkshopTemplateByID(
 				workshopTemplate.getID() );
 		updateable.setExerciseTemplates( Arrays.asList( exerciseTemplateOne, exerciseTemplateTwo ) );

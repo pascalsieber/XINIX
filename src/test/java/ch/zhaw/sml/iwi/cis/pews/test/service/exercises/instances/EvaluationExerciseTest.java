@@ -1,6 +1,7 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.instances;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
 import ch.zhaw.iwi.cis.pews.model.instance.*;
 import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
@@ -119,20 +120,6 @@ import static org.junit.Assert.assertTrue;
 		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( owner, "", "", "", "" ) ) );
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
-		// session
-		sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class, login, password );
-		session.setID( sessionService.persistSession( new SessionImpl( "",
-				"",
-				null,
-				SessionSynchronizationImpl.SYNCHRONOUS,
-				workshop,
-				null,
-				null,
-				null ) ) );
-
-		// owner joing session
-		sessionService.join( new Invitation( null, owner, session ) );
-
 		// compression exercise
 		CompressionTemplate compressionTemplate = (CompressionTemplate)exerciseTemplateService.findExerciseTemplateByID(
 				exerciseTemplateService.persistExerciseTemplate( new CompressionTemplate( null,
@@ -173,6 +160,20 @@ import static org.junit.Assert.assertTrue;
 				"",
 				"",
 				VOTES ) ) );
+
+		// session
+		sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class, login, password );
+		session.setID( sessionService.persistSession( new SessionImpl( "",
+				"",
+				null,
+				SessionSynchronizationImpl.SYNCHRONOUS,
+				workshop,
+				null,
+				null,
+				null ) ) );
+
+		// owner joing session
+		sessionService.join( new Invitation( null, owner, session ) );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
@@ -220,8 +221,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		EvaluationExercise base = (EvaluationExercise)exerciseService.findExerciseByID( exercise.getID() );
-		EvaluationInput input = TestUtil.objectMapper.readValue(
-				exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+		EvaluationInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
 				EvaluationInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
@@ -240,12 +240,18 @@ import static org.junit.Assert.assertTrue;
 
 		assertTrue( input.getQuestion().equals( base.getQuestion() ) );
 		assertTrue( input.getNumberOfVotes() == base.getNumberOfVotes() );
-		assertTrue( input.getSolutions().equals( exerciseDataService.findByID( compressionExerciseData.getID() ) ) );
+
+		assertTrue( input.getSolutions().size() == 1 );
+		for ( CompressionInputElement element : input.getSolutions() )
+		{
+			assertTrue( element.getSolution().equals( COMPRESSION_SOLUTION ) );
+			assertTrue( element.getDescription().equals( COMPRESSION_DESCRIPTION ) );
+		}
 	}
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws IOException
 	{
 		int score = 5;
 		EvaluationOutput output = new EvaluationOutput( exercise.getID(),
@@ -254,33 +260,58 @@ import static org.junit.Assert.assertTrue;
 						score ) ) );
 		exerciseService.setOuputByExerciseID( objectMapper.writeValueAsString( output ) );
 
-		List<ExerciseDataImpl> stored = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<EvaluationExerciseData> stored = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( EvaluationExerciseData.class ) );
+
+		// check / verify output
 		assertTrue( stored.size() == 1 );
-		assertTrue( stored.get( 0 ).getOwner().getID().equals( owner.getID() ) );
-
-		// verify score
-		assertTrue( ( (EvaluationExerciseData)stored.get( 0 ) ).getEvaluation().getScore().getScore() == score );
-
-		// verify voted solution / {@link CompressionExerciseDataElement}
-		CompressionExerciseData voted = exerciseDataService.findByID( compressionExerciseData.getID() );
-		assertTrue( ( (EvaluationExerciseData)stored.get( 0 ) ).getEvaluation()
-				.getSolution()
-				.getID()
-				.equals( voted.getSolutions().get( 0 ).getID() ) );
+		for ( EvaluationExerciseData d : stored )
+		{
+			assertTrue( d.getOwner().getID().equals( owner.getID() ) );
+			assertTrue( d.getEvaluation().getScore().getScore() == score );
+			assertTrue( d.getEvaluation().getSolution().getSolution().equals( COMPRESSION_SOLUTION ) );
+			assertTrue( d.getEvaluation().getSolution().getDescription().equals( COMPRESSION_DESCRIPTION ) );
+		}
 	}
 
-	@TestOrder( order = 5 ) @Test public void testGetOutput()
+	// only testing getOutputByExerciseID. this ends up doing the same as getOutput, except that
+	// the exerciseID is explicitly provided as argument and not deduced from the user's session
+	@TestOrder( order = 5 ) @Test public void testGetOutput() throws IOException
 	{
-		// set current exercise on owner's session, as exercise to get output for
-		// is determined based on the current exercise of the session of user
-		// making request
-		SessionImpl dummy = new SessionImpl();
-		dummy.setID( session.getID() );
-		dummy.setCurrentExercise( exercise );
-		sessionService.setCurrentExercise( dummy );
+		// get data from exerciseDataService for exercise
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableData = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
 
-		// get output and compare to data of exercise (exerciseDataService)
-		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
+		// get output from exerciseService for exercise
+		List<ExerciseDataImpl> output = exerciseService.getOutputByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableOutput = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				output ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
+
+		// ensure output and data are not empty and compare ids
+		assertTrue( comparableData.size() == 1 && comparableOutput.size() == 1 );
+		assertTrue( TestUtil.extractIds( comparableData ).containsAll( TestUtil.extractIds( comparableOutput ) ) );
+		assertTrue( TestUtil.extractIds( comparableOutput ).containsAll( TestUtil.extractIds( comparableData ) ) );
+
+		// check specifics
+		List<String> dataSolutionIds = new ArrayList<String>();
+		for ( ExerciseDataImpl d : comparableData )
+		{
+			dataSolutionIds.add( ( (EvaluationExerciseData)d ).getEvaluation().getSolution().getID() );
+		}
+
+		List<String> outputSolutionIds = new ArrayList<String>();
+		for ( ExerciseDataImpl o : comparableOutput )
+		{
+			outputSolutionIds.add( ( (EvaluationExerciseData)o ).getEvaluation().getSolution().getID() );
+		}
+
+		assertTrue(
+				dataSolutionIds.containsAll( outputSolutionIds ) && outputSolutionIds.containsAll( dataSolutionIds ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testFindAll()

@@ -1,5 +1,6 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.instances;
 
+import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
 import ch.zhaw.iwi.cis.pews.model.instance.*;
@@ -25,15 +26,15 @@ import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.net.URL;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -57,6 +58,7 @@ import static org.junit.Assert.assertTrue;
 	private static ExerciseDataService     exerciseDataService;
 	private static SessionService          sessionService;
 	private static WorkshopService         workshopService;
+	private static MediaService            mediaService;
 
 	private static ExerciseImpl     exercise         = new XinixExercise();
 	private static ExerciseTemplate exerciseTemplate = new XinixTemplate();
@@ -112,9 +114,7 @@ import static org.junit.Assert.assertTrue;
 		XinixImageMatrixService xinixImageMatrixService = ServiceProxyManager.createServiceProxyWithUser( XinixImageMatrixServiceProxy.class,
 				login,
 				password );
-		MediaService mediaService = ServiceProxyManager.createServiceProxyWithUser( MediaServiceProxy.class,
-				login,
-				password );
+		mediaService = ServiceProxyManager.createServiceProxyWithUser( MediaServiceProxy.class, login, password );
 
 		// workshop
 		PinkElefantTemplate workshopTemplate = new PinkElefantTemplate();
@@ -136,7 +136,23 @@ import static org.junit.Assert.assertTrue;
 		sessionService.join( new Invitation( null, owner, session ) );
 
 		// xinix image matrix
-		mediaObject.setID( mediaService.persist( new MediaObject( "", "".getBytes(), MediaObjectType.XINIX ) ) );
+		try
+		{
+			File temp = new File( "tempxinixrestservicetest.jpg" );
+			FileUtils.copyURLToFile( new URL( "http://images.freeimages.com/images/previews/1da/lotus-1377828.jpg" ),
+					temp );
+
+			mediaObject.setID( mediaService.persistMediaObjectFormData( temp,
+					MediaObjectType.XINIX,
+					ZhawEngine.ROOT_USER_LOGIN_NAME,
+					"root" ) );
+
+			temp.delete();
+		}
+		catch ( IOException e )
+		{
+			throw new RuntimeException( "error in persisting media object" );
+		}
 		xinixImageMatrix.setID( xinixImageMatrixService.persistImageMatrix( new XinixImageMatrix( Collections.singletonList(
 				(MediaObject)mediaService.findByID( mediaObject.getID() ) ) ) ) );
 
@@ -198,8 +214,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		XinixExercise base = (XinixExercise)exerciseService.findExerciseByID( exercise.getID() );
-		XinixInput input = TestUtil.objectMapper.readValue(
-				exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+		XinixInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
 				XinixInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
@@ -222,37 +237,66 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws IOException
 	{
 		String outputOne = "outputone";
 		String outputTwo = "outputtwo";
 
 		XinixOutput output = new XinixOutput( exercise.getID(),
 				new HashSet<>( Arrays.asList( outputOne, outputTwo ) ),
-				mediaObject );
+				(MediaObject)mediaService.findByID( mediaObject.getID() ) );
 		exerciseService.setOuputByExerciseID( objectMapper.writeValueAsString( output ) );
 
-		List<ExerciseDataImpl> stored = exerciseDataService.findByExerciseID( exercise.getID() );
-		assertTrue( stored.size() == 1 );
-		assertTrue( stored.get( 0 ).getOwner().getID().equals( owner.getID() ) );
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<XinixData> stored = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString( data ),
+				TestUtil.makeCollectionType( XinixData.class ) );
 
-		assertTrue( ( (XinixData)stored.get( 0 ) ).getXinixImage().getID().equals( mediaObject.getID() ) );
-		assertTrue( ( (XinixData)stored.get( 0 ) ).getAssociations()
-				.containsAll( Arrays.asList( outputOne, outputTwo ) ) );
+		assertTrue( stored.size() == 1 );
+		for ( XinixData d : stored )
+		{
+			assertTrue( d.getOwner().getID().equals( owner.getID() ) );
+			assertTrue( d.getXinixImage().getID().equals( mediaObject.getID() ) );
+			assertTrue( d.getAssociations().size() == 2 );
+			assertTrue( d.getAssociations().containsAll( Arrays.asList( outputOne, outputTwo ) ) );
+		}
 	}
 
-	@TestOrder( order = 5 ) @Test public void testGetOutput()
+	// only testing getOutputByExerciseID. this ends up doing the same as getOutput, except that
+	// the exerciseID is explicitly provided as argument and not deduced from the user's session
+	@TestOrder( order = 5 ) @Test public void testGetOutput() throws IOException
 	{
-		// set current exercise on owner's session, as exercise to get output for
-		// is determined based on the current exercise of the session of user
-		// making request
-		SessionImpl dummy = new SessionImpl();
-		dummy.setID( session.getID() );
-		dummy.setCurrentExercise( exercise );
-		sessionService.setCurrentExercise( dummy );
+		// get data from exerciseDataService for exercise
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableData = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
 
-		// get output and compare to data of exercise (exerciseDataService)
-		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
+		// get output from exerciseService for exercise
+		List<ExerciseDataImpl> output = exerciseService.getOutputByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableOutput = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				output ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
+
+		// ensure output and data are not empty and compare ids
+		assertTrue( comparableData.size() == 1 && comparableOutput.size() == 1 );
+		assertTrue( TestUtil.extractIds( comparableData ).containsAll( TestUtil.extractIds( comparableOutput ) ) );
+		assertTrue( TestUtil.extractIds( comparableOutput ).containsAll( TestUtil.extractIds( comparableData ) ) );
+
+		// specifics
+		List<String> dataAssociations = new ArrayList<String>();
+		for ( ExerciseDataImpl d : comparableData )
+		{
+			dataAssociations.addAll( ( (XinixData)d ).getAssociations() );
+		}
+
+		List<String> outputAssociations = new ArrayList<String>();
+		for ( ExerciseDataImpl o : comparableOutput )
+		{
+			outputAssociations.addAll( ( (XinixData)o ).getAssociations() );
+		}
+
+		assertTrue( outputAssociations.containsAll( dataAssociations ) && dataAssociations.containsAll(
+				outputAssociations ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testFindAll()

@@ -1,10 +1,9 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.instances;
 
 import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultInput;
-import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.model.instance.*;
 import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
+import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
@@ -28,6 +27,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -93,12 +93,15 @@ import static org.junit.Assert.assertTrue;
 				login ) ) );
 
 		// services
-		exerciseService = ServiceProxyManager.createServiceProxy( ExerciseServiceProxy.class );
+		exerciseService = ServiceProxyManager.createServiceProxyWithUser( ExerciseServiceProxy.class, login, password );
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 				WorkshopTemplateServiceProxy.class );
 		workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
 		ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
+		SessionService sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class,
+				login,
+				password );
 
 		// workshop
 		PinkElefantTemplate workshopTemplate = new PinkElefantTemplate();
@@ -168,12 +171,24 @@ import static org.junit.Assert.assertTrue;
 				new EvaluationExercise( "", "", evaluationTemplate, workshop ) ) );
 
 		// evaluation data
-		exerciseDataService.persistExerciseData( new EvaluationExerciseData( null,
+		exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
 				evaluationExercise,
-				new Evaluation( null, evaluated.getSolutions().get( 0 ), new Score( null, SCORE_ONE ) ) ) );
-		exerciseDataService.persistExerciseData( new EvaluationExerciseData( null,
+				new Evaluation( owner, evaluated.getSolutions().get( 0 ), new Score( owner, SCORE_ONE ) ) ) );
+		exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
 				evaluationExercise,
-				new Evaluation( null, evaluated.getSolutions().get( 0 ), new Score( null, SCORE_TWO ) ) ) );
+				new Evaluation( owner, evaluated.getSolutions().get( 0 ), new Score( owner, SCORE_TWO ) ) ) );
+
+		// owner joins session
+		SessionImpl session = new SessionImpl();
+		session.setID( sessionService.persistSession( new SessionImpl( "",
+				"",
+				null,
+				SessionSynchronizationImpl.SYNCHRONOUS,
+				workshop,
+				null,
+				new HashSet<Participant>(),
+				new HashSet<Invitation>() ) ) );
+		sessionService.join( new Invitation( null, owner, session ) );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
@@ -247,8 +262,6 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( input.getResults().get( 0 ).getAverageScore() == ( SCORE_ONE + SCORE_TWO ) / 2 );
 	}
 
-	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
-	// which ends up calling setOutputByExerciseID
 	@TestOrder( order = 4 ) @Test public void testSetOutput()
 	{
 		// not used. evaluation result exercise does not generate any output

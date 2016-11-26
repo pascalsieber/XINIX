@@ -2,6 +2,7 @@ package ch.zhaw.sml.iwi.cis.pews.test.util;
 
 import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.io.IOException;
@@ -37,5 +38,15 @@ public class TestUtil
 			ids.add( identifiableObject.getID() );
 		}
 		return ids;
+	}
+
+	/**
+	 * helper method for turning json String into List for objects of chosen class
+	 * @param elementClass
+	 * @return List for objects of type elementClass
+	 */
+	public static CollectionType makeCollectionType( Class<?> elementClass )
+	{
+		return TypeFactory.defaultInstance().constructCollectionType( ArrayList.class, elementClass );
 	}
 }

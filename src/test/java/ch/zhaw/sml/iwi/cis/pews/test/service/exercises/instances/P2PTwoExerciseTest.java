@@ -1,6 +1,7 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service.exercises.instances;
 
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
+import ch.zhaw.iwi.cis.pews.model.input.P2PKeywordInput;
 import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
 import ch.zhaw.iwi.cis.pews.model.instance.*;
 import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
@@ -29,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -115,20 +117,6 @@ import static org.junit.Assert.assertTrue;
 		workshopTemplate.setID( workshopTemplateService.persist( new PinkElefantTemplate( owner, "", "", "", "" ) ) );
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
-		// session
-		sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class, login, password );
-		session.setID( sessionService.persistSession( new SessionImpl( "",
-				"",
-				null,
-				SessionSynchronizationImpl.SYNCHRONOUS,
-				workshop,
-				null,
-				null,
-				null ) ) );
-
-		// owner joining session
-		sessionService.join( new Invitation( null, owner, session ) );
-
 		// exercise template
 		exerciseTemplate.setID( exerciseTemplateService.persistExerciseTemplate( new P2PTwoTemplate( null,
 				TIMED,
@@ -165,6 +153,20 @@ import static org.junit.Assert.assertTrue;
 		p2POneData.setID( exerciseDataService.persistExerciseData( new P2POneData( null,
 				p2POneExercise,
 				Arrays.asList( KEYWORD_ONE, KEYWORD_TWO ) ) ) );
+
+		// session
+		sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class, login, password );
+		session.setID( sessionService.persistSession( new SessionImpl( "",
+				"",
+				null,
+				SessionSynchronizationImpl.SYNCHRONOUS,
+				workshop,
+				null,
+				null,
+				null ) ) );
+
+		// owner joining session
+		sessionService.join( new Invitation( null, owner, session ) );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
@@ -211,8 +213,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		P2PTwoExercise base = (P2PTwoExercise)exerciseService.findExerciseByID( exercise.getID() );
-		P2PTwoInput input = TestUtil.objectMapper.readValue(
-				exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+		P2PTwoInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
 				P2PTwoInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
@@ -235,15 +236,23 @@ import static org.junit.Assert.assertTrue;
 		List<P2POneKeyword> p2POneKeywords = ( (P2POneData)exerciseDataService.findExerciseDataByID( p2POneData.getID() ) )
 				.getKeywords();
 		assertTrue( input.getCascade1Keywords().size() == 2 );
-		assertTrue( input.getCascade1Keywords().get( 0 ).getId().equals( p2POneKeywords.get( 0 ).getID() ) );
-		assertTrue( input.getCascade1Keywords().get( 0 ).getKeyword().equals( KEYWORD_ONE ) );
-		assertTrue( input.getCascade1Keywords().get( 1 ).getId().equals( p2POneKeywords.get( 1 ).getID() ) );
-		assertTrue( input.getCascade1Keywords().get( 1 ).getKeyword().equals( KEYWORD_TWO ) );
+
+		List<String> p2POneKeywordIds = new ArrayList<>();
+		for ( P2POneKeyword p2POneKeyword : p2POneKeywords )
+		{
+			p2POneKeywordIds.add( p2POneKeyword.getID() );
+		}
+
+		for ( P2PKeywordInput keyword : input.getCascade1Keywords() )
+		{
+			assertTrue( keyword.getKeyword().equals( KEYWORD_ONE ) || keyword.getKeyword().equals( KEYWORD_TWO ) );
+			assertTrue( p2POneKeywordIds.contains( keyword.getId() ) );
+		}
 	}
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws IOException
 	{
 		String outputOne = "outputone";
 		String outputTwo = "outputtwo";
@@ -253,25 +262,68 @@ import static org.junit.Assert.assertTrue;
 				Arrays.asList( outputOne, outputTwo ) );
 		exerciseService.setOuputByExerciseID( objectMapper.writeValueAsString( output ) );
 
-		List<ExerciseDataImpl> stored = exerciseDataService.findByExerciseID( exercise.getID() );
-		assertTrue( stored.size() == 1 );
-		assertTrue( stored.get( 0 ).getOwner().getID().equals( owner.getID() ) );
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<P2PTwoData> stored = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString( data ),
+				TestUtil.makeCollectionType( P2PTwoData.class ) );
 
-		assertTrue( ( (P2PTwoData)stored.get( 0 ) ).getAnswers().containsAll( Arrays.asList( outputOne, outputTwo ) ) );
+		assertTrue( stored.size() == 1 );
+		for ( P2PTwoData d : stored )
+		{
+			assertTrue( d.getOwner().getID().equals( owner.getID() ) );
+			assertTrue( d.getAnswers().containsAll( Arrays.asList( outputOne, outputTwo ) ) );
+			for ( P2POneKeyword keyword : d.getSelectedKeywords() )
+			{
+				assertTrue( keyword.getKeyword().equals( KEYWORD_ONE ) || keyword.getKeyword().equals( KEYWORD_TWO ) );
+			}
+		}
 	}
 
-	@TestOrder( order = 5 ) @Test public void testGetOutput()
+	// only testing getOutputByExerciseID. this ends up doing the same as getOutput, except that
+	// the exerciseID is explicitly provided as argument and not deduced from the user's session
+	@TestOrder( order = 5 ) @Test public void testGetOutput() throws IOException
 	{
-		// set current exercise on owner's session, as exercise to get output for
-		// is determined based on the current exercise of the session of user
-		// making request
-		SessionImpl dummy = new SessionImpl();
-		dummy.setID( session.getID() );
-		dummy.setCurrentExercise( exercise );
-		sessionService.setCurrentExercise( dummy );
+		// get data from exerciseDataService for exercise
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableData = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
 
-		// get output and compare to data of exercise (exerciseDataService)
-		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
+		// get output from exerciseService for exercise
+		List<ExerciseDataImpl> output = exerciseService.getOutputByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableOutput = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				output ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
+
+		// ensure output and data are not empty and compare ids
+		assertTrue( comparableData.size() == 1 && comparableOutput.size() == 1 );
+		assertTrue( TestUtil.extractIds( comparableData ).containsAll( TestUtil.extractIds( comparableOutput ) ) );
+		assertTrue( TestUtil.extractIds( comparableOutput ).containsAll( TestUtil.extractIds( comparableData ) ) );
+
+		// check specifics
+		List<String> dataAnswers = new ArrayList<>();
+		List<String> dataKeywordIds = new ArrayList<>();
+		for ( ExerciseDataImpl d : comparableData )
+		{
+			dataAnswers.addAll( ( (P2PTwoData)d ).getAnswers() );
+			for ( P2POneKeyword keyword : ( (P2PTwoData)d ).getSelectedKeywords() )
+			{
+				dataKeywordIds.add( keyword.getID() );
+			}
+		}
+
+		List<String> outputAnswers = new ArrayList<>();
+		List<String> outputKeywordIds = new ArrayList<String>();
+		for ( ExerciseDataImpl o : comparableOutput )
+		{
+			outputAnswers.addAll( ( (P2PTwoData)o ).getAnswers() );
+			for ( P2POneKeyword keyword : ( (P2PTwoData)o ).getSelectedKeywords() )
+			{
+				outputKeywordIds.add( keyword.getID() );
+			}
+		}
+
+		assertTrue( dataAnswers.containsAll( outputAnswers ) && outputAnswers.containsAll( dataAnswers ) );
+		assertTrue( dataKeywordIds.containsAll( outputKeywordIds ) && outputKeywordIds.containsAll( dataKeywordIds ) );
 	}
 
 	@TestOrder( order = 6 ) @Test public void testFindAll()

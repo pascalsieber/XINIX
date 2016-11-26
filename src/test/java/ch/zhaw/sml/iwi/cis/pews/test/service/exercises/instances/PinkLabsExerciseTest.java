@@ -181,8 +181,7 @@ import static org.junit.Assert.assertTrue;
 	@TestOrder( order = 3 ) @Test public void testGetInput() throws IOException
 	{
 		PinkLabsExercise base = (PinkLabsExercise)exerciseService.findExerciseByID( exercise.getID() );
-		PinkLabsInput input = TestUtil.objectMapper.readValue(
-				exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
+		PinkLabsInput input = TestUtil.objectMapper.readValue( exerciseService.getInputByExerciseIDAsString( exercise.getID() ),
 				PinkLabsInput.class );
 
 		assertTrue( input.getExerciseID().equals( base.getID() ) );
@@ -204,7 +203,7 @@ import static org.junit.Assert.assertTrue;
 
 	// only testing setOutputByExerciseID. setOutput API method is 'syntactic sugar'
 	// which ends up calling setOutputByExerciseID
-	@TestOrder( order = 4 ) @Test public void testSetOutput() throws JsonProcessingException
+	@TestOrder( order = 4 ) @Test public void testSetOutput() throws IOException
 	{
 		String outputOne = "outputone";
 		String outputTwo = "outputtwo";
@@ -212,27 +211,44 @@ import static org.junit.Assert.assertTrue;
 		PinkLabsOutput output = new PinkLabsOutput( exercise.getID(), Arrays.asList( outputOne, outputTwo ) );
 		exerciseService.setOuputByExerciseID( objectMapper.writeValueAsString( output ) );
 
-		List<ExerciseDataImpl> stored = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<PinkLabsExerciseData> stored = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( PinkLabsExerciseData.class ) );
+
 		assertTrue( stored.size() == 1 );
-		assertTrue( stored.get( 0 ).getOwner().getID().equals( owner.getID() ) );
-
-		assertTrue( ( (PinkLabsExerciseData)stored.get( 0 ) ).getAnswers()
-				.containsAll( Arrays.asList( outputOne, outputTwo ) ) );
+		for ( PinkLabsExerciseData d : stored )
+		{
+			assertTrue( d.getOwner().getID().equals( owner.getID() ) );
+			for ( String answer : d.getAnswers() )
+			{
+				assertTrue( answer.equals( outputOne ) || answer.equals( outputTwo ) );
+			}
+		}
 	}
 
-	@TestOrder( order = 5 ) @Test public void testGetOutput()
+	// only testing getOutputByExerciseID. this ends up doing the same as getOutput, except that
+	// the exerciseID is explicitly provided as argument and not deduced from the user's session
+	@TestOrder( order = 5 ) @Test public void testGetOutput() throws IOException
 	{
-		// set current exercise on owner's session, as exercise to get output for
-		// is determined based on the current exercise of the session of user
-		// making request
-		SessionImpl dummy = new SessionImpl();
-		dummy.setID( session.getID() );
-		dummy.setCurrentExercise( exercise );
-		sessionService.setCurrentExercise( dummy );
+		// get data from exerciseDataService for exercise
+		List<ExerciseDataImpl> data = exerciseDataService.findByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableData = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				data ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
 
-		// get output and compare to data of exercise (exerciseDataService)
-		assertTrue( exerciseService.getOutput().equals( exerciseDataService.findByExerciseID( exercise.getID() ) ) );
+		// get output from exerciseService for exercise
+		List<ExerciseDataImpl> output = exerciseService.getOutputByExerciseID( exercise.getID() );
+		List<ExerciseDataImpl> comparableOutput = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				output ),
+				TestUtil.makeCollectionType( ExerciseDataImpl.class ) );
+
+		// ensure output and data are not empty and compare ids
+		assertTrue( comparableData.size() == 1 && comparableOutput.size() == 1 );
+		assertTrue( TestUtil.extractIds( comparableData ).containsAll( TestUtil.extractIds( comparableOutput ) ) );
+		assertTrue( TestUtil.extractIds( comparableOutput ).containsAll( TestUtil.extractIds( comparableData ) ) );
 	}
+
 
 	@TestOrder( order = 6 ) @Test public void testFindAll()
 	{
