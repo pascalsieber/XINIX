@@ -13,7 +13,9 @@ import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.*;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.*;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.*;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
+import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 import ch.zhaw.sml.iwi.cis.pews.test.util.OrderedRunner;
 import ch.zhaw.sml.iwi.cis.pews.test.util.TestOrder;
@@ -22,6 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -50,11 +53,15 @@ import static org.junit.Assert.assertTrue;
 	private static CompressionExerciseDataElement solution = new CompressionExerciseDataElement();
 	private static int                            SCORE    = 5;
 	private static UserImpl                       owner    = new UserImpl();
+	private static final String                   LOGIN    = "evaluationexercisedatatestlogin";
+	private static final String                   PASSWORD = "password";
 
 	@BeforeClass public static void setup()
 	{
 		// services
-		exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
+		exerciseDataService = ServiceProxyManager.createServiceProxyWithUser( ExerciseDataServiceProxy.class,
+				LOGIN,
+				PASSWORD );
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 				WorkshopTemplateServiceProxy.class );
 		WorkshopService workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
@@ -67,12 +74,12 @@ import static org.junit.Assert.assertTrue;
 
 		// owner
 		RoleImpl role = roleService.findByID( roleService.persist( new RoleImpl( "role", "role" ) ) );
-		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( "password" ),
+		owner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( PASSWORD ),
 				role,
 				null,
 				"",
 				"",
-				"evaluationexercisedatatestlogin" ) ) );
+				LOGIN ) ) );
 
 		// workshop
 		WorkshopTemplate workshopTemplate = workshopTemplateService.findByID( workshopTemplateService.persist( new WorkshopTemplate( null,
@@ -80,18 +87,25 @@ import static org.junit.Assert.assertTrue;
 				"" ) ) );
 		workshop.setID( workshopService.persist( new WorkshopImpl( "", "", workshopTemplate ) ) );
 
-		// session
-		session.setID( sessionService.persistSession( new SessionImpl( "",
+		// compression exercise
+		CompressionTemplate compressionTemplate = (CompressionTemplate)exerciseTemplateService.findExerciseTemplateByID(
+				exerciseTemplateService.persistExerciseTemplate( new CompressionTemplate( null,
+						true,
+						TimeUnit.SECONDS,
+						0,
+						true,
+						true,
+						true,
+						0,
+						workshopTemplate,
+						"",
+						"",
+						"",
+						new ArrayList<String>() ) ) );
+		ExerciseImpl compressionExercise = exerciseService.findExerciseByID( exerciseService.persistExercise( new CompressionExercise( "",
 				"",
-				null,
-				SessionSynchronizationImpl.SYNCHRONOUS,
-				workshop,
-				null,
-				null,
-				null ) ) );
-
-		// owner joins session -> needed as evaluation exercise service checks session's exercises
-		sessionService.join( new Invitation( null, owner, session ) );
+				compressionTemplate,
+				workshop ) ) );
 
 		// exercise
 		EvaluationTemplate exerciseTemplate = (EvaluationTemplate)exerciseTemplateService.findExerciseTemplateByID(
@@ -115,10 +129,23 @@ import static org.junit.Assert.assertTrue;
 
 		// solution
 		CompressionExerciseData compressionExerciseData = exerciseDataService.findByID( exerciseDataService.persist( new CompressionExerciseData( owner,
-				null,
-				Collections.singletonList( new CompressionExerciseDataElement( "compressiondata",
-						"compressiondata" ) ) ) ) );
+				compressionExercise,
+				Collections.singletonList( new CompressionExerciseDataElement( "compressionsolution",
+						"compressiondescription" ) ) ) ) );
 		solution = compressionExerciseData.getSolutions().get( 0 );
+
+		// session
+		session.setID( sessionService.persistSession( new SessionImpl( "",
+				"",
+				null,
+				SessionSynchronizationImpl.SYNCHRONOUS,
+				workshop,
+				null,
+				null,
+				null ) ) );
+
+		// owner joins session -> needed as evaluation exercise service checks session's exercises
+		sessionService.join( new Invitation( null, owner, session ) );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
