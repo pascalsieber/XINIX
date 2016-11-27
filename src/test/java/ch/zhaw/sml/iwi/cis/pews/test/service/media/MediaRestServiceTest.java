@@ -18,6 +18,7 @@ import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -105,16 +106,18 @@ import static org.junit.Assert.assertTrue;
 		// note that the correct persistance of blob is tested with testGetContentByID
 	}
 
-	@TestOrder( order = 3 ) @Test public void testFindByType()
+	@TestOrder( order = 3 ) @Test public void testFindByType() throws IOException
 	{
-		MediaObject findable = mediaService.findByID( mediaObject.getID() );
-		List<MediaObject> mediaObjects = mediaService.findByType( TYPE );
-		assertTrue( mediaService.findByType( TYPE ).contains( findable ) );
-
-		MediaObject excludable = mediaService.findByID( otherMediaObject.getID() );
-		assertTrue( excludable != null );
-		assertTrue( mediaService.findByType( OTHER_TYPE ).contains( excludable ) );
-		assertTrue( !mediaService.findByType( TYPE ).contains( excludable ) );
+		List<MediaObject> mediaObjects = TestUtil.objectMapper.readValue( TestUtil.objectMapper.writeValueAsString(
+				mediaService.findByType( TYPE ) ), TestUtil.makeCollectionType( MediaObject.class ) );
+		List<String> mediaObjectIds = new ArrayList<String>();
+		for ( MediaObject mediaObject : mediaObjects )
+		{
+			mediaObjectIds.add( mediaObject.getID() );
+		}
+		assertTrue( mediaObjectIds.contains( mediaObject.getID() ) );
+		assertTrue( mediaService.findByID( otherMediaObject.getID() ) != null );
+		assertTrue( !mediaObjectIds.contains( otherMediaObject.getID() ) );
 	}
 
 	@TestOrder( order = 4 ) @Test public void testGetContentByID()
