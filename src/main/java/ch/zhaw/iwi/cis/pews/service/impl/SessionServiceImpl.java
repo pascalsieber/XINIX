@@ -50,27 +50,29 @@ import ch.zhaw.iwi.cis.pews.util.comparator.ExerciseImplComparator;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class SessionServiceImpl extends WorkflowElementServiceImpl implements SessionService
 {
-	private SessionDao sessionDao;
-	private UserDao userDao;
-	private ParticipantDao participantDao;
-	private ExerciseDao exerciseDao;
+	private SessionDao                 sessionDao;
+	private UserDao                    userDao;
+	private ParticipantDao             participantDao;
+	private ExerciseDao                exerciseDao;
 	private AuthenticationTokenService authenticationTokenService;
-	private ExerciseService exerciseService;
-	private WorkshopDao workshopDao;
+	private ExerciseService            exerciseService;
+	private WorkshopDao                workshopDao;
 
 	public SessionServiceImpl()
 	{
 		sessionDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionDaoImpl.class.getSimpleName() );
 		userDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
-		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
+		participantDao = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
 		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
-		authenticationTokenService = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
-		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
+		authenticationTokenService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
+		exerciseService = ZhawEngine.getManagedObjectRegistry()
+				.getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
 		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
 	}
 
-	@Override
-	public String persistSession( SessionImpl session )
+	@Override public String persistSession( SessionImpl session )
 	{
 		// if new session, use first exercise in workshop as currentExercise
 		// if existing session, use currentExercise referenced in database if null
@@ -90,28 +92,31 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		return super.persist( session );
 	}
 
-	@Override
-	public void stop( String id )
+	@Override public void stop( String id )
 	{
 		super.stop( id );
 		// remove authentication tokens
 		authenticationTokenService.removeBySessionID( id );
 	}
 
-	@Override
-	public void renew( String id )
+	@Override public void renew( String id )
 	{
 		super.renew( id );
 		// remove authentication tokens
 		authenticationTokenService.removeBySessionID( id );
 	}
 
-	@Override
-	public SessionImpl findSessionByID( String id )
+	@Override public SessionImpl findSessionByID( String id )
 	{
+		SessionImpl found = sessionDao.findSessionByID( id );
+		if ( found == null )
+		{
+			return null;
+		}
+
 		// simplify object for JSON mapper
-		SessionImpl session = (SessionImpl)simplifyOwnerInObjectGraph( sessionDao.findSessionByID( id ) );
-		session.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+		SessionImpl session = (SessionImpl)simplifyOwnerInObjectGraph( found );
+		session.getWorkshop().setExercises( new ArrayList<ExerciseImpl>() );
 
 		for ( Participant part : session.getParticipants() )
 		{
@@ -125,15 +130,12 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		return session;
 	}
 
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public List< SessionImpl > findAllSessions()
+	@SuppressWarnings( "unchecked" ) @Override public List<SessionImpl> findAllSessions()
 	{
-		return (List< SessionImpl >)simplifyOwnerInObjectGraph( findAll() );
+		return (List<SessionImpl>)simplifyOwnerInObjectGraph( findAll() );
 	}
 
-	@Override
-	public void join( Invitation invitation )
+	@Override public void join( Invitation invitation )
 	{
 		if ( ( (PrincipalImpl)userDao.findById( invitation.getInvitee().getID() ) ).getParticipation() != null )
 		{
@@ -152,8 +154,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		sessionDao.persist( session );
 	}
 
-	@Override
-	public void leave( Invitation invitation )
+	@Override public void leave( Invitation invitation )
 	{
 		PrincipalImpl principal = userDao.findById( invitation.getInvitee().getID() );
 		SessionImpl session = sessionDao.findById( principal.getParticipation().getSession().getID() );
@@ -175,8 +176,7 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		// participantDao.remove( participantDao.findById( removable.getID() ) );
 	}
 
-	@Override
-	public void setCurrentExercise( SessionImpl request )
+	@Override public void setCurrentExercise( SessionImpl request )
 	{
 		SessionImpl session = sessionDao.findById( request.getID() );
 		ExerciseImpl exercise = exerciseDao.findById( request.getCurrentExercise().getID() );
@@ -192,41 +192,39 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		}
 	}
 
-	private List< ExerciseImpl > getExercisesOfSession( SessionImpl session )
+	private List<ExerciseImpl> getExercisesOfSession( SessionImpl session )
 	{
-		Set< ExerciseImpl > exercisesRaw = new HashSet<>( session.getWorkshop().getExercises() );
-		List< ExerciseImpl > orderedExercises = new ArrayList<>( exercisesRaw );
+		Set<ExerciseImpl> exercisesRaw = new HashSet<>( session.getWorkshop().getExercises() );
+		List<ExerciseImpl> orderedExercises = new ArrayList<>( exercisesRaw );
 		Collections.sort( orderedExercises, new ExerciseImplComparator() );
 
 		return orderedExercises;
 	}
 
-	@Override
-	public ExerciseImpl getPreviousExercise( String sessionID )
+	@Override public ExerciseImpl getPreviousExercise( String sessionID )
 	{
 		SessionImpl session = sessionDao.findById( sessionID );
-		List< ExerciseImpl > exercises = getExercisesOfSession( session );
+		List<ExerciseImpl> exercises = getExercisesOfSession( session );
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
 		if ( current > 0 )
 		{
 			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current - 1 ) );
-			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+			ex.getWorkshop().setExercises( new ArrayList<ExerciseImpl>() );
 			return ex;
 		}
 		else
 		{
 			ExerciseImpl ex = (ExerciseImpl)simplifyOwnerInObjectGraph( exercises.get( current ) );
-			ex.getWorkshop().setExercises( new ArrayList< ExerciseImpl >() );
+			ex.getWorkshop().setExercises( new ArrayList<ExerciseImpl>() );
 			return ex;
 		}
 	}
 
-	@Override
-	public String setNextExercise( String sessionID )
+	@Override public String setNextExercise( String sessionID )
 	{
 		SessionImpl session = sessionDao.findById( sessionID );
-		List< ExerciseImpl > exercises = getExercisesOfSession( session );
+		List<ExerciseImpl> exercises = getExercisesOfSession( session );
 		int current = exercises.indexOf( session.getCurrentExercise() );
 
 		if ( current + 1 < exercises.size() )
@@ -241,15 +239,14 @@ public class SessionServiceImpl extends WorkflowElementServiceImpl implements Se
 		}
 	}
 
-	@Override
-	protected WorkshopObjectDao getWorkshopObjectDao()
+	@Override protected WorkshopObjectDao getWorkshopObjectDao()
 	{
 		return sessionDao;
 	}
 
-	@Override
-	public PollingWrapper getCurrentExericseIDWithOutput()
+	@Override public PollingWrapper getCurrentExericseIDWithOutput()
 	{
-		return new PollingWrapper( UserContext.getCurrentUser().getSession().getCurrentExercise().getID(), exerciseService.getOutput() );
+		return new PollingWrapper( UserContext.getCurrentUser().getSession().getCurrentExercise().getID(),
+				exerciseService.getOutput() );
 	}
 }
