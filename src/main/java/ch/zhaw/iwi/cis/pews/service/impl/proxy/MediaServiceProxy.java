@@ -35,7 +35,7 @@ public class MediaServiceProxy extends WorkshopObjectServiceProxy implements Med
 	{
 		return getServiceTarget().path( MediaRestService.FIND_BY_TYPE )
 				.request( MediaType.APPLICATION_JSON )
-				.post( Entity.json( type ) )
+				.post( Entity.json( type.toString() ) )
 				.readEntity( List.class );
 	}
 
