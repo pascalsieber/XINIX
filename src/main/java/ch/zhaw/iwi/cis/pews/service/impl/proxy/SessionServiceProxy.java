@@ -80,7 +80,7 @@ public class SessionServiceProxy extends WorkshopObjectServiceProxy implements S
 	@Override
 	public List< SessionImpl > findAllSessions()
 	{
-		return getServiceTarget().path( SessionRestService.FIND_BY_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
+		return getServiceTarget().path( SessionRestService.FIND_ALL ).request( MediaType.APPLICATION_JSON ).post( Entity.json( "" ) ).readEntity( List.class );
 	}
 
 	@Override
