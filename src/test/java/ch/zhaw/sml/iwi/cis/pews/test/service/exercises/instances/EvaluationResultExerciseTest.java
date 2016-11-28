@@ -92,13 +92,24 @@ import static org.junit.Assert.assertTrue;
 				"",
 				login ) ) );
 
+		String secondLogin = "secondLogin";
+		UserImpl secondOwner = new UserImpl();
+		secondOwner.setID( userService.persist( new UserImpl( new PasswordCredentialImpl( password ),
+				role,
+				null,
+				"",
+				"",
+				secondLogin ) ) );
+
 		// services
 		exerciseService = ServiceProxyManager.createServiceProxyWithUser( ExerciseServiceProxy.class, login, password );
 		WorkshopTemplateService workshopTemplateService = ServiceProxyManager.createServiceProxy(
 				WorkshopTemplateServiceProxy.class );
 		workshopService = ServiceProxyManager.createServiceProxy( WorkshopServiceProxy.class );
 		exerciseTemplateService = ServiceProxyManager.createServiceProxy( ExerciseTemplateServiceProxy.class );
-		ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxy( ExerciseDataServiceProxy.class );
+		ExerciseDataService exerciseDataService = ServiceProxyManager.createServiceProxyWithUser( ExerciseDataServiceProxy.class,
+				login,
+				password );
 		SessionService sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class,
 				login,
 				password );
@@ -170,14 +181,6 @@ import static org.junit.Assert.assertTrue;
 		EvaluationExercise evaluationExercise = (EvaluationExercise)exerciseService.findExerciseByID( exerciseService.persistExercise(
 				new EvaluationExercise( "", "", evaluationTemplate, workshop ) ) );
 
-		// evaluation data
-		exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
-				evaluationExercise,
-				new Evaluation( owner, evaluated.getSolutions().get( 0 ), new Score( owner, SCORE_ONE ) ) ) );
-		exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
-				evaluationExercise,
-				new Evaluation( owner, evaluated.getSolutions().get( 0 ), new Score( owner, SCORE_TWO ) ) ) );
-
 		// owner joins session
 		SessionImpl session = new SessionImpl();
 		session.setID( sessionService.persistSession( new SessionImpl( "",
@@ -189,6 +192,23 @@ import static org.junit.Assert.assertTrue;
 				new HashSet<Participant>(),
 				new HashSet<Invitation>() ) ) );
 		sessionService.join( new Invitation( null, owner, session ) );
+
+		// second user joins as well
+		sessionService.join( new Invitation( null, secondOwner, session ) );
+
+		// evaluation data
+		exerciseDataService.persistExerciseData( new EvaluationExerciseData( owner,
+				evaluationExercise,
+				new Evaluation( owner, evaluated.getSolutions().get( 0 ), new Score( owner, SCORE_ONE ) ) ) );
+		// second evaluation by different user (secondOwner)
+		ExerciseDataService secondExerciseDataService = ServiceProxyManager.createServiceProxyWithUser( ExerciseDataServiceProxy.class,
+				secondLogin,
+				password );
+		secondExerciseDataService.persistExerciseData( new EvaluationExerciseData( secondOwner,
+				evaluationExercise,
+				new Evaluation( secondOwner,
+						evaluated.getSolutions().get( 0 ),
+						new Score( secondOwner, SCORE_TWO ) ) ) );
 	}
 
 	@TestOrder( order = 1 ) @Test public void testPersist()
@@ -259,7 +279,7 @@ import static org.junit.Assert.assertTrue;
 		assertTrue( input.getResults().get( 0 ).getSolution().getSolution().equals( SOLUTION_VOTED ) );
 		assertTrue( input.getResults().get( 0 ).getSolution().getDescription().equals( DESCRIPTION_VOTED ) );
 		assertTrue( input.getResults().get( 0 ).getNumberOfVotes() == 2 );
-		assertTrue( input.getResults().get( 0 ).getAverageScore() == ( SCORE_ONE + SCORE_TWO ) / 2 );
+		assertTrue( input.getResults().get( 0 ).getAverageScore() == ( (double)SCORE_ONE + (double)SCORE_TWO ) / 2 );
 	}
 
 	@TestOrder( order = 4 ) @Test public void testSetOutput()
