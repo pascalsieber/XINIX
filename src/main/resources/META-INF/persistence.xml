@@ -13,7 +13,9 @@
 		<class>ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry</class>
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword</class>
@@ -21,29 +23,35 @@
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData</class>
 		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData</class>
-		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixImage</class>
-		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData</class>		
+		<class>ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData</class>
 		
 		<class>ch.zhaw.iwi.cis.pews.model.data.WorkflowElementDataImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.data.WorkshopDataImpl</class>
 		
-		<class>ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplateImpl</class>
-		<class>ch.zhaw.iwi.cis.pews.model.template.WorkflowElemenTemplateImpl</class>
-		<class>ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplateImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate</class>
+		<class>ch.zhaw.iwi.cis.pews.model.template.WorkflowElementTemplate</class>
+		<class>ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate</class>
 		
 		<class>ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.instance.Timer</class>
 		<class>ch.zhaw.iwi.cis.pews.model.instance.SessionImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.instance.Participant</class>
 		<class>ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementStatusHistoryElementImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl</class>
 		
 		<class>ch.zhaw.iwi.cis.pews.model.user.CredentialImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.user.GroupImpl</class>
+		<class>ch.zhaw.iwi.cis.pews.model.user.Invitation</class>
 		<class>ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.user.RoleImpl</class>
 		<class>ch.zhaw.iwi.cis.pews.model.user.UserImpl</class>
-		
+
+
+		<class>ch.zhaw.iwi.cis.pews.model.Client</class>
+		<class>ch.zhaw.iwi.cis.pews.model.media.MediaObject</class>
+
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
 			
@@ -54,7 +62,7 @@
 			
 			<property name="javax.persistence.jdbc.user" value="pews" />
 			<property name="javax.persistence.jdbc.password" value="pews" />
-			<property name="hibernate.hbm2ddl.auto" value="validate" />
+			<property name="hibernate.hbm2ddl.auto" value="create" />
 			<property name="hibernate.show_sql" value="false" />
 		</properties>
 	</persistence-unit>

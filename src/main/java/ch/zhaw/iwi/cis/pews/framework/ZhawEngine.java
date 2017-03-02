@@ -231,7 +231,6 @@ public class ZhawEngine implements LifecycleObject
 		HandlerCollection handlers = new HandlerCollection();
 		handlers.addHandler( getSecurityHandler( getServletContextHandler() ) );
 
-		handlers.addHandler( getRequestLogHandler() );
 		handlers.addHandler( getResourceHandler() );
 		webServer.setHandler( handlers );
 
@@ -270,20 +269,6 @@ public class ZhawEngine implements LifecycleObject
 		handler.setHandler( sessionHandler );
 
 		return handler;
-	}
-
-	private static RequestLogHandler getRequestLogHandler()
-	{
-		NCSARequestLog requestLog = new NCSARequestLog( PewsConfig.getLogDir() + "/jetty-yyyy_mm_dd.request.log" );
-		requestLog.setRetainDays( 90 );
-		requestLog.setAppend( true );
-		requestLog.setExtended( false );
-		requestLog.setLogTimeZone( "GMT" );
-
-		RequestLogHandler requestLogHandler = new RequestLogHandler();
-		requestLogHandler.setRequestLog( requestLog );
-
-		return requestLogHandler;
 	}
 
 	private static SecurityHandler getSecurityHandler( Handler delegateHandler )

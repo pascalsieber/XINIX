@@ -10,7 +10,6 @@ public class PewsConfig
 	public static final String CONF = "/conf";
 	public static final String DB = "/db";
 	public static final String LIB = "/lib";
-	public static final String LOG = "/log";
 	public static final String WEB = "/web";
 	public static Properties properties;
 
@@ -21,7 +20,7 @@ public class PewsConfig
 
 		try
 		{
-			properties.load( PewsConfig.class.getClassLoader().getResourceAsStream( "META-INF/pews.properties" ) );
+			properties.load( PewsConfig.class.getClassLoader().getResourceAsStream( "defaultConfig/pews.properties" ) );
 		}
 		catch ( IOException e )
 		{
@@ -62,11 +61,6 @@ public class PewsConfig
 	public static String getLibDir()
 	{
 		return getPewsHome() + LIB;
-	}
-
-	public static String getLogDir()
-	{
-		return getPewsHome() + LOG;
 	}
 
 	public static int getApplicationPort()

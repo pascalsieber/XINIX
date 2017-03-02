@@ -153,3 +153,5 @@ crashlytics-build.properties
 # KDE directory preferences
 .directory
 
+derby.log
+build/
