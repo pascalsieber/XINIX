@@ -1,9 +1,6 @@
 package ch.zhaw.iwi.cis.pews.framework;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
@@ -13,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
@@ -27,10 +23,8 @@ import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.session.HashSessionIdManager;
 import org.eclipse.jetty.server.session.HashSessionManager;
@@ -121,9 +115,13 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.apache.derby.drda.NetworkServerControlWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.eclipse.jetty.server.ServerWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ZhawEngine implements LifecycleObject
 {
+	private static Logger LOG = LoggerFactory.getLogger(ZhawEngine.class);
+
 	private static NetworkServerControl serverControl;
 	private static Server webServer;
 	private static ManagedObjectRegistry managedObjectRegistry;
@@ -147,15 +145,24 @@ public class ZhawEngine implements LifecycleObject
 	{
 		// This only needs to be done once, so am doing it here.
 		Runtime.getRuntime().addShutdownHook( new ShutdownThread() );
+
+		// Fix Logging
+		System.setProperty("org.jboss.logging.provider", "slf4j");
+		System.setProperty("derby.stream.error.field", ZhawEngine.class.getName() + ".DEV_NULL");
 	}
 
 	public static void main( String[] args )
 	{
-		Logger.getLogger( ZhawEngine.class.getName() ).info( "Testing" );
+		System.out.println("Starting...");
 		initProperties();
 
 		getEngine().start();
 	}
+
+	// Used to get rid of derby.log
+	public static final OutputStream DEV_NULL = new OutputStream() {
+		public void write(int b) {}
+	};
 
 	public static void initProperties()
 	{
