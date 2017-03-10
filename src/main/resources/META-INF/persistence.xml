@@ -67,8 +67,8 @@
 		<class>ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate</class>
 
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1529/pewsDB;create=true" />
+			<property name="javax.persistence.jdbc.driver" value="TODO ADD DRIVER" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:TODO ADD DATABASE" />
 			<property name="javax.persistence.jdbc.user" value="pews" />
 			<property name="javax.persistence.jdbc.password" value="pews" />
 			<property name="hibernate.hbm2ddl.auto" value="validate" />

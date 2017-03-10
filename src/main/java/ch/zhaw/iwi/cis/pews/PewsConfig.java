@@ -68,11 +68,6 @@ public class PewsConfig
 		return Integer.parseInt( properties.getProperty( "APPLICATION_PORT" ) );
 	}
 
-	public static int getDerbyPort()
-	{
-		return Integer.parseInt( properties.getProperty( "DERBY_PORT" ) );
-	}
-
 	public static String getWebDirURL()
 	{
 		return "http://" + properties.getProperty( "APPLICATION_HOST" ) + ":" + properties.getProperty( "APPLICATION_PORT" );

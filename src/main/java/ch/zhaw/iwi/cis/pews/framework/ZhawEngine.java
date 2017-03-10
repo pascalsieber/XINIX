@@ -17,7 +17,6 @@ import javax.servlet.MultipartConfigElement;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.derby.drda.NetworkServerControl;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.SecurityHandler;
@@ -112,8 +111,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
-import ch.zhaw.sml.iwi.cis.exwrapper.java.net.InetAddressWrapper;
-import ch.zhaw.sml.iwi.cis.exwrapper.org.apache.derby.drda.NetworkServerControlWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.eclipse.jetty.server.ServerWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +119,6 @@ public class ZhawEngine implements LifecycleObject
 {
 	private static Logger LOG = LoggerFactory.getLogger(ZhawEngine.class);
 
-	private static NetworkServerControl serverControl;
 	private static Server webServer;
 	private static ManagedObjectRegistry managedObjectRegistry;
 	private static ZhawEngine zhawEngine;
@@ -148,7 +144,6 @@ public class ZhawEngine implements LifecycleObject
 
 		// Fix Logging
 		System.setProperty("org.jboss.logging.provider", "slf4j");
-		System.setProperty("derby.stream.error.field", ZhawEngine.class.getName() + ".DEV_NULL");
 	}
 
 	public static void main( String[] args )
@@ -158,11 +153,6 @@ public class ZhawEngine implements LifecycleObject
 
 		getEngine().start();
 	}
-
-	// Used to get rid of derby.log
-	public static final OutputStream DEV_NULL = new OutputStream() {
-		public void write(int b) {}
-	};
 
 	public static void initProperties()
 	{
@@ -206,7 +196,6 @@ public class ZhawEngine implements LifecycleObject
 
 		try
 		{
-			serverControl.ping();
 			stopDatabase();
 			getManagedObjectRegistry().stop();
 		}
@@ -224,8 +213,7 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startDatabase()
 	{
-		serverControl = NetworkServerControlWrapper.__new( InetAddressWrapper.getByName( "0.0.0.0" ), PewsConfig.getDerbyPort() );
-		NetworkServerControlWrapper.start( serverControl, new PrintWriter( System.out ) );
+	    // TODO: Add other database
 	}
 
 	private static void startWebServer()
@@ -2123,7 +2111,7 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void stopDatabase()
 	{
-		NetworkServerControlWrapper.shutdown( serverControl );
+	    // TODO: Stop database
 	}
 
 	private static void stopWebServer()
