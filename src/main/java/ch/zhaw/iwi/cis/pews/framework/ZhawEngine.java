@@ -120,6 +120,7 @@ public class ZhawEngine implements LifecycleObject
 	private static Logger LOG = LoggerFactory.getLogger(ZhawEngine.class);
 
 	private static Server webServer;
+	private static org.hsqldb.server.Server databaseServer;
 	private static ManagedObjectRegistry managedObjectRegistry;
 	private static ZhawEngine zhawEngine;
 	private static Client rootClient;
@@ -139,9 +140,6 @@ public class ZhawEngine implements LifecycleObject
 
 	static
 	{
-		// This only needs to be done once, so am doing it here.
-		Runtime.getRuntime().addShutdownHook( new ShutdownThread() );
-
 		// Fix Logging
 		System.setProperty("org.jboss.logging.provider", "slf4j");
 	}
@@ -170,14 +168,13 @@ public class ZhawEngine implements LifecycleObject
 	public void start()
 	{
 		startDatabase();
-
 		setupEntityManager();
 		startWebServer();
-//		configureRootUser();
-//		configureSampleWorkshop();
-//		configureDemoWorkshop();
-//		configurePostWorkshop();
-//		configureSBBWorkshop();
+		configureRootUser();
+		configureSampleWorkshop();
+		configureDemoWorkshop();
+		configurePostWorkshop();
+		configureSBBWorkshop();
 
 		System.out.println( "PEWS running and ready to go!" );
 	}
@@ -213,7 +210,11 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startDatabase()
 	{
-	    // TODO: Add other database
+	    if (databaseServer == null){
+	        LOG.info("Starting HSQLDB Database...");
+	        databaseServer = new org.hsqldb.Server();
+		}
+		databaseServer.start();
 	}
 
 	private static void startWebServer()
@@ -456,7 +457,7 @@ public class ZhawEngine implements LifecycleObject
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( PewsConfig.getImageDir() + "/xinix_img_" + i + ".png" );
+			imageUrls.add( PewsConfig.getImageDir() + "/xinix_img_" + i + ".jpg" );
 		}
 
 		XINIX_IMAGES = new ArrayList< MediaObject >();
@@ -465,9 +466,7 @@ public class ZhawEngine implements LifecycleObject
 		{
 			try
 			{
-				File tempFile = new File( "tempFile" );
-				FileUtils.copyURLToFile( new URL( url ), tempFile );
-				FileInputStream input = new FileInputStream( tempFile );
+				FileInputStream input = new FileInputStream( url );
 				XINIX_IMAGES.add( (MediaObject)mediaService.findByID( mediaService.persist( new MediaObject( "image/png", IOUtils.toByteArray( input ), MediaObjectType.XINIX ) ) ) );
 			}
 			catch ( IOException e )
@@ -599,8 +598,7 @@ public class ZhawEngine implements LifecycleObject
 		try
 		{
 
-			File file = new File( "file" );
-			FileUtils.copyURLToFile( new URL( "http://91ef69bade70f992a001-b6054e05bb416c4c4b6f3b0ef3e0f71d.r93.cf3.rackcdn.com/laptop-with-business-chart-10032918.jpg" ), file );
+			File file = new File( PewsConfig.getImageDir() + "/laptop.jpeg" );
 			byte[] blob = IOUtils.toByteArray( new FileInputStream( file ) );
 			String mediaObjectID = mediaService.persist( new MediaObject( "image/jpeg", blob, MediaObjectType.SIMPLYPROTOTYPING ) );
 
@@ -609,7 +607,7 @@ public class ZhawEngine implements LifecycleObject
 		}
 		catch ( IOException e )
 		{
-			throw new RuntimeException( "an error occured while configuring sample data for Simply Prorotyping" );
+			throw new RuntimeException( "an error occured while configuring sample data for Simply Prototyping" );
 		}
 
 		// compression data
@@ -802,7 +800,7 @@ public class ZhawEngine implements LifecycleObject
 		List< String > imageUrls = new ArrayList<>();
 		for ( int i = 1; i < 37; i++ )
 		{
-			imageUrls.add( PewsConfig.getImageDir() + "/xinix_img_" + i + ".png" );
+			imageUrls.add( PewsConfig.getImageDir() + "/xinix_img_" + i + ".jpg" );
 		}
 
 		XINIX_IMAGES = new ArrayList< MediaObject >();
@@ -811,9 +809,7 @@ public class ZhawEngine implements LifecycleObject
 		{
 			try
 			{
-				File tempFile = new File( "tempFile" );
-				FileUtils.copyURLToFile( new URL( url ), tempFile );
-				FileInputStream input = new FileInputStream( tempFile );
+				FileInputStream input = new FileInputStream( url );
 				XINIX_IMAGES.add( (MediaObject)mediaService.findByID( mediaService.persist( new MediaObject( "image/png", IOUtils.toByteArray( input ), MediaObjectType.XINIX ) ) ) );
 			}
 			catch ( IOException e )
@@ -2111,7 +2107,9 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void stopDatabase()
 	{
-	    // TODO: Stop database
+	    if (databaseServer != null) {
+	    	databaseServer.shutdown();
+		}
 	}
 
 	private static void stopWebServer()

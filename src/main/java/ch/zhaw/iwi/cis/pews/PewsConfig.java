@@ -75,7 +75,11 @@ public class PewsConfig
 
 	public static String getImageDir()
 	{
-		return properties.getProperty( "IMAGE_DIR" );
+		String imageDir = properties.getProperty( "IMAGE_DIR" );
+		if (imageDir == null || imageDir.trim().isEmpty()) {
+			imageDir = PewsConfig.class.getClassLoader().getResource("web/images").getPath();
+		}
+		return imageDir;
 	}
 
 	public static String getExportDir()
