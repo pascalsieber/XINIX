@@ -170,11 +170,11 @@ public class ZhawEngine implements LifecycleObject
 		startDatabase();
 		setupEntityManager();
 		startWebServer();
-		configureRootUser();
-		configureSampleWorkshop();
-		configureDemoWorkshop();
-		configurePostWorkshop();
-		configureSBBWorkshop();
+//		configureRootUser();
+//		configureSampleWorkshop();
+//		configureDemoWorkshop();
+//		configurePostWorkshop();
+//		configureSBBWorkshop();
 
 		System.out.println( "PEWS running and ready to go!" );
 	}
@@ -213,6 +213,7 @@ public class ZhawEngine implements LifecycleObject
 	    if (databaseServer == null){
 	        LOG.info("Starting HSQLDB Database...");
 	        databaseServer = new org.hsqldb.Server();
+	        databaseServer.setAddress("127.0.0.1");
 		}
 		databaseServer.start();
 	}

@@ -67,7 +67,7 @@
 		<class>ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate</class>
 
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:testdb" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:db/pews" />
 			<property name="hibernate.connection.provider_class"
 					  value="com.zaxxer.hikari.hibernate.HikariConnectionProvider" />
 
