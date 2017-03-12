@@ -6,10 +6,6 @@ import java.util.Properties;
 public class PewsConfig
 {
 	public static final String PEWS_HOME = PewsConfig.class.getPackage().getName() + ".pewsHome";
-	public static final String BIN = "/bin";
-	public static final String CONF = "/conf";
-	public static final String DB = "/db";
-	public static final String LIB = "/lib";
 	public static final String WEB = "/web";
 	public static Properties properties;
 
@@ -34,21 +30,6 @@ public class PewsConfig
 		return System.getProperty( PEWS_HOME );
 	}
 
-	public static String getBinDir()
-	{
-		return getPewsHome() + BIN;
-	}
-
-	public static String getConfDir()
-	{
-		return getPewsHome() + CONF;
-	}
-
-	public static String getDbDir()
-	{
-		return getPewsHome() + DB;
-	}
-
 	public static String getWebDir()
 	{
 		// TODO Make webBase configuration dependent: alternative is ""
@@ -58,19 +39,9 @@ public class PewsConfig
 		return getPewsHome() + WEB;
 	}
 
-	public static String getLibDir()
-	{
-		return getPewsHome() + LIB;
-	}
-
 	public static int getApplicationPort()
 	{
 		return Integer.parseInt( properties.getProperty( "APPLICATION_PORT" ) );
-	}
-
-	public static String getWebDirURL()
-	{
-		return "http://" + properties.getProperty( "APPLICATION_HOST" ) + ":" + properties.getProperty( "APPLICATION_PORT" );
 	}
 
 	public static String getImageDir()
