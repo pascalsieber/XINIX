@@ -6,7 +6,7 @@
 	version="2.0">
 	<persistence-unit name="pews">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		
+
 		<class>ch.zhaw.iwi.cis.pews.model.authentication.AuthenticationToken</class>
 		<class>ch.zhaw.iwi.cis.pews.model.Client</class>
 		<class>ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl</class>
@@ -67,8 +67,9 @@
 		<class>ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate</class>
 
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:testdb" />
+			<property name="hibernate.connection.provider_class"
+					  value="com.zaxxer.hikari.hibernate.HikariConnectionProvider" />
 
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 			<property name="hibernate.hbm2ddl.auto" value="update" />

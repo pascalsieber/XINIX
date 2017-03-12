@@ -10,6 +10,7 @@ repositories {
 dependencies {
     compile (group: 'org.hibernate', name: 'hibernate-core', version: '4.3.11.Final')
     compile (group: 'org.hibernate', name: 'hibernate-entitymanager', version: '4.3.11.Final')
+    compile (group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1')
     compile (group: 'net.sf.flexjson', name: 'flexjson', version: '2.0')
     compile (group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13')
     compile (group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13')
