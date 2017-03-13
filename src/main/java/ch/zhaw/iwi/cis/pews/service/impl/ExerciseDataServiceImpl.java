@@ -302,7 +302,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	@SuppressWarnings( "resource" )
 	private String exportDataToFile( Map< ExerciseImpl, List< ExerciseDataViewObject >> exportableDataMap )
 	{
-		String exportDirLocation = PewsConfig.getWebDir() + File.separator + "export";
+		String exportDirLocation = PewsConfig.getWebDir();
 
 		// init export directory if not available
 		File dir = new File( exportDirLocation );
@@ -310,7 +310,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			dir.mkdirs();
 
 		String filePath = dir.getAbsolutePath() + File.separator + "export.xlsx";
-		String downloadPath = PewsConfig.getExportDir() + "/export.xlsx";
+		String downloadPath = PewsConfig.getWebClientUrl() + "export.xlsx";
 		Workbook workbook = new XSSFWorkbook();
 
 		// make sheet for every entry in exportableDataMap

@@ -5,38 +5,18 @@ import java.util.Properties;
 
 public class PewsConfig
 {
-	public static final String PEWS_HOME = PewsConfig.class.getPackage().getName() + ".pewsHome";
-	public static final String WEB = "/web";
 	public static Properties properties;
 
-	public static void loadProperties()
-	{
+	public static void loadProperties() throws IOException {
 		System.out.println( "loading properties" );
 		properties = new Properties();
+		properties.load( PewsConfig.class.getClassLoader().getResourceAsStream( "defaultConfig/pews.properties" ) );
 
-		try
-		{
-			properties.load( PewsConfig.class.getClassLoader().getResourceAsStream( "defaultConfig/pews.properties" ) );
-		}
-		catch ( IOException e )
-		{
-			throw new RuntimeException( e );
-		}
-
-	}
-
-	public static String getPewsHome()
-	{
-		return System.getProperty( PEWS_HOME );
 	}
 
 	public static String getWebDir()
 	{
-		// TODO Make webBase configuration dependent: alternative is ""
-		// String webBase = "/../../../src";
-		// return getPewsHome() + webBase + WEB;
-
-		return getPewsHome() + WEB;
+		return properties.getProperty( "WEB_DIR" );
 	}
 
 	public static int getApplicationPort()
@@ -46,21 +26,17 @@ public class PewsConfig
 
 	public static String getImageDir()
 	{
-		String imageDir = properties.getProperty( "IMAGE_DIR" );
-		if (imageDir == null || imageDir.trim().isEmpty()) {
-			imageDir = PewsConfig.class.getClassLoader().getResource("web/images").getPath();
-		}
-		return imageDir;
-	}
-
-	public static String getExportDir()
-	{
-		return properties.getProperty( "EXPORT_DIR" );
+		return PewsConfig.class.getClassLoader().getResource("web/images").getPath();
 	}
 
 	public static String getServiceUrl()
 	{
 		return properties.getProperty( "EXPOSED_SERVICE_URL" );
+	}
+
+	public static String getWebClientUrl()
+	{
+		return properties.getProperty( "WEB_CLIENT_URL" );
 	}
 
 	public static String getWebClientAuthenticationUrl()

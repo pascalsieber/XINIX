@@ -144,17 +144,11 @@ public class ZhawEngine implements LifecycleObject
 		System.setProperty("org.jboss.logging.provider", "slf4j");
 	}
 
-	public static void main( String[] args )
-	{
+	public static void main( String[] args ) throws IOException {
 		System.out.println("Starting...");
-		initProperties();
+		PewsConfig.loadProperties();
 
 		getEngine().start();
-	}
-
-	public static void initProperties()
-	{
-		PewsConfig.loadProperties();
 	}
 
 	public static ZhawEngine getEngine()
