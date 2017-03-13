@@ -1,17 +1,25 @@
 package ch.zhaw.iwi.cis.pews;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Properties;
 
 public class PewsConfig
 {
+	private static Logger LOG = LoggerFactory.getLogger(PewsConfig.class);
+
 	public static Properties properties;
 
-	public static void loadProperties() throws IOException {
+	static {
 		System.out.println( "loading properties" );
 		properties = new Properties();
-		properties.load( PewsConfig.class.getClassLoader().getResourceAsStream( "defaultConfig/pews.properties" ) );
-
+		try {
+			properties.load( PewsConfig.class.getClassLoader().getResourceAsStream( "defaultConfig/pews.properties" ) );
+		} catch (IOException e) {
+		    LOG.error("Could not load properties (" + e.getMessage() + ")");
+		}
 	}
 
 	public static String getWebDir()

@@ -146,8 +146,6 @@ public class ZhawEngine implements LifecycleObject
 
 	public static void main( String[] args ) throws IOException {
 		System.out.println("Starting...");
-		PewsConfig.loadProperties();
-
 		getEngine().start();
 	}
 
