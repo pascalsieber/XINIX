@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class PewsConfig
 {
-	private static Logger LOG = LoggerFactory.getLogger(PewsConfig.class);
+	private final static Logger LOG = LoggerFactory.getLogger(PewsConfig.class);
 
 	public static Properties properties;
 

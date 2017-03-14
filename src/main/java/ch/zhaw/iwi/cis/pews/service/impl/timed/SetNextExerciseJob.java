@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class SetNextExerciseJob implements Job
 {
-	private static Logger LOG = LoggerFactory.getLogger(SetNextExerciseJob.class);
+	private final static Logger LOG = LoggerFactory.getLogger(SetNextExerciseJob.class);
 
 	@Override
 	public void execute( JobExecutionContext context ) throws JobExecutionException

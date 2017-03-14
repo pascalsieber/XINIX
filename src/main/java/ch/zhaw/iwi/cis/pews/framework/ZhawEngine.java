@@ -117,7 +117,7 @@ import org.slf4j.LoggerFactory;
 
 public class ZhawEngine implements LifecycleObject
 {
-	private static Logger LOG = LoggerFactory.getLogger(ZhawEngine.class);
+	private final static Logger LOG = LoggerFactory.getLogger(ZhawEngine.class);
 
 	private static Server webServer;
 	private static org.hsqldb.server.Server databaseServer;
