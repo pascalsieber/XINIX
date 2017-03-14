@@ -2,7 +2,6 @@ package ch.zhaw.iwi.cis.pews.framework;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -15,7 +14,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -120,7 +118,6 @@ public class ZhawEngine implements LifecycleObject
 	private final static Logger LOG = LoggerFactory.getLogger(ZhawEngine.class);
 
 	private static Server webServer;
-	private static org.hsqldb.server.Server databaseServer;
 	private static ManagedObjectRegistry managedObjectRegistry;
 	private static ZhawEngine zhawEngine;
 	private static Client rootClient;
@@ -159,7 +156,6 @@ public class ZhawEngine implements LifecycleObject
 
 	public void start()
 	{
-		startDatabase();
 		setupEntityManager();
 		startWebServer();
 //		configureRootUser();
@@ -185,7 +181,6 @@ public class ZhawEngine implements LifecycleObject
 
 		try
 		{
-			stopDatabase();
 			getManagedObjectRegistry().stop();
 		}
 		catch ( Exception e )
@@ -200,15 +195,6 @@ public class ZhawEngine implements LifecycleObject
 		return managedObjectRegistry;
 	}
 
-	private static void startDatabase()
-	{
-	    if (databaseServer == null){
-	        LOG.info("Starting HSQLDB Database...");
-	        databaseServer = new org.hsqldb.Server();
-	        databaseServer.setAddress("127.0.0.1");
-		}
-		databaseServer.start();
-	}
 
 	private static void startWebServer()
 	{
@@ -2098,12 +2084,6 @@ public class ZhawEngine implements LifecycleObject
 
 	}
 
-	private static void stopDatabase()
-	{
-	    if (databaseServer != null) {
-	    	databaseServer.shutdown();
-		}
-	}
 
 	private static void stopWebServer()
 	{
