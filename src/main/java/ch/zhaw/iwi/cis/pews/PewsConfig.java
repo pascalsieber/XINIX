@@ -13,7 +13,7 @@ public class PewsConfig
 	public static Properties properties;
 
 	static {
-		System.out.println( "loading properties" );
+		LOG.info( "loading properties" );
 		properties = new Properties();
 		try {
 			properties.load( PewsConfig.class.getClassLoader().getResourceAsStream( "defaultConfig/pews.properties" ) );

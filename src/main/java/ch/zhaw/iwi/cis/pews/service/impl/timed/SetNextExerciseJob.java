@@ -10,9 +10,13 @@ import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
 import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SetNextExerciseJob implements Job
 {
+	private static Logger LOG = LoggerFactory.getLogger(SetNextExerciseJob.class);
+
 	@Override
 	public void execute( JobExecutionContext context ) throws JobExecutionException
 	{
@@ -23,7 +27,7 @@ public class SetNextExerciseJob implements Job
 
 			SessionService sessionService = ServiceProxyManager.createServiceProxyWithUser( SessionServiceProxy.class, currentUser.getLoginName(), currentUser.getCredential().getPassword() );
 			sessionService.setNextExercise( (String)schedulerContext.get( "sessionID" ) );
-			System.out.println( "executed setNextExercise with delay for session " + (String)schedulerContext.get( "sessionID" ) );
+			LOG.info( "executed setNextExercise with delay for session " + (String)schedulerContext.get( "sessionID" ) );
 		}
 		catch ( SchedulerException e )
 		{

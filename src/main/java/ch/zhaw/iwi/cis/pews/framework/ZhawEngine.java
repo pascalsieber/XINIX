@@ -145,7 +145,7 @@ public class ZhawEngine implements LifecycleObject
 	}
 
 	public static void main( String[] args ) throws IOException {
-		System.out.println("Starting...");
+		LOG.info("Starting...");
 		getEngine().start();
 	}
 
@@ -168,7 +168,7 @@ public class ZhawEngine implements LifecycleObject
 //		configurePostWorkshop();
 //		configureSBBWorkshop();
 
-		System.out.println( "PEWS running and ready to go!" );
+		LOG.info( "PEWS running and ready to go!" );
 	}
 
 	private static void setupEntityManager()
@@ -334,7 +334,7 @@ public class ZhawEngine implements LifecycleObject
 			bootstrapUser.setClient( rootClient );
 			UserContext.setCurrentUser( bootstrapUser );
 
-			System.out.println( "root client registered initially" );
+			LOG.info( "root client registered initially" );
 		}
 
 		ROOT_ROLE_ID = roleService.persist( new RoleImpl( "root", "root" ) );
@@ -343,17 +343,17 @@ public class ZhawEngine implements LifecycleObject
 		String rootUserID = userService.persist( user );
 
 		rootUser = userService.findByID( rootUserID );
-		System.out.println( "root user registered initially" );
+		LOG.info( "root user registered initially" );
 
 		// configure default roles
 		ORGANIZER_ROLE_ID = roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
-		System.out.println( "organizer role created initially" );
+		LOG.info( "organizer role created initially" );
 
 		EXECUTER_ROLE_ID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
-		System.out.println( "executer role created initially" );
+		LOG.info( "executer role created initially" );
 
 		PARTICIPANT_ROLE_ID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
-		System.out.println( "participant role created initially" );
+		LOG.info( "participant role created initially" );
 	}
 
 	@SuppressWarnings( "unused" )
@@ -688,7 +688,7 @@ public class ZhawEngine implements LifecycleObject
 		invitationService.persist( new Invitation( (UserImpl)userService.findByID( rootUser.getID() ), (UserImpl)userService.findByID( participantID ), (SessionImpl)sessionService
 			.findByID( sessionID ) ) );
 
-		System.out.println( "sample workshop configured" );
+		LOG.info( "sample workshop configured" );
 
 	}
 
@@ -994,7 +994,7 @@ public class ZhawEngine implements LifecycleObject
 		sessionService.start( sessionID );
 		sessionService.start( asyncSessionID1 );
 
-		System.out.println( "demo workshop configured" );
+		LOG.info( "demo workshop configured" );
 	}
 
 	public static final String POST_ROOT_CLIENT_NAME = "post";
@@ -1544,7 +1544,7 @@ public class ZhawEngine implements LifecycleObject
 		// start session
 		sessionService.start( sessionID );
 
-		System.out.println( "workshop for Post configured" );
+		LOG.info( "workshop for Post configured" );
 
 	}
 
@@ -2094,7 +2094,7 @@ public class ZhawEngine implements LifecycleObject
 		// sessionService.start( sessionID );
 		// }
 
-		System.out.println( "workshop for SBB configured" );
+		LOG.info( "workshop for SBB configured" );
 
 	}
 
