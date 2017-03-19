@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import ch.zhaw.iwi.cis.pews.service.rest.RestService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
@@ -349,9 +350,8 @@ public class RestServiceTest
 
 		try
 		{
-			File tempFile = new File( "tempFile" );
-			FileUtils.copyURLToFile( new URL( "http://www.whatnextpawan.com/wp-content/uploads/2014/03/oh-yes-its-free.png" ), tempFile );
-			FileInputStream inputStream = new FileInputStream( tempFile );
+
+			FileInputStream inputStream = new FileInputStream(RestService.class.getClassLoader().getResource("oh-yes-its-free.png" ).getFile() );
 			xinixImageStub.setID( mediaService.persist( new MediaObject( "image/png", IOUtils.toByteArray( inputStream ), MediaObjectType.XINIX ) ) );
 		}
 		catch ( IOException e )

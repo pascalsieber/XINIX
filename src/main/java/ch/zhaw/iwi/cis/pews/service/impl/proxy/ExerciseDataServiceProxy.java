@@ -56,15 +56,17 @@ public class ExerciseDataServiceProxy extends WorkshopObjectServiceProxy impleme
 	}
 
 	@Override
-	public String exportByExerciseID( String exerciseID )
+	public byte[] exportByExerciseID( String exerciseID )
 	{
-		return getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_EXERCISE_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( String.class );
+		//return getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_EXERCISE_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( exerciseID ) ).readEntity( String.class );
+		return new byte[] {};
 	}
 
 	@Override
-	public String exportByWorkshopID( String workshopID )
+	public byte[] exportByWorkshopID( String workshopID )
 	{
-		return getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_WORKSHOP_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( workshopID ) ).readEntity( String.class );
+		//getServiceTarget().path( ExerciseDataRestService.EXPORT_BY_WORKSHOP_ID ).request( MediaType.APPLICATION_JSON ).post( Entity.json( workshopID ) ).readEntity( String.class ).
+		return new byte[] {};
 	}
 
 	@Override

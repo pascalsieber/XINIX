@@ -8,6 +8,8 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
 
+import javax.ws.rs.core.Response;
+
 public interface ExerciseDataService extends WorkshopObjectService
 {
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID );
@@ -18,11 +20,11 @@ public interface ExerciseDataService extends WorkshopObjectService
 
 	public void removeExerciseDataByID( String id );
 
-	public String exportByExerciseID( String exerciseID );
+	public byte[] exportByExerciseID( String exerciseID );
 
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs );
 
-	public String exportByWorkshopID( String workshopID );
+	public byte[] exportByWorkshopID(String workshopID );
 
 	public < T extends ExerciseDataViewObject > List< T > getExportableDataByExerciseID( ExerciseImpl exercise );
 

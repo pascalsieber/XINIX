@@ -2,8 +2,6 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -36,7 +34,6 @@ import org.hibernate.collection.internal.PersistentSortedMap;
 import org.hibernate.collection.internal.PersistentSortedSet;
 import org.hibernate.collection.spi.PersistentCollection;
 
-import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
@@ -256,7 +253,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	}
 
 	@Override
-	public String exportByExerciseID( String exerciseID )
+	public byte[] exportByExerciseID( String exerciseID )
 	{
 		ExerciseImpl ex = exerciseDao.findById( exerciseID );
 		Class< ? > serviceClass = getExerciseClassSpecificService( ex.getClass().getSimpleName() );
@@ -265,7 +262,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		List< ExerciseDataViewObject > data = service.getExportableDataByExerciseID( ex );
 		Map< ExerciseImpl, List< ExerciseDataViewObject > > exportableDataMap = new HashMap< ExerciseImpl, List< ExerciseDataViewObject > >();
 		exportableDataMap.put( ex, data );
-		return exportDataToFile( exportableDataMap );
+		return exportDataToByteArray( exportableDataMap );
 	}
 
 	@Override
@@ -275,7 +272,7 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	}
 
 	@Override
-	public String exportByWorkshopID( String workshopID )
+	public byte[] exportByWorkshopID( String workshopID )
 	{
 		WorkshopImpl workshop = workshopDao.findWorkshopByID( workshopID );
 		Map< ExerciseImpl, List< ExerciseDataViewObject > > exportableDataMap = new TreeMap< ExerciseImpl, List< ExerciseDataViewObject >>( new Comparator< ExerciseImpl >() {
@@ -296,21 +293,12 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 			exportableDataMap.put( ex, data );
 		}
 
-		return exportDataToFile( exportableDataMap );
+		return exportDataToByteArray( exportableDataMap );
 	}
 
 	@SuppressWarnings( "resource" )
-	private String exportDataToFile( Map< ExerciseImpl, List< ExerciseDataViewObject >> exportableDataMap )
+	private byte[] exportDataToByteArray(Map< ExerciseImpl, List< ExerciseDataViewObject >> exportableDataMap )
 	{
-		String exportDirLocation = PewsConfig.getWebDir();
-
-		// init export directory if not available
-		File dir = new File( exportDirLocation );
-		if ( !dir.exists() )
-			dir.mkdirs();
-
-		String filePath = dir.getAbsolutePath() + File.separator + "export.xlsx";
-		String downloadPath = PewsConfig.getWebClientUrl() + "export.xlsx";
 		Workbook workbook = new XSSFWorkbook();
 
 		// make sheet for every entry in exportableDataMap
@@ -388,18 +376,17 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 		}
 
 		// write workbook as xlsx file
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try
 		{
-			FileOutputStream fos = new FileOutputStream( filePath );
-			workbook.write( fos );
-			fos.close();
-
-			return downloadPath;
+			workbook.write(out);
 		}
 		catch ( IOException e )
 		{
 			throw new RuntimeException( e.getStackTrace().toString() );
 		}
+
+		return out.toByteArray();
 	}
 
 	/**

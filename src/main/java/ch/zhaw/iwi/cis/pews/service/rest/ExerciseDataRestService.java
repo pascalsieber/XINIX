@@ -2,11 +2,9 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
@@ -22,8 +20,8 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	public final static String BASE = "/exerciseService/data";
 	public final static String FIND_BY_EXERCISE_ID = "/findByExerciseID";
 	public final static String REMOVE_BY_ID = "/removeByID";
-	public final static String EXPORT_BY_EXERCISE_ID = "/exportByExerciseID";
-	public final static String EXPORT_BY_WORKSHOP_ID = "/exportByWorkshopID";
+	public final static String EXPORT_BY_EXERCISE_ID = "/exportByExerciseID/{exerciseID}";
+	public final static String EXPORT_BY_WORKSHOP_ID = "/exportByWorkshopID/{workshopID}";
 
 	private ExerciseDataService exerciseDataService;
 
@@ -77,19 +75,31 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 		exerciseDataService.removeExerciseDataByID( id );
 	}
 
-	@POST
+	@GET
 	@Path( EXPORT_BY_EXERCISE_ID )
-	public String exportDataByExerciseID( String exerciseID )
+	@Produces("application/vnd.ms-excel")
+	public Response exportDataByExerciseID( @PathParam("exerciseID") String exerciseID )
 
 	{
-		return exerciseDataService.exportByExerciseID( exerciseID );
+		byte[] file = exerciseDataService.exportByExerciseID( exerciseID );
+
+		Response.ResponseBuilder response = Response.ok((Object)file);
+		response.header("Content-Disposition",
+				"attachment; filename=export.xlsx");
+		return response.build();
 	}
 
-	@POST
+	@GET
 	@Path( EXPORT_BY_WORKSHOP_ID )
-	public String exportDataByWorkshopID( String workshopID )
+	@Produces("application/vnd.ms-excel")
+	public Response exportDataByWorkshopID( @PathParam("workshopID") String workshopID )
 	{
-		return exerciseDataService.exportByWorkshopID( workshopID );
+		byte[] file = exerciseDataService.exportByWorkshopID( workshopID );
+
+		Response.ResponseBuilder response = Response.ok((Object)file);
+		response.header("Content-Disposition",
+				"attachment; filename=export.xlsx");
+		return response.build();
 	}
 
 	@Override
