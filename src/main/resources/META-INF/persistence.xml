@@ -67,11 +67,13 @@
 		<class>ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate</class>
 
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:db/pews" />
-			<property name="hibernate.connection.provider_class"
-					  value="com.zaxxer.hikari.hibernate.HikariConnectionProvider" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/pews" />
+			<property name="javax.persistence.jdbc.user" value="pinkelefant" />
+			<!--<property name="javax.persistence.jdbc.password" value="pews" />-->
 
-			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+            <property name="hibernate.connection.provider_class"
+                      value="com.zaxxer.hikari.hibernate.HikariConnectionProvider" />
+
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="false" />
 		</properties>

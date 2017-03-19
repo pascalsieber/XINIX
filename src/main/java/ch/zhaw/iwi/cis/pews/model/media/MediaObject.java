@@ -20,7 +20,6 @@ public class MediaObject extends WorkshopObject
 	private String mimeType;
 
 	@JsonIgnore
-	@Lob
 	private byte[] blob;
 
 	@Enumerated( EnumType.STRING )
