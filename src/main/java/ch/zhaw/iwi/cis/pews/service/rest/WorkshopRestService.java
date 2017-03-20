@@ -2,14 +2,17 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
+import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
 import ch.zhaw.iwi.cis.pews.service.impl.WorkshopServiceImpl;
@@ -29,16 +32,10 @@ public class WorkshopRestService extends WorkshopObjectRestService
 
 	public static final String UPDATE_EXERCISES_ORDER = "/updateOrderOfExercises";
 	public static final String GENERATE_FROM_TEMPLATE = "/generateFromTemplate";
-	public static final String EXPORT_DATA = "/exportData";
 	public static final String UPDATE_BASIC_INFO = "/updateBasicInformation";
 
+	@Inject
 	private WorkshopService workshopService;
-
-	public WorkshopRestService()
-	{
-		super();
-		workshopService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
-	}
 
 	@POST
 	@Path( PERSIST )

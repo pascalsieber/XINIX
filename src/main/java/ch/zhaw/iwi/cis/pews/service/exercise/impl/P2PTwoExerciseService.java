@@ -8,6 +8,7 @@ import java.util.Set;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.dao.P2POneKeywordDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneDataDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.P2POneKeywordDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
@@ -31,6 +32,8 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseTemplate = P2PTwoTemplate.class )
 public class P2PTwoExerciseService extends ExerciseServiceImpl
@@ -41,7 +44,6 @@ public class P2PTwoExerciseService extends ExerciseServiceImpl
 
 	public P2PTwoExerciseService()
 	{
-		super();
 		this.p2pOneDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneDataDao.class.getSimpleName() );
 		this.p2pOneKeywordDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2POneKeywordDaoImpl.class.getSimpleName() );
 	}

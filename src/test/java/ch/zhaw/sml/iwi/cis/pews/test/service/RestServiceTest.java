@@ -1,134 +1,8 @@
 package ch.zhaw.sml.iwi.cis.pews.test.service;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import ch.zhaw.iwi.cis.pews.service.rest.RestService;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
-import ch.zhaw.iwi.cis.pews.model.Client;
-import ch.zhaw.iwi.cis.pews.model.IdentifiableObject;
-import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
-import ch.zhaw.iwi.cis.pews.model.input.CompressionInput;
-import ch.zhaw.iwi.cis.pews.model.input.CompressionInputElement;
-import ch.zhaw.iwi.cis.pews.model.input.EvaluationInput;
-import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultInput;
-import ch.zhaw.iwi.cis.pews.model.input.EvaluationResultObject;
-import ch.zhaw.iwi.cis.pews.model.input.P2PKeywordInput;
-import ch.zhaw.iwi.cis.pews.model.input.P2POneInput;
-import ch.zhaw.iwi.cis.pews.model.input.P2PTwoInput;
-import ch.zhaw.iwi.cis.pews.model.input.PinkLabsInput;
-import ch.zhaw.iwi.cis.pews.model.input.PosterInput;
-import ch.zhaw.iwi.cis.pews.model.input.XinixInput;
-import ch.zhaw.iwi.cis.pews.model.input.You2MeInput;
-import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.SessionSynchronizationImpl;
-import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
-import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
-import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
-import ch.zhaw.iwi.cis.pews.model.output.CompressionOutput;
-import ch.zhaw.iwi.cis.pews.model.output.CompressionOutputElement;
-import ch.zhaw.iwi.cis.pews.model.output.DialogRole;
-import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutput;
-import ch.zhaw.iwi.cis.pews.model.output.EvaluationOutputElement;
-import ch.zhaw.iwi.cis.pews.model.output.Output;
-import ch.zhaw.iwi.cis.pews.model.output.P2POneOutput;
-import ch.zhaw.iwi.cis.pews.model.output.P2PTwoOutput;
-import ch.zhaw.iwi.cis.pews.model.output.PinkLabsOutput;
-import ch.zhaw.iwi.cis.pews.model.output.XinixOutput;
-import ch.zhaw.iwi.cis.pews.model.output.You2MeOutput;
-import ch.zhaw.iwi.cis.pews.model.template.ExerciseTemplate;
-import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
-import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
-import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
-import ch.zhaw.iwi.cis.pews.model.user.RoleImpl;
-import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
-import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
-import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
-import ch.zhaw.iwi.cis.pews.model.xinix.XinixImageMatrix;
-import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
-import ch.zhaw.iwi.cis.pews.service.ExerciseService;
-import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
-import ch.zhaw.iwi.cis.pews.service.GlobalService;
-import ch.zhaw.iwi.cis.pews.service.InvitationService;
-import ch.zhaw.iwi.cis.pews.service.MediaService;
-import ch.zhaw.iwi.cis.pews.service.RoleService;
-import ch.zhaw.iwi.cis.pews.service.SessionService;
-import ch.zhaw.iwi.cis.pews.service.UserService;
-import ch.zhaw.iwi.cis.pews.service.WorkshopService;
-import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseDataServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ExerciseTemplateServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.GlobalServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.InvitationServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.MediaServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.RoleServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.ServiceProxyManager;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.SessionServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.UserServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.impl.proxy.WorkshopTemplateServiceProxy;
-import ch.zhaw.iwi.cis.pews.service.xinix.XinixImageMatrixService;
-import ch.zhaw.iwi.cis.pews.service.xinix.proxy.XinixImageMatrixServiceProxy;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Evaluation;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.EvaluationExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.PinkLabsExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationResultExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2PTwoExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PinkLabsExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationResultTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2PTwoTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PinkLabsTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.PosterTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
-import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-
 public class RestServiceTest
 {
+    /*
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	private static GlobalService globalService = ServiceProxyManager.createServiceProxy( GlobalServiceProxy.class );
@@ -669,10 +543,12 @@ public class RestServiceTest
 		assertTrue( exs.size() > 0 );
 		assertTrue( exBefore - exs.size() == 1 );
 	}
+	*/
 
 	/**
 	 * helper method for validating exercise data objects (ID, Client, Owner, WorkflowElement)
 	 */
+	/*
 	private void checkExerciseData( ExerciseImpl exercise, ExerciseDataImpl data, ExerciseDataImpl dataStub )
 	{
 		assertTrue( data.getID().equalsIgnoreCase( dataStub.getID() ) );
@@ -1150,6 +1026,8 @@ public class RestServiceTest
 		 * mapper.writeValueAsString( exerciseService.getOutputByExerciseID( simplyprotoExerciseStub.getID() ) ), makeCollectionType( ExerciseDataImpl.class ) ) ) );
 		 */
 
+
+	/*
 		// xinix
 		setExerciseOnDefaultSession( xinixExerciseStub );
 		XinixInput xinixInput = mapper.readValue( exerciseService.getInputAsString(), XinixInput.class );
@@ -1522,7 +1400,6 @@ public class RestServiceTest
 		assertTrue( exerciseService.findUserParticipant().getTimer().getTimeUnit() == null );
 		assertTrue( exerciseService.findUserParticipant().getTimer().getValue() == 0 );
 	}
-
 	/**
 	 * helper method for checking result of getOutput and getOutputByExerciseID
 	 * 
@@ -1530,6 +1407,7 @@ public class RestServiceTest
 	 * @param output
 	 * @return
 	 */
+/*
 	private boolean checkOutput( List< ExerciseDataImpl > data, List< ExerciseDataImpl > output )
 	{
 
@@ -1563,6 +1441,7 @@ public class RestServiceTest
 	/**
 	 * helper method, extensively used in getInputSetOutput could use sessionService.setCurrentExercise, but this is faster
 	 */
+/*
 	private void setExerciseOnDefaultSession( ExerciseImpl exercise )
 	{
 		SessionImpl session = sessionService.findByID( defaultSessionStub.getID() );
@@ -1581,6 +1460,6 @@ public class RestServiceTest
 		}
 
 		return initial;
-	}
+	}*/
 
 }

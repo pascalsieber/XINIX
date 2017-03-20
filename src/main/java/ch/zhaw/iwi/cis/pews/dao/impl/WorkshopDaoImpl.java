@@ -11,6 +11,8 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 
+import javax.persistence.EntityManager;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class WorkshopDaoImpl extends WorkshopObjectDaoImpl implements WorkshopDao
 {
@@ -25,9 +27,14 @@ public class WorkshopDaoImpl extends WorkshopObjectDaoImpl implements WorkshopDa
 	@Override
 	public List< WorkshopImpl > findByAllSimple( String clientID )
 	{
-		List< WorkshopImpl > results = getEntityManager().createQuery(
-			"from WorkshopImpl ws LEFT JOIN FETCH ws.sessions sessions LEFT JOIN FETCH ws.exercises ex where ws.client.id = '" + clientID + "'" ).getResultList();
-		return new ArrayList< WorkshopImpl >( new HashSet< WorkshopImpl >( (List< WorkshopImpl >)cloneResult( results ) ) );
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		List< WorkshopImpl > results = em.createQuery(
+			"from WorkshopImpl ws LEFT JOIN FETCH ws.sessions sessions LEFT JOIN FETCH ws.exercises ex where ws.client.id = :clientId" )
+				.setParameter("clientId", clientID).getResultList();
+		em.close();
+		// TODO: JESUS CHRIST (it's jason borne) WTF? FIX THIS!
+		//return new ArrayList< WorkshopImpl >( new HashSet< WorkshopImpl >( (List< WorkshopImpl >)cloneResult( results ) ) );
+		return (List< WorkshopImpl >)cloneResult( results );
 	}
 
 	@SuppressWarnings( "unchecked" )

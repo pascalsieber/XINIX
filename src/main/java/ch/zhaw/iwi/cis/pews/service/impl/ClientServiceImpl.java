@@ -12,11 +12,12 @@ import ch.zhaw.iwi.cis.pews.service.ClientService;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ClientServiceImpl extends IdentifiableObjectServiceImpl implements ClientService
 {
-	private ClientDao clientDao;
+	private final ClientDao clientDao;
 
 	public ClientServiceImpl()
 	{
-		clientDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ClientDaoImpl.class.getSimpleName() );
+		clientDao = new ClientDaoImpl();
+		//clientDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ClientDaoImpl.class.getSimpleName() );
 	}
 
 	@Override

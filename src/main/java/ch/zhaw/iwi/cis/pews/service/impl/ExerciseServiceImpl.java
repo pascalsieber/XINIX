@@ -59,17 +59,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
 {
-	private ObjectMapper objectMapper;
-	private ExerciseDataService exerciseDataService;
-	private ExerciseTemplateService exerciseTemplateService;
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	private ExerciseDao exerciseDao;
-	private ExerciseDataDao exerciseDataDao;
-	private ParticipantDao participantDao;
-	private WorkshopDao workshopDao;
+	@Inject private ExerciseDataService exerciseDataService;
+	@Inject private ExerciseTemplateService exerciseTemplateService;
+	@Inject private ExerciseDao exerciseDao;
+	@Inject private ExerciseDataDao exerciseDataDao;
+	@Inject private ParticipantDao participantDao;
+	@Inject private WorkshopDao workshopDao;
+
 	private static final Map< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl > > EXERCISESPECIFICSERVICES = new HashMap< Class< ? extends ExerciseImpl >, Class< ? extends ExerciseServiceImpl >>();
 
 	protected WorkshopDao getWorkshopDao()
@@ -95,17 +98,6 @@ public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements E
 	private Class< ? > getExerciseSpecificService( Class< ? extends ExerciseImpl > exerciseClass )
 	{
 		return EXERCISESPECIFICSERVICES.get( exerciseClass );
-	}
-
-	public ExerciseServiceImpl()
-	{
-		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
-		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
-		participantDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ParticipantDaoImpl.class.getSimpleName() );
-		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
-		objectMapper = new ObjectMapper();
-		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
 	}
 
 	public ObjectMapper getObjectMapper()

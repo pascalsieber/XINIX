@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -24,6 +25,7 @@ public class CompressionExerciseDataService extends ExerciseDataServiceImpl
 
 	public CompressionExerciseDataService()
 	{
+		super();
 		specificDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDaoImpl.class.getSimpleName() );
 	}
 

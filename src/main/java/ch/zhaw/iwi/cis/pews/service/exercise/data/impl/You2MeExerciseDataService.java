@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.You2MeExerciseDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -19,13 +20,17 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.DialogEntry;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class You2MeExerciseDataService extends ExerciseDataServiceImpl
 {
 	private ExerciseDataDao specificDataDao;
 
+	@Inject
 	public You2MeExerciseDataService()
 	{
+		super();
 		specificDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( You2MeExerciseDataDao.class.getSimpleName() );
 	}
 

@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.ManagedBean;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -32,13 +33,15 @@ import ch.zhaw.iwi.cis.pews.service.util.impl.MailServiceImpl;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserService
 {
-	private UserDao userdao;
-	private MailService mailService;
+	private final UserDao userdao;
+	private final MailService mailService;
 
 	public UserServiceImpl()
 	{
-		userdao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
-		mailService = ZhawEngine.getManagedObjectRegistry().getManagedObject( MailServiceImpl.class.getSimpleName() );
+		userdao = new UserDaoImpl();
+		//userdao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
+		mailService = new MailServiceImpl();
+		//mailService = ZhawEngine.getManagedObjectRegistry().getManagedObject( MailServiceImpl.class.getSimpleName() );
 	}
 
 	@Override

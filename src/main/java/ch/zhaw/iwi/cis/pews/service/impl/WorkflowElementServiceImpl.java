@@ -14,11 +14,12 @@ import ch.zhaw.iwi.cis.pews.service.WorkflowElementService;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class WorkflowElementServiceImpl extends WorkshopObjectServiceImpl implements WorkflowElementService
 {
-	private WorkflowElementDao workflowElementDao;
+	private final WorkflowElementDao workflowElementDao;
 
 	public WorkflowElementServiceImpl()
 	{
-		workflowElementDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkflowElementDaoImpl.class.getSimpleName() );
+		workflowElementDao = new WorkflowElementDaoImpl();
+		//workflowElementDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkflowElementDaoImpl.class.getSimpleName() );
 	}
 
 	@Override

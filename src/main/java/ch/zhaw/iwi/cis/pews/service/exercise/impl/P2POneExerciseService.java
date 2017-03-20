@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
 import java.io.IOException;
 
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -17,15 +18,12 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.P2POneExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.P2POneTemplate;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseTemplate = P2POneTemplate.class )
 public class P2POneExerciseService extends ExerciseServiceImpl
 {
-
-	public P2POneExerciseService()
-	{
-		super();
-	}
 
 	@Override
 	public ExerciseImpl findExerciseByID( String id )

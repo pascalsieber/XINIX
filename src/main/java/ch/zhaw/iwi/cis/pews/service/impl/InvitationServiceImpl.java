@@ -3,43 +3,28 @@ package ch.zhaw.iwi.cis.pews.service.impl;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.PewsConfig;
-import ch.zhaw.iwi.cis.pews.dao.InvitationDao;
-import ch.zhaw.iwi.cis.pews.dao.SessionDao;
-import ch.zhaw.iwi.cis.pews.dao.UserDao;
-import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
-import ch.zhaw.iwi.cis.pews.dao.impl.InvitationDaoImpl;
-import ch.zhaw.iwi.cis.pews.dao.impl.SessionDaoImpl;
-import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
+import ch.zhaw.iwi.cis.pews.dao.*;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.service.InvitationService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopService;
 import ch.zhaw.iwi.cis.pews.service.util.MailService;
-import ch.zhaw.iwi.cis.pews.service.util.impl.MailServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
+
+import javax.inject.Inject;
 
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements InvitationService
 {
-	private InvitationDao invitationDao;
-	private UserDao userDao;
-	private SessionDao sessionDao;
-	private MailService mailService;
-	private WorkshopService workshopService;
-
-	public InvitationServiceImpl()
-	{
-		invitationDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( InvitationDaoImpl.class.getSimpleName() );
-		userDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
-		sessionDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionDaoImpl.class.getSimpleName() );
-		mailService = ZhawEngine.getManagedObjectRegistry().getManagedObject( MailServiceImpl.class.getSimpleName() );
-		workshopService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopServiceImpl.class.getSimpleName() );
-	}
+	@Inject private InvitationDao invitationDao;
+	@Inject private UserDao userDao;
+	@Inject private SessionDao sessionDao;
+	@Inject private MailService mailService;
+	@Inject private WorkshopService workshopService;
 
 	@Override
 	protected WorkshopObjectDao getWorkshopObjectDao()

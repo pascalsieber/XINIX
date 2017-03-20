@@ -18,12 +18,14 @@ import ch.zhaw.iwi.cis.pews.service.AuthenticationTokenService;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class AuthenticationTokenServiceImpl extends WorkshopObjectServiceImpl implements AuthenticationTokenService
 {
-	private AuthenticationTokenDao authenticationTokenDao;
-	private Random generator;
+	private final AuthenticationTokenDao authenticationTokenDao;
+	private final Random generator;
 
 	public AuthenticationTokenServiceImpl()
 	{
-		authenticationTokenDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenDaoImpl.class.getSimpleName() );
+		authenticationTokenDao = new AuthenticationTokenDaoImpl();
+		//authenticationTokenDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenDaoImpl.class.getSimpleName() );
+
 		generator = new Random();
 	}
 

@@ -3,6 +3,7 @@ package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -18,15 +19,12 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.You2MeExerciseData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.You2MeExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseTemplate = You2MeTemplate.class )
 public class You2MeExerciseService extends ExerciseServiceImpl
 {
-
-	public You2MeExerciseService()
-	{
-		super();
-	}
 
 	@Override
 	public ExerciseImpl findExerciseByID( String id )

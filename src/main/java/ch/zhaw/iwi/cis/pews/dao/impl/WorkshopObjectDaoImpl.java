@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.framework.LazyLoadingHandlingOutputStream;
@@ -20,6 +21,11 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 	protected EntityManager getEntityManager()
 	{
 		return ZhawEngine.getManagedObjectRegistry().getManagedObject( "pews" );
+	}
+
+	protected EntityManagerFactory getEntityManagerFactory ()
+	{
+		return ZhawEngine.getManagedObjectRegistry().getManagedObject("pewsFactory");
 	}
 
 	@Override
@@ -62,7 +68,10 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 	@Override
 	public < T extends WorkshopObject > List< T > findByAll( String clientID )
 	{
-		return (List< T >)cloneResult( getEntityManager().createQuery( "from " + getWorkshopObjectClass().getSimpleName() + " where client.id = '" + clientID + "'" ).getResultList() );
+	    EntityManager em = getEntityManagerFactory().createEntityManager();
+	    List<T> res = em.createQuery( "from " + getWorkshopObjectClass().getSimpleName() + " where client.id = '" + clientID + "'" ).getResultList();
+		em.close();
+		return (List< T >)cloneResult(res);
 	}
 
 	protected abstract Class< ? extends WorkshopObject > getWorkshopObjectClass();

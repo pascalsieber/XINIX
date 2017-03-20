@@ -21,7 +21,8 @@ public abstract class WorkshopObjectRestService extends RestService
 	public WorkshopObjectRestService()
 	{
 		super();
-		userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
+		userService = new UserServiceImpl();
+		//userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 	}
 
 	public < T extends WorkshopObject > String persist( T persistentObject )

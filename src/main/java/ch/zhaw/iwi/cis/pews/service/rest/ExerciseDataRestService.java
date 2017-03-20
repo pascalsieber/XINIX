@@ -2,15 +2,14 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.data.ExerciseDataImpl;
 import ch.zhaw.iwi.cis.pews.service.ExerciseDataService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
-import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 
 @Path( ExerciseDataRestService.BASE )
 @Consumes( MediaType.APPLICATION_JSON )
@@ -23,13 +22,8 @@ public class ExerciseDataRestService extends WorkshopObjectRestService
 	public final static String EXPORT_BY_EXERCISE_ID = "/exportByExerciseID/{exerciseID}";
 	public final static String EXPORT_BY_WORKSHOP_ID = "/exportByWorkshopID/{workshopID}";
 
+	@Inject
 	private ExerciseDataService exerciseDataService;
-
-	public ExerciseDataRestService()
-	{
-		super();
-		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-	}
 
 	@POST
 	@Path( PERSIST )

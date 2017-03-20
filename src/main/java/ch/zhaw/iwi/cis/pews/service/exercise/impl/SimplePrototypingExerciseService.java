@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.exercise.impl;
 
 import java.io.IOException;
 
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import org.apache.commons.codec.binary.Base64;
 
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
@@ -21,15 +22,12 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.SimplePrototypingData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.SimplyPrototypingExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseTemplate = SimplyPrototypingTemplate.class )
 public class SimplePrototypingExerciseService extends ExerciseServiceImpl
 {
-
-	public SimplePrototypingExerciseService()
-	{
-		super();
-	}
 
 	@Override
 	public ExerciseImpl findExerciseByID( String id )

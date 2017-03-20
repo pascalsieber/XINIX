@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnitUtil;
 
@@ -91,24 +92,11 @@ import ch.zhaw.sml.iwi.cis.exwrapper.java.io.ObjectOutputStreamWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.io.OutputStreamWrapper;
 import ch.zhaw.sml.iwi.cis.exwrapper.java.lang.ClassWrapper;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implements ExerciseDataService
 {
-	private ExerciseDataDao exerciseDataDao;
-	private ExerciseDao exerciseDao;
-	private WorkshopDao workshopDao;
-
-	protected WorkshopDao getWorkshopDao()
-	{
-		return this.workshopDao;
-	}
-
-	public ExerciseDataServiceImpl()
-	{
-		exerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataDaoImpl.class.getSimpleName() );
-		exerciseDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDaoImpl.class.getSimpleName() );
-		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
-	}
+	@Inject private ExerciseDataDao exerciseDataDao;
+	@Inject private ExerciseDao exerciseDao;
+	@Inject private WorkshopDao workshopDao;
 
 	// TODO move this from manual entries to an automatic solution (e.g. with an annotation)
 	private static final Map< String, Class< ? extends ExerciseDataServiceImpl > > EXERCISEDATACLASSSPECIFICSERVICES = new HashMap< String, Class< ? extends ExerciseDataServiceImpl > >();

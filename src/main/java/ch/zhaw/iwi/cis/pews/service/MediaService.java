@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObjectType;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
+import org.jvnet.hk2.annotations.Contract;
 
+@Contract
 public interface MediaService extends WorkshopObjectService
 {
 

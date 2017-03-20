@@ -7,9 +7,9 @@ import ch.zhaw.iwi.cis.pews.model.data.export.ExerciseDataViewObject;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.WorkshopImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressableExerciseData;
+import org.jvnet.hk2.annotations.Contract;
 
-import javax.ws.rs.core.Response;
-
+@Contract
 public interface ExerciseDataService extends WorkshopObjectService
 {
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID );

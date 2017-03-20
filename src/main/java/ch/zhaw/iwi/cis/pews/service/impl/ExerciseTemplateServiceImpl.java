@@ -41,8 +41,8 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseTemplateServiceImpl extends WorkshopObjectServiceImpl implements ExerciseTemplateService
 {
-	private ExerciseTemplateDao exerciseTemplateDao;
-	private WorkshopTemplateDao workshopTemplateDao;
+	private final ExerciseTemplateDao exerciseTemplateDao;
+	private final WorkshopTemplateDao workshopTemplateDao;
 
 	private static final Map< Class< ? extends ExerciseTemplate >, Class< ? extends ExerciseTemplateServiceImpl > > EXERCISETEMPLATESPECIFICSERVICES = new HashMap< Class< ? extends ExerciseTemplate >, Class< ? extends ExerciseTemplateServiceImpl > >();
 
@@ -67,8 +67,11 @@ public class ExerciseTemplateServiceImpl extends WorkshopObjectServiceImpl imple
 
 	public ExerciseTemplateServiceImpl()
 	{
-		exerciseTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateDaoImpl.class.getSimpleName() );
-		workshopTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateDaoImpl.class.getSimpleName() );
+		exerciseTemplateDao = new ExerciseTemplateDaoImpl();
+		//exerciseTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateDaoImpl.class.getSimpleName() );
+		workshopTemplateDao = new WorkshopTemplateDaoImpl();
+		//workshopTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateDaoImpl.class.getSimpleName() );
+
 	}
 
 	@Override

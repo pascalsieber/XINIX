@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.XinixImageMatrixDao;
 import ch.zhaw.iwi.cis.pews.dao.exercise.impl.XinixExerciseDaoImpl;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
@@ -23,6 +24,8 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.XinixExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseTemplate = XinixTemplate.class )
 public class XinixExerciseService extends ExerciseServiceImpl
@@ -30,9 +33,9 @@ public class XinixExerciseService extends ExerciseServiceImpl
 	private ExerciseDataDao xinixImageMatrixDao;
 	private ExerciseDao specificDao;
 
+	@Inject
 	public XinixExerciseService()
 	{
-		super();
 		this.xinixImageMatrixDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( XinixImageMatrixDao.class.getSimpleName() );
 		this.specificDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( XinixExerciseDaoImpl.class.getSimpleName() );
 	}

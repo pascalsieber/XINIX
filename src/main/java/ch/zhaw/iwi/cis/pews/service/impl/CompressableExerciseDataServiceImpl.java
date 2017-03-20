@@ -12,11 +12,13 @@ import ch.zhaw.iwi.cis.pews.service.CompressableExerciseDataService;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class CompressableExerciseDataServiceImpl extends WorkshopObjectServiceImpl implements CompressableExerciseDataService
 {
-	private CompressableExerciseDataDao compressableExerciseDataDao;
+	private final CompressableExerciseDataDao compressableExerciseDataDao;
 	
 	public CompressableExerciseDataServiceImpl()
 	{
-		compressableExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressableExerciseDataDaoImpl.class.getSimpleName() );
+		compressableExerciseDataDao = new CompressableExerciseDataDaoImpl();
+		//compressableExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressableExerciseDataDaoImpl.class.getSimpleName() );
+
 	}
 
 	@Override

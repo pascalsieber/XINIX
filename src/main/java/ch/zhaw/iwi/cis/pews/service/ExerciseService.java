@@ -8,7 +8,9 @@ import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.Participant;
 import ch.zhaw.iwi.cis.pews.model.wrappers.SuspensionRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.TimerRequest;
+import org.jvnet.hk2.annotations.Contract;
 
+@Contract
 public interface ExerciseService extends WorkflowElementService
 {
 	public void suspend( SuspensionRequest suspensionRequest );

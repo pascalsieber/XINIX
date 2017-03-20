@@ -13,11 +13,13 @@ import ch.zhaw.iwi.cis.pews.service.CachedInputService;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class CachedInputServiceImpl extends WorkshopObjectServiceImpl implements CachedInputService
 {
-	private CachedInputDao cachedInputDao;
+	private final CachedInputDao cachedInputDao;
 
 	public CachedInputServiceImpl()
 	{
-		cachedInputDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CachedInputDaoImpl.class.getSimpleName() );
+		cachedInputDao = new CachedInputDaoImpl();
+		//cachedInputDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CachedInputDaoImpl.class.getSimpleName() );
+
 	}
 
 	@Override

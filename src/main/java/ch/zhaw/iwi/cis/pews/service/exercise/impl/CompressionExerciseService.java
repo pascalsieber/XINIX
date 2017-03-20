@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -25,17 +26,13 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.CompressionExerciseDataElement;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.CompressionExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.CompressionTemplate;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseTemplate = CompressionTemplate.class )
 public class CompressionExerciseService extends ExerciseServiceImpl
 {
-	private ExerciseDataService exerciseDataService;
-
-	public CompressionExerciseService()
-	{
-		super();
-		this.exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-	}
+	@Inject private ExerciseDataService exerciseDataService;
 
 	@Override
 	public ExerciseImpl findExerciseByID( String id )

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.XinixDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -16,13 +17,17 @@ import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class XinixExerciseDataService extends ExerciseDataServiceImpl
 {
 	private ExerciseDataDao specificDataDao;
 
+	@Inject
 	public XinixExerciseDataService()
 	{
+		super();
 		specificDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( XinixDataDao.class.getSimpleName() );
 	}
 

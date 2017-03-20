@@ -5,10 +5,10 @@ import java.util.List;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
-import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
+import org.jvnet.hk2.annotations.Contract;
 
+@Contract
 public interface SessionService extends WorkflowElementService
 {
 
@@ -29,10 +29,6 @@ public interface SessionService extends WorkflowElementService
 	public void removeExecuter( Invitation invitation );
 
 	public void setCurrentExercise( SessionImpl request );
-
-	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest );
-
-	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request );
 
 	public SessionImpl findSessionByID( String id );
 

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
@@ -58,13 +59,13 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements WorkshopService
 {
-	private WorkshopDao workshopDao;
-	private ExerciseDataService exerciseDataService;
-	private SessionService sessionService;
-	private WorkshopTemplateService workshopTemplateService;
-	private ExerciseService exerciseService;
-	private ExerciseTemplateService exerciseTemplateService;
-	private AuthenticationTokenService authenticationTokenService;
+	@Inject private WorkshopDao workshopDao;
+	@Inject private ExerciseDataService exerciseDataService;
+	@Inject private SessionService sessionService;
+	@Inject private WorkshopTemplateService workshopTemplateService;
+	@Inject private ExerciseService exerciseService;
+	@Inject private ExerciseTemplateService exerciseTemplateService;
+	@Inject private AuthenticationTokenService authenticationTokenService;
 
 	private static final Map< String, Class< ? extends ExerciseImpl > > EXERCISETEMPLATESUBCLASSESMAP = new HashMap< String, Class< ? extends ExerciseImpl >>();
 
@@ -85,17 +86,6 @@ public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements W
 	private Class< ? > getExerciseSubClass( String exerciseTemplateClassName )
 	{
 		return EXERCISETEMPLATESUBCLASSESMAP.get( exerciseTemplateClassName );
-	}
-
-	public WorkshopServiceImpl()
-	{
-		workshopDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopDaoImpl.class.getSimpleName() );
-		exerciseDataService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseDataServiceImpl.class.getSimpleName() );
-		sessionService = ZhawEngine.getManagedObjectRegistry().getManagedObject( SessionServiceImpl.class.getSimpleName() );
-		workshopTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateServiceImpl.class.getSimpleName() );
-		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
-		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
-		authenticationTokenService = ZhawEngine.getManagedObjectRegistry().getManagedObject( AuthenticationTokenServiceImpl.class.getSimpleName() );
 	}
 
 	@Override

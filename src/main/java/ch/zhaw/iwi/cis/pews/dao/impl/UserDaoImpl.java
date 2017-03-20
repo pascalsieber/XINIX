@@ -9,6 +9,8 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 
+import javax.persistence.EntityManager;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 {
@@ -66,13 +68,18 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 	@Override
 	public PrincipalImpl findByLoginNameForUserContext( String loginName )
 	{
-		List< PrincipalImpl > results = getEntityManager()
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		List< PrincipalImpl > results = em
 			.createQuery(
 				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.sessionInvitations as invitations "
 						+ "LEFT JOIN FETCH principal.participation as participation " + "LEFT JOIN FETCH participation.session as session " + "LEFT JOIN FETCH session.workshop as workshop "
 						+ "where principal.loginName = :login_name" )
 			.setParameter( "login_name", loginName )
 			.getResultList();
+		if (em.isJoinedToTransaction()) {
+			System.out.println("FICKEN");
+		}
+		em.close();
 
 		if ( results.size() > 0 )
 		{
@@ -88,7 +95,10 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 	@Override
 	public List< PrincipalImpl > finAllUsersForLoginService()
 	{
-		return getEntityManager().createQuery( "from " + getWorkshopObjectClass().getSimpleName() ).getResultList();
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		List<PrincipalImpl> res = em.createQuery( "from " + getWorkshopObjectClass().getSimpleName() ).getResultList();
+		em.close();
+		return res;
 	}
 
 	@Override

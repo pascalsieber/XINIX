@@ -19,7 +19,7 @@ public class ZhawJDBCLoginService extends MappedLoginService
 	{
 		super();
 		setName( "ZHAWRealm" );
-		userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
+		userService = new UserServiceImpl();
 	}
 
 	private UserIdentity loadUserHelper( PrincipalImpl principal )

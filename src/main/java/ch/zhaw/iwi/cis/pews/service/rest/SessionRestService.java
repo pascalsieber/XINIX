@@ -13,8 +13,6 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.instance.ExerciseImpl;
 import ch.zhaw.iwi.cis.pews.model.instance.SessionImpl;
 import ch.zhaw.iwi.cis.pews.model.user.Invitation;
-import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedExecutionRequest;
-import ch.zhaw.iwi.cis.pews.model.wrappers.DelayedSetCurrentExerciseRequest;
 import ch.zhaw.iwi.cis.pews.model.wrappers.PollingWrapper;
 import ch.zhaw.iwi.cis.pews.service.SessionService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopObjectService;
@@ -32,13 +30,11 @@ public class SessionRestService extends WorkshopObjectRestService
 
 	public final static String GET_CURRENT_EXERCISE = "/getCurrentExercise";
 	public final static String SET_CURRENT_EXERCISE = "/setCurrentExercise";
-	public final static String SET_CURRENT_EXERCISE_WITH_DELAY = "/setCurrentExerciseWithDelay";
 
 	public final static String GET_NEXT_EXERCISE = "/getNextExercise";
 	public final static String GET_PREVIOUS_EXERCISE = "/getPreviousExercise";
 
 	public final static String SET_NEXT_EXERCISE = "/setNextExercise";
-	public final static String SET_NEXT_EXERCISE_WITH_DELAY = "/setNextExerciseWithDelay";
 
 	public final static String START = "/start";
 	public final static String STOP = "/stop";
@@ -120,13 +116,6 @@ public class SessionRestService extends WorkshopObjectRestService
 	}
 
 	@POST
-	@Path( SET_CURRENT_EXERCISE_WITH_DELAY )
-	public void setCurrentExerciseWithDelay( DelayedSetCurrentExerciseRequest request )
-	{
-		sessionService.setCurrentExerciseWithDelay( request );
-	}
-
-	@POST
 	@Path( GET_NEXT_EXERCISE )
 	public ExerciseImpl getNextExercise( String sessionID )
 	{
@@ -145,13 +134,6 @@ public class SessionRestService extends WorkshopObjectRestService
 	public String setNextExercise( String sessionID )
 	{
 		return sessionService.setNextExercise( sessionID );
-	}
-
-	@POST
-	@Path( SET_NEXT_EXERCISE_WITH_DELAY )
-	public String setNextExerciseWithDelay( DelayedExecutionRequest offsetRequest )
-	{
-		return sessionService.setNextExerciseWithDelay( offsetRequest );
 	}
 
 	@POST

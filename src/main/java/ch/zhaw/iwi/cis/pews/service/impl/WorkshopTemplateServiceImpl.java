@@ -17,13 +17,16 @@ import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class WorkshopTemplateServiceImpl extends WorkshopObjectServiceImpl implements WorkshopTemplateService
 {
-	private WorkshopTemplateDao workshopTemplateDao;
-	private ExerciseTemplateService exerciseTemplateService;
+	private final WorkshopTemplateDao workshopTemplateDao;
+	private final ExerciseTemplateService exerciseTemplateService;
 
 	public WorkshopTemplateServiceImpl()
 	{
-		workshopTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateDaoImpl.class.getSimpleName() );
-		exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
+		workshopTemplateDao = new WorkshopTemplateDaoImpl();
+		//workshopTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateDaoImpl.class.getSimpleName() );
+		exerciseTemplateService = new ExerciseTemplateServiceImpl();
+		//exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
+
 	}
 
 	@Override

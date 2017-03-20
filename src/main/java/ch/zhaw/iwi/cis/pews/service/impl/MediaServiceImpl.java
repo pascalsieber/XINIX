@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import org.apache.commons.io.IOUtils;
 
 import ch.zhaw.iwi.cis.pews.dao.MediaDao;
@@ -28,14 +30,8 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class MediaServiceImpl extends WorkshopObjectServiceImpl implements MediaService
 {
-	private MediaDao mediaDao;
-	private ExerciseService exerciseService;
-
-	public MediaServiceImpl()
-	{
-		mediaDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( MediaDaoImpl.class.getSimpleName() );
-		exerciseService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseServiceImpl.class.getSimpleName() );
-	}
+	@Inject private MediaDao mediaDao;
+	@Inject private ExerciseService exerciseService;
 
 	@Override
 	public String persistMediaObject( HttpServletRequest request )

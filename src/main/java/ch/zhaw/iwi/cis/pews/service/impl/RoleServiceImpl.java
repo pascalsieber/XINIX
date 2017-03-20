@@ -15,11 +15,13 @@ import ch.zhaw.iwi.cis.pews.service.RoleService;
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class RoleServiceImpl extends WorkshopObjectServiceImpl implements RoleService
 {
-	private RoleDao roleDao;
+	private final RoleDao roleDao;
 
 	public RoleServiceImpl()
 	{
-		roleDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( RoleDaoImpl.class.getSimpleName() );
+		roleDao = new RoleDaoImpl();
+		//roleDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( RoleDaoImpl.class.getSimpleName() );
+
 	}
 
 	@Override

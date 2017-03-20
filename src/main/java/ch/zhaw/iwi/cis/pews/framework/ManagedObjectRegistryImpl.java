@@ -26,8 +26,8 @@ public class ManagedObjectRegistryImpl implements ManagedObjectRegistry
 	private static ThreadLocal< ManagedObjectMap > threadLocalMap = new ThreadLocal< ManagedObjectMap >();
 	private static ManagedObjectsMap allObjects = new ManagedObjectsMap();
 
-	@SuppressWarnings( "unchecked" )
 	@Override
+    @SuppressWarnings( "unchecked" )
 	public Object getManagedObject( String name )
 	{
 		Object mangagedObject = null;

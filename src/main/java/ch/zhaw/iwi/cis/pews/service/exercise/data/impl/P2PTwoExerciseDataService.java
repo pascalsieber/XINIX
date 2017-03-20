@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.P2PTwoDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
 import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
@@ -17,6 +18,8 @@ import ch.zhaw.iwi.cis.pews.service.impl.ExerciseDataServiceImpl;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2POneKeyword;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.data.P2PTwoData;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class P2PTwoExerciseDataService extends ExerciseDataServiceImpl
 {
@@ -24,6 +27,7 @@ public class P2PTwoExerciseDataService extends ExerciseDataServiceImpl
 
 	public P2PTwoExerciseDataService()
 	{
+	    super();
 		specificDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( P2PTwoDataDao.class.getSimpleName() );
 	}
 

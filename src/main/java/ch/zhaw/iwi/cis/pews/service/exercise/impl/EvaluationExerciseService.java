@@ -6,6 +6,7 @@ import java.util.List;
 
 import ch.zhaw.iwi.cis.pews.dao.CompressionDataDao;
 import ch.zhaw.iwi.cis.pews.dao.ExerciseDataDao;
+import ch.zhaw.iwi.cis.pews.dao.WorkshopDao;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.CompressionDataDaoImpl;
 import ch.zhaw.iwi.cis.pews.dao.data.impl.EvaluationDataDao;
 import ch.zhaw.iwi.cis.pews.framework.ExerciseSpecificService;
@@ -32,19 +33,14 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.Score;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.EvaluationExercise;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.EvaluationTemplate;
 
+import javax.inject.Inject;
+
 @ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 @ExerciseSpecificService( exerciseTemplate = EvaluationTemplate.class )
 public class EvaluationExerciseService extends ExerciseServiceImpl
 {
-	private CompressionDataDao compressionDataDao;
-	private ExerciseDataDao evaluationExerciseDataDao;
-
-	public EvaluationExerciseService()
-	{
-		super();
-		this.compressionDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CompressionDataDaoImpl.class.getSimpleName() );
-		this.evaluationExerciseDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( EvaluationDataDao.class.getSimpleName() );
-	}
+	@Inject private CompressionDataDao compressionDataDao;
+	@Inject private EvaluationDataDao evaluationExerciseDataDao;
 
 	@Override
 	public ExerciseImpl findExerciseByID( String id )
