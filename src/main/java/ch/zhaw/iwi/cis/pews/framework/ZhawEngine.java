@@ -198,7 +198,7 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void startWebServer()
 	{
-		webServer = new Server( new InetSocketAddress( "0.0.0.0", PewsConfig.getApplicationPort() ) );
+		webServer = new Server( new InetSocketAddress( PewsConfig.getApplicationHostname(), PewsConfig.getApplicationPort() ) );
 
 		// Setup session ID manager.
 		webServer.setSessionIdManager( new HashSessionIdManager() );
@@ -218,7 +218,13 @@ public class ZhawEngine implements LifecycleObject
 		ResourceHandler handler = new ResourceHandler();
 		handler.setDirectoriesListed( true );
 		handler.setWelcomeFiles( new String[] { "index.html" } );
-		handler.setResourceBase( PewsConfig.getWebDir() );
+
+		String webRoot = PewsConfig.getWebDir();
+		if (webRoot == null || webRoot.trim().isEmpty())
+		{
+		    webRoot = ZhawEngine.class.getClassLoader().getResource("webroot/").getPath();
+		}
+		handler.setResourceBase( webRoot );
 
 		return handler;
 	}

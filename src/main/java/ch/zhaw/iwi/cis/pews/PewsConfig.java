@@ -51,6 +51,8 @@ public class PewsConfig
 		return Integer.parseInt( properties.getProperty( "APPLICATION_PORT" ) );
 	}
 
+	public static String getApplicationHostname() { return properties.getProperty( "APPLICATION_HOSTNAME" ); };
+
 	public static String getImageDir()
 	{
 		return PewsConfig.class.getClassLoader().getResource("web/images").getPath();
@@ -59,11 +61,6 @@ public class PewsConfig
 	public static String getServiceUrl()
 	{
 		return properties.getProperty( "EXPOSED_SERVICE_URL" );
-	}
-
-	public static String getWebClientUrl()
-	{
-		return properties.getProperty( "WEB_CLIENT_URL" );
 	}
 
 	public static String getWebClientAuthenticationUrl()
