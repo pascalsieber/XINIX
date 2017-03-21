@@ -41,6 +41,8 @@ public class PewsConfig
 		});
 	}
 
+	public static String getBootstrapRootPassword() { return properties.getProperty( "BOOTSTRAP_ROOT_PW" ); }
+
 	public static String getWebDir()
 	{
 		return properties.getProperty( "WEB_DIR" );

@@ -108,6 +108,7 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 import ch.zhaw.sml.iwi.cis.exwrapper.org.eclipse.jetty.server.ServerWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.rmi.runtime.Log;
 
 public class ZhawEngine implements LifecycleObject
 {
@@ -154,7 +155,8 @@ public class ZhawEngine implements LifecycleObject
 	{
 		setupEntityManager();
 		startWebServer();
-//		configureRootUser();
+
+		configureRootUser(PewsConfig.getBootstrapRootPassword());
 //		configureSampleWorkshop();
 //		configureDemoWorkshop();
 //		configurePostWorkshop();
@@ -310,16 +312,19 @@ public class ZhawEngine implements LifecycleObject
 	}
 
 	public static final String ROOT_CLIENT_NAME = "pews_root_client";
-	public static final String ROOT_USER_LOGIN_NAME = ROOT_CLIENT_NAME + "/root@pews";
+	public static final String ROOT_USER_LOGIN_NAME = "root";
 
-	private static void configureRootUser()
+	private static void configureRootUser(String rootPassword)
 	{
 		RoleService roleService = getManagedObjectRegistry().getManagedObject( RoleServiceImpl.class.getSimpleName() );
 		UserService userService = getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
 		ClientService clientService = getManagedObjectRegistry().getManagedObject( ClientServiceImpl.class.getSimpleName() );
 
-		if ( rootClient == null )
+		// Only bootstrap if we have no client
+		if (clientService.findAll().isEmpty())
 		{
+		    LOG.info("Bootstrapping root user");
+
 			rootClient = clientService.findByID( clientService.persist( new Client( ROOT_CLIENT_NAME ) ) );
 			ROOT_CLIENT_ID = rootClient.getID();
 
@@ -333,25 +338,25 @@ public class ZhawEngine implements LifecycleObject
 			UserContext.setCurrentUser( bootstrapUser );
 
 			LOG.info( "root client registered initially" );
+
+			ROOT_ROLE_ID = roleService.persist( new RoleImpl( "root", "root" ) );
+
+			UserImpl user = new UserImpl( new PasswordCredentialImpl( rootPassword ), (RoleImpl)roleService.findByID( ROOT_ROLE_ID ), null, "root first name", "root last name", ROOT_USER_LOGIN_NAME );
+			String rootUserID = userService.persist( user );
+
+			rootUser = userService.findByID( rootUserID );
+			LOG.info( "root user registered initially" );
+
+			// configure default roles
+			ORGANIZER_ROLE_ID = roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
+			LOG.info( "organizer role created initially" );
+
+			EXECUTER_ROLE_ID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
+			LOG.info( "executer role created initially" );
+
+			PARTICIPANT_ROLE_ID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
+			LOG.info( "participant role created initially" );
 		}
-
-		ROOT_ROLE_ID = roleService.persist( new RoleImpl( "root", "root" ) );
-
-		UserImpl user = new UserImpl( new PasswordCredentialImpl( "root" ), (RoleImpl)roleService.findByID( ROOT_ROLE_ID ), null, "root first name", "root last name", ROOT_USER_LOGIN_NAME );
-		String rootUserID = userService.persist( user );
-
-		rootUser = userService.findByID( rootUserID );
-		LOG.info( "root user registered initially" );
-
-		// configure default roles
-		ORGANIZER_ROLE_ID = roleService.persist( new RoleImpl( "organizer", "workshop organizer" ) );
-		LOG.info( "organizer role created initially" );
-
-		EXECUTER_ROLE_ID = roleService.persist( new RoleImpl( "executer", "session executer" ) );
-		LOG.info( "executer role created initially" );
-
-		PARTICIPANT_ROLE_ID = roleService.persist( new RoleImpl( "participant", "workshop participant" ) );
-		LOG.info( "participant role created initially" );
 	}
 
 	@SuppressWarnings( "unused" )
