@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.framework;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -222,7 +223,13 @@ public class ZhawEngine implements LifecycleObject
 		String webRoot = PewsConfig.getWebDir();
 		if (webRoot == null || webRoot.trim().isEmpty())
 		{
-		    webRoot = ZhawEngine.class.getClassLoader().getResource("webroot/").getPath();
+			try {
+				webRoot = ZhawEngine.class.getClassLoader().getResource("webroot/").toURI().toString();
+			} catch (URISyntaxException e) {
+			    LOG.error("Could not set web root to {resources}/webroot. Will try best to serve from webroot/ "
+				+ "relative to classloader.");
+			    webRoot = "webroot/";
+			}
 		}
 		handler.setResourceBase( webRoot );
 
