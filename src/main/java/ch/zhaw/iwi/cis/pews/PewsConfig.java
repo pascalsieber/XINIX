@@ -21,12 +21,18 @@ public class PewsConfig
 		    LOG.error("Could not load properties (" + e.getMessage() + ")");
 		}
 
-		// Pretty-Print properties
+		// Check for overriding environment variables and pretty print result
 		final int longestKey = properties.keySet().stream()
-                .map(Object::toString) .map(String::length)
-				.max(Integer::compareTo) .get();
+                .map(Object::toString).map(String::length)
+				.max(Integer::compareTo).get();
 
 		properties.entrySet().stream().forEach(entry -> {
+		    String envValue = System.getenv(entry.getKey().toString());
+		    if (envValue != null) {
+		    	properties.setProperty(entry.getKey().toString(), envValue);
+		    	entry.setValue(envValue);
+			}
+
 		    LOG.info("{} | {}",
 					String.format("%1$-" + longestKey + "s", entry.getKey()),
 					entry.getValue()
