@@ -6,6 +6,9 @@ plugins {
 
 mainClassName = 'ch.zhaw.iwi.cis.pews.framework.ZhawEngine'
 
+task stage(dependsOn: ['shadowJar', 'clean'])
+shadowJar.mustRunAfter clean
+
 repositories {
     mavenCentral()
 }
