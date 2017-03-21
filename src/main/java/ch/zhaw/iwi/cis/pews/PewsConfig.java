@@ -20,6 +20,19 @@ public class PewsConfig
 		} catch (IOException e) {
 		    LOG.error("Could not load properties (" + e.getMessage() + ")");
 		}
+
+		// Pretty-Print properties
+		final int longestKey = properties.keySet().stream()
+                .map(Object::toString) .map(String::length)
+				.max(Integer::compareTo) .get();
+
+		properties.entrySet().stream().forEach(entry -> {
+		    LOG.info("{} | {}",
+					String.format("%1$-" + longestKey + "s", entry.getKey()),
+					entry.getValue()
+			);
+
+		});
 	}
 
 	public static String getWebDir()
