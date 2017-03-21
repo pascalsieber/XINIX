@@ -3,12 +3,7 @@ package ch.zhaw.iwi.cis.pews.framework;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManagerFactory;
@@ -170,8 +165,12 @@ public class ZhawEngine implements LifecycleObject
 
 	private static void setupEntityManager()
 	{
+	    // Overwrite jdbc path from properties
+		Map<String, String> jdbcProperties = new HashMap<>();
+		jdbcProperties.put("javax.persistence.jdbc.url", PewsConfig.getJDBCPath() );
+
 		ManagedObjectRegistry registry = ZhawEngine.getManagedObjectRegistry();
-		registry.registerManagedObjectType( new EntityManagerFactoryLifecycleManager( "pews" ), "pewsFactory", Scope.CLASSLOADER );
+		registry.registerManagedObjectType( new EntityManagerFactoryLifecycleManager( "pews", jdbcProperties ), "pewsFactory", Scope.CLASSLOADER );
 		EntityManagerLifecycleManager lifecycleManager = new EntityManagerLifecycleManager( (EntityManagerFactory)registry.getManagedObject( "pewsFactory" ) );
 		registry.registerManagedObjectType( lifecycleManager, "pews", Scope.THREAD );
 	}

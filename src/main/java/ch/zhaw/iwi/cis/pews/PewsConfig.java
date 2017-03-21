@@ -53,6 +53,8 @@ public class PewsConfig
 
 	public static String getApplicationHostname() { return properties.getProperty( "APPLICATION_HOSTNAME" ); };
 
+	public static String getJDBCPath() { return properties.getProperty( "JDBC_DATABASE_URL" ); }
+
 	public static String getImageDir()
 	{
 		return PewsConfig.class.getClassLoader().getResource("web/images").getPath();
