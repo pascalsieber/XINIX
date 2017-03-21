@@ -98,16 +98,6 @@ public class PewsConfig
 		return properties.getProperty( "MAIL_SMTP_HOST" );
 	}
 
-	public static String getMailSocketFactoryPort()
-	{
-		return properties.getProperty( "MAIL_SMTP_SOCKETFACTORY_PORT" );
-	}
-
-	public static String getMailSocketFactoryClass()
-	{
-		return properties.getProperty( "MAIL_SMTP_SOCKETFACTORY_CLASS" );
-	}
-
 	public static String getMailPort()
 	{
 		return properties.getProperty( "MAIL_SMTP_PORT" );
