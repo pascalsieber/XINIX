@@ -1,1 +1,1 @@
-web:  java $JAVA_OPTS APPLICATION_PORT=$PORT -jar ./build/libs/pink-elefant-backend-all.jar
+web:  APPLICATION_PORT=$PORT java $JAVA_OPTS -jar ./build/libs/*.jar
