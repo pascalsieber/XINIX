@@ -9,18 +9,17 @@ import org.eclipse.jetty.util.security.Credential;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
-import ch.zhaw.iwi.cis.pews.service.impl.UserServiceImpl;
+
+import javax.inject.Inject;
 
 public class ZhawJDBCLoginService extends MappedLoginService
 {
-	private UserService userService;
+	@Inject private UserService userService;
 
 	public ZhawJDBCLoginService()
 	{
-		super();
 		setName( "ZHAWRealm" );
-		userService = new UserServiceImpl();
-	}
+}
 
 	private UserIdentity loadUserHelper( PrincipalImpl principal )
 	{

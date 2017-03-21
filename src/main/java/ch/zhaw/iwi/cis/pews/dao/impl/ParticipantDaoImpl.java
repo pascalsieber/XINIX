@@ -17,7 +17,7 @@ public class ParticipantDaoImpl extends WorkshopObjectDaoImpl implements Partici
 	@SuppressWarnings( "unchecked" )
 	public Participant findByPrincipalIDandSessionID( String principalID, String sessionID )
 	{
-		List< Participant > results = getEntityManager()
+		List< Participant > results = em
 			.createQuery( "select participant FROM Participant participant WHERE participant.session.id = :session_id and participant.principal.id =:principal_id" )
 			.setParameter( "session_id", sessionID )
 			.setParameter( "principal_id", principalID )

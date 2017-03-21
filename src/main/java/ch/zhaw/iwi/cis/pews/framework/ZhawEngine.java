@@ -7,9 +7,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
 
 import ch.zhaw.iwi.cis.pews.service.*;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -42,6 +45,7 @@ public class ZhawEngine
 	private static Server webServer;
 	private static ManagedObjectRegistry managedObjectRegistry;
 	private static ZhawEngine zhawEngine;
+	private static Injector guiceInjector;
 
 	static
 	{
@@ -51,6 +55,7 @@ public class ZhawEngine
 
 	public static void main( String[] args ) throws IOException {
 		LOG.info("Starting...");
+		guiceInjector = Guice.createInjector(new GuiceModule());
 		getEngine().start();
 	}
 
@@ -89,9 +94,15 @@ public class ZhawEngine
 		webServer = new Server( PewsConfig.getApplicationPort() );
 
 		ServletContextHandler pewsContext = new ServletContextHandler(webServer, SERVICES_BASE);
-		pewsContext.addFilter(ServletContextFilter.class, "/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
 
-		ResourceConfig resourceConfig = new PewsJerseyResourceConfig();
+		// Filter that adds the user
+		FilterHolder filter = new FilterHolder();
+		filter.setFilter( guiceInjector.getInstance( ServletContextFilter.class ));
+		pewsContext.addFilter(filter, "/*",
+				EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+
+
+		ResourceConfig resourceConfig = new PewsJerseyResourceConfig(guiceInjector);
 		ServletHolder servlet = new ServletHolder( new ServletContainer( resourceConfig ) );
 		pewsContext.addServlet(servlet, "/*");
 
@@ -99,12 +110,12 @@ public class ZhawEngine
 		ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 		securityHandler.setHandler(pewsContext);
 		securityHandler.setAuthenticator( new BasicAuthenticator() );
-		securityHandler.setLoginService( new ZhawJDBCLoginService()  );
+		securityHandler.setLoginService( guiceInjector.getInstance( ZhawJDBCLoginService.class)  );
 		// TODO: Constraints
 
 		webServer.setHandler(securityHandler);
 
-		// Start jetty and join the Threadpool
+		// Start jetty and join the thread pool
 		try {
 			webServer.start();
 			LOG.info("Jetty started...");

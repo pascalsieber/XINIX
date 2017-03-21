@@ -20,7 +20,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
 	{
-		List< P2POneData > results = getEntityManager()
+		List< P2POneData > results = em
 			.createQuery( "select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();
@@ -39,7 +39,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< P2POneData > data = getEntityManager().createQuery(
+		List< P2POneData > data = em.createQuery(
 			"select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
 	}
@@ -48,7 +48,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
 	{
-		List< P2POneData > data = getEntityManager()
+		List< P2POneData > data = em
 			.createQuery( "select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
 			.setParameter( "ids", exerciseIDs )
 			.getResultList();
@@ -65,7 +65,7 @@ public class P2POneDataDao extends ExerciseDataDaoImpl
 		{
 			if ( ex.getClass().getSimpleName().equalsIgnoreCase( P2POneExercise.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager()
+				data.addAll( em
 					.createQuery( "select distinct d from P2POneData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.keywords where d.workflowElement.id = '" + ex.getID() + "' ORDER BY d.timestamp ASC" )
 					.getResultList() );
 			}

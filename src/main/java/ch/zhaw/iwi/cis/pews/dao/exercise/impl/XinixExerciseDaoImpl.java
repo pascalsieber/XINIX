@@ -18,7 +18,7 @@ public class XinixExerciseDaoImpl extends ExerciseDaoImpl implements ExerciseDao
 	@Override
 	public ExerciseImpl findExerciseByID( String id )
 	{
-		List< XinixExercise > results = getEntityManager()
+		List< XinixExercise > results = em
 			.createQuery( "from XinixExercise x LEFT JOIN FETCH x.images as m LEFT JOIN FETCH m.xinixImages where x.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();

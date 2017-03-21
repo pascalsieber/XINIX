@@ -1,6 +1,7 @@
 package ch.zhaw.iwi.cis.pews.framework;
 
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spi.Container;
@@ -16,7 +17,7 @@ public class PewsJerseyResourceConfig extends ResourceConfig {
     ServiceLocator serviceLocator;
 
     @Inject
-    public PewsJerseyResourceConfig() {
+    public PewsJerseyResourceConfig(Injector guiceInjector) {
         packages(true, "ch.zhaw.iwi.cis");
 
         register(new ContainerLifecycleListener()
@@ -28,7 +29,7 @@ public class PewsJerseyResourceConfig extends ResourceConfig {
                 // Guice Config
                 GuiceBridge.getGuiceBridge().initializeGuiceBridge(serviceLocator);
                 GuiceIntoHK2Bridge guiceBridge = serviceLocator.getService(GuiceIntoHK2Bridge.class);
-                guiceBridge.bridgeGuiceInjector(Guice.createInjector(new GuiceModule()));
+                guiceBridge.bridgeGuiceInjector(guiceInjector);
             }
 
             public void onReload(Container container) {/*...*/}

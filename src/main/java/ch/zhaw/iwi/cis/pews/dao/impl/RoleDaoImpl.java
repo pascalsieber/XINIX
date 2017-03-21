@@ -17,7 +17,7 @@ public class RoleDaoImpl extends WorkshopObjectDaoImpl implements RoleDao
 	@Override
 	public List< RoleImpl > findAllRoles()
 	{
-		return getEntityManager().createQuery( "from " + this.getWorkshopObjectClass().getSimpleName() ).getResultList();
+		return em.createQuery( "from " + this.getWorkshopObjectClass().getSimpleName() ).getResultList();
 	}
 
 	@Override

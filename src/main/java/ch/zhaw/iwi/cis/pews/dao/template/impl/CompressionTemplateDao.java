@@ -17,7 +17,7 @@ public class CompressionTemplateDao extends ExerciseTemplateDaoImpl
 	@Override
 	public ExerciseTemplate findExerciseTemplateByID( String id )
 	{
-		List< CompressionTemplate > templates = getEntityManager().createQuery( "from CompressionTemplate t LEFT JOIN FETCH t.solutionCriteria where t.id = '" + id + "'" ).getResultList();
+		List< CompressionTemplate > templates = em.createQuery( "from CompressionTemplate t LEFT JOIN FETCH t.solutionCriteria where t.id = '" + id + "'" ).getResultList();
 		if ( templates.size() > 0 )
 		{
 			return (ExerciseTemplate)cloneResult( templates.get( 0 ) );

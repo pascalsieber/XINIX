@@ -61,7 +61,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.inject.Inject;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class ExerciseServiceImpl extends WorkflowElementServiceImpl implements ExerciseService
 {
 	private final ObjectMapper objectMapper = new ObjectMapper();

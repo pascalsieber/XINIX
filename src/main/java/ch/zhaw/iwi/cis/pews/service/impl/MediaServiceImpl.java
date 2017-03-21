@@ -27,7 +27,6 @@ import ch.zhaw.iwi.cis.pews.service.ExerciseService;
 import ch.zhaw.iwi.cis.pews.service.MediaService;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.instance.PosterExercise;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class MediaServiceImpl extends WorkshopObjectServiceImpl implements MediaService
 {
 	@Inject private MediaDao mediaDao;

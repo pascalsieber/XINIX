@@ -10,17 +10,11 @@ import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.input.CachedInput;
 import ch.zhaw.iwi.cis.pews.service.CachedInputService;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
+import javax.inject.Inject;
+
 public class CachedInputServiceImpl extends WorkshopObjectServiceImpl implements CachedInputService
 {
-	private final CachedInputDao cachedInputDao;
-
-	public CachedInputServiceImpl()
-	{
-		cachedInputDao = new CachedInputDaoImpl();
-		//cachedInputDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( CachedInputDaoImpl.class.getSimpleName() );
-
-	}
+	@Inject private CachedInputDao cachedInputDao;
 
 	@Override
 	public CachedInput findBySessionID( String sessionID )

@@ -9,16 +9,11 @@ import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
 import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.service.ClientService;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
+import javax.inject.Inject;
+
 public class ClientServiceImpl extends IdentifiableObjectServiceImpl implements ClientService
 {
-	private final ClientDao clientDao;
-
-	public ClientServiceImpl()
-	{
-		clientDao = new ClientDaoImpl();
-		//clientDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ClientDaoImpl.class.getSimpleName() );
-	}
+	@Inject private ClientDao clientDao;
 
 	@Override
 	protected IdentifiableObjectDao getIdentifiableObjectDao()

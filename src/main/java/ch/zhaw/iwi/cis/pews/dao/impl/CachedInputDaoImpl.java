@@ -23,7 +23,7 @@ public class CachedInputDaoImpl extends WorkshopObjectDaoImpl implements CachedI
 	@Override
 	public CachedInput findBySessionID( String sessionID )
 	{
-		List< CachedInput > results = getEntityManager().createQuery( "from CachedInput c where c.sessionID = :_session_id" ).setParameter( "_session_id", sessionID ).getResultList();
+		List< CachedInput > results = em.createQuery( "from CachedInput c where c.sessionID = :_session_id" ).setParameter( "_session_id", sessionID ).getResultList();
 		if ( results.size() > 0 )
 		{
 			return results.get( 0 );

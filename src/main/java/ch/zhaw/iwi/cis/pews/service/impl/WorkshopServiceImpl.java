@@ -56,7 +56,6 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 import ch.zhaw.iwi.cis.pinkelefant.workshop.template.PinkElefantTemplate;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class WorkshopServiceImpl extends WorkflowElementServiceImpl implements WorkshopService
 {
 	@Inject private WorkshopDao workshopDao;

@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Properties;
 
-import javax.annotation.ManagedBean;
+import javax.inject.Inject;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,31 +18,16 @@ import javax.mail.internet.MimeMessage;
 import ch.zhaw.iwi.cis.pews.PewsConfig;
 import ch.zhaw.iwi.cis.pews.dao.UserDao;
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
-import ch.zhaw.iwi.cis.pews.dao.impl.UserDaoImpl;
-import ch.zhaw.iwi.cis.pews.framework.ManagedObject;
-import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Scope;
-import ch.zhaw.iwi.cis.pews.framework.ManagedObject.Transactionality;
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.user.PasswordCredentialImpl;
 import ch.zhaw.iwi.cis.pews.model.user.PrincipalImpl;
 import ch.zhaw.iwi.cis.pews.model.user.UserImpl;
 import ch.zhaw.iwi.cis.pews.service.UserService;
 import ch.zhaw.iwi.cis.pews.service.util.MailService;
-import ch.zhaw.iwi.cis.pews.service.util.impl.MailServiceImpl;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class UserServiceImpl extends WorkshopObjectServiceImpl implements UserService
 {
-	private final UserDao userdao;
-	private final MailService mailService;
-
-	public UserServiceImpl()
-	{
-		userdao = new UserDaoImpl();
-		//userdao = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserDaoImpl.class.getSimpleName() );
-		mailService = new MailServiceImpl();
-		//mailService = ZhawEngine.getManagedObjectRegistry().getManagedObject( MailServiceImpl.class.getSimpleName() );
-	}
+	@Inject private UserDao userdao;
+	@Inject private MailService mailService;
 
 	@Override
 	protected WorkshopObjectDao getWorkshopObjectDao()

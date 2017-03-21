@@ -17,7 +17,7 @@ public class SessionDaoImpl extends WorkshopObjectDaoImpl implements SessionDao
 	@Override
 	public SessionImpl findSessionByID( String id )
 	{
-		List< SessionImpl > exercises = getEntityManager()
+		List< SessionImpl > exercises = em
 			.createQuery(
 				"from SessionImpl as s " + "LEFT JOIN FETCH s.workshop as w " + "LEFT JOIN FETCH w.exercises as ex " + "LEFT JOIN FETCH s.acceptees as acceptees "
 						+ "LEFT JOIN FETCH s.participants as participants " + "LEFT JOIN FETCH s.executers as executers " + "LEFT JOIN FETCH s.invitations as i " + "WHERE s.id = :_id" )

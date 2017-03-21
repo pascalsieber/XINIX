@@ -23,7 +23,7 @@ public class InvitationDaoImpl extends WorkshopObjectDaoImpl implements Invitati
 	@Override
 	public List< Invitation > findByUserID( String userID )
 	{
-		return getEntityManager()
+		return em
 			.createQuery( "from Invitation as i LEFT JOIN FETCH i.inviter LEFT JOIN FETCH i.invitee as user LEFT JOIN FETCH i.session as s LEFT JOIN FETCH s.workshop as w where user.id = :_user_id" )
 			.setParameter( "_user_id", userID )
 			.getResultList();
@@ -33,7 +33,7 @@ public class InvitationDaoImpl extends WorkshopObjectDaoImpl implements Invitati
 	@Override
 	public List< Invitation > findBySessionID( String sessionID )
 	{
-		return getEntityManager()
+		return em
 			.createQuery( "from Invitation as i LEFT JOIN FETCH i.inviter LEFT JOIN FETCH i.invitee as user LEFT JOIN FETCH i.session as s LEFT JOIN FETCH s.workshop as w where s.id = :_session_id" )
 			.setParameter( "_session_id", sessionID )
 			.getResultList();

@@ -38,11 +38,12 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.template.SimplyPrototypingTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.XinixTemplate;
 import ch.zhaw.iwi.cis.pinkelefant.exercise.template.You2MeTemplate;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
+import javax.inject.Inject;
+
 public class ExerciseTemplateServiceImpl extends WorkshopObjectServiceImpl implements ExerciseTemplateService
 {
-	private final ExerciseTemplateDao exerciseTemplateDao;
-	private final WorkshopTemplateDao workshopTemplateDao;
+	@Inject private ExerciseTemplateDao exerciseTemplateDao;
+	@Inject private WorkshopTemplateDao workshopTemplateDao;
 
 	private static final Map< Class< ? extends ExerciseTemplate >, Class< ? extends ExerciseTemplateServiceImpl > > EXERCISETEMPLATESPECIFICSERVICES = new HashMap< Class< ? extends ExerciseTemplate >, Class< ? extends ExerciseTemplateServiceImpl > >();
 
@@ -63,15 +64,6 @@ public class ExerciseTemplateServiceImpl extends WorkshopObjectServiceImpl imple
 	private Class< ? > getExerciseTemplateSpecificService( Class< ? extends ExerciseTemplate > exerciseTemplateClass )
 	{
 		return EXERCISETEMPLATESPECIFICSERVICES.get( exerciseTemplateClass );
-	}
-
-	public ExerciseTemplateServiceImpl()
-	{
-		exerciseTemplateDao = new ExerciseTemplateDaoImpl();
-		//exerciseTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateDaoImpl.class.getSimpleName() );
-		workshopTemplateDao = new WorkshopTemplateDaoImpl();
-		//workshopTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateDaoImpl.class.getSimpleName() );
-
 	}
 
 	@Override

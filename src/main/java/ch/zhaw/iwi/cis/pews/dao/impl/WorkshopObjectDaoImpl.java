@@ -7,26 +7,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import ch.zhaw.iwi.cis.pews.dao.WorkshopObjectDao;
 import ch.zhaw.iwi.cis.pews.framework.LazyLoadingHandlingOutputStream;
 import ch.zhaw.iwi.cis.pews.framework.UserContext;
-import ch.zhaw.iwi.cis.pews.framework.ZhawEngine;
 import ch.zhaw.iwi.cis.pews.model.WorkshopObject;
 
 public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 {
-	protected EntityManager getEntityManager()
-	{
-		return ZhawEngine.getManagedObjectRegistry().getManagedObject( "pews" );
-	}
-
-	protected EntityManagerFactory getEntityManagerFactory ()
-	{
-		return ZhawEngine.getManagedObjectRegistry().getManagedObject("pewsFactory");
-	}
+	@Inject protected EntityManager em;
 
 	@Override
 	public < T extends WorkshopObject > String persist( T object )
@@ -39,7 +30,7 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 		}
 
 		WorkshopObject objectMerged = merge( object );
-		getEntityManager().persist( objectMerged );
+		em.persist( objectMerged );
 
 		return objectMerged.getID();
 	}
@@ -47,30 +38,28 @@ public abstract class WorkshopObjectDaoImpl implements WorkshopObjectDao
 	@Override
 	public < T extends WorkshopObject > void remove( T object )
 	{
-		WorkshopObject objectMerged = getEntityManager().merge( object );
-		getEntityManager().remove( objectMerged );
+		WorkshopObject objectMerged = em.merge( object );
+		em.remove( objectMerged );
 	}
 
 	@Override
 	public < T extends WorkshopObject > T merge( T object )
 	{
-		return getEntityManager().merge( object );
+		return em.merge( object );
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public < T extends WorkshopObject > T findById( String id )
 	{
-		return (T)getEntityManager().find( getWorkshopObjectClass(), id );
+		return (T)em.find( getWorkshopObjectClass(), id );
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public < T extends WorkshopObject > List< T > findByAll( String clientID )
 	{
-	    EntityManager em = getEntityManagerFactory().createEntityManager();
 	    List<T> res = em.createQuery( "from " + getWorkshopObjectClass().getSimpleName() + " where client.id = '" + clientID + "'" ).getResultList();
-		em.close();
 		return (List< T >)cloneResult(res);
 	}
 

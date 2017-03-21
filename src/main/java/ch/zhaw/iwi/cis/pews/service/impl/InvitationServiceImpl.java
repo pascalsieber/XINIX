@@ -17,7 +17,6 @@ import ch.zhaw.iwi.cis.pinkelefant.workshop.instance.PinkElefantWorkshop;
 
 import javax.inject.Inject;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class InvitationServiceImpl extends WorkshopObjectServiceImpl implements InvitationService
 {
 	@Inject private InvitationDao invitationDao;

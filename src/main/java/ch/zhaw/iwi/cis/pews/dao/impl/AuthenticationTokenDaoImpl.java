@@ -23,7 +23,7 @@ public class AuthenticationTokenDaoImpl extends WorkshopObjectDaoImpl implements
 	@Override
 	public AuthenticationToken findByToken( String token )
 	{
-		List< AuthenticationToken > results = getEntityManager()
+		List< AuthenticationToken > results = em
 			.createQuery( "from AuthenticationToken a LEFT JOIN FETCH a.owner where a.token = :_token" )
 			.setParameter( "_token", token )
 			.getResultList();
@@ -41,14 +41,14 @@ public class AuthenticationTokenDaoImpl extends WorkshopObjectDaoImpl implements
 	@Override
 	public List< AuthenticationToken > findAllBySessionID( String sessionID )
 	{
-		return getEntityManager().createQuery( "from AuthenticationToken a where a.sessionID = :_sessionID" ).setParameter( "_sessionID", sessionID ).getResultList();
+		return em.createQuery( "from AuthenticationToken a where a.sessionID = :_sessionID" ).setParameter( "_sessionID", sessionID ).getResultList();
 	}
 
 	@SuppressWarnings( "unchecked" )
 	@Override
 	public List< String > getAllTokens()
 	{
-		return getEntityManager().createQuery( "SELECT token from AuthenticationToken" ).getResultList();
+		return em.createQuery( "SELECT token from AuthenticationToken" ).getResultList();
 	}
 
 }

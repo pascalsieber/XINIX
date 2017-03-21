@@ -23,7 +23,7 @@ public class WorkshopTemplateDaoImpl extends WorkshopObjectDaoImpl implements Wo
 	@Override
 	public WorkshopTemplate findByIDWithExerciseTemplates( String id )
 	{
-		List< WorkshopTemplate > results = getEntityManager()
+		List< WorkshopTemplate > results = em
 			.createQuery( "from WorkshopTemplate d LEFT JOIN FETCH d.exerciseTemplates exDefs where d.id = '" + id + "'" )
 			.getResultList();
 

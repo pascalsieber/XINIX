@@ -19,17 +19,9 @@ import ch.zhaw.iwi.cis.pinkelefant.exercise.data.XinixData;
 
 import javax.inject.Inject;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class XinixExerciseDataService extends ExerciseDataServiceImpl
 {
-	private ExerciseDataDao specificDataDao;
-
-	@Inject
-	public XinixExerciseDataService()
-	{
-		super();
-		specificDataDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( XinixDataDao.class.getSimpleName() );
-	}
+	@Inject private XinixDataDao specificDataDao;
 
 	@Override
 	public String persistExerciseData( ExerciseDataImpl obj )

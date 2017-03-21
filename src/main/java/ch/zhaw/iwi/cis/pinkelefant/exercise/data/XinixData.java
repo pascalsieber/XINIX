@@ -3,10 +3,7 @@ package ch.zhaw.iwi.cis.pinkelefant.exercise.data;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import ch.zhaw.iwi.cis.pews.model.instance.WorkflowElementImpl;
 import ch.zhaw.iwi.cis.pews.model.media.MediaObject;
@@ -18,7 +15,7 @@ public class XinixData extends CompressableExerciseData
 	@Transient
 	private static final long serialVersionUID = 1L;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	private Set< String > associations;
 
 	@ManyToOne
@@ -26,7 +23,6 @@ public class XinixData extends CompressableExerciseData
 
 	public XinixData()
 	{
-		super();
 		this.associations = new HashSet<>();
 	}
 

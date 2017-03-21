@@ -24,7 +24,7 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 	@Override
 	public PrincipalImpl findUserByID( String id )
 	{
-		List< PrincipalImpl > results = getEntityManager()
+		List< PrincipalImpl > results = em
 			.createQuery(
 				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.sessionInvitations as invitations "
 						+ "LEFT JOIN FETCH principal.participation as participation " + "LEFT JOIN FETCH participation.session as session " + "LEFT JOIN FETCH session.workshop as workshop "
@@ -46,7 +46,7 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 	@Override
 	public PrincipalImpl findByLoginName( String loginName )
 	{
-		List< PrincipalImpl > results = getEntityManager()
+		List< PrincipalImpl > results = em
 			.createQuery(
 				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.sessionInvitations as invitations "
 						+ "LEFT JOIN FETCH principal.participation as participation " + "LEFT JOIN FETCH participation.session as session " + "LEFT JOIN FETCH session.workshop as workshop "
@@ -68,7 +68,6 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 	@Override
 	public PrincipalImpl findByLoginNameForUserContext( String loginName )
 	{
-		EntityManager em = getEntityManagerFactory().createEntityManager();
 		List< PrincipalImpl > results = em
 			.createQuery(
 				"select principal FROM PrincipalImpl principal " + "LEFT JOIN FETCH principal.credential as cred " + "LEFT JOIN FETCH principal.sessionInvitations as invitations "
@@ -79,7 +78,6 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 		if (em.isJoinedToTransaction()) {
 			System.out.println("FICKEN");
 		}
-		em.close();
 
 		if ( results.size() > 0 )
 		{
@@ -95,10 +93,7 @@ public class UserDaoImpl extends WorkshopObjectDaoImpl implements UserDao
 	@Override
 	public List< PrincipalImpl > finAllUsersForLoginService()
 	{
-		EntityManager em = getEntityManagerFactory().createEntityManager();
-		List<PrincipalImpl> res = em.createQuery( "from " + getWorkshopObjectClass().getSimpleName() ).getResultList();
-		em.close();
-		return res;
+		return em.createQuery( "from " + getWorkshopObjectClass().getSimpleName() ).getResultList();
 	}
 
 	@Override

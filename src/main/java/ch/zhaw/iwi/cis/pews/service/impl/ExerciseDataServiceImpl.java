@@ -153,8 +153,8 @@ public class ExerciseDataServiceImpl extends WorkshopObjectServiceImpl implement
 	@Override
 	public ExerciseDataImpl findExerciseDataByID( String id )
 	{
-		ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseDataClassSpecificService( findByID( id ).getClass().getSimpleName() ).getSimpleName() );
-		return (ExerciseDataImpl)cleanObjectGraph( service.findExerciseDataByID( id ) );
+		//ExerciseDataService service = ZhawEngine.getManagedObjectRegistry().getManagedObject( getExerciseDataClassSpecificService( findByID( id ).getClass().getSimpleName() ).getSimpleName() );
+		return (ExerciseDataImpl)cleanObjectGraph( xinixExerciseDataService.findExerciseDataByID( id ) );
 	}
 
 	public ExerciseDataImpl genericFindDataByID( String id )

@@ -37,7 +37,6 @@ import ch.zhaw.iwi.cis.pews.util.comparator.ExerciseImplComparator;
 
 import javax.inject.Inject;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
 public class SessionServiceImpl extends WorkflowElementServiceImpl implements SessionService
 {
 	@ Inject private SessionDao sessionDao;

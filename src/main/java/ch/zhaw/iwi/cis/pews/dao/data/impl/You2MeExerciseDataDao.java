@@ -16,7 +16,7 @@ public class You2MeExerciseDataDao extends ExerciseDataDaoImpl
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
 	{
-		List< You2MeExerciseData > results = getEntityManager()
+		List< You2MeExerciseData > results = em
 			.createQuery( "select distinct d from You2MeExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.dialog where d.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();
@@ -35,7 +35,7 @@ public class You2MeExerciseDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< You2MeExerciseData > data = getEntityManager().createQuery(
+		List< You2MeExerciseData > data = em.createQuery(
 			"select distinct d from You2MeExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.dialog where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" ).getResultList();
 
 		return (List< ExerciseDataImpl >)cloneResult( data );
@@ -45,7 +45,7 @@ public class You2MeExerciseDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
 	{
-		List< You2MeExerciseData > data = getEntityManager()
+		List< You2MeExerciseData > data = em
 			.createQuery( "select distinct d from You2MeExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.dialog where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
 			.setParameter( "ids", exerciseIDs )
 			.getResultList();

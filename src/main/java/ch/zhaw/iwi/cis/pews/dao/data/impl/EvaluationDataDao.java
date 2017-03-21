@@ -34,7 +34,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
 	{
-		List< EvaluationExerciseData > results = getEntityManager()
+		List< EvaluationExerciseData > results = em
 			.createQuery( "select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();
@@ -53,7 +53,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< EvaluationExerciseData > data = getEntityManager()
+		List< EvaluationExerciseData > data = em
 			.createQuery(
 				"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
 			.getResultList();
@@ -64,7 +64,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
 	{
-		List< EvaluationExerciseData > data = getEntityManager()
+		List< EvaluationExerciseData > data = em
 			.createQuery( "select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
 			.setParameter( "ids", exerciseIDs )
 			.getResultList();
@@ -90,7 +90,7 @@ public class EvaluationDataDao extends ExerciseDataDaoImpl
 		{
 			if ( ex.getClass().getSimpleName().equalsIgnoreCase( EvaluationExercise.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager()
+				data.addAll( em
 					.createQuery(
 						"select distinct d from EvaluationExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.evaluation where d.workflowElement.id = '" + ex.getID()
 								+ "' ORDER BY d.timestamp ASC" )

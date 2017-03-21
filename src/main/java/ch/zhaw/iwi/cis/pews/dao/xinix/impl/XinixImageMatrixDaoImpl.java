@@ -27,7 +27,7 @@ public class XinixImageMatrixDaoImpl extends WorkshopObjectDaoImpl implements Xi
 	@Override
 	public XinixImageMatrix findXinixImageMatrixByID( String id )
 	{
-		List< XinixImageMatrix > matrices = getEntityManager().createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages where x.id = :_id" ).setParameter( "_id", id ).getResultList();
+		List< XinixImageMatrix > matrices = em.createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages where x.id = :_id" ).setParameter( "_id", id ).getResultList();
 
 		if ( matrices.size() > 0 )
 		{
@@ -41,7 +41,7 @@ public class XinixImageMatrixDaoImpl extends WorkshopObjectDaoImpl implements Xi
 	@Override
 	public List< XinixImageMatrix > findAllXinixImageMatrices()
 	{
-		List< XinixImageMatrix > matrices = getEntityManager()
+		List< XinixImageMatrix > matrices = em
 			.createQuery( "from XinixImageMatrix as x LEFT JOIN FETCH x.xinixImages where x.client.id = :_client_id" )
 			.setParameter( "_client_id", UserContext.getCurrentUser().getClient().getID() )
 			.getResultList();

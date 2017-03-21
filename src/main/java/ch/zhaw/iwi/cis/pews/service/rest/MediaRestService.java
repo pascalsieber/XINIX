@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.service.rest;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -34,13 +35,7 @@ public class MediaRestService extends WorkshopObjectRestService
 	public static final String UPDATE_POSTER_IMAGES = "/updatePosterImages";
 	public static final String UPDATE_POSTER_VIDEOS = "/updatePosterVideos";
 
-	private MediaService mediaService;
-
-	public MediaRestService()
-	{
-		super();
-		mediaService = ZhawEngine.getManagedObjectRegistry().getManagedObject( MediaServiceImpl.class.getSimpleName() );
-	}
+	@Inject private MediaService mediaService;
 
 	@POST
 	@Consumes( MediaType.MULTIPART_FORM_DATA )

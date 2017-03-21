@@ -17,7 +17,7 @@ public class XinixTemplateDao extends ExerciseTemplateDaoImpl
 	@Override
 	public ExerciseTemplate findExerciseTemplateByID( String id )
 	{
-		List< XinixTemplate > templates = getEntityManager()
+		List< XinixTemplate > templates = em
 			.createQuery( "from XinixTemplate t LEFT JOIN FETCH t.images i LEFT JOIN FETCH i.xinixImages where t.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();

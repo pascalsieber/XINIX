@@ -21,7 +21,7 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
 	{
-		List< XinixData > results = getEntityManager()
+		List< XinixData > results = em
 			.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();
@@ -40,7 +40,7 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< XinixData > data = getEntityManager()
+		List< XinixData > data = em
 			.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id = :_exercise_id ORDER BY d.timestamp ASC" )
 			.setParameter( "_exercise_id", exerciseID )
 			.getResultList();
@@ -51,7 +51,7 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 	@Override
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
 	{
-		List< XinixData > data = getEntityManager()
+		List< XinixData > data = em
 			.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
 			.setParameter( "ids", exerciseIDs )
 			.getResultList();
@@ -68,7 +68,7 @@ public class XinixDataDao extends ExerciseDataDaoImpl
 		{
 			if ( ex.getClass().getSimpleName().equalsIgnoreCase( XinixExercise.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager()
+				data.addAll( em
 					.createQuery( "select distinct d from XinixData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.associations where d.workflowElement.id = :_exercise_id ORDER BY d.timestamp ASC" )
 					.setParameter( "_exercise_id", ex.getID() )
 					.getResultList() );

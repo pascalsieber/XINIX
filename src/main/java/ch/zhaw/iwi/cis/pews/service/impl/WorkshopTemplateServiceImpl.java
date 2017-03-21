@@ -14,20 +14,12 @@ import ch.zhaw.iwi.cis.pews.model.template.WorkshopTemplate;
 import ch.zhaw.iwi.cis.pews.service.ExerciseTemplateService;
 import ch.zhaw.iwi.cis.pews.service.WorkshopTemplateService;
 
-@ManagedObject( scope = Scope.THREAD, entityManager = "pews", transactionality = Transactionality.TRANSACTIONAL )
+import javax.inject.Inject;
+
 public class WorkshopTemplateServiceImpl extends WorkshopObjectServiceImpl implements WorkshopTemplateService
 {
-	private final WorkshopTemplateDao workshopTemplateDao;
-	private final ExerciseTemplateService exerciseTemplateService;
-
-	public WorkshopTemplateServiceImpl()
-	{
-		workshopTemplateDao = new WorkshopTemplateDaoImpl();
-		//workshopTemplateDao = ZhawEngine.getManagedObjectRegistry().getManagedObject( WorkshopTemplateDaoImpl.class.getSimpleName() );
-		exerciseTemplateService = new ExerciseTemplateServiceImpl();
-		//exerciseTemplateService = ZhawEngine.getManagedObjectRegistry().getManagedObject( ExerciseTemplateServiceImpl.class.getSimpleName() );
-
-	}
+	@Inject private WorkshopTemplateDao workshopTemplateDao;
+	@Inject private ExerciseTemplateService exerciseTemplateService;
 
 	@Override
 	protected WorkshopObjectDao getWorkshopObjectDao()

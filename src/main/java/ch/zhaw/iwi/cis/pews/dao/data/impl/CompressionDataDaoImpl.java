@@ -23,7 +23,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
 	{
-		List< CompressionExerciseData > results = getEntityManager()
+		List< CompressionExerciseData > results = em
 			.createQuery( "select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.id = :_id" )
 			.setParameter( "_id", id )
 			.getResultList();
@@ -42,7 +42,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< CompressionExerciseData > data = getEntityManager()
+		List< CompressionExerciseData > data = em
 			.createQuery(
 				"select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
 			.getResultList();
@@ -53,7 +53,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 	@Override
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
 	{
-		List< CompressionExerciseData > data = getEntityManager()
+		List< CompressionExerciseData > data = em
 			.createQuery( "select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
 			.setParameter( "ids", exerciseIDs )
 			.getResultList();
@@ -70,7 +70,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 		{
 			if ( ex.getClass().getSimpleName().equalsIgnoreCase( CompressionExercise.class.getSimpleName() ) )
 			{
-				data.addAll( getEntityManager()
+				data.addAll( em
 					.createQuery(
 						"select distinct d from CompressionExerciseData d LEFT JOIN FETCH d.owner LEFT JOIN FETCH d.solutions where d.workflowElement.id = '" + ex.getID()
 								+ "' ORDER BY d.timestamp ASC" )
@@ -85,7 +85,7 @@ public class CompressionDataDaoImpl extends ExerciseDataDaoImpl implements Compr
 	@Override
 	public CompressionExerciseDataElement findBySolutionAndDescription( String solution, String description )
 	{
-		List< CompressionExerciseDataElement > results = getEntityManager()
+		List< CompressionExerciseDataElement > results = em
 			.createQuery( "from CompressionExerciseDataElement c where LOWER(c.solution) = LOWER(:_solution) AND LOWER(c.description) = LOWER(:_description)" )
 			.setParameter( "_solution", solution )
 			.setParameter( "_description", description )

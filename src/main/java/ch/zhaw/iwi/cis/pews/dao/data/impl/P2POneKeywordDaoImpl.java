@@ -24,7 +24,7 @@ public class P2POneKeywordDaoImpl extends ExerciseDataDaoImpl implements P2POneK
 	@Override
 	public P2POneKeyword findByKeywordString( String keywordString )
 	{
-		List< P2POneKeyword > results = getEntityManager()
+		List< P2POneKeyword > results = em
 			.createQuery( "from P2POneKeyword p where LOWER(p.keyword) = LOWER(:keyword_string)" )
 			.setParameter( "keyword_string", keywordString )
 			.getResultList();

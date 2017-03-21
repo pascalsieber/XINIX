@@ -2,6 +2,7 @@ package ch.zhaw.iwi.cis.pews.framework;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -18,21 +19,12 @@ import ch.zhaw.iwi.cis.pews.service.rest.AuthenticationTokenRestService;
 
 public class ServletContextFilter implements Filter
 {
-	private UserService userService;
-
-	private UserService getUserService()
-	{
-		if ( userService == null )
-			userService = new UserServiceImpl();
-			//userService = ZhawEngine.getManagedObjectRegistry().getManagedObject( UserServiceImpl.class.getSimpleName() );
-
-		return userService;
-	}
+	@Inject private UserService userService;
 
 	public UserImpl getCurrentUser( HttpServletRequest request )
 	{
 		String loginName = request.getUserPrincipal().getName();
-		UserImpl user = (UserImpl)getUserService().findByLoginNameForUserContext( loginName );
+		UserImpl user = (UserImpl)userService.findByLoginNameForUserContext( loginName );
 
 		return user;
 	}

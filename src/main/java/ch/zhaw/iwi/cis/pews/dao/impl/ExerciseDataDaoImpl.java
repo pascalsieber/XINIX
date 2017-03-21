@@ -32,7 +32,7 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 	@Override
 	public ExerciseDataImpl findDataByID( String id )
 	{
-		List< ExerciseDataImpl > results = getEntityManager().createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.id = :_id" ).setParameter( "_id", id ).getResultList();
+		List< ExerciseDataImpl > results = em.createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.id = :_id" ).setParameter( "_id", id ).getResultList();
 
 		if ( results.size() > 0 )
 		{
@@ -48,7 +48,7 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 	@Override
 	public List< ExerciseDataImpl > findByExerciseID( String exerciseID )
 	{
-		List< ExerciseDataImpl > data = getEntityManager()
+		List< ExerciseDataImpl > data = em
 			.createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id = '" + exerciseID + "' ORDER BY d.timestamp ASC" )
 			.getResultList();
 		return (List< ExerciseDataImpl >)cloneResult( data );
@@ -58,7 +58,7 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 	@Override
 	public List< ExerciseDataImpl > findByExerciseIDs( List< String > exerciseIDs )
 	{
-		List< ExerciseDataImpl > data = getEntityManager()
+		List< ExerciseDataImpl > data = em
 			.createQuery( "from ExerciseDataImpl d LEFT JOIN FETCH d.owner where d.workflowElement.id in (:ids) ORDER BY d.timestamp ASC" )
 			.setParameter( "ids", exerciseIDs )
 			.getResultList();
@@ -82,7 +82,7 @@ public class ExerciseDataDaoImpl extends WorkshopObjectDaoImpl implements Exerci
 			}
 		}
 
-		getEntityManager().clear();
+		em.clear();
 
 		return (List< ExerciseDataImpl >)cloneResult( result );
 	}
