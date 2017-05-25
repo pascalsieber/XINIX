@@ -19,7 +19,9 @@ Run with
     java -jar pink-elefant-backend-all.jar
 
 ## Configuration
+
 All config parameters can be changed via environment variables.
+
 ------------------------------------------------------------------------------------------
 | Parameter                          | Example                                           |
 |------------------------------------|---------------------------------------------------|
