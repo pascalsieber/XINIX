@@ -6,6 +6,8 @@
 
 ## Running
     ./gradlew run
+    
+Note: The app also works with Heroku.
 
 ## Deploying
 Build with
